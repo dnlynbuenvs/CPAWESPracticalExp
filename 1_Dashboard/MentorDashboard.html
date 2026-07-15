@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPA - Mentor Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:#0B1F3A; --blue:#1B5EA8; --accent:#2A9D8F; --amber:#E76F1A; --green:#2D7A4E; --red:#C0392B;
+    --sand:#F7F5F2; --white:#FFFFFF; --gray-100:#F2F1EF; --gray-200:#E4E2DE; --gray-300:#D2CEC8;
+    --gray-400:#A8A49E; --gray-600:#6B6760; --gray-800:#2E2C2A;
+    --shadow-sm:0 1px 3px rgba(11,31,58,0.07),0 1px 2px rgba(11,31,58,0.05);
+    --shadow-md:0 10px 28px rgba(11,31,58,0.10);
+    --radius-sm:6px; --radius-md:10px; --radius-lg:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'DM Sans',sans-serif;background:var(--sand);color:var(--gray-800);min-height:100vh}
+  button,input,select{font:inherit}
+  a{text-decoration:none;color:inherit}
+  .topbar{background:var(--navy);min-height:60px;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:0 2rem}
+  .logo-group{display:flex;align-items:center;gap:10px;min-width:225px}
+  .logo-mark{width:36px;height:36px;background:var(--white);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .logo-text{display:flex;flex-direction:column;line-height:1.1}
+  .logo-text .brand{font-size:13px;font-weight:600;color:var(--white);letter-spacing:.04em}
+  .logo-text .sub{font-size:10px;color:rgba(255,255,255,.5);letter-spacing:.02em;text-transform:uppercase}
+  .nav-links{display:flex;align-items:center;gap:2px}
+  .nav-links a{color:rgba(255,255,255,.55);font-size:14px;padding:8px 16px;border-radius:var(--radius-sm);white-space:nowrap}
+  .nav-links a.active,.nav-links a:hover{color:var(--white);background:rgba(255,255,255,.08)}
+  .topbar-right{display:flex;align-items:center;gap:12px}
+  .role-dropdown{position:relative}
+  .role-trigger{list-style:none;display:flex;align-items:center;gap:10px;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);color:var(--white);font-size:13px;font-weight:600;cursor:pointer}
+  .role-trigger::-webkit-details-marker{display:none}
+  .role-label{display:inline-flex;align-items:center;justify-content:center;min-width:72px}
+  .role-caret{font-size:11px;color:rgba(255,255,255,.72)}
+  .role-menu{position:absolute;right:0;top:calc(100% + 10px);min-width:180px;padding:8px;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);box-shadow:0 12px 30px rgba(11,31,58,.14);display:flex;flex-direction:column;gap:4px;z-index:20}
+  .role-option{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:var(--radius-sm);font-size:13px;color:var(--gray-800)}
+  .role-option:hover{background:var(--gray-100)}
+  .role-option.active{background:#EBF3FF;color:var(--blue);font-weight:600}
+  .page{max-width:1240px;margin:0 auto;padding:2rem 2rem 4rem}
+  .hero{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--gray-200)}
+  .hero h1{font-family:'DM Serif Display',serif;font-size:38px;font-weight:400;color:var(--navy);margin-bottom:4px}
+  .hero p{font-size:14px;color:var(--gray-600);max-width:680px}
+  .hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);padding:10px 16px;box-shadow:var(--shadow-sm);font-size:13px;color:var(--gray-600);white-space:nowrap}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--blue);flex:0 0 auto}
+  .section-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gray-400);margin-bottom:.75rem}
+  .panel{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);animation:rise .35s ease}
+  .panel h2{font-size:17px;color:var(--navy);margin-bottom:4px}
+  .panel-copy{font-size:12px;color:var(--gray-600);line-height:1.45}
+  .overview-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(320px,.9fr);gap:16px;margin-bottom:1.5rem}
+  .mentor-panel,.focus-panel,.queue-panel,.controls-panel,.roster-panel{padding:1.25rem}
+  .mentor-head{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:1rem}
+  .mentor-title{display:flex;align-items:center;gap:12px}
+  .avatar{width:54px;height:54px;border-radius:50%;background:#EBF3FF;color:var(--blue);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px}
+  .mentor-title h2{font-size:18px;color:var(--navy);margin-bottom:2px}
+  .mentor-title p{font-size:12px;color:var(--gray-600)}
+  .mentor-pill{display:inline-flex;align-items:center;gap:7px;background:#E8F5EE;color:var(--green);border:1px solid rgba(45,122,78,.18);border-radius:999px;padding:7px 11px;font-size:12px;font-weight:700}
+  .metric-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  .metric-card{background:var(--sand);border:1px solid var(--gray-200);border-radius:var(--radius-md);padding:12px;min-height:82px}
+  .metric-card span{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--gray-400);margin-bottom:8px;font-weight:700}
+  .metric-card strong{display:block;font-family:'DM Serif Display',serif;font-size:30px;font-weight:400;color:var(--navy);line-height:1}
+  .metric-card small{display:block;font-size:12px;color:var(--gray-600);margin-top:8px;line-height:1.35}
+  .focus-list{display:flex;flex-direction:column;gap:10px;margin-top:1rem}
+  .focus-item{display:flex;align-items:flex-start;gap:10px;padding:11px;border-radius:var(--radius-md);border:1px solid var(--gray-200);background:var(--sand)}
+  .focus-index{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--white);border:1px solid var(--gray-200);font-size:11px;font-weight:700;color:var(--blue);flex:0 0 auto}
+  .focus-item strong{display:block;font-size:13px;color:var(--navy);margin-bottom:2px}
+  .focus-item span{font-size:12px;color:var(--gray-600);line-height:1.4}
+  .message-bar{display:none;align-items:center;gap:10px;margin-bottom:1rem;padding:12px 14px;border-radius:var(--radius-md);background:#EBF3FF;border:1px solid rgba(27,94,168,.18);color:var(--navy);box-shadow:var(--shadow-sm)}
+  .message-bar.visible{display:flex}
+  .queue-head,.controls-head,.roster-head{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:1rem}
+  .queue-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+  .review-card{border:1px solid var(--gray-200);border-radius:var(--radius-md);background:var(--sand);padding:1rem;transition:transform .15s ease,border-color .15s ease,box-shadow .15s ease}
+  .review-card:hover{transform:translateY(-1px);border-color:rgba(27,94,168,.32);box-shadow:var(--shadow-md)}
+  .review-card.flash{animation:flash .75s ease}
+  .review-top{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:.75rem}
+  .review-type{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--gray-400)}
+  .review-type .type-dot{width:8px;height:8px;border-radius:50%;background:var(--blue)}
+  .type-dot.fe{background:var(--green)}
+  .type-dot.wp{background:var(--blue)}
+  .type-dot.checkin{background:var(--amber)}
+  .type-dot.completion{background:var(--accent)}
+  .review-card h3{font-size:16px;color:var(--navy);margin-bottom:3px}
+  .review-card p{font-size:12px;color:var(--gray-600);line-height:1.45}
+  .review-meta{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:12px 0}
+  .meta-box{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-sm);padding:10px}
+  .meta-box span{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--gray-400);font-weight:700;margin-bottom:4px}
+  .meta-box strong{display:block;font-size:12px;color:var(--gray-800)}
+  .status-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:5px 10px;border-radius:20px;white-space:nowrap}
+  .status-badge .dot{width:6px;height:6px}
+  .badge-approved{background:#E8F5EE;color:var(--green)} .badge-approved .dot{background:var(--green)}
+  .badge-pending{background:#FEF3E8;color:var(--amber)} .badge-pending .dot{background:var(--amber)}
+  .badge-progress{background:#EBF3FF;color:var(--blue)} .badge-progress .dot{background:var(--blue)}
+  .badge-declined{background:#FDECEA;color:var(--red)} .badge-declined .dot{background:var(--red)}
+  .badge-neutral{background:var(--gray-100);color:var(--gray-600)} .badge-neutral .dot{background:var(--gray-400)}
+  .review-actions,.row-actions{display:flex;flex-wrap:wrap;gap:8px}
+  .action-btn,.table-btn,.toolbar-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:var(--radius-sm);border:1px solid var(--gray-200);padding:8px 12px;background:var(--white);color:var(--navy);font-size:12px;font-weight:700;cursor:pointer;transition:all .15s ease}
+  .action-btn:hover,.table-btn:hover,.toolbar-btn:hover{border-color:rgba(27,94,168,.28);background:#F7FAFF}
+  .action-btn.primary,.table-btn.primary,.toolbar-btn.primary{background:#EBF3FF;border-color:rgba(27,94,168,.28);color:var(--blue)}
+  .action-btn.danger,.table-btn.danger,.toolbar-btn.danger{background:#FFF4F1;border-color:rgba(192,57,43,.22);color:var(--red)}
+  .action-btn[disabled],.table-btn[disabled],.toolbar-btn[disabled]{opacity:.5;cursor:not-allowed;background:var(--gray-100);color:var(--gray-600)}
+  .competency-box{margin-top:12px;padding:12px;border-radius:var(--radius-sm);background:var(--white);border:1px solid var(--gray-200)}
+  .competency-box strong{display:block;font-size:12px;color:var(--navy);margin-bottom:8px}
+  .competency-box ul{padding-left:18px}
+  .competency-box li{font-size:12px;color:var(--gray-600);line-height:1.45;margin-bottom:4px}
+  .assist-note{margin-top:10px;font-size:11px;color:var(--gray-600);line-height:1.4}
+  .controls-shell{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end}
+  .field{display:flex;flex-direction:column;gap:6px;min-width:180px;flex:1}
+  .field label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gray-400)}
+  .field input,.field select{height:42px;border-radius:var(--radius-md);border:1px solid var(--gray-200);background:var(--sand);padding:0 12px;color:var(--gray-800)}
+  .field input:focus,.field select:focus{outline:none;border-color:rgba(27,94,168,.32);box-shadow:0 0 0 3px rgba(27,94,168,.08)}
+  .bulk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-bottom:1rem;padding:12px 14px;border-radius:var(--radius-md);background:var(--sand);border:1px solid var(--gray-200)}
+  .bulk-bar strong{font-size:13px;color:var(--navy)}
+  .bulk-copy{font-size:12px;color:var(--gray-600)}
+  .table-wrap{overflow:auto;border:1px solid var(--gray-200);border-radius:var(--radius-lg)}
+  table{width:100%;min-width:1180px;border-collapse:collapse;background:var(--white)}
+  thead th{padding:11px 14px;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--gray-400);background:var(--sand);border-bottom:1px solid var(--gray-200);vertical-align:top}
+  tbody td{padding:14px;vertical-align:top;border-bottom:1px solid var(--gray-100);font-size:13px}
+  tbody tr:last-child td{border-bottom:none}
+  .select-col{width:42px}
+  .learner-cell strong{display:block;font-size:14px;color:var(--navy);margin-bottom:4px}
+  .subline{display:block;font-size:12px;color:var(--gray-600);line-height:1.45}
+  .tiny-note{display:inline-flex;align-items:center;gap:6px;margin-top:8px;padding:4px 8px;border-radius:999px;background:#EBF3FF;color:var(--blue);font-size:11px;font-weight:700}
+  .stage-copy{font-size:13px;color:var(--gray-800);font-weight:600;margin-bottom:4px}
+  .stage-note{font-size:12px;color:var(--gray-600);line-height:1.4}
+  .role-stack strong{display:block;font-size:13px;color:var(--navy);margin-bottom:6px}
+  .role-stack span{display:block;font-size:12px;color:var(--gray-600);line-height:1.45}
+  .empty-copy{font-size:12px;color:var(--gray-600)}
+  .empty-state{padding:20px;text-align:center;font-size:13px;color:var(--gray-600);background:var(--sand)}
+  @keyframes rise {
+    from {opacity:0; transform:translateY(8px)}
+    to {opacity:1; transform:translateY(0)}
+  }
+  @keyframes flash {
+    0% {background:#FFF7E8}
+    100% {background:var(--sand)}
+  }
+  @media(max-width:1100px){
+    .overview-grid{grid-template-columns:1fr}
+    .metric-grid{grid-template-columns:repeat(2,1fr)}
+    .queue-grid{grid-template-columns:1fr}
+  }
+  @media(max-width:760px){
+    .topbar{align-items:flex-start;flex-direction:column;padding:1rem}
+    .nav-links{display:none}
+    .topbar-right{width:100%;justify-content:space-between}
+    .page{padding:1.25rem 1rem 3rem}
+    .hero,.mentor-head,.queue-head,.controls-head,.roster-head,.bulk-bar{flex-direction:column;align-items:flex-start}
+    .hero h1{font-size:34px}
+    .metric-grid{grid-template-columns:1fr}
+    .review-meta{grid-template-columns:1fr}
+    .controls-shell{width:100%}
+    .field{min-width:100%}
+  }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="logo-group">
+    <div class="logo-mark">
+      <svg width="24" height="20" viewBox="0 0 24 20" fill="none" aria-hidden="true">
+        <path d="M2 10C2 5.58 5.58 2 10 2h4c4.42 0 8 3.58 8 8s-3.58 8-8 8h-4C5.58 18 2 14.42 2 10z" fill="#0B1F3A" opacity="0.12"/>
+        <path d="M7 10.5l3 3 7-7" stroke="#0B1F3A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="logo-text"><span class="brand">CPA Canada</span><span class="sub">Chartered Professional Accountants</span></div>
+  </div>
+  <div class="topbar-right">
+    <nav class="nav-links" aria-label="Primary navigation">
+      <a href="MentorDashboard.html" class="active">Dashboard</a>
+      <a href="#pending-reviews">Pending reviews</a>
+      <a href="#assigned-learners">Assigned learners</a>
+      <a href="#">Messages</a>
+    </nav>
+    <details class="role-dropdown">
+      <summary class="role-trigger"><span class="role-label">Mentor</span><span class="role-caret">&#9662;</span></summary>
+      <div class="role-menu">
+        <a class="role-option" href="LearnerDashboard.html">Learner</a>
+        <a class="role-option active" href="MentorDashboard.html">Mentor</a>
+        <a class="role-option" href="#">ASB Staff</a>
+      </div>
+    </details>
+  </div>
+</header>
+
+<main class="page">
+  <section class="hero" aria-labelledby="mentor-dashboard-title">
+    <div>
+      <h1 id="mentor-dashboard-title">Mentor dashboard</h1>
+      <p>Review assigned learners, manage approvals, and keep pre-reviewed position oversight visible in one place.</p>
+    </div>
+    <div class="hero-badge"><span class="dot"></span><span id="hero-summary">Loading mentor summary</span></div>
+  </section>
+
+  <div class="message-bar" id="message-bar" role="status" aria-live="polite">
+    <span class="dot"></span>
+    <span id="message-text"></span>
+  </div>
+
+  <section class="overview-grid" aria-label="Mentor overview">
+    <div class="panel mentor-panel">
+      <div class="mentor-head">
+        <div class="mentor-title">
+          <div class="avatar" aria-hidden="true">SC</div>
+          <div>
+            <h2>Sofia Chen, CPA</h2>
+            <p>Mentor ID: MTR-4021</p>
+          </div>
+        </div>
+        <div class="mentor-pill"><span class="dot"></span><span>Quarterly mentor review cycle active</span></div>
+      </div>
+      <div class="metric-grid">
+        <div class="metric-card"><span>Assigned learners</span><strong id="metric-learners">0</strong><small>Active mentorship relationships</small></div>
+        <div class="metric-card"><span>Pending reviews</span><strong id="metric-reviews">0</strong><small>Foundational experience, work plan, check-in, and completion report</small></div>
+        <div class="metric-card"><span>Pre-reviewed positions</span><strong id="metric-pre-reviewed">0</strong><small>Learners with role, senior leader, and program administrator details</small></div>
+        <div class="metric-card"><span>Prior mentor access</span><strong id="metric-prior-mentor">0</strong><small>View-only learners with limited approval actions</small></div>
+      </div>
+    </div>
+
+    <div class="panel focus-panel">
+      <div class="section-label">Mentor focus</div>
+      <h2>What needs attention this week</h2>
+      <p class="panel-copy">This summary mirrors the current review queue and learner roster.</p>
+      <div class="focus-list">
+        <div class="focus-item">
+          <div class="focus-index">1</div>
+          <div><strong>Pending approvals are grouped by submission type</strong><span>Review cards below surface foundational experience, work plan, check-in, and completion report items.</span></div>
+        </div>
+        <div class="focus-item">
+          <div class="focus-index">2</div>
+          <div><strong>Roster filters help narrow by learner name and status</strong><span>Search, filter, and sort work together before you take relationship actions.</span></div>
+        </div>
+        <div class="focus-item">
+          <div class="focus-index">3</div>
+          <div><strong>Pre-reviewed role assignments stay visible in the learner row</strong><span>Mentor, senior leader, and program administrator roles display where they apply.</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel queue-panel" id="pending-reviews" aria-labelledby="pending-reviews-title">
+    <div class="queue-head">
+      <div>
+        <div class="section-label">Pending reviews</div>
+        <h2 id="pending-reviews-title">Learner submissions waiting on mentor action</h2>
+        <p class="panel-copy">Open a submission, approve it, reject it, or inspect awarded competencies before deciding.</p>
+      </div>
+      <div class="hero-badge"><span class="dot"></span><span id="pending-review-count">0 active items</span></div>
+    </div>
+    <div class="queue-grid" id="review-grid"></div>
+  </section>
+
+  <section class="panel controls-panel" aria-labelledby="roster-controls-title" style="margin-top:1.5rem;">
+    <div class="controls-head">
+      <div>
+        <div class="section-label">Roster controls</div>
+        <h2 id="roster-controls-title">Filter assigned learners</h2>
+        <p class="panel-copy">Search by learner name, filter by status, and sort the roster before taking action.</p>
+      </div>
+    </div>
+    <div class="controls-shell">
+      <div class="field">
+        <label for="name-filter">Learner name</label>
+        <input id="name-filter" type="search" placeholder="Search learner name">
+      </div>
+      <div class="field">
+        <label for="status-filter">Status</label>
+        <select id="status-filter">
+          <option value="all">All statuses</option>
+          <option value="Pending mentor approval">Pending mentor approval</option>
+          <option value="Approved">Approved</option>
+          <option value="Draft">Draft</option>
+          <option value="In CPA review">In CPA review</option>
+          <option value="More information needed">More information needed</option>
+          <option value="Not started">Not started</option>
+          <option value="Pre-reviewed position">Pre-reviewed position</option>
+          <option value="Prior mentor access">Prior mentor access</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="sort-filter">Sort by</label>
+        <select id="sort-filter">
+          <option value="name">Learner name</option>
+          <option value="employer">Employer</option>
+          <option value="stage">Current stage</option>
+          <option value="status">Overall status</option>
+          <option value="pending">Pending reviews</option>
+        </select>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel roster-panel" id="assigned-learners" aria-labelledby="assigned-learners-title" style="margin-top:1.5rem;">
+    <div class="roster-head">
+      <div>
+        <div class="section-label">Assigned learners</div>
+        <h2 id="assigned-learners-title">Learner roster</h2>
+        <p class="panel-copy">Select one or more learners to end the relationship, or open an individual submission from the row actions.</p>
+      </div>
+      <div class="hero-badge"><span class="dot"></span><span id="visible-count">0 learners shown</span></div>
+    </div>
+
+    <div class="bulk-bar">
+      <div>
+        <strong id="selected-count">0 learners selected</strong>
+        <div class="bulk-copy">Bulk relationship changes apply only to the currently selected learners.</div>
+      </div>
+      <button class="toolbar-btn danger" id="end-relationship-btn" type="button" disabled>End relationship with selected</button>
+    </div>
+
+    <div class="table-wrap">
+      <table aria-describedby="assigned-learners-title">
+        <thead>
+          <tr>
+            <th class="select-col"><input id="select-all" type="checkbox" aria-label="Select all visible learners"></th>
+            <th>Learner</th>
+            <th>Employer</th>
+            <th>Current stage</th>
+            <th>FE status</th>
+            <th>WP status</th>
+            <th>Check-in status</th>
+            <th>Pre-reviewed role</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="learner-table-body"></tbody>
+      </table>
+    </div>
+  </section>
+</main>
+
+<script>
+const learners = [
+  {
+    id: 'LRN-248109',
+    name: 'Amelia Reyes',
+    employer: 'Northline Advisory Group',
+    currentStage: 'Work plan review',
+    feStatus: 'Approved',
+    wpStatus: 'Pending mentor approval',
+    checkinStatus: 'Not started',
+    completionStatus: 'Not started',
+    competenciesNote: '4 competencies awarded across enabling and technical areas.',
+    priorMentor: false,
+    relationshipEnded: false,
+    preReviewedRole: null
+  },
+  {
+    id: 'LRN-251004',
+    name: 'Daniel Brooks',
+    employer: 'Cedar & Finch LLP',
+    currentStage: 'Foundational experience review',
+    feStatus: 'Pending mentor approval',
+    wpStatus: 'Draft',
+    checkinStatus: 'Not started',
+    completionStatus: 'Not started',
+    competenciesNote: '2 competencies documented for ethical decision-making and communication.',
+    priorMentor: false,
+    relationshipEnded: false,
+    preReviewedRole: {
+      position: 'Audit Senior (Pre-reviewed)',
+      mentor: 'Sofia Chen, CPA',
+      seniorLeader: 'Harper Singh',
+      programAdministrator: 'Lena Ortiz'
+    }
+  },
+  {
+    id: 'LRN-251887',
+    name: 'Mina Hassan',
+    employer: 'Summit Rail Finance',
+    currentStage: 'Check-in review',
+    feStatus: 'Approved',
+    wpStatus: 'Approved',
+    checkinStatus: 'Pending mentor approval',
+    completionStatus: 'Not started',
+    competenciesNote: '4 competencies awarded, including reporting, analytics, and professionalism.',
+    priorMentor: false,
+    relationshipEnded: false,
+    preReviewedRole: {
+      position: 'Advisory Analyst (Pre-reviewed)',
+      mentor: 'Sofia Chen, CPA',
+      seniorLeader: 'Devon Clarke',
+      programAdministrator: 'Noah Ramirez'
+    }
+  },
+  {
+    id: 'LRN-253102',
+    name: 'Ethan Cole',
+    employer: 'Avery Health Group',
+    currentStage: 'Completion report review',
+    feStatus: 'Approved',
+    wpStatus: 'Approved',
+    checkinStatus: 'Approved',
+    completionStatus: 'Pending mentor approval',
+    competenciesNote: '6 competencies awarded with final report evidence attached.',
+    priorMentor: false,
+    relationshipEnded: false,
+    preReviewedRole: null
+  },
+  {
+    id: 'LRN-247771',
+    name: 'Olivia Park',
+    employer: 'Grant Mercer Tax',
+    currentStage: 'In CPA review',
+    feStatus: 'Approved',
+    wpStatus: 'In CPA review',
+    checkinStatus: 'More information needed',
+    completionStatus: 'Not started',
+    competenciesNote: '3 competencies awarded. CPA reviewer requested more evidence on tax planning depth.',
+    priorMentor: false,
+    relationshipEnded: false,
+    preReviewedRole: null
+  },
+  {
+    id: 'LRN-245664',
+    name: 'Lucas Bennett',
+    employer: 'Northern Ports Inc.',
+    currentStage: 'Prior mentor access',
+    feStatus: 'Approved',
+    wpStatus: 'Approved',
+    checkinStatus: 'Approved',
+    completionStatus: 'In CPA review',
+    competenciesNote: 'Prior mentor access is limited to viewing competencies already awarded.',
+    priorMentor: true,
+    relationshipEnded: false,
+    preReviewedRole: null
+  }
+];
+
+let reviews = [
+  {
+    id: 'RV-1042',
+    learnerId: 'LRN-251004',
+    type: 'Foundational Experience',
+    field: 'feStatus',
+    receivedAt: 'Jul 09, 2026',
+    summary: 'Learner submitted foundational experience for mentor approval after supervisor review.',
+    competencies: ['Ethics and trust-building', 'Professional communication'],
+    status: 'Pending mentor approval'
+  },
+  {
+    id: 'RV-1048',
+    learnerId: 'LRN-248109',
+    type: 'Work Plan',
+    field: 'wpStatus',
+    receivedAt: 'Jul 08, 2026',
+    summary: 'Work plan update includes revised enabling competency targets and expected completion date.',
+    competencies: ['Planning and prioritization', 'Management reporting'],
+    status: 'Pending mentor approval'
+  },
+  {
+    id: 'RV-1053',
+    learnerId: 'LRN-251887',
+    type: 'Check-In Report',
+    field: 'checkinStatus',
+    receivedAt: 'Jul 12, 2026',
+    summary: 'Check-in report is ready for mentor review with competency evidence attached.',
+    competencies: ['Data analysis', 'Stakeholder communication', 'Problem solving', 'Professionalism'],
+    status: 'Pending mentor approval'
+  },
+  {
+    id: 'RV-1059',
+    learnerId: 'LRN-253102',
+    type: 'Completion Report',
+    field: 'completionStatus',
+    receivedAt: 'Jul 14, 2026',
+    summary: 'Final completion report is ready for mentor approval before CPA review.',
+    competencies: ['Financial reporting depth', 'Risk assessment', 'Leadership', 'Client service'],
+    status: 'Pending mentor approval'
+  }
+];
+
+const selectedLearners = new Set();
+const messageBar = document.getElementById('message-bar');
+const messageText = document.getElementById('message-text');
+const reviewGrid = document.getElementById('review-grid');
+const learnerTableBody = document.getElementById('learner-table-body');
+const nameFilter = document.getElementById('name-filter');
+const statusFilter = document.getElementById('status-filter');
+const sortFilter = document.getElementById('sort-filter');
+const selectAll = document.getElementById('select-all');
+const endRelationshipBtn = document.getElementById('end-relationship-btn');
+
+function setMessage(text) {
+  messageText.textContent = text;
+  messageBar.classList.add('visible');
+}
+
+function getActiveLearners() {
+  return learners.filter((learner) => !learner.relationshipEnded);
+}
+
+function getLearnerById(id) {
+  return learners.find((learner) => learner.id === id);
+}
+
+function getPendingReviews() {
+  return reviews.filter((review) => review.status === 'Pending mentor approval' && !getLearnerById(review.learnerId).relationshipEnded);
+}
+
+function getPendingReviewCount(learnerId) {
+  return getPendingReviews().filter((review) => review.learnerId === learnerId).length;
+}
+
+function getFirstPendingReview(learnerId) {
+  return getPendingReviews().find((review) => review.learnerId === learnerId) || null;
+}
+
+function getStatusBadgeClass(status) {
+  if (/approved/i.test(status)) return 'badge-approved';
+  if (/pending/i.test(status)) return 'badge-pending';
+  if (/declined/i.test(status)) return 'badge-declined';
+  if (/draft|in cpa review|more information/i.test(status)) return 'badge-progress';
+  return 'badge-neutral';
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function typeClass(type) {
+  if (type === 'Foundational Experience') return 'fe';
+  if (type === 'Work Plan') return 'wp';
+  if (type === 'Check-In Report') return 'checkin';
+  return 'completion';
+}
+
+function renderMetrics() {
+  const activeLearners = getActiveLearners();
+  const pendingReviews = getPendingReviews();
+  const preReviewedCount = activeLearners.filter((learner) => learner.preReviewedRole).length;
+  const priorMentorCount = activeLearners.filter((learner) => learner.priorMentor).length;
+
+  document.getElementById('metric-learners').textContent = activeLearners.length;
+  document.getElementById('metric-reviews').textContent = pendingReviews.length;
+  document.getElementById('metric-pre-reviewed').textContent = preReviewedCount;
+  document.getElementById('metric-prior-mentor').textContent = priorMentorCount;
+  document.getElementById('hero-summary').textContent = `${pendingReviews.length} pending reviews across ${activeLearners.length} learners`;
+  document.getElementById('pending-review-count').textContent = `${pendingReviews.length} active item${pendingReviews.length === 1 ? '' : 's'}`;
+}
+
+function renderReviews() {
+  const pendingReviews = getPendingReviews();
+
+  if (!pendingReviews.length) {
+    reviewGrid.innerHTML = '<div class="empty-state">No learner submissions are currently waiting on mentor approval.</div>';
+    return;
+  }
+
+  reviewGrid.innerHTML = pendingReviews.map((review) => {
+    const learner = getLearnerById(review.learnerId);
+    return `
+      <article class="review-card" id="review-${escapeHtml(review.id)}">
+        <div class="review-top">
+          <div>
+            <div class="review-type"><span class="type-dot ${typeClass(review.type)}"></span><span>${escapeHtml(review.type)}</span></div>
+            <h3>${escapeHtml(learner.name)}</h3>
+            <p>${escapeHtml(review.summary)}</p>
+          </div>
+          <span class="status-badge ${getStatusBadgeClass(review.status)}"><span class="dot"></span>${escapeHtml(review.status)}</span>
+        </div>
+        <div class="review-meta">
+          <div class="meta-box"><span>Employer</span><strong>${escapeHtml(learner.employer)}</strong></div>
+          <div class="meta-box"><span>Current stage</span><strong>${escapeHtml(learner.currentStage)}</strong></div>
+          <div class="meta-box"><span>Received</span><strong>${escapeHtml(review.receivedAt)}</strong></div>
+        </div>
+        <div class="review-actions">
+          <button class="action-btn" type="button" data-action="open-review" data-review-id="${escapeHtml(review.id)}">Open submission</button>
+          <button class="action-btn primary" type="button" data-action="approve-review" data-review-id="${escapeHtml(review.id)}">Approve</button>
+          <button class="action-btn danger" type="button" data-action="reject-review" data-review-id="${escapeHtml(review.id)}">Reject</button>
+          <button class="action-btn" type="button" data-action="toggle-competencies" data-review-id="${escapeHtml(review.id)}">View competencies awarded</button>
+        </div>
+        <div class="competency-box" id="competencies-${escapeHtml(review.id)}" hidden>
+          <strong>Competencies awarded</strong>
+          <ul>${review.competencies.map((item) => `<li>${escapeHtml(item)}</li>`).join('')}</ul>
+        </div>
+      </article>
+    `;
+  }).join('');
+}
+
+function learnerMatchesStatus(learner, status) {
+  if (status === 'all') return true;
+  if (status === 'Pre-reviewed position') return Boolean(learner.preReviewedRole);
+  if (status === 'Prior mentor access') return learner.priorMentor;
+
+  const haystack = [
+    learner.currentStage,
+    learner.feStatus,
+    learner.wpStatus,
+    learner.checkinStatus,
+    learner.completionStatus
+  ].join(' | ').toLowerCase();
+
+  return haystack.includes(status.toLowerCase());
+}
+
+function getVisibleLearners() {
+  const query = nameFilter.value.trim().toLowerCase();
+  const status = statusFilter.value;
+  const sort = sortFilter.value;
+
+  const filtered = getActiveLearners().filter((learner) => {
+    const matchesName = !query || learner.name.toLowerCase().includes(query);
+    const matchesStatus = learnerMatchesStatus(learner, status);
+    return matchesName && matchesStatus;
+  });
+
+  filtered.sort((left, right) => {
+    if (sort === 'employer') return left.employer.localeCompare(right.employer);
+    if (sort === 'stage') return left.currentStage.localeCompare(right.currentStage);
+    if (sort === 'status') return getSortStatusValue(left).localeCompare(getSortStatusValue(right)) || left.name.localeCompare(right.name);
+    if (sort === 'pending') return getPendingReviewCount(right.id) - getPendingReviewCount(left.id) || left.name.localeCompare(right.name);
+    return left.name.localeCompare(right.name);
+  });
+
+  return filtered;
+}
+
+function getSortStatusValue(learner) {
+  const statuses = [learner.feStatus, learner.wpStatus, learner.checkinStatus, learner.completionStatus];
+  const primaryStatus =
+    statuses.find((status) => /pending mentor approval/i.test(status)) ||
+    statuses.find((status) => /more information|draft|in cpa review/i.test(status)) ||
+    statuses.find((status) => /declined/i.test(status)) ||
+    statuses.find((status) => /approved/i.test(status)) ||
+    statuses[0] ||
+    'Not started';
+
+  if (/pending mentor approval/i.test(primaryStatus)) return `1-${primaryStatus}`;
+  if (/more information|draft|in cpa review/i.test(primaryStatus)) return `2-${primaryStatus}`;
+  if (/declined/i.test(primaryStatus)) return `3-${primaryStatus}`;
+  if (/approved/i.test(primaryStatus)) return `4-${primaryStatus}`;
+  return `5-${primaryStatus}`;
+}
+
+function renderLearners() {
+  const visibleLearners = getVisibleLearners();
+  document.getElementById('visible-count').textContent = `${visibleLearners.length} learner${visibleLearners.length === 1 ? '' : 's'} shown`;
+
+  if (!visibleLearners.length) {
+    learnerTableBody.innerHTML = '<tr><td colspan="9" class="empty-state">No assigned learners match the current filter.</td></tr>';
+    updateSelectionState();
+    return;
+  }
+
+  learnerTableBody.innerHTML = visibleLearners.map((learner) => {
+    const pendingReview = getFirstPendingReview(learner.id);
+    const disableApproval = learner.priorMentor || !pendingReview;
+    const preReviewed = learner.preReviewedRole;
+
+    return `
+      <tr id="learner-${escapeHtml(learner.id)}">
+        <td class="select-col">
+          <input class="learner-select" type="checkbox" data-learner-id="${escapeHtml(learner.id)}" ${selectedLearners.has(learner.id) ? 'checked' : ''} aria-label="Select ${escapeHtml(learner.name)}">
+        </td>
+        <td class="learner-cell">
+          <strong>${escapeHtml(learner.name)}</strong>
+          <span class="subline">${escapeHtml(learner.id)}</span>
+          <span class="subline">${getPendingReviewCount(learner.id)} pending mentor review${getPendingReviewCount(learner.id) === 1 ? '' : 's'}</span>
+          ${learner.priorMentor ? '<span class="tiny-note">Prior mentor: view-only access</span>' : ''}
+        </td>
+        <td>
+          <div class="stage-copy">${escapeHtml(learner.employer)}</div>
+          <div class="stage-note">${preReviewed ? 'Pre-reviewed position active' : 'Standard practical experience path'}</div>
+        </td>
+        <td>
+          <div class="stage-copy">${escapeHtml(learner.currentStage)}</div>
+          <div class="stage-note">${escapeHtml(learner.competenciesNote)}</div>
+        </td>
+        <td><span class="status-badge ${getStatusBadgeClass(learner.feStatus)}"><span class="dot"></span>${escapeHtml(learner.feStatus)}</span></td>
+        <td><span class="status-badge ${getStatusBadgeClass(learner.wpStatus)}"><span class="dot"></span>${escapeHtml(learner.wpStatus)}</span></td>
+        <td><span class="status-badge ${getStatusBadgeClass(learner.checkinStatus)}"><span class="dot"></span>${escapeHtml(learner.checkinStatus)}</span></td>
+        <td>
+          ${preReviewed ? `
+            <div class="role-stack">
+              <strong>${escapeHtml(preReviewed.position)}</strong>
+              <span>Mentor: ${escapeHtml(preReviewed.mentor)}</span>
+              <span>Senior Leader: ${escapeHtml(preReviewed.seniorLeader)}</span>
+              <span>Program Administrator: ${escapeHtml(preReviewed.programAdministrator)}</span>
+            </div>
+          ` : '<span class="empty-copy">Not applicable</span>'}
+        </td>
+        <td>
+          <div class="row-actions">
+            <button class="table-btn" type="button" data-action="open-learner" data-learner-id="${escapeHtml(learner.id)}">Open submission</button>
+            <button class="table-btn primary" type="button" data-action="approve-learner" data-learner-id="${escapeHtml(learner.id)}" ${disableApproval ? 'disabled' : ''}>Approve</button>
+            <button class="table-btn danger" type="button" data-action="reject-learner" data-learner-id="${escapeHtml(learner.id)}" ${disableApproval ? 'disabled' : ''}>Reject</button>
+            <button class="table-btn" type="button" data-action="competencies-learner" data-learner-id="${escapeHtml(learner.id)}">View competencies</button>
+          </div>
+          ${learner.priorMentor ? '<div class="assist-note">Limited access applies because this mentor relationship is historical.</div>' : ''}
+        </td>
+      </tr>
+    `;
+  }).join('');
+
+  updateSelectionState();
+}
+
+function updateSelectionState() {
+  const visibleLearners = getVisibleLearners();
+  const visibleIds = visibleLearners.map((learner) => learner.id);
+  const selectedVisibleCount = visibleIds.filter((id) => selectedLearners.has(id)).length;
+
+  document.getElementById('selected-count').textContent = `${selectedLearners.size} learner${selectedLearners.size === 1 ? '' : 's'} selected`;
+  endRelationshipBtn.disabled = !selectedLearners.size;
+  selectAll.checked = visibleIds.length > 0 && selectedVisibleCount === visibleIds.length;
+  selectAll.indeterminate = selectedVisibleCount > 0 && selectedVisibleCount < visibleIds.length;
+}
+
+function updateLearnerFromReview(review, decision) {
+  const learner = getLearnerById(review.learnerId);
+  const nextStatus = decision === 'approve' ? 'Approved' : 'Declined';
+  learner[review.field] = nextStatus;
+
+  if (review.field === 'feStatus') {
+    learner.currentStage = decision === 'approve' ? 'Work plan in progress' : 'Foundational experience revision requested';
+  } else if (review.field === 'wpStatus') {
+    learner.currentStage = decision === 'approve' ? 'Check-in preparation' : 'Work plan revision requested';
+  } else if (review.field === 'checkinStatus') {
+    learner.currentStage = decision === 'approve' ? 'Completion report preparation' : 'Check-in revision requested';
+  } else if (review.field === 'completionStatus') {
+    learner.currentStage = decision === 'approve' ? 'Ready for CPA review handoff' : 'Completion report revision requested';
+  }
+}
+
+function handleReviewDecision(reviewId, decision) {
+  const review = reviews.find((item) => item.id === reviewId);
+  if (!review) return;
+
+  updateLearnerFromReview(review, decision);
+  review.status = decision === 'approve' ? 'Approved' : 'Declined';
+
+  const learner = getLearnerById(review.learnerId);
+  setMessage(`${learner.name}'s ${review.type.toLowerCase()} was ${decision === 'approve' ? 'approved' : 'rejected'} by the mentor.`);
+  renderAll();
+}
+
+function flashCard(reviewId) {
+  const card = document.getElementById(`review-${reviewId}`);
+  if (!card) return;
+  card.classList.remove('flash');
+  void card.offsetWidth;
+  card.classList.add('flash');
+}
+
+function openReview(reviewId) {
+  const review = reviews.find((item) => item.id === reviewId);
+  if (!review) return;
+  document.getElementById(`review-${reviewId}`).scrollIntoView({ behavior: 'smooth', block: 'center' });
+  flashCard(reviewId);
+  const learner = getLearnerById(review.learnerId);
+  setMessage(`Opened ${learner.name}'s ${review.type.toLowerCase()} for mentor review.`);
+}
+
+function toggleCompetencies(reviewId, forceOpen) {
+  const box = document.getElementById(`competencies-${reviewId}`);
+  if (!box) return;
+  if (forceOpen) {
+    box.hidden = false;
+    return;
+  }
+  box.hidden = !box.hidden;
+}
+
+function openLearnerSubmission(learnerId) {
+  const learner = getLearnerById(learnerId);
+  const review = getFirstPendingReview(learnerId);
+
+  if (review) {
+    openReview(review.id);
+    return;
+  }
+
+  const row = document.getElementById(`learner-${learnerId}`);
+  if (row) row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  setMessage(`${learner.name} has no pending mentor approval right now, but the learner record remains available for reference.`);
+}
+
+function showLearnerCompetencies(learnerId) {
+  const learner = getLearnerById(learnerId);
+  const review = getFirstPendingReview(learnerId);
+
+  if (review) {
+    openReview(review.id);
+    toggleCompetencies(review.id, true);
+    setMessage(`Showing competencies awarded for ${learner.name}.`);
+    return;
+  }
+
+  setMessage(`${learner.name}: ${learner.competenciesNote}`);
+}
+
+function handleRosterDecision(learnerId, decision) {
+  const learner = getLearnerById(learnerId);
+  if (learner.priorMentor) {
+    setMessage(`${learner.name} is view-only because this is prior mentor access.`);
+    return;
+  }
+
+  const review = getFirstPendingReview(learnerId);
+  if (!review) {
+    setMessage(`${learner.name} has no pending mentor approval to ${decision}.`);
+    return;
+  }
+
+  handleReviewDecision(review.id, decision);
+}
+
+function endSelectedRelationships() {
+  const selectedIds = Array.from(selectedLearners);
+  if (!selectedIds.length) return;
+
+  const selectedNames = selectedIds.map((id) => getLearnerById(id).name);
+  const confirmed = window.confirm(`End mentor relationship with ${selectedNames.length} learner${selectedNames.length === 1 ? '' : 's'}?`);
+  if (!confirmed) return;
+
+  selectedIds.forEach((id) => {
+    const learner = getLearnerById(id);
+    learner.relationshipEnded = true;
+  });
+
+  reviews = reviews.filter((review) => !selectedLearners.has(review.learnerId));
+  selectedLearners.clear();
+  setMessage(`Ended mentor relationship with ${selectedNames.join(', ')}.`);
+  renderAll();
+}
+
+function renderAll() {
+  renderMetrics();
+  renderReviews();
+  renderLearners();
+}
+
+reviewGrid.addEventListener('click', (event) => {
+  const button = event.target.closest('button[data-action]');
+  if (!button) return;
+
+  const action = button.dataset.action;
+  const reviewId = button.dataset.reviewId;
+
+  if (action === 'open-review') openReview(reviewId);
+  if (action === 'approve-review') handleReviewDecision(reviewId, 'approve');
+  if (action === 'reject-review') handleReviewDecision(reviewId, 'reject');
+  if (action === 'toggle-competencies') {
+    toggleCompetencies(reviewId);
+    const review = reviews.find((item) => item.id === reviewId);
+    if (review) setMessage(`Viewing competencies awarded for ${getLearnerById(review.learnerId).name}.`);
+  }
+});
+
+learnerTableBody.addEventListener('click', (event) => {
+  const button = event.target.closest('button[data-action]');
+  if (!button) return;
+
+  const learnerId = button.dataset.learnerId;
+  const action = button.dataset.action;
+
+  if (action === 'open-learner') openLearnerSubmission(learnerId);
+  if (action === 'approve-learner') handleRosterDecision(learnerId, 'approve');
+  if (action === 'reject-learner') handleRosterDecision(learnerId, 'reject');
+  if (action === 'competencies-learner') showLearnerCompetencies(learnerId);
+});
+
+learnerTableBody.addEventListener('change', (event) => {
+  const checkbox = event.target.closest('.learner-select');
+  if (!checkbox) return;
+
+  if (checkbox.checked) selectedLearners.add(checkbox.dataset.learnerId);
+  else selectedLearners.delete(checkbox.dataset.learnerId);
+  updateSelectionState();
+});
+
+selectAll.addEventListener('change', () => {
+  const visibleLearners = getVisibleLearners();
+  visibleLearners.forEach((learner) => {
+    if (selectAll.checked) selectedLearners.add(learner.id);
+    else selectedLearners.delete(learner.id);
+  });
+  renderLearners();
+});
+
+nameFilter.addEventListener('input', renderLearners);
+statusFilter.addEventListener('change', renderLearners);
+sortFilter.addEventListener('change', renderLearners);
+endRelationshipBtn.addEventListener('click', endSelectedRelationships);
+
+renderAll();
+</script>
+</body>
+</html>
