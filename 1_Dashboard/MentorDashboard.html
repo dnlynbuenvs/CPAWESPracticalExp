@@ -28,13 +28,13 @@
   .nav-links a{color:rgba(255,255,255,.55);font-size:14px;padding:8px 16px;border-radius:var(--radius-sm);white-space:nowrap}
   .nav-links a.active,.nav-links a:hover{color:var(--white);background:rgba(255,255,255,.08)}
   .topbar-right{display:flex;align-items:center;gap:12px}
-  .role-dropdown{position:relative}
+    .role-dropdown{position:relative}
   .role-trigger{list-style:none;display:flex;align-items:center;gap:10px;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);color:var(--white);font-size:13px;font-weight:600;cursor:pointer}
   .role-trigger::-webkit-details-marker{display:none}
-  .role-label{display:inline-flex;align-items:center;justify-content:center;min-width:72px}
+  .role-label{display:inline-flex;align-items:center;justify-content:center;min-width:92px}
   .role-caret{font-size:11px;color:rgba(255,255,255,.72)}
-  .role-menu{position:absolute;right:0;top:calc(100% + 10px);min-width:180px;padding:8px;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);box-shadow:0 12px 30px rgba(11,31,58,.14);display:flex;flex-direction:column;gap:4px;z-index:20}
-  .role-option{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:var(--radius-sm);font-size:13px;color:var(--gray-800)}
+  .role-menu{position:absolute;right:0;top:calc(100% + 10px);min-width:190px;padding:8px;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);box-shadow:0 12px 30px rgba(11,31,58,.14);display:flex;flex-direction:column;gap:4px;z-index:20}
+  .role-option{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:var(--radius-sm);font-size:13px;color:var(--gray-800);text-decoration:none}
   .role-option:hover{background:var(--gray-100)}
   .role-option.active{background:#EBF3FF;color:var(--blue);font-weight:600}
   .page{max-width:1240px;margin:0 auto;padding:2rem 2rem 4rem}
@@ -47,8 +47,8 @@
   .panel{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);animation:rise .35s ease}
   .panel h2{font-size:17px;color:var(--navy);margin-bottom:4px}
   .panel-copy{font-size:12px;color:var(--gray-600);line-height:1.45}
-  .overview-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(320px,.9fr);gap:16px;margin-bottom:1.5rem}
-  .mentor-panel,.focus-panel,.queue-panel,.controls-panel,.roster-panel{padding:1.25rem}
+  .overview-grid{display:grid;grid-template-columns:1fr;gap:16px;margin-bottom:1.5rem}
+  .mentor-panel,.controls-panel,.roster-panel{padding:1.25rem}
   .mentor-head{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:1rem}
   .mentor-title{display:flex;align-items:center;gap:12px}
   .avatar{width:54px;height:54px;border-radius:50%;background:#EBF3FF;color:var(--blue);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px}
@@ -60,28 +60,15 @@
   .metric-card span{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--gray-400);margin-bottom:8px;font-weight:700}
   .metric-card strong{display:block;font-family:'DM Serif Display',serif;font-size:30px;font-weight:400;color:var(--navy);line-height:1}
   .metric-card small{display:block;font-size:12px;color:var(--gray-600);margin-top:8px;line-height:1.35}
-  .focus-list{display:flex;flex-direction:column;gap:10px;margin-top:1rem}
-  .focus-item{display:flex;align-items:flex-start;gap:10px;padding:11px;border-radius:var(--radius-md);border:1px solid var(--gray-200);background:var(--sand)}
-  .focus-index{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--white);border:1px solid var(--gray-200);font-size:11px;font-weight:700;color:var(--blue);flex:0 0 auto}
-  .focus-item strong{display:block;font-size:13px;color:var(--navy);margin-bottom:2px}
-  .focus-item span{font-size:12px;color:var(--gray-600);line-height:1.4}
   .message-bar{display:none;align-items:center;gap:10px;margin-bottom:1rem;padding:12px 14px;border-radius:var(--radius-md);background:#EBF3FF;border:1px solid rgba(27,94,168,.18);color:var(--navy);box-shadow:var(--shadow-sm)}
   .message-bar.visible{display:flex}
-  .queue-head,.controls-head,.roster-head{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:1rem}
-  .queue-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-  .review-card{border:1px solid var(--gray-200);border-radius:var(--radius-md);background:var(--sand);padding:1rem;transition:transform .15s ease,border-color .15s ease,box-shadow .15s ease}
-  .review-card:hover{transform:translateY(-1px);border-color:rgba(27,94,168,.32);box-shadow:var(--shadow-md)}
-  .review-card.flash{animation:flash .75s ease}
-  .review-top{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:.75rem}
+  .controls-head,.roster-head{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:1rem}
   .review-type{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--gray-400)}
   .review-type .type-dot{width:8px;height:8px;border-radius:50%;background:var(--blue)}
   .type-dot.fe{background:var(--green)}
   .type-dot.wp{background:var(--blue)}
   .type-dot.checkin{background:var(--amber)}
   .type-dot.completion{background:var(--accent)}
-  .review-card h3{font-size:16px;color:var(--navy);margin-bottom:3px}
-  .review-card p{font-size:12px;color:var(--gray-600);line-height:1.45}
-  .review-meta{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:12px 0}
   .meta-box{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-sm);padding:10px}
   .meta-box span{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--gray-400);font-weight:700;margin-bottom:4px}
   .meta-box strong{display:block;font-size:12px;color:var(--gray-800)}
@@ -124,6 +111,10 @@
   .stage-note{font-size:12px;color:var(--gray-600);line-height:1.4}
   .role-stack strong{display:block;font-size:13px;color:var(--navy);margin-bottom:6px}
   .role-stack span{display:block;font-size:12px;color:var(--gray-600);line-height:1.45}
+  .pending-stack{display:flex;flex-direction:column;gap:8px;min-width:180px}
+  .pending-item{padding:9px 10px;border-radius:var(--radius-sm);border:1px solid var(--gray-200);background:var(--sand)}
+  .pending-item .review-type{margin-bottom:5px}
+  .pending-item p{font-size:12px;color:var(--gray-600);line-height:1.4}
   .empty-copy{font-size:12px;color:var(--gray-600)}
   .empty-state{padding:20px;text-align:center;font-size:13px;color:var(--gray-600);background:var(--sand)}
   @keyframes rise {
@@ -135,19 +126,16 @@
     100% {background:var(--sand)}
   }
   @media(max-width:1100px){
-    .overview-grid{grid-template-columns:1fr}
     .metric-grid{grid-template-columns:repeat(2,1fr)}
-    .queue-grid{grid-template-columns:1fr}
   }
   @media(max-width:760px){
     .topbar{align-items:flex-start;flex-direction:column;padding:1rem}
     .nav-links{display:none}
     .topbar-right{width:100%;justify-content:space-between}
     .page{padding:1.25rem 1rem 3rem}
-    .hero,.mentor-head,.queue-head,.controls-head,.roster-head,.bulk-bar{flex-direction:column;align-items:flex-start}
+    .hero,.mentor-head,.controls-head,.roster-head,.bulk-bar{flex-direction:column;align-items:flex-start}
     .hero h1{font-size:34px}
     .metric-grid{grid-template-columns:1fr}
-    .review-meta{grid-template-columns:1fr}
     .controls-shell{width:100%}
     .field{min-width:100%}
   }
@@ -167,16 +155,17 @@
   <div class="topbar-right">
     <nav class="nav-links" aria-label="Primary navigation">
       <a href="MentorDashboard.html" class="active">Dashboard</a>
-      <a href="#pending-reviews">Pending reviews</a>
+      <a href="#roster-controls-title">Filters</a>
       <a href="#assigned-learners">Assigned learners</a>
       <a href="#">Messages</a>
     </nav>
-    <details class="role-dropdown">
+                <details class="role-dropdown">
       <summary class="role-trigger"><span class="role-label">Mentor</span><span class="role-caret">&#9662;</span></summary>
       <div class="role-menu">
-        <a class="role-option" href="LearnerDashboard.html">Learner</a>
+        <a class="role-option" href="../index.html">Learner</a>
+        <a class="role-option" href="CPAReviewer.html">CPA Reviewer</a>
         <a class="role-option active" href="MentorDashboard.html">Mentor</a>
-        <a class="role-option" href="#">ASB Staff</a>
+        <a class="role-option" href="PTSBStaffDashboard.html">PTSB Staff</a>
       </div>
     </details>
   </div>
@@ -208,45 +197,13 @@
         </div>
         <div class="mentor-pill"><span class="dot"></span><span>Quarterly mentor review cycle active</span></div>
       </div>
-      <div class="metric-grid">
-        <div class="metric-card"><span>Assigned learners</span><strong id="metric-learners">0</strong><small>Active mentorship relationships</small></div>
-        <div class="metric-card"><span>Pending reviews</span><strong id="metric-reviews">0</strong><small>Foundational experience, work plan, check-in, and completion report</small></div>
-        <div class="metric-card"><span>Pre-reviewed positions</span><strong id="metric-pre-reviewed">0</strong><small>Learners with role, senior leader, and program administrator details</small></div>
-        <div class="metric-card"><span>Prior mentor access</span><strong id="metric-prior-mentor">0</strong><small>View-only learners with limited approval actions</small></div>
-      </div>
+    <div class="metric-grid">
+      <div class="metric-card"><span>Assigned learners</span><strong id="metric-learners">0</strong><small>Active mentorship relationships</small></div>
+      <div class="metric-card"><span>Pending reviews</span><strong id="metric-reviews">0</strong><small>Foundational experience, work plan, check-in, and completion report</small></div>
+      <div class="metric-card"><span>Pre-reviewed positions</span><strong id="metric-pre-reviewed">0</strong><small>Learners with role, senior leader, and program administrator details</small></div>
+      <div class="metric-card"><span>Prior mentor access</span><strong id="metric-prior-mentor">0</strong><small>View-only learners with limited approval actions</small></div>
     </div>
-
-    <div class="panel focus-panel">
-      <div class="section-label">Mentor focus</div>
-      <h2>What needs attention this week</h2>
-      <p class="panel-copy">This summary mirrors the current review queue and learner roster.</p>
-      <div class="focus-list">
-        <div class="focus-item">
-          <div class="focus-index">1</div>
-          <div><strong>Pending approvals are grouped by submission type</strong><span>Review cards below surface foundational experience, work plan, check-in, and completion report items.</span></div>
-        </div>
-        <div class="focus-item">
-          <div class="focus-index">2</div>
-          <div><strong>Roster filters help narrow by learner name and status</strong><span>Search, filter, and sort work together before you take relationship actions.</span></div>
-        </div>
-        <div class="focus-item">
-          <div class="focus-index">3</div>
-          <div><strong>Pre-reviewed role assignments stay visible in the learner row</strong><span>Mentor, senior leader, and program administrator roles display where they apply.</span></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="panel queue-panel" id="pending-reviews" aria-labelledby="pending-reviews-title">
-    <div class="queue-head">
-      <div>
-        <div class="section-label">Pending reviews</div>
-        <h2 id="pending-reviews-title">Learner submissions waiting on mentor action</h2>
-        <p class="panel-copy">Open a submission, approve it, reject it, or inspect awarded competencies before deciding.</p>
-      </div>
-      <div class="hero-badge"><span class="dot"></span><span id="pending-review-count">0 active items</span></div>
-    </div>
-    <div class="queue-grid" id="review-grid"></div>
+  </div>
   </section>
 
   <section class="panel controls-panel" aria-labelledby="roster-controls-title" style="margin-top:1.5rem;">
@@ -318,6 +275,7 @@
             <th>FE status</th>
             <th>WP status</th>
             <th>Check-in status</th>
+            <th>Pending reviews</th>
             <th>Pre-reviewed role</th>
             <th>Actions</th>
           </tr>
@@ -472,7 +430,6 @@ let reviews = [
 const selectedLearners = new Set();
 const messageBar = document.getElementById('message-bar');
 const messageText = document.getElementById('message-text');
-const reviewGrid = document.getElementById('review-grid');
 const learnerTableBody = document.getElementById('learner-table-body');
 const nameFilter = document.getElementById('name-filter');
 const statusFilter = document.getElementById('status-filter');
@@ -540,47 +497,6 @@ function renderMetrics() {
   document.getElementById('metric-pre-reviewed').textContent = preReviewedCount;
   document.getElementById('metric-prior-mentor').textContent = priorMentorCount;
   document.getElementById('hero-summary').textContent = `${pendingReviews.length} pending reviews across ${activeLearners.length} learners`;
-  document.getElementById('pending-review-count').textContent = `${pendingReviews.length} active item${pendingReviews.length === 1 ? '' : 's'}`;
-}
-
-function renderReviews() {
-  const pendingReviews = getPendingReviews();
-
-  if (!pendingReviews.length) {
-    reviewGrid.innerHTML = '<div class="empty-state">No learner submissions are currently waiting on mentor approval.</div>';
-    return;
-  }
-
-  reviewGrid.innerHTML = pendingReviews.map((review) => {
-    const learner = getLearnerById(review.learnerId);
-    return `
-      <article class="review-card" id="review-${escapeHtml(review.id)}">
-        <div class="review-top">
-          <div>
-            <div class="review-type"><span class="type-dot ${typeClass(review.type)}"></span><span>${escapeHtml(review.type)}</span></div>
-            <h3>${escapeHtml(learner.name)}</h3>
-            <p>${escapeHtml(review.summary)}</p>
-          </div>
-          <span class="status-badge ${getStatusBadgeClass(review.status)}"><span class="dot"></span>${escapeHtml(review.status)}</span>
-        </div>
-        <div class="review-meta">
-          <div class="meta-box"><span>Employer</span><strong>${escapeHtml(learner.employer)}</strong></div>
-          <div class="meta-box"><span>Current stage</span><strong>${escapeHtml(learner.currentStage)}</strong></div>
-          <div class="meta-box"><span>Received</span><strong>${escapeHtml(review.receivedAt)}</strong></div>
-        </div>
-        <div class="review-actions">
-          <button class="action-btn" type="button" data-action="open-review" data-review-id="${escapeHtml(review.id)}">Open submission</button>
-          <button class="action-btn primary" type="button" data-action="approve-review" data-review-id="${escapeHtml(review.id)}">Approve</button>
-          <button class="action-btn danger" type="button" data-action="reject-review" data-review-id="${escapeHtml(review.id)}">Reject</button>
-          <button class="action-btn" type="button" data-action="toggle-competencies" data-review-id="${escapeHtml(review.id)}">View competencies awarded</button>
-        </div>
-        <div class="competency-box" id="competencies-${escapeHtml(review.id)}" hidden>
-          <strong>Competencies awarded</strong>
-          <ul>${review.competencies.map((item) => `<li>${escapeHtml(item)}</li>`).join('')}</ul>
-        </div>
-      </article>
-    `;
-  }).join('');
 }
 
 function learnerMatchesStatus(learner, status) {
@@ -643,13 +559,14 @@ function renderLearners() {
   document.getElementById('visible-count').textContent = `${visibleLearners.length} learner${visibleLearners.length === 1 ? '' : 's'} shown`;
 
   if (!visibleLearners.length) {
-    learnerTableBody.innerHTML = '<tr><td colspan="9" class="empty-state">No assigned learners match the current filter.</td></tr>';
+    learnerTableBody.innerHTML = '<tr><td colspan="10" class="empty-state">No assigned learners match the current filter.</td></tr>';
     updateSelectionState();
     return;
   }
 
   learnerTableBody.innerHTML = visibleLearners.map((learner) => {
     const pendingReview = getFirstPendingReview(learner.id);
+    const learnerPendingReviews = getPendingReviews().filter((review) => review.learnerId === learner.id);
     const disableApproval = learner.priorMentor || !pendingReview;
     const preReviewed = learner.preReviewedRole;
 
@@ -676,6 +593,18 @@ function renderLearners() {
         <td><span class="status-badge ${getStatusBadgeClass(learner.wpStatus)}"><span class="dot"></span>${escapeHtml(learner.wpStatus)}</span></td>
         <td><span class="status-badge ${getStatusBadgeClass(learner.checkinStatus)}"><span class="dot"></span>${escapeHtml(learner.checkinStatus)}</span></td>
         <td>
+          ${learnerPendingReviews.length ? `
+            <div class="pending-stack">
+              ${learnerPendingReviews.map((review) => `
+                <div class="pending-item">
+                  <div class="review-type"><span class="type-dot ${typeClass(review.type)}"></span><span>${escapeHtml(review.type)}</span></div>
+                  <p>Pending approval since ${escapeHtml(review.receivedAt)}</p>
+                </div>
+              `).join('')}
+            </div>
+          ` : '<span class="empty-copy">No pending mentor approvals</span>'}
+        </td>
+        <td>
           ${preReviewed ? `
             <div class="role-stack">
               <strong>${escapeHtml(preReviewed.position)}</strong>
@@ -687,8 +616,13 @@ function renderLearners() {
         </td>
         <td>
           <div class="row-actions">
-            <button class="table-btn" type="button" data-action="open-learner" data-learner-id="${escapeHtml(learner.id)}">Open submission</button>
-            <button class="table-btn primary" type="button" data-action="approve-learner" data-learner-id="${escapeHtml(learner.id)}" ${disableApproval ? 'disabled' : ''}>Approve</button>
+            <button class="table-btn"
+                    type="button"
+                    data-action="open-learner"
+                    data-learner-id="${escapeHtml(learner.id)}"
+                    onclick="location.href='../2_ClaimFoundationalExp/2_SupervisorMentorFE/1_SupervisorMentorFEReview.html'">
+                Open submission
+            </button>            <button class="table-btn primary" type="button" data-action="approve-learner" data-learner-id="${escapeHtml(learner.id)}" ${disableApproval ? 'disabled' : ''}>Approve</button>
             <button class="table-btn danger" type="button" data-action="reject-learner" data-learner-id="${escapeHtml(learner.id)}" ${disableApproval ? 'disabled' : ''}>Reject</button>
             <button class="table-btn" type="button" data-action="competencies-learner" data-learner-id="${escapeHtml(learner.id)}">View competencies</button>
           </div>
@@ -741,7 +675,9 @@ function handleReviewDecision(reviewId, decision) {
 }
 
 function flashCard(reviewId) {
-  const card = document.getElementById(`review-${reviewId}`);
+  const review = reviews.find((item) => item.id === reviewId);
+  if (!review) return;
+  const card = document.getElementById(`learner-${review.learnerId}`);
   if (!card) return;
   card.classList.remove('flash');
   void card.offsetWidth;
@@ -751,20 +687,18 @@ function flashCard(reviewId) {
 function openReview(reviewId) {
   const review = reviews.find((item) => item.id === reviewId);
   if (!review) return;
-  document.getElementById(`review-${reviewId}`).scrollIntoView({ behavior: 'smooth', block: 'center' });
+  const row = document.getElementById(`learner-${review.learnerId}`);
+  if (row) row.scrollIntoView({ behavior: 'smooth', block: 'center' });
   flashCard(reviewId);
   const learner = getLearnerById(review.learnerId);
   setMessage(`Opened ${learner.name}'s ${review.type.toLowerCase()} for mentor review.`);
 }
 
 function toggleCompetencies(reviewId, forceOpen) {
-  const box = document.getElementById(`competencies-${reviewId}`);
-  if (!box) return;
-  if (forceOpen) {
-    box.hidden = false;
-    return;
-  }
-  box.hidden = !box.hidden;
+  const review = reviews.find((item) => item.id === reviewId);
+  if (!review) return;
+  const learner = getLearnerById(review.learnerId);
+  setMessage(`${learner.name}: ${review.competencies.join(', ')}`);
 }
 
 function openLearnerSubmission(learnerId) {
@@ -832,26 +766,8 @@ function endSelectedRelationships() {
 
 function renderAll() {
   renderMetrics();
-  renderReviews();
   renderLearners();
 }
-
-reviewGrid.addEventListener('click', (event) => {
-  const button = event.target.closest('button[data-action]');
-  if (!button) return;
-
-  const action = button.dataset.action;
-  const reviewId = button.dataset.reviewId;
-
-  if (action === 'open-review') openReview(reviewId);
-  if (action === 'approve-review') handleReviewDecision(reviewId, 'approve');
-  if (action === 'reject-review') handleReviewDecision(reviewId, 'reject');
-  if (action === 'toggle-competencies') {
-    toggleCompetencies(reviewId);
-    const review = reviews.find((item) => item.id === reviewId);
-    if (review) setMessage(`Viewing competencies awarded for ${getLearnerById(review.learnerId).name}.`);
-  }
-});
 
 learnerTableBody.addEventListener('click', (event) => {
   const button = event.target.closest('button[data-action]');
@@ -893,3 +809,6 @@ renderAll();
 </script>
 </body>
 </html>
+
+
+

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPA - Claim Foundational Experience</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:#0B1F3A; --blue:#1B5EA8; --accent:#2A9D8F; --amber:#E76F1A; --green:#2D7A4E; --red:#C0392B;
+    --sand:#F7F5F2; --white:#FFFFFF; --gray-100:#F2F1EF; --gray-200:#E4E2DE; --gray-400:#A8A49E;
+    --gray-600:#6B6760; --gray-800:#2E2C2A;
+    --shadow-sm:0 1px 3px rgba(11,31,58,0.07),0 1px 2px rgba(11,31,58,0.05);
+    --shadow-md:0 10px 28px rgba(11,31,58,0.10);
+    --radius-sm:6px; --radius-md:10px; --radius-lg:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'DM Sans',sans-serif;background:var(--sand);color:var(--gray-800);min-height:100vh}
+  a{text-decoration:none;color:inherit}
+  button{font:inherit}
+  .topbar{background:var(--navy);min-height:60px;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:0 2rem}
+  .logo-group{display:flex;align-items:center;gap:10px;min-width:225px}
+  .logo-mark{width:36px;height:36px;background:var(--white);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .logo-text{display:flex;flex-direction:column;line-height:1.1}
+  .logo-text .brand{font-size:13px;font-weight:600;color:var(--white);letter-spacing:.04em}
+  .logo-text .sub{font-size:10px;color:rgba(255,255,255,.5);letter-spacing:.02em;text-transform:uppercase}
+  .topbar-right{display:flex;align-items:center;gap:12px}
+  .nav-links{display:flex;align-items:center;gap:2px}
+  .nav-links a{color:rgba(255,255,255,.55);font-size:14px;padding:8px 16px;border-radius:var(--radius-sm);white-space:nowrap}
+  .nav-links a.active,.nav-links a:hover{color:var(--white);background:rgba(255,255,255,.08)}
+    .role-dropdown{position:relative}
+  .role-trigger{list-style:none;display:flex;align-items:center;gap:10px;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);color:var(--white);font-size:13px;font-weight:600;cursor:pointer}
+  .role-trigger::-webkit-details-marker{display:none}
+  .role-label{display:inline-flex;align-items:center;justify-content:center;min-width:92px}
+  .role-caret{font-size:11px;color:rgba(255,255,255,.72)}
+  .role-menu{position:absolute;right:0;top:calc(100% + 10px);min-width:190px;padding:8px;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);box-shadow:0 12px 30px rgba(11,31,58,.14);display:flex;flex-direction:column;gap:4px;z-index:20}
+  .role-option{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:var(--radius-sm);font-size:13px;color:var(--gray-800);text-decoration:none}
+  .role-option:hover{background:var(--gray-100)}
+  .role-option.active{background:#EBF3FF;color:var(--blue);font-weight:600}
+  .page{max-width:1180px;margin:0 auto;padding:2rem 2rem 4rem}
+  .hero{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--gray-200)}
+  .hero h1{font-family:'DM Serif Display',serif;font-size:38px;font-weight:400;color:var(--navy);margin-bottom:6px}
+  .hero p{font-size:14px;color:var(--gray-600);max-width:700px;line-height:1.5}
+  .hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);padding:10px 16px;box-shadow:var(--shadow-sm);font-size:13px;color:var(--gray-600)}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--blue);flex:0 0 auto}
+  .message-bar{display:none;align-items:center;gap:10px;margin-bottom:1rem;padding:12px 14px;border-radius:var(--radius-md);background:#EBF3FF;border:1px solid rgba(27,94,168,.18);color:var(--navy);box-shadow:var(--shadow-sm)}
+  .message-bar.visible{display:flex}
+  .section-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gray-400);margin-bottom:.75rem}
+  .decision-grid{display:block;margin-bottom:1.5rem}
+  .panel{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm)}
+  .decision-panel{padding:1.5rem}
+  .decision-panel h2{font-size:17px;color:var(--navy);margin-bottom:4px}
+  .panel-copy{font-size:12px;color:var(--gray-600);line-height:1.45}
+  .choice-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;margin-top:1.25rem;align-items:stretch}
+  .choice-card{display:flex;flex-direction:column;justify-content:space-between;gap:20px;min-height:250px;padding:1.5rem;border:1px solid var(--gray-200);border-radius:var(--radius-md);background:linear-gradient(180deg,#fff 0%,#fbfaf8 100%)}
+  .choice-card.selected-claim{border-color:rgba(45,122,78,.32);box-shadow:0 0 0 3px rgba(45,122,78,.08)}
+  .choice-card.selected-skip{border-color:rgba(231,111,26,.30);box-shadow:0 0 0 3px rgba(231,111,26,.08)}
+  .choice-card.claim-card{background:linear-gradient(180deg,#f7fcf9 0%,#eef8f2 100%)}
+  .choice-card.skip-card{background:linear-gradient(180deg,#fffaf5 0%,#fff3e9 100%)}
+  .choice-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+  .choice-icon{width:48px;height:48px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;background:var(--white);border:1px solid var(--gray-200);color:var(--blue)}
+  .choice-card h3{font-size:20px;color:var(--navy);margin-bottom:8px}
+  .choice-card p{font-size:13px;color:var(--gray-600);line-height:1.55}
+  .choice-tag{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:6px 10px;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+  .choice-tag.success{background:#E8F5EE;color:var(--green)}
+  .choice-tag.warn{background:#FEF3E8;color:var(--amber)}
+  .action-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto}
+  .action-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:var(--radius-sm);border:1px solid var(--gray-200);padding:12px 16px;background:var(--white);color:var(--navy);font-size:13px;font-weight:700;cursor:pointer;transition:all .15s ease}
+  .action-btn:hover{border-color:rgba(27,94,168,.28);background:#F7FAFF}
+  .action-btn.primary{background:#EBF3FF;border-color:rgba(27,94,168,.28);color:var(--blue)}
+  .action-btn.success{background:#E8F5EE;border-color:rgba(45,122,78,.22);color:var(--green)}
+  .action-btn.warn{background:#FEF3E8;border-color:rgba(231,111,26,.24);color:var(--amber)}
+  .action-btn[disabled]{opacity:.55;cursor:not-allowed;background:var(--gray-100);color:var(--gray-600)}
+  .action-btn.full-width{width:100%}
+  .status-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:5px 10px;border-radius:20px;white-space:nowrap;margin-top:.75rem}
+  .status-badge .dot{width:6px;height:6px}
+  .badge-claim{background:#E8F5EE;color:var(--green)} .badge-claim .dot{background:var(--green)}
+  .badge-skip{background:#FEF3E8;color:var(--amber)} .badge-skip .dot{background:var(--amber)}
+  .badge-neutral{background:var(--gray-100);color:var(--gray-600)} .badge-neutral .dot{background:var(--gray-400)}
+  @media(max-width:980px){
+    .decision-grid{grid-template-columns:1fr}
+  }
+  @media(max-width:760px){
+    .topbar{align-items:flex-start;flex-direction:column;padding:1rem}
+    .nav-links{display:none}
+    .topbar-right{width:100%;justify-content:space-between}
+    .page{padding:1.25rem 1rem 3rem}
+    .hero{flex-direction:column;align-items:flex-start}
+    .hero h1{font-size:34px}
+    .choice-grid{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="logo-group">
+    <div class="logo-mark">
+      <svg width="24" height="20" viewBox="0 0 24 20" fill="none" aria-hidden="true">
+        <path d="M2 10C2 5.58 5.58 2 10 2h4c4.42 0 8 3.58 8 8s-3.58 8-8 8h-4C5.58 18 2 14.42 2 10z" fill="#0B1F3A" opacity="0.12"/>
+        <path d="M7 10.5l3 3 7-7" stroke="#0B1F3A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="logo-text"><span class="brand">CPA Canada</span><span class="sub">Chartered Professional Accountants</span></div>
+  </div>
+  <div class="topbar-right">
+    <nav class="nav-links" aria-label="Primary navigation">
+      <a href="../../1_Dashboard/LearnerDashboard.html">Dashboard</a>
+      <a href="1_FE_YesorNo.html" class="active">Foundational experience</a>
+      <a href="../../1_Dashboard/LearnerDashboard.html">Work plan</a>
+    </nav>
+                <details class="role-dropdown">
+      <summary class="role-trigger"><span class="role-label">Learner</span><span class="role-caret">&#9662;</span></summary>
+      <div class="role-menu">
+        <a class="role-option active" href="../../index.html">Learner</a>
+        <a class="role-option" href="../../1_Dashboard/CPAReviewer.html">CPA Reviewer</a>
+        <a class="role-option" href="../../1_Dashboard/MentorDashboard.html">Mentor</a>
+        <a class="role-option" href="../../1_Dashboard/PTSBStaffDashboard.html">PTSB Staff</a>
+      </div>
+    </details>
+  </div>
+</header>
+
+<main class="page">
+  <section class="hero" aria-labelledby="fe-decision-title">
+    <div>
+      <h1 id="fe-decision-title">Declare foundational experience</h1>
+      <p>Choose whether you want to claim foundational experience now. Your decision is stored for later reference by CPA Reviewer and CPA Staff, and you can return to change a skipped decision while eligible work-plan experience is not yet complete.</p>
+    </div>
+    <div class="hero-badge"><span class="dot"></span><span id="hero-summary">Decision not yet recorded</span></div>
+  </section>
+
+  <div class="message-bar" id="message-bar" role="status" aria-live="polite">
+    <span class="dot"></span>
+    <span id="message-text"></span>
+  </div>
+
+  <section class="decision-grid">
+    <div class="panel decision-panel">
+      <div class="section-label">Decision</div>
+      <h2>How do you want to proceed?</h2>
+      <p class="panel-copy">Choose the path that matches your experience. Each option shows what happens next so you can move forward with confidence.</p>
+
+      <div class="choice-grid">
+        <article class="choice-card claim-card" id="claim-card">
+          <div class="choice-top">
+            <div class="choice-icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M5 4h10l4 4v12H5V4z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M15 4v5h4M8 13h8M8 17h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            </div>
+            <span class="choice-tag success">Recommended when eligible</span>
+          </div>
+          <div>
+            <h3>Claim foundational experience</h3>
+            <p>Start your foundational experience submission now and continue into the detailed reporting flow on the next page.</p>
+          </div>
+          <div class="action-row">
+            <button class="action-btn success full-width" id="claim-btn" type="button">Claim and continue</button>
+          </div>
+        </article>
+
+        <article class="choice-card skip-card" id="skip-card">
+          <div class="choice-top">
+            <div class="choice-icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M6 12h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M12 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <span class="choice-tag warn">Use with care</span>
+          </div>
+          <div>
+            <h3>Skip foundational experience</h3>
+            <p>Proceed without claiming foundational experience and move toward the work plan path after a confirmation step.</p>
+          </div>
+          <div class="action-row">
+            <button class="action-btn warn full-width" id="skip-btn" type="button">Skip and continue</button>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+const decisionKey = 'feDecision:learner-101';
+const reportsKey = 'feReports:learner-101';
+const workPlanCompleteKey = 'workPlanEligibleExperienceComplete:learner-101';
+
+const claimFlowUrl = '2_FE_RecordExpDuration.html';
+const skipWarningUrl = '1.1_FE_SkipFEModal.html';
+
+const claimBtn = document.getElementById('claim-btn');
+const skipBtn = document.getElementById('skip-btn');
+const claimCard = document.getElementById('claim-card');
+const skipCard = document.getElementById('skip-card');
+const heroSummary = document.getElementById('hero-summary');
+const messageBar = document.getElementById('message-bar');
+const messageText = document.getElementById('message-text');
+
+function setMessage(text) {
+  messageText.textContent = text;
+  messageBar.classList.add('visible');
+}
+
+function getStoredDecision() {
+  return JSON.parse(localStorage.getItem(decisionKey) || 'null');
+}
+
+function setStoredDecision(decision) {
+  localStorage.setItem(decisionKey, JSON.stringify(decision));
+}
+
+function isWorkPlanCompleted() {
+  return localStorage.getItem(workPlanCompleteKey) === 'true';
+}
+
+function getReportCount() {
+  const stored = JSON.parse(localStorage.getItem(reportsKey) || '[]');
+  return Array.isArray(stored) ? stored.length : 0;
+}
+
+function updateCards(currentDecision) {
+  claimCard.classList.toggle('selected-claim', currentDecision && currentDecision.choice === 'claim');
+  skipCard.classList.toggle('selected-skip', currentDecision && currentDecision.choice === 'skip');
+}
+
+function renderStatus() {
+  const currentDecision = getStoredDecision();
+  const workPlanCompleted = isWorkPlanCompleted();
+  const reportCount = getReportCount();
+  updateCards(currentDecision);
+
+  claimBtn.disabled = workPlanCompleted && currentDecision && currentDecision.choice === 'skip';
+
+  if (!currentDecision) {
+    heroSummary.textContent = 'Decision not yet recorded';
+    return;
+  }
+
+  if (currentDecision.choice === 'claim') {
+    heroSummary.textContent = reportCount > 0 ? `Claiming foundational experience | ${reportCount} report${reportCount === 1 ? '' : 's'} started` : 'Claiming foundational experience';
+    return;
+  }
+
+  heroSummary.textContent = workPlanCompleted ? 'Foundational experience skipped | work-plan experience complete' : 'Foundational experience skipped';
+}
+
+function storeClaimDecision() {
+  const currentDecision = getStoredDecision();
+  if (isWorkPlanCompleted() && currentDecision && currentDecision.choice === 'skip') {
+    setMessage('Claiming foundational experience is locked because eligible work-plan experience is already complete.');
+    renderStatus();
+    return;
+  }
+
+  setStoredDecision({
+    choice: 'claim',
+    updatedAt: new Date().toISOString(),
+    referencedBy: ['CPA Reviewer', 'CPA Staff']
+  });
+
+  if (!localStorage.getItem(reportsKey)) {
+    localStorage.setItem(reportsKey, JSON.stringify([]));
+  }
+
+  setMessage('Foundational experience claim recorded. Continuing to the foundational experience submission flow.');
+  renderStatus();
+  window.location.href = claimFlowUrl;
+}
+
+function storeSkipDecision() {
+  window.location.href = skipWarningUrl;
+}
+
+claimBtn.addEventListener('click', storeClaimDecision);
+skipBtn.addEventListener('click', storeSkipDecision);
+
+renderStatus();
+</script>
+</body>
+</html>
+
+
+

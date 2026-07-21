@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPA - Reviewer Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:#0B1F3A; --blue:#1B5EA8; --accent:#2A9D8F; --amber:#E76F1A; --green:#2D7A4E; --red:#C0392B;
+    --sand:#F7F5F2; --white:#FFFFFF; --gray-100:#F2F1EF; --gray-200:#E4E2DE; --gray-300:#D2CEC8;
+    --gray-400:#A8A49E; --gray-600:#6B6760; --gray-800:#2E2C2A;
+    --shadow-sm:0 1px 3px rgba(11,31,58,0.07),0 1px 2px rgba(11,31,58,0.05);
+    --shadow-md:0 10px 28px rgba(11,31,58,0.10);
+    --radius-sm:6px; --radius-md:10px; --radius-lg:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'DM Sans',sans-serif;background:var(--sand);color:var(--gray-800);min-height:100vh}
+  a{text-decoration:none;color:inherit}
+  button,input,select{font:inherit}
+  .topbar{background:var(--navy);min-height:60px;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:0 2rem}
+  .logo-group{display:flex;align-items:center;gap:10px;min-width:225px}
+  .logo-mark{width:36px;height:36px;background:var(--white);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .logo-text{display:flex;flex-direction:column;line-height:1.1}
+  .logo-text .brand{font-size:13px;font-weight:600;color:var(--white);letter-spacing:.04em}
+  .logo-text .sub{font-size:10px;color:rgba(255,255,255,.5);letter-spacing:.02em;text-transform:uppercase}
+  .nav-links{display:flex;align-items:center;gap:2px}
+  .nav-links a{color:rgba(255,255,255,.55);font-size:14px;padding:8px 16px;border-radius:var(--radius-sm);white-space:nowrap}
+  .nav-links a.active,.nav-links a:hover{color:var(--white);background:rgba(255,255,255,.08)}
+  .topbar-right{display:flex;align-items:center;gap:12px}
+    .role-dropdown{position:relative}
+  .role-trigger{list-style:none;display:flex;align-items:center;gap:10px;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);color:var(--white);font-size:13px;font-weight:600;cursor:pointer}
+  .role-trigger::-webkit-details-marker{display:none}
+  .role-label{display:inline-flex;align-items:center;justify-content:center;min-width:92px}
+  .role-caret{font-size:11px;color:rgba(255,255,255,.72)}
+  .role-menu{position:absolute;right:0;top:calc(100% + 10px);min-width:190px;padding:8px;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);box-shadow:0 12px 30px rgba(11,31,58,.14);display:flex;flex-direction:column;gap:4px;z-index:20}
+  .role-option{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:var(--radius-sm);font-size:13px;color:var(--gray-800);text-decoration:none}
+  .role-option:hover{background:var(--gray-100)}
+  .role-option.active{background:#EBF3FF;color:var(--blue);font-weight:600}
+  .page{max-width:1280px;margin:0 auto;padding:2rem 2rem 4rem}
+  .hero{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--gray-200)}
+  .hero h1{font-family:'DM Serif Display',serif;font-size:38px;font-weight:400;color:var(--navy);margin-bottom:4px}
+  .hero p{font-size:14px;color:var(--gray-600);max-width:720px}
+  .hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);padding:10px 16px;box-shadow:var(--shadow-sm);font-size:13px;color:var(--gray-600);white-space:nowrap}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--blue);flex:0 0 auto}
+  .section-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gray-400);margin-bottom:.75rem}
+  .panel{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);animation:rise .35s ease}
+  .panel h2{font-size:17px;color:var(--navy);margin-bottom:4px}
+  .panel-copy{font-size:12px;color:var(--gray-600);line-height:1.45}
+  .message-bar{display:none;align-items:center;gap:10px;margin-bottom:1rem;padding:12px 14px;border-radius:var(--radius-md);background:#EBF3FF;border:1px solid rgba(27,94,168,.18);color:var(--navy);box-shadow:var(--shadow-sm)}
+  .message-bar.visible{display:flex}
+  .overview-grid{display:grid;grid-template-columns:1fr;gap:16px;margin-bottom:1.5rem}
+  .summary-panel,.filter-panel,.queue-panel{padding:1.25rem}
+  .summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  .summary-card{background:var(--sand);border:1px solid var(--gray-200);border-radius:var(--radius-md);padding:12px;min-height:82px}
+  .summary-card span{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--gray-400);margin-bottom:8px;font-weight:700}
+  .summary-card strong{display:block;font-family:'DM Serif Display',serif;font-size:30px;font-weight:400;color:var(--navy);line-height:1}
+  .summary-card small{display:block;font-size:12px;color:var(--gray-600);margin-top:8px;line-height:1.35}
+  .reviewer-bar{display:flex;flex-wrap:wrap;align-items:flex-end;gap:10px}
+  .field{display:flex;flex-direction:column;gap:6px;min-width:150px;flex:1}
+  .field.grow-2{flex:2}
+  .field label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gray-400)}
+  .field input,.field select{height:42px;border-radius:var(--radius-md);border:1px solid var(--gray-200);background:var(--sand);padding:0 12px;color:var(--gray-800)}
+  .field input:focus,.field select:focus{outline:none;border-color:rgba(27,94,168,.32);box-shadow:0 0 0 3px rgba(27,94,168,.08)}
+  .toolbar-btn,.table-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:var(--radius-sm);border:1px solid var(--gray-200);padding:9px 12px;background:var(--white);color:var(--navy);font-size:12px;font-weight:700;cursor:pointer;transition:all .15s ease}
+  .toolbar-btn:hover,.table-btn:hover{border-color:rgba(27,94,168,.28);background:#F7FAFF}
+  .toolbar-btn.primary,.table-btn.primary{background:#EBF3FF;border-color:rgba(27,94,168,.28);color:var(--blue)}
+  .toolbar-btn.danger,.table-btn.danger{background:#FFF4F1;border-color:rgba(192,57,43,.22);color:var(--red)}
+  .toolbar-btn[disabled],.table-btn[disabled]{opacity:.5;cursor:not-allowed;background:var(--gray-100);color:var(--gray-600)}
+  .filter-head,.queue-head{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:1rem}
+  .queue-tools{display:flex;flex-wrap:wrap;align-items:flex-end;gap:10px}
+  .bulk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-top:1rem;padding:12px 14px;border-radius:var(--radius-md);background:var(--sand);border:1px solid var(--gray-200)}
+  .bulk-bar strong{font-size:13px;color:var(--navy)}
+  .bulk-copy{font-size:12px;color:var(--gray-600)}
+  .table-wrap{overflow:auto;border:1px solid var(--gray-200);border-radius:var(--radius-lg)}
+  table{width:100%;min-width:1500px;border-collapse:collapse;background:var(--white)}
+  thead th{padding:11px 14px;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--gray-400);background:var(--sand);border-bottom:1px solid var(--gray-200);vertical-align:top}
+  tbody td{padding:14px;vertical-align:top;border-bottom:1px solid var(--gray-100);font-size:13px}
+  tbody tr:last-child td{border-bottom:none}
+  .select-col{width:42px}
+  .learner-cell strong{display:block;font-size:14px;color:var(--navy);margin-bottom:4px}
+  .subline{display:block;font-size:12px;color:var(--gray-600);line-height:1.45}
+  .status-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:5px 10px;border-radius:20px;white-space:nowrap}
+  .status-badge .dot{width:6px;height:6px}
+  .badge-approved{background:#E8F5EE;color:var(--green)} .badge-approved .dot{background:var(--green)}
+  .badge-pending{background:#FEF3E8;color:var(--amber)} .badge-pending .dot{background:var(--amber)}
+  .badge-progress{background:#EBF3FF;color:var(--blue)} .badge-progress .dot{background:var(--blue)}
+  .badge-declined{background:#FDECEA;color:var(--red)} .badge-declined .dot{background:var(--red)}
+  .badge-neutral{background:var(--gray-100);color:var(--gray-600)} .badge-neutral .dot{background:var(--gray-400)}
+  .risk-chip{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:5px 10px;font-size:11px;font-weight:700}
+  .risk-high{background:#FDECEA;color:var(--red)}
+  .risk-medium{background:#FEF3E8;color:var(--amber)}
+  .risk-low{background:#E8F5EE;color:var(--green)}
+  .assign-shell{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  .assign-shell select{min-width:160px;height:36px;border-radius:var(--radius-sm);border:1px solid var(--gray-200);background:var(--white);padding:0 10px}
+  .empty-state{padding:20px;text-align:center;font-size:13px;color:var(--gray-600);background:var(--sand)}
+  .hint{font-size:11px;color:var(--gray-600);line-height:1.4;margin-top:8px}
+  @keyframes rise {
+    from {opacity:0; transform:translateY(8px)}
+    to {opacity:1; transform:translateY(0)}
+  }
+  @media(max-width:1140px){
+    .summary-grid{grid-template-columns:repeat(2,1fr)}
+  }
+  @media(max-width:760px){
+    .topbar{align-items:flex-start;flex-direction:column;padding:1rem}
+    .nav-links{display:none}
+    .topbar-right{width:100%;justify-content:space-between}
+    .page{padding:1.25rem 1rem 3rem}
+    .hero,.filter-head,.queue-head,.bulk-bar{flex-direction:column;align-items:flex-start}
+    .hero h1{font-size:34px}
+    .summary-grid{grid-template-columns:1fr}
+    .reviewer-bar{width:100%}
+    .queue-tools{width:100%}
+    .field,.field.grow-2{min-width:100%;flex:auto}
+  }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="logo-group">
+    <div class="logo-mark">
+      <svg width="24" height="20" viewBox="0 0 24 20" fill="none" aria-hidden="true">
+        <path d="M2 10C2 5.58 5.58 2 10 2h4c4.42 0 8 3.58 8 8s-3.58 8-8 8h-4C5.58 18 2 14.42 2 10z" fill="#0B1F3A" opacity="0.12"/>
+        <path d="M7 10.5l3 3 7-7" stroke="#0B1F3A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="logo-text"><span class="brand">CPA Canada</span><span class="sub">Chartered Professional Accountants</span></div>
+  </div>
+  <div class="topbar-right">
+    <nav class="nav-links" aria-label="Primary navigation">
+      <a href="CPAReviewer.html" class="active">Dashboard</a>
+      <a href="#review-queue">Review queue</a>
+      <a href="#filter-title">Filters</a>
+      <a href="#">Messages</a>
+    </nav>
+                <details class="role-dropdown">
+      <summary class="role-trigger"><span class="role-label">CPA Reviewer</span><span class="role-caret">&#9662;</span></summary>
+      <div class="role-menu">
+        <a class="role-option" href="../index.html">Learner</a>
+        <a class="role-option active" href="CPAReviewer.html">CPA Reviewer</a>
+        <a class="role-option" href="MentorDashboard.html">Mentor</a>
+        <a class="role-option" href="PTSBStaffDashboard.html">PTSB Staff</a>
+      </div>
+    </details>
+  </div>
+</header>
+
+<main class="page">
+  <section class="hero" aria-labelledby="reviewer-dashboard-title">
+    <div>
+      <h1 id="reviewer-dashboard-title">CPA reviewer dashboard</h1>
+      <p>Monitor all in-flight foundational experience, work plan, partial report, and completion submissions, then triage or review them from the same workspace.</p>
+    </div>
+    <div class="hero-badge"><span class="dot"></span><span id="hero-summary">Loading in-flight submissions</span></div>
+  </section>
+
+  <div class="message-bar" id="message-bar" role="status" aria-live="polite">
+    <span class="dot"></span>
+    <span id="message-text"></span>
+  </div>
+
+  <section class="overview-grid" aria-label="CPA reviewer overview">
+    <div class="panel summary-panel">
+      <div class="section-label">Operations snapshot</div>
+      <div class="summary-grid">
+        <div class="summary-card"><span>In-flight items</span><strong id="metric-total">0</strong><small>All submissions currently visible in the queue</small></div>
+        <div class="summary-card"><span>Unassigned triage</span><strong id="metric-unassigned">0</strong><small>Needs a CPA staff reviewer assignment</small></div>
+        <div class="summary-card"><span>Assigned to me</span><strong id="metric-assigned-me">0</strong><small>Items current user can review directly</small></div>
+        <div class="summary-card"><span>High risk</span><strong id="metric-high-risk">0</strong><small>Priority items with elevated review attention</small></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel filter-panel" aria-labelledby="filter-title">
+    <div class="filter-head">
+      <div>
+        <div class="section-label">Queue filters</div>
+        <h2 id="filter-title">Filter all in-flight experiences</h2>
+        <p class="panel-copy">Filter by submission type, status, name, CPA Canada ID, iMIS ID, learner ID, and submission date.</p>
+      </div>
+    </div>
+    <div class="reviewer-bar">
+      <div class="field">
+        <label for="filter-type">Submission type</label>
+        <select id="filter-type">
+          <option value="all">All submission types</option>
+          <option value="Foundational Experience">Foundational Experience</option>
+          <option value="Work Plan">Work Plan</option>
+          <option value="Partial Report">Partial Report</option>
+          <option value="Completion Report">Completion Report</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="filter-status">Status</label>
+        <select id="filter-status">
+          <option value="all">All statuses</option>
+          <option value="Submitted">Submitted</option>
+          <option value="Assigned for review">Assigned for review</option>
+          <option value="In CPA review">In CPA review</option>
+          <option value="More information needed">More information needed</option>
+        </select>
+      </div>
+      <div class="field grow-2">
+        <label for="filter-name">Learner name</label>
+        <input id="filter-name" type="search" placeholder="Search learner name">
+      </div>
+      <div class="field">
+        <label for="filter-cpa-id">CPA Canada ID</label>
+        <input id="filter-cpa-id" type="search" placeholder="CPA ID">
+      </div>
+      <div class="field">
+        <label for="filter-imis-id">iMIS ID</label>
+        <input id="filter-imis-id" type="search" placeholder="iMIS ID">
+      </div>
+      <div class="field">
+        <label for="filter-learner-id">Learner ID</label>
+        <input id="filter-learner-id" type="search" placeholder="Learner ID">
+      </div>
+      <div class="field">
+        <label for="filter-date">Submission date</label>
+        <input id="filter-date" type="date">
+      </div>
+      <button class="toolbar-btn" id="reset-filters-btn" type="button">Reset filters</button>
+    </div>
+  </section>
+
+  <section class="panel queue-panel" id="review-queue" aria-labelledby="review-queue-title" style="margin-top:1.5rem;">
+    <div class="queue-head">
+      <div>
+        <div class="section-label">Dashboard review queue</div>
+        <h2 id="review-queue-title">All in-flight submissions</h2>
+        <p class="panel-copy">Use the queue to triage by reviewer assignment and review items already assigned to the current CPA staff user. The same user can do both.</p>
+      </div>
+      <div class="queue-tools">
+        <div class="field grow-2">
+          <label for="current-reviewer">Current CPA staff user</label>
+          <select id="current-reviewer"></select>
+        </div>
+        <div class="hero-badge"><span class="dot"></span><span id="visible-count">0 items shown</span></div>
+      </div>
+    </div>
+
+    <div class="bulk-bar">
+      <div>
+        <strong id="selected-count">0 items selected</strong>
+        <div class="bulk-copy">Bulk triage lets CPA staff assign one or many submissions to a reviewer in a single step.</div>
+      </div>
+      <div class="assign-shell">
+        <select id="bulk-reviewer"></select>
+        <button class="toolbar-btn primary" id="bulk-assign-btn" type="button" disabled>Assign selected</button>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table aria-describedby="review-queue-title">
+        <thead>
+          <tr>
+            <th class="select-col"><input id="select-all" type="checkbox" aria-label="Select all visible submissions"></th>
+            <th>Learner</th>
+            <th>Submission type</th>
+            <th>Status</th>
+            <th>Submitted date</th>
+            <th>Risk factor</th>
+            <th>Last login date</th>
+            <th>Pre-reviewed</th>
+            <th>Partial report type</th>
+            <th>Assigned reviewer</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="queue-body"></tbody>
+      </table>
+    </div>
+    <div class="hint">Assigned CPA staff reviewers can review submissions that are assigned to them. Unassigned items remain available for triage.</div>
+  </section>
+</main>
+
+<script>
+const reviewers = [
+  'Avery Patel, CPA',
+  'Noah Ramirez, CPA',
+  'Harper Singh, CPA',
+  'Lena Ortiz, CPA'
+];
+
+let currentReviewer = reviewers[0];
+
+const submissions = [
+  {
+    id: 'SUB-2001',
+    learnerName: 'Amelia Reyes',
+    learnerId: 'LRN-248109',
+    cpaId: 'CPA-772401',
+    iMISId: 'IMIS-10882',
+    type: 'Work Plan',
+    status: 'Assigned for review',
+    submittedDate: '2026-07-08',
+    riskFactor: 'Medium',
+    lastLoginDate: '2026-07-14',
+    assignedReviewer: 'Avery Patel, CPA',
+    preReviewed: 'No',
+    partialType: ''
+  },
+  {
+    id: 'SUB-2002',
+    learnerName: 'Daniel Brooks',
+    learnerId: 'LRN-251004',
+    cpaId: 'CPA-772582',
+    iMISId: 'IMIS-10911',
+    type: 'Foundational Experience',
+    status: 'Submitted',
+    submittedDate: '2026-07-09',
+    riskFactor: 'Low',
+    lastLoginDate: '2026-07-13',
+    assignedReviewer: '',
+    preReviewed: 'No',
+    partialType: ''
+  },
+  {
+    id: 'SUB-2003',
+    learnerName: 'Mina Hassan',
+    learnerId: 'LRN-251887',
+    cpaId: 'CPA-772993',
+    iMISId: 'IMIS-10938',
+    type: 'Partial Report',
+    status: 'Assigned for review',
+    submittedDate: '2026-07-12',
+    riskFactor: 'High',
+    lastLoginDate: '2026-07-15',
+    assignedReviewer: 'Noah Ramirez, CPA',
+    preReviewed: 'Yes',
+    partialType: 'Check-in report'
+  },
+  {
+    id: 'SUB-2004',
+    learnerName: 'Ethan Cole',
+    learnerId: 'LRN-253102',
+    cpaId: 'CPA-773245',
+    iMISId: 'IMIS-10997',
+    type: 'Completion Report',
+    status: 'In CPA review',
+    submittedDate: '2026-07-14',
+    riskFactor: 'Medium',
+    lastLoginDate: '2026-07-14',
+    assignedReviewer: 'Avery Patel, CPA',
+    preReviewed: 'No',
+    partialType: ''
+  },
+  {
+    id: 'SUB-2005',
+    learnerName: 'Olivia Park',
+    learnerId: 'LRN-247771',
+    cpaId: 'CPA-771918',
+    iMISId: 'IMIS-10831',
+    type: 'Work Plan',
+    status: 'More information needed',
+    submittedDate: '2026-07-11',
+    riskFactor: 'High',
+    lastLoginDate: '2026-07-12',
+    assignedReviewer: 'Harper Singh, CPA',
+    preReviewed: 'No',
+    partialType: ''
+  },
+  {
+    id: 'SUB-2006',
+    learnerName: 'Lucas Bennett',
+    learnerId: 'LRN-245664',
+    cpaId: 'CPA-771442',
+    iMISId: 'IMIS-10794',
+    type: 'Partial Report',
+    status: 'Submitted',
+    submittedDate: '2026-07-10',
+    riskFactor: 'Low',
+    lastLoginDate: '2026-07-11',
+    assignedReviewer: '',
+    preReviewed: 'No',
+    partialType: 'Interim partial report'
+  },
+  {
+    id: 'SUB-2007',
+    learnerName: 'Sofia Morales',
+    learnerId: 'LRN-254210',
+    cpaId: 'CPA-773614',
+    iMISId: 'IMIS-11022',
+    type: 'Completion Report',
+    status: 'Assigned for review',
+    submittedDate: '2026-07-13',
+    riskFactor: 'High',
+    lastLoginDate: '2026-07-15',
+    assignedReviewer: 'Lena Ortiz, CPA',
+    preReviewed: 'Yes',
+    partialType: ''
+  },
+  {
+    id: 'SUB-2008',
+    learnerName: 'Nina Patel',
+    learnerId: 'LRN-254771',
+    cpaId: 'CPA-773921',
+    iMISId: 'IMIS-11061',
+    type: 'Foundational Experience',
+    status: 'Assigned for review',
+    submittedDate: '2026-07-15',
+    riskFactor: 'Medium',
+    lastLoginDate: '2026-07-15',
+    assignedReviewer: 'Avery Patel, CPA',
+    preReviewed: 'Yes',
+    partialType: ''
+  }
+];
+
+const selectedItems = new Set();
+
+const currentReviewerSelect = document.getElementById('current-reviewer');
+const filterType = document.getElementById('filter-type');
+const filterStatus = document.getElementById('filter-status');
+const filterName = document.getElementById('filter-name');
+const filterCpaId = document.getElementById('filter-cpa-id');
+const filterImisId = document.getElementById('filter-imis-id');
+const filterLearnerId = document.getElementById('filter-learner-id');
+const filterDate = document.getElementById('filter-date');
+const resetFiltersBtn = document.getElementById('reset-filters-btn');
+const bulkReviewer = document.getElementById('bulk-reviewer');
+const bulkAssignBtn = document.getElementById('bulk-assign-btn');
+const selectAll = document.getElementById('select-all');
+const queueBody = document.getElementById('queue-body');
+const messageBar = document.getElementById('message-bar');
+const messageText = document.getElementById('message-text');
+
+function setMessage(text) {
+  messageText.textContent = text;
+  messageBar.classList.add('visible');
+}
+
+function formatDate(dateValue) {
+  const date = new Date(`${dateValue}T00:00:00`);
+  return date.toLocaleDateString('en-CA', { year:'numeric', month:'short', day:'numeric' });
+}
+
+function riskClass(level) {
+  if (level === 'High') return 'risk-high';
+  if (level === 'Medium') return 'risk-medium';
+  return 'risk-low';
+}
+
+function statusClass(status) {
+  if (/submitted|assigned/i.test(status)) return 'badge-pending';
+  if (/review/i.test(status)) return 'badge-progress';
+  if (/more information/i.test(status)) return 'badge-declined';
+  if (/approved/i.test(status)) return 'badge-approved';
+  return 'badge-neutral';
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function populateReviewerControls() {
+  currentReviewerSelect.innerHTML = reviewers.map((reviewer) => `<option value="${escapeHtml(reviewer)}">${escapeHtml(reviewer)}</option>`).join('');
+  bulkReviewer.innerHTML = ['<option value="">Assign to reviewer</option>'].concat(
+    reviewers.map((reviewer) => `<option value="${escapeHtml(reviewer)}">${escapeHtml(reviewer)}</option>`)
+  ).join('');
+  currentReviewerSelect.value = currentReviewer;
+}
+
+function matchesFilter(item) {
+  const typeValue = filterType.value;
+  const statusValue = filterStatus.value;
+  const nameValue = filterName.value.trim().toLowerCase();
+  const cpaValue = filterCpaId.value.trim().toLowerCase();
+  const imisValue = filterImisId.value.trim().toLowerCase();
+  const learnerValue = filterLearnerId.value.trim().toLowerCase();
+  const dateValue = filterDate.value;
+
+  if (typeValue !== 'all' && item.type !== typeValue) return false;
+  if (statusValue !== 'all' && item.status !== statusValue) return false;
+  if (nameValue && !item.learnerName.toLowerCase().includes(nameValue)) return false;
+  if (cpaValue && !item.cpaId.toLowerCase().includes(cpaValue)) return false;
+  if (imisValue && !item.iMISId.toLowerCase().includes(imisValue)) return false;
+  if (learnerValue && !item.learnerId.toLowerCase().includes(learnerValue)) return false;
+  if (dateValue && item.submittedDate !== dateValue) return false;
+  return true;
+}
+
+function getVisibleItems() {
+  return submissions.filter(matchesFilter).sort((left, right) => {
+    const riskOrder = { High: 0, Medium: 1, Low: 2 };
+    return riskOrder[left.riskFactor] - riskOrder[right.riskFactor] || right.submittedDate.localeCompare(left.submittedDate);
+  });
+}
+
+function getAssignedReviewerLabel(item) {
+  return item.assignedReviewer || 'Unassigned';
+}
+
+function canCurrentReviewerReview(item) {
+  return item.assignedReviewer === currentReviewer;
+}
+
+function renderMetrics() {
+  const visibleItems = getVisibleItems();
+  const unassigned = visibleItems.filter((item) => !item.assignedReviewer).length;
+  const assignedToMe = visibleItems.filter((item) => item.assignedReviewer === currentReviewer).length;
+  const highRisk = visibleItems.filter((item) => item.riskFactor === 'High').length;
+
+  document.getElementById('metric-total').textContent = visibleItems.length;
+  document.getElementById('metric-unassigned').textContent = unassigned;
+  document.getElementById('metric-assigned-me').textContent = assignedToMe;
+  document.getElementById('metric-high-risk').textContent = highRisk;
+  document.getElementById('hero-summary').textContent = `${visibleItems.length} in-flight item${visibleItems.length === 1 ? '' : 's'} | ${assignedToMe} assigned to ${currentReviewer.split(',')[0]}`;
+}
+
+function renderQueue() {
+  const visibleItems = getVisibleItems();
+  document.getElementById('visible-count').textContent = `${visibleItems.length} item${visibleItems.length === 1 ? '' : 's'} shown`;
+
+  if (!visibleItems.length) {
+    queueBody.innerHTML = '<tr><td colspan="11" class="empty-state">No in-flight submissions match the current filters.</td></tr>';
+    updateSelectionState();
+    return;
+  }
+
+  queueBody.innerHTML = visibleItems.map((item) => {
+    const reviewEnabled = canCurrentReviewerReview(item);
+    return `
+      <tr id="row-${escapeHtml(item.id)}">
+        <td class="select-col">
+          <input class="row-select" type="checkbox" data-id="${escapeHtml(item.id)}" ${selectedItems.has(item.id) ? 'checked' : ''} aria-label="Select ${escapeHtml(item.learnerName)} ${escapeHtml(item.type)}">
+        </td>
+        <td class="learner-cell">
+          <strong>${escapeHtml(item.learnerName)}</strong>
+          <span class="subline">Learner ID: ${escapeHtml(item.learnerId)}</span>
+          <span class="subline">CPA Canada ID: ${escapeHtml(item.cpaId)}</span>
+          <span class="subline">iMIS ID: ${escapeHtml(item.iMISId)}</span>
+        </td>
+        <td>${escapeHtml(item.type)}</td>
+        <td><span class="status-badge ${statusClass(item.status)}"><span class="dot"></span>${escapeHtml(item.status)}</span></td>
+        <td>${escapeHtml(formatDate(item.submittedDate))}</td>
+        <td><span class="risk-chip ${riskClass(item.riskFactor)}">${escapeHtml(item.riskFactor)} risk</span></td>
+        <td>${escapeHtml(formatDate(item.lastLoginDate))}</td>
+        <td>${escapeHtml(item.preReviewed)}</td>
+        <td>${escapeHtml(item.type === 'Partial Report' ? (item.partialType || 'Partial report') : 'Not applicable')}</td>
+        <td>
+          <div class="assign-shell">
+            <select data-assign-select="${escapeHtml(item.id)}">
+              <option value="">Assign reviewer</option>
+              ${reviewers.map((reviewer) => `<option value="${escapeHtml(reviewer)}" ${item.assignedReviewer === reviewer ? 'selected' : ''}>${escapeHtml(reviewer)}</option>`).join('')}
+            </select>
+            <button class="table-btn" type="button" data-action="assign" data-id="${escapeHtml(item.id)}">Assign</button>
+          </div>
+          <div class="hint">${escapeHtml(getAssignedReviewerLabel(item))}</div>
+        </td>
+        <td>
+          <div class="assign-shell">
+            <button class="table-btn"
+                    type="button"
+                    data-action="open"
+                    data-id="${escapeHtml(item.id)}"
+                    onclick="location.href='../2_ClaimFoundationalExp/4_CPAStaffReviewerFE/1_CPAStaffReview.html'">
+                Open
+            </button>
+            <button class="table-btn primary" type="button" data-action="review" data-id="${escapeHtml(item.id)}" ${reviewEnabled ? '' : 'disabled'}>Review</button>
+          </div>
+          <div class="hint">${reviewEnabled ? 'Assigned reviewer can review this submission.' : 'Assign to current user to enable review.'}</div>
+        </td>
+      </tr>
+    `;
+  }).join('');
+
+  updateSelectionState();
+}
+
+function updateSelectionState() {
+  const visibleIds = getVisibleItems().map((item) => item.id);
+  const selectedVisible = visibleIds.filter((id) => selectedItems.has(id)).length;
+  document.getElementById('selected-count').textContent = `${selectedItems.size} item${selectedItems.size === 1 ? '' : 's'} selected`;
+  bulkAssignBtn.disabled = !selectedItems.size || !bulkReviewer.value;
+  selectAll.checked = visibleIds.length > 0 && selectedVisible === visibleIds.length;
+  selectAll.indeterminate = selectedVisible > 0 && selectedVisible < visibleIds.length;
+}
+
+function renderAll() {
+  renderMetrics();
+  renderQueue();
+}
+
+function getSubmissionById(id) {
+  return submissions.find((item) => item.id === id);
+}
+
+function assignSubmission(id, reviewer) {
+  const submission = getSubmissionById(id);
+  if (!submission) return;
+  if (!reviewer) {
+    setMessage(`Choose a CPA staff reviewer before assigning ${submission.learnerName}'s ${submission.type.toLowerCase()}.`);
+    return;
+  }
+  submission.assignedReviewer = reviewer;
+  if (submission.status === 'Submitted') submission.status = 'Assigned for review';
+  setMessage(`${submission.learnerName}'s ${submission.type.toLowerCase()} was assigned to ${reviewer}.`);
+  renderAll();
+}
+
+function openSubmission(id) {
+  const submission = getSubmissionById(id);
+  if (!submission) return;
+  document.getElementById(`row-${id}`).scrollIntoView({ behavior: 'smooth', block: 'center' });
+  setMessage(`Opened ${submission.learnerName}'s ${submission.type.toLowerCase()} for CPA staff review.`);
+}
+
+function reviewSubmission(id) {
+  const submission = getSubmissionById(id);
+  if (!submission) return;
+  if (!canCurrentReviewerReview(submission)) {
+    setMessage(`Assign ${submission.learnerName}'s ${submission.type.toLowerCase()} to ${currentReviewer} before reviewing.`);
+    return;
+  }
+  if (submission.status === 'In CPA review') {
+    submission.status = 'More information needed';
+    setMessage(`${currentReviewer} marked ${submission.learnerName}'s ${submission.type.toLowerCase()} as more information needed.`);
+  } else {
+    submission.status = 'In CPA review';
+    setMessage(`${currentReviewer} is now reviewing ${submission.learnerName}'s ${submission.type.toLowerCase()}.`);
+  }
+  renderAll();
+}
+
+function resetFilters() {
+  filterType.value = 'all';
+  filterStatus.value = 'all';
+  filterName.value = '';
+  filterCpaId.value = '';
+  filterImisId.value = '';
+  filterLearnerId.value = '';
+  filterDate.value = '';
+  renderAll();
+}
+
+function bulkAssign() {
+  if (!selectedItems.size || !bulkReviewer.value) return;
+  const reviewer = bulkReviewer.value;
+  Array.from(selectedItems).forEach((id) => {
+    const submission = getSubmissionById(id);
+    if (!submission) return;
+    submission.assignedReviewer = reviewer;
+    if (submission.status === 'Submitted') submission.status = 'Assigned for review';
+  });
+  const count = selectedItems.size;
+  selectedItems.clear();
+  bulkReviewer.value = '';
+  setMessage(`Assigned ${count} submission${count === 1 ? '' : 's'} to ${reviewer}.`);
+  renderAll();
+}
+
+currentReviewerSelect.addEventListener('change', () => {
+  currentReviewer = currentReviewerSelect.value;
+  setMessage(`Current CPA staff user is now ${currentReviewer}.`);
+  renderAll();
+});
+
+[filterType, filterStatus, filterName, filterCpaId, filterImisId, filterLearnerId, filterDate].forEach((control) => {
+  const eventName = control.tagName === 'INPUT' && control.type !== 'date' ? 'input' : 'change';
+  control.addEventListener(eventName, renderAll);
+});
+
+resetFiltersBtn.addEventListener('click', resetFilters);
+
+bulkReviewer.addEventListener('change', updateSelectionState);
+bulkAssignBtn.addEventListener('click', bulkAssign);
+
+queueBody.addEventListener('change', (event) => {
+  const checkbox = event.target.closest('.row-select');
+  if (!checkbox) return;
+  if (checkbox.checked) selectedItems.add(checkbox.dataset.id);
+  else selectedItems.delete(checkbox.dataset.id);
+  updateSelectionState();
+});
+
+queueBody.addEventListener('click', (event) => {
+  const button = event.target.closest('button[data-action]');
+  if (!button) return;
+  const id = button.dataset.id;
+  const action = button.dataset.action;
+
+  if (action === 'assign') {
+    const select = document.querySelector(`select[data-assign-select="${id}"]`);
+    assignSubmission(id, select ? select.value : '');
+  }
+  if (action === 'open') openSubmission(id);
+  if (action === 'review') reviewSubmission(id);
+});
+
+selectAll.addEventListener('change', () => {
+  const visibleItems = getVisibleItems();
+  visibleItems.forEach((item) => {
+    if (selectAll.checked) selectedItems.add(item.id);
+    else selectedItems.delete(item.id);
+  });
+  renderQueue();
+});
+
+populateReviewerControls();
+renderAll();
+</script>
+</body>
+</html>
+
+
+

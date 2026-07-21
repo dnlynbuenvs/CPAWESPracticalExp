@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPA - Mentor Work Plan Review</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:#0B1F3A; --blue:#1B5EA8; --accent:#2A9D8F; --amber:#E76F1A; --green:#2D7A4E; --red:#C0392B;
+    --sand:#F7F5F2; --white:#FFFFFF; --gray-100:#F2F1EF; --gray-200:#E4E2DE; --gray-300:#D2CEC8;
+    --gray-400:#A8A49E; --gray-600:#6B6760; --gray-800:#2E2C2A;
+    --shadow-sm:0 1px 3px rgba(11,31,58,0.07),0 1px 2px rgba(11,31,58,0.05);
+    --shadow-md:0 10px 28px rgba(11,31,58,0.10);
+    --radius-sm:6px; --radius-md:10px; --radius-lg:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'DM Sans',sans-serif;background:var(--sand);color:var(--gray-800);min-height:100vh}
+  a{text-decoration:none;color:inherit}
+  button,input,select,textarea{font:inherit}
+  textarea{resize:vertical}
+  .topbar{background:var(--navy);min-height:60px;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:0 2rem}
+  .logo-group{display:flex;align-items:center;gap:10px;min-width:225px}
+  .logo-mark{width:36px;height:36px;background:var(--white);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .logo-text{display:flex;flex-direction:column;line-height:1.1}
+  .logo-text .brand{font-size:13px;font-weight:600;color:var(--white);letter-spacing:.04em}
+  .logo-text .sub{font-size:10px;color:rgba(255,255,255,.5);letter-spacing:.02em;text-transform:uppercase}
+  .topbar-right{display:flex;align-items:center;gap:12px}
+  .nav-links{display:flex;align-items:center;gap:2px}
+  .nav-links a{color:rgba(255,255,255,.55);font-size:14px;padding:8px 16px;border-radius:var(--radius-sm);white-space:nowrap}
+  .nav-links a.active,.nav-links a:hover{color:var(--white);background:rgba(255,255,255,.08)}
+    .role-dropdown{position:relative}
+  .role-trigger{list-style:none;display:flex;align-items:center;gap:10px;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);color:var(--white);font-size:13px;font-weight:600;cursor:pointer}
+  .role-trigger::-webkit-details-marker{display:none}
+  .role-label{display:inline-flex;align-items:center;justify-content:center;min-width:92px}
+  .role-caret{font-size:11px;color:rgba(255,255,255,.72)}
+  .role-menu{position:absolute;right:0;top:calc(100% + 10px);min-width:190px;padding:8px;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);box-shadow:0 12px 30px rgba(11,31,58,.14);display:flex;flex-direction:column;gap:4px;z-index:20}
+  .role-option{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:var(--radius-sm);font-size:13px;color:var(--gray-800);text-decoration:none}
+  .role-option:hover{background:var(--gray-100)}
+  .role-option.active{background:#EBF3FF;color:var(--blue);font-weight:600}
+  .page{max-width:1380px;margin:0 auto;padding:2rem 2rem 4rem}
+  .hero{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--gray-200)}
+  .hero h1{font-family:'DM Serif Display',serif;font-size:38px;font-weight:400;color:var(--navy);margin-bottom:6px}
+  .hero p{font-size:14px;color:var(--gray-600);max-width:820px;line-height:1.5}
+  .hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);padding:10px 16px;box-shadow:var(--shadow-sm);font-size:13px;color:var(--gray-600)}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--blue);flex:0 0 auto}
+  .message-bar{display:none;align-items:center;gap:10px;margin-bottom:1rem;padding:12px 14px;border-radius:var(--radius-md);background:#EBF3FF;border:1px solid rgba(27,94,168,.18);color:var(--navy);box-shadow:var(--shadow-sm)}
+  .message-bar.visible{display:flex}
+  .panel{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm)}
+  .panel h2{font-size:17px;color:var(--navy);margin-bottom:4px}
+  .panel-copy{font-size:12px;color:var(--gray-600);line-height:1.45}
+  .section-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gray-400);margin-bottom:.75rem}
+  .workspace{display:grid;grid-template-columns:330px minmax(0,1fr);gap:16px}
+  .sidebar-panel,.detail-panel,.meta-panel{padding:1.25rem}
+  .sidebar-stack,.meta-stack,.comment-list,.trail-list,.reminder-list,.doc-list,.pill-row,.section-stack{display:flex;flex-direction:column;gap:12px}
+  .queue-card{padding:12px;border-radius:var(--radius-md);border:1px solid var(--gray-200);background:var(--sand);cursor:pointer;transition:all .15s ease}
+  .queue-card.active{border-color:rgba(27,94,168,.32);box-shadow:0 0 0 3px rgba(27,94,168,.08);background:#F7FAFF}
+  .queue-card strong{display:block;font-size:14px;color:var(--navy);margin-bottom:4px}
+  .queue-card span{display:block;font-size:12px;color:var(--gray-600);line-height:1.4}
+  .workspace-main{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:16px}
+  .detail-stack{display:flex;flex-direction:column;gap:16px}
+  .info-section{padding:1rem;border:1px solid var(--gray-200);border-radius:var(--radius-md);background:var(--sand)}
+  .info-section h3{font-size:15px;color:var(--navy);margin-bottom:6px}
+  .grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+  .value-card{padding:11px;border-radius:var(--radius-sm);border:1px solid var(--gray-200);background:var(--white)}
+  .value-card span{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--gray-400);font-weight:700;margin-bottom:4px}
+  .value-card strong{display:block;font-size:13px;color:var(--gray-800);line-height:1.45}
+  .readonly-copy{padding:12px;border-radius:var(--radius-md);border:1px solid var(--gray-200);background:#F7FAFF;font-size:12px;color:var(--gray-600);line-height:1.45}
+  .doc-item,.comment-item,.trail-item,.reminder-item,.meta-card,.task-card,.notice-box{padding:12px;border-radius:var(--radius-md);border:1px solid var(--gray-200);background:var(--sand)}
+  .doc-item strong,.comment-item strong,.trail-item strong,.reminder-item strong,.meta-card strong,.task-card strong,.notice-box strong{display:block;font-size:13px;color:var(--navy);margin-bottom:4px}
+  .doc-item span,.comment-item span,.trail-item span,.reminder-item span,.meta-card span,.task-card span,.notice-box span{display:block;font-size:12px;color:var(--gray-600);line-height:1.45}
+  .status-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:5px 10px;border-radius:20px;white-space:nowrap}
+  .status-badge .dot{width:6px;height:6px}
+  .badge-approved{background:#E8F5EE;color:var(--green)} .badge-approved .dot{background:var(--green)}
+  .badge-pending{background:#FEF3E8;color:var(--amber)} .badge-pending .dot{background:var(--amber)}
+  .badge-progress{background:#EBF3FF;color:var(--blue)} .badge-progress .dot{background:var(--blue)}
+  .badge-declined{background:#FDECEA;color:var(--red)} .badge-declined .dot{background:var(--red)}
+  .badge-neutral{background:var(--gray-100);color:var(--gray-600)} .badge-neutral .dot{background:var(--gray-400)}
+  .comment-form{display:flex;flex-direction:column;gap:8px}
+  .comment-form textarea,.comment-form input,.comment-form select{border:1px solid var(--gray-200);border-radius:var(--radius-sm);background:var(--white);padding:10px 12px;color:var(--gray-800)}
+  .comment-form textarea{min-height:90px}
+  .comment-form textarea:focus,.comment-form input:focus,.comment-form select:focus{outline:none;border-color:rgba(27,94,168,.32);box-shadow:0 0 0 3px rgba(27,94,168,.08)}
+  .button-row{display:flex;flex-wrap:wrap;gap:8px}
+  .action-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:var(--radius-sm);border:1px solid var(--gray-200);padding:9px 12px;background:var(--white);color:var(--navy);font-size:12px;font-weight:700;cursor:pointer;transition:all .15s ease}
+  .action-btn:hover{border-color:rgba(27,94,168,.28);background:#F7FAFF}
+  .action-btn.primary{background:#EBF3FF;border-color:rgba(27,94,168,.28);color:var(--blue)}
+  .action-btn.success{background:#E8F5EE;border-color:rgba(45,122,78,.22);color:var(--green)}
+  .action-btn.danger{background:#FFF4F1;border-color:rgba(192,57,43,.22);color:var(--red)}
+  .action-btn.warn{background:#FEF3E8;border-color:rgba(231,111,26,.24);color:var(--amber)}
+  .action-btn[disabled]{opacity:.55;cursor:not-allowed;background:var(--gray-100);color:var(--gray-600)}
+  .notice-box{background:#F7FAFF}
+  .notice-box.warn{background:#FFF8F1;border-color:rgba(231,111,26,.22)}
+  .notice-box.success{background:#F2FBF6;border-color:rgba(45,122,78,.22)}
+  .notice-box.error{background:#FDECEA;border-color:rgba(192,57,43,.16)}
+  .checkbox-inline{display:flex;align-items:flex-start;gap:10px}
+  .checkbox-inline input{margin-top:3px}
+  .pill{display:inline-flex;align-items:center;gap:6px;background:#EBF3FF;color:var(--blue);border:1px solid rgba(27,94,168,.18);border-radius:999px;padding:5px 9px;font-size:11px;font-weight:700}
+  .empty-state{padding:20px;border:1px dashed var(--gray-300);border-radius:var(--radius-md);font-size:13px;color:var(--gray-600);text-align:center;background:var(--sand)}
+  @media(max-width:1180px){
+    .workspace,.workspace-main{grid-template-columns:1fr}
+  }
+  @media(max-width:760px){
+    .topbar{align-items:flex-start;flex-direction:column;padding:1rem}
+    .nav-links{display:none}
+    .topbar-right{width:100%;justify-content:space-between}
+    .page{padding:1.25rem 1rem 3rem}
+    .hero{flex-direction:column;align-items:flex-start}
+    .hero h1{font-size:34px}
+    .grid-2,.grid-3{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="logo-group">
+    <div class="logo-mark">
+      <svg width="24" height="20" viewBox="0 0 24 20" fill="none" aria-hidden="true">
+        <path d="M2 10C2 5.58 5.58 2 10 2h4c4.42 0 8 3.58 8 8s-3.58 8-8 8h-4C5.58 18 2 14.42 2 10z" fill="#0B1F3A" opacity="0.12"/>
+        <path d="M7 10.5l3 3 7-7" stroke="#0B1F3A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="logo-text"><span class="brand">CPA Canada</span><span class="sub">Chartered Professional Accountants</span></div>
+  </div>
+  <div class="topbar-right">
+    <nav class="nav-links" aria-label="Primary navigation">
+      <a href="../../1_Dashboard/MentorDashboard.html">Dashboard</a>
+      <a href="1_MentorReviewWP.html" class="active">Work plan review</a>
+      <a href="../../1_Dashboard/CPAReviewer.html">CPA review queue</a>
+    </nav>
+                <details class="role-dropdown">
+      <summary class="role-trigger"><span class="role-label">Mentor</span><span class="role-caret">&#9662;</span></summary>
+      <div class="role-menu">
+        <a class="role-option" href="../../index.html">Learner</a>
+        <a class="role-option" href="../../1_Dashboard/CPAReviewer.html">CPA Reviewer</a>
+        <a class="role-option active" href="../../1_Dashboard/MentorDashboard.html">Mentor</a>
+        <a class="role-option" href="../../1_Dashboard/PTSBStaffDashboard.html">PTSB Staff</a>
+      </div>
+    </details>
+  </div>
+</header>
+
+<main class="page">
+  <section class="hero" aria-labelledby="review-title">
+    <div>
+      <h1 id="review-title">Review submitted work plan</h1>
+      <p>Open the learner's submitted work plan in read-only mode, review the dates, documents, competencies, and supporting details, add learner-facing or staff-facing comments, and either approve it for CPA Staff review or return it for revision.</p>
+    </div>
+    <div class="hero-badge"><span class="dot"></span><span id="hero-summary">Loading mentor work plan queue</span></div>
+  </section>
+
+  <div class="message-bar" id="message-bar" role="status" aria-live="polite">
+    <span class="dot"></span>
+    <span id="message-text"></span>
+  </div>
+
+  <section class="workspace">
+    <aside class="panel sidebar-panel">
+      <div class="section-label">Submitted work plans</div>
+      <h2>Mentor review queue</h2>
+      <p class="panel-copy">Mentor review occurs before CPA Staff review. Submitted work plans remain read-only during mentor review, and each declined plan keeps its original version for historical reference.</p>
+      <div class="sidebar-stack" style="margin-top:1rem;">
+        <div class="meta-card">
+          <strong>Acting mentor</strong>
+          <span>Choose the mentor identity used for review comments, declarations, approvals, and revision actions.</span>
+          <div class="comment-form" style="margin-top:.75rem;">
+            <select id="mentor-actor">
+              <option value="Marcus Chen, CPA">Marcus Chen, CPA</option>
+              <option value="Sonia Malik, CPA">Sonia Malik, CPA</option>
+              <option value="Elena Flores, CPA">Elena Flores, CPA</option>
+            </select>
+          </div>
+        </div>
+        <div id="queue-list"></div>
+      </div>
+    </aside>
+
+    <section class="workspace-main">
+      <section class="panel detail-panel">
+        <div class="section-label">Work plan details</div>
+        <h2 id="detail-title">Submitted work plan</h2>
+        <p class="panel-copy" id="detail-copy">All learner work plan details are shown in read-only mode during mentor review.</p>
+
+        <div class="detail-stack">
+          <div class="readonly-copy">This work plan is shown read-only while mentor review is in progress. Mentor review happens before CPA Staff review, and the original submitted version is retained for historical reference even if the learner is asked to revise and resubmit.</div>
+
+          <section class="info-section">
+            <h3>Learner and employer details</h3>
+            <div class="grid-3" id="overview-grid"></div>
+          </section>
+
+          <section class="info-section">
+            <h3>Dates and duration</h3>
+            <div class="grid-3" id="duration-grid"></div>
+          </section>
+
+          <section class="info-section">
+            <h3>Role and organization details</h3>
+            <div class="grid-2" id="role-grid"></div>
+          </section>
+
+          <section class="info-section">
+            <h3>Supporting documents</h3>
+            <div class="doc-list" id="document-list"></div>
+          </section>
+
+          <section class="info-section">
+            <h3>Competency selections</h3>
+            <div class="section-stack" id="competency-section"></div>
+          </section>
+
+          <section class="info-section">
+            <h3>Mentor comments</h3>
+            <div class="comment-form">
+              <label for="learner-comment" class="subcopy">Comment for learner</label>
+              <textarea id="learner-comment" placeholder="Visible to the learner and CPA Staff Reviewer. Required when returning the work plan for revision."></textarea>
+              <label for="staff-comment" class="subcopy">Comment for CPA Staff Reviewer</label>
+              <textarea id="staff-comment" placeholder="Visible to CPA Staff Reviewer as part of the review history."></textarea>
+              <div class="button-row">
+                <button class="action-btn primary" id="add-comment-btn" type="button">Add comments</button>
+              </div>
+            </div>
+            <div class="comment-list" id="comment-list" style="margin-top:1rem;"></div>
+          </section>
+
+          <section class="info-section">
+            <h3>Mentor decision</h3>
+            <div class="notice-box" id="decision-note">
+              <strong>Pending mentor review</strong>
+              <span>The mentor can approve the work plan to route it to CPA Staff review or return it to the learner for revision with required learner-facing comments.</span>
+            </div>
+            <div class="notice-box" style="margin-top:1rem;">
+              <strong>Approval declaration</strong>
+              <label class="checkbox-inline" style="margin-top:.5rem;">
+                <input id="approval-declaration" type="checkbox">
+                <span>I confirm that I reviewed this work plan, to the best of my knowledge it is accurate, and it can proceed to CPA Staff review.</span>
+              </label>
+            </div>
+            <div class="button-row" style="margin-top:1rem;">
+              <button class="action-btn success" id="approve-btn" type="button">Approve work plan</button>
+              <button class="action-btn danger" id="return-btn" type="button">Return for revision</button>
+              <button class="action-btn warn" id="reminder-btn" type="button">Run reminder check</button>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <aside class="panel meta-panel">
+        <div class="section-label">Workflow and history</div>
+        <h2>Review metadata</h2>
+        <div class="meta-stack">
+          <div class="meta-card">
+            <strong>Current status</strong>
+            <span id="meta-status">Not available</span>
+          </div>
+          <div class="meta-card">
+            <strong>Submitted date and time</strong>
+            <span id="meta-submitted">Not submitted</span>
+          </div>
+          <div class="meta-card">
+            <strong>Mentor</strong>
+            <span id="meta-mentor">No mentor recorded.</span>
+          </div>
+          <div class="meta-card">
+            <strong>Workflow route</strong>
+            <span id="meta-route">No workflow route recorded.</span>
+          </div>
+          <div class="meta-card">
+            <strong>Reminder schedule</strong>
+            <div class="reminder-list" id="reminder-list" style="margin-top:.75rem;"></div>
+          </div>
+          <div class="meta-card">
+            <strong>Audit trail</strong>
+            <div class="trail-list" id="trail-list" style="margin-top:.75rem;"></div>
+          </div>
+        </div>
+      </aside>
+    </section>
+  </section>
+</main>
+
+<script>
+const workPlanKey = 'workPlanRecord:learner-101';
+const competencyKey = 'workPlanCompetencies:learner-101';
+const versionsKey = 'workPlanVersions:learner-101';
+const activeReviewKey = 'mentorWorkPlanReviewActive:learner-101';
+
+const queueList = document.getElementById('queue-list');
+const detailTitle = document.getElementById('detail-title');
+const detailCopy = document.getElementById('detail-copy');
+const heroSummary = document.getElementById('hero-summary');
+const overviewGrid = document.getElementById('overview-grid');
+const durationGrid = document.getElementById('duration-grid');
+const roleGrid = document.getElementById('role-grid');
+const documentList = document.getElementById('document-list');
+const competencySection = document.getElementById('competency-section');
+const learnerComment = document.getElementById('learner-comment');
+const staffComment = document.getElementById('staff-comment');
+const commentList = document.getElementById('comment-list');
+const decisionNote = document.getElementById('decision-note');
+const approvalDeclaration = document.getElementById('approval-declaration');
+const metaStatus = document.getElementById('meta-status');
+const metaSubmitted = document.getElementById('meta-submitted');
+const metaMentor = document.getElementById('meta-mentor');
+const metaRoute = document.getElementById('meta-route');
+const reminderList = document.getElementById('reminder-list');
+const trailList = document.getElementById('trail-list');
+const messageBar = document.getElementById('message-bar');
+const messageText = document.getElementById('message-text');
+const mentorActor = document.getElementById('mentor-actor');
+const approveBtn = document.getElementById('approve-btn');
+const returnBtn = document.getElementById('return-btn');
+const reminderBtn = document.getElementById('reminder-btn');
+
+let versions = [];
+let activeVersionId = null;
+let competencySnapshot = JSON.parse(localStorage.getItem(competencyKey) || 'null') || null;
+
+function setMessage(text) {
+  messageText.textContent = text;
+  messageBar.classList.add('visible');
+}
+
+function escapeHtml(value) {
+  return String(value || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function cloneDeep(value) {
+  return JSON.parse(JSON.stringify(value));
+}
+
+function formatDate(dateValue) {
+  if (!dateValue) return 'Not available';
+  const date = new Date(dateValue);
+  if (Number.isNaN(date.getTime())) return 'Not available';
+  return date.toLocaleString('en-CA', { year:'numeric', month:'short', day:'numeric', hour:'numeric', minute:'2-digit' });
+}
+
+function formatShortDate(dateValue) {
+  if (!dateValue) return 'Not available';
+  const date = new Date(`${dateValue}T00:00:00`);
+  if (Number.isNaN(date.getTime())) return 'Not available';
+  return date.toLocaleDateString('en-CA', { year:'numeric', month:'short', day:'numeric' });
+}
+
+function statusClass(status) {
+  if (/pending mentor/i.test(status)) return 'badge-pending';
+  if (/pending cpa|review/i.test(status)) return 'badge-progress';
+  if (/declined/i.test(status)) return 'badge-declined';
+  if (/approved/i.test(status)) return 'badge-approved';
+  return 'badge-neutral';
+}
+
+function createDefaultWorkPlan() {
+  return {
+    id: `wp-${Date.now()}`,
+    version: 1,
+    learnerInfo: {
+      legalName: 'Amelia Reyes',
+      preferredName: 'Amelia',
+      cpaId: 'CPA-772401',
+      governingBody: 'CPA British Columbia',
+      email: 'amelia.reyes@example.com',
+      phone: '604-555-0186'
+    },
+    preReviewed: {
+      employer: 'Northline Advisory Group',
+      roleId: 'nr-audit',
+      roleName: 'Pre-Reviewed Audit Associate',
+      seniorLeader: 'Priya Nair, CPA',
+      templatePath: 'Pre-reviewed role template: Pre-Reviewed Audit Associate'
+    },
+    approvals: {
+      mentorName: 'Marcus Chen, CPA',
+      mentorCpaId: 'CPA-100421',
+      mentorSelectedEmail: 'marcus.chen@northlineadvisory.example',
+      seniorLeaderName: 'Priya Nair, CPA',
+      seniorLeaderEmail: 'priya.nair@northlineadvisory.example'
+    },
+    roleType: 'Pre-reviewed',
+    serviceArea: 'Assurance',
+    employerDetails: {
+      organizationName: 'Northline Advisory Group',
+      organizationAddress: '700 Burrard Street, Vancouver, BC V6C 2X8',
+      organizationWebsite: 'https://www.northlineadvisory.example',
+      positionTitle: 'Audit Associate',
+      professionalStartDate: '2026-01-02',
+      positionStartDate: '2026-01-02',
+      expectedCompletionDate: '2027-08-30',
+      expectedLeaveDays: 8,
+      averageHoursPerWeek: 37.5
+    },
+    duration: {
+      potentialMonths: 19.66,
+      estimatedHours: 3060,
+      totalDays: 606,
+      eligibleDays: 598,
+      actualGainedPE: '',
+      reviewerThreeAttemptIndicator: false
+    },
+    documents: {
+      jobDescriptions: [{ id:'jd-1', name:'audit-associate-job-description.pdf', category:'Job description', sizeLabel:'212 KB', uploadedAt:new Date(Date.now() - 15 * 86400000).toISOString() }],
+      supporting: [{ id:'sd-1', name:'organization-chart.pdf', category:'Supporting document', sizeLabel:'84 KB', uploadedAt:new Date(Date.now() - 13 * 86400000).toISOString() }]
+    },
+    jobInformation: {
+      rolePlans: ['Audit and assurance', 'Finance'],
+      otherRolePlan: '',
+      orgEmployees: '160',
+      orgCpas: '42',
+      departmentName: 'Assurance Services',
+      departmentDescription: 'External audit and assurance delivery for mid-market clients.',
+      departmentEmployees: '28',
+      departmentCpas: '16',
+      directReports: '0'
+    },
+    workflow: {
+      status: 'Pending Mentor Approval',
+      submittedAt: new Date(Date.now() - 20 * 86400000).toISOString(),
+      notifications: [
+        { type:'Mentor dashboard notification', sentAt:new Date(Date.now() - 20 * 86400000).toISOString(), recipient:'marcus.chen@northlineadvisory.example' },
+        { type:'Mentor email notification', sentAt:new Date(Date.now() - 20 * 86400000).toISOString(), recipient:'marcus.chen@northlineadvisory.example' }
+      ],
+      reminderSchedule: [30,60,90].map((dayCount) => ({ dayCount, dueDate:new Date(Date.now() - (20 - dayCount) * 86400000).toISOString().slice(0,10), sent:false })),
+      resubmissionCount: 1,
+      comments: [],
+      auditTrail: []
+    },
+    updatedAt: new Date().toISOString()
+  };
+}
+
+function createDemoCompetencies() {
+  return {
+    coreMode: 'both',
+    taskSelections: {
+      'fr-1': { selected:true, level:'Level 2 - Emerging' },
+      'fr-2': { selected:true, level:'Level 1 - Foundational' },
+      'ma-1': { selected:true, level:'Level 2 - Emerging' },
+      'ma-2': { selected:true, level:'Level 1 - Foundational' },
+      'at-1': { selected:true, level:'Level 1 - Foundational' }
+    },
+    subtaskSelections: {
+      'fr-1-0': { applicable:'Yes', level:'Level 2 - Emerging' },
+      'fr-1-1': { applicable:'Yes', level:'Level 1 - Foundational' },
+      'fr-1-2': { applicable:'Yes', level:'Level 1 - Foundational' },
+      'fr-2-0': { applicable:'Yes', level:'Level 1 - Foundational' },
+      'fr-2-1': { applicable:'Yes', level:'Level 1 - Foundational' },
+      'fr-2-2': { applicable:'Yes', level:'Level 1 - Foundational' }
+    },
+    dcLevels: {
+      0:'Level 2 - Emerging', 1:'Level 2 - Emerging', 2:'Level 1 - Foundational',
+      3:'Level 2 - Emerging', 4:'Level 2 - Emerging', 5:'Level 1 - Foundational'
+    }
+  };
+}
+
+function normaliseVersion(plan) {
+  const base = createDefaultWorkPlan();
+  const merged = {
+    ...base,
+    ...plan,
+    learnerInfo: { ...base.learnerInfo, ...(plan.learnerInfo || {}) },
+    preReviewed: { ...base.preReviewed, ...(plan.preReviewed || {}) },
+    approvals: { ...base.approvals, ...(plan.approvals || {}) },
+    employerDetails: { ...base.employerDetails, ...(plan.employerDetails || {}) },
+    duration: { ...base.duration, ...(plan.duration || {}) },
+    documents: {
+      jobDescriptions: ((plan.documents && plan.documents.jobDescriptions) || []).slice(),
+      supporting: ((plan.documents && plan.documents.supporting) || []).slice()
+    },
+    jobInformation: { ...base.jobInformation, ...(plan.jobInformation || {}) },
+    workflow: {
+      ...base.workflow,
+      ...(plan.workflow || {}),
+      notifications: ((plan.workflow && plan.workflow.notifications) || []).slice(),
+      reminderSchedule: ((plan.workflow && plan.workflow.reminderSchedule) || []).slice(),
+      comments: ((plan.workflow && plan.workflow.comments) || []).slice(),
+      auditTrail: ((plan.workflow && plan.workflow.auditTrail) || []).slice()
+    }
+  };
+  return merged;
+}
+
+function loadVersions() {
+  const storedVersions = JSON.parse(localStorage.getItem(versionsKey) || '[]');
+  if (Array.isArray(storedVersions) && storedVersions.length) {
+    versions = storedVersions.map(normaliseVersion);
+  } else {
+    const storedPlan = JSON.parse(localStorage.getItem(workPlanKey) || 'null');
+    const seeded = storedPlan ? normaliseVersion(storedPlan) : createDefaultWorkPlan();
+    if (!seeded.id) seeded.id = `wp-${Date.now()}`;
+    if (!seeded.version) seeded.version = 1;
+    if (!seeded.workflow.status || seeded.workflow.status === 'Draft') {
+      seeded.workflow.status = 'Pending Mentor Approval';
+      seeded.workflow.submittedAt = seeded.workflow.submittedAt || new Date(Date.now() - 12 * 86400000).toISOString();
+      seeded.workflow.reminderSchedule = seeded.workflow.reminderSchedule && seeded.workflow.reminderSchedule.length
+        ? seeded.workflow.reminderSchedule
+        : [30,60,90].map((dayCount) => ({ dayCount, dueDate:new Date(new Date(seeded.workflow.submittedAt).getTime() + dayCount * 86400000).toISOString().slice(0,10), sent:false }));
+    }
+    versions = [seeded];
+    if (!competencySnapshot) competencySnapshot = createDemoCompetencies();
+  }
+
+  activeVersionId = localStorage.getItem(activeReviewKey) || versions[0].id;
+  if (!versions.some((item) => item.id === activeVersionId)) activeVersionId = versions[0].id;
+}
+
+function persistVersions() {
+  localStorage.setItem(versionsKey, JSON.stringify(versions));
+  localStorage.setItem(activeReviewKey, activeVersionId);
+  const active = getActiveVersion();
+  if (active) localStorage.setItem(workPlanKey, JSON.stringify(active));
+}
+
+function getActiveVersion() {
+  return versions.find((item) => item.id === activeVersionId);
+}
+
+function getActor() {
+  return mentorActor.value || 'Mentor';
+}
+
+function renderQueue() {
+  queueList.innerHTML = versions.map((plan) => `
+    <article class="queue-card ${plan.id === activeVersionId ? 'active' : ''}" data-version-id="${plan.id}">
+      <strong>${escapeHtml(plan.employerDetails.positionTitle || 'Work Plan')}</strong>
+      <span>${escapeHtml(plan.learnerInfo.legalName || 'Learner')} | Version ${plan.version}</span>
+      <span>${escapeHtml(plan.employerDetails.organizationName || 'Employer not entered')}</span>
+      <span class="status-badge ${statusClass(plan.workflow.status)}"><span class="dot"></span>${escapeHtml(plan.workflow.status)}</span>
+    </article>
+  `).join('');
+}
+
+function renderValueCards(container, values, colsClass) {
+  container.innerHTML = values.map((item) => `
+    <div class="value-card">
+      <span>${escapeHtml(item.label)}</span>
+      <strong>${escapeHtml(item.value)}</strong>
+    </div>
+  `).join('');
+}
+
+function renderDocuments(plan) {
+  const docs = [...(plan.documents.jobDescriptions || []), ...(plan.documents.supporting || [])];
+  if (!docs.length) {
+    documentList.innerHTML = '<div class="empty-state">No supporting documents are attached to this work plan.</div>';
+    return;
+  }
+  documentList.innerHTML = docs.map((doc) => `
+    <div class="doc-item">
+      <strong>${escapeHtml(doc.name)}</strong>
+      <span>${escapeHtml(doc.category)} | ${escapeHtml(doc.sizeLabel)} | Uploaded ${escapeHtml(formatDate(doc.uploadedAt))}</span>
+    </div>
+  `).join('');
+}
+
+function renderComments(plan) {
+  const comments = plan.workflow.comments || [];
+  if (!comments.length) {
+    commentList.innerHTML = '<div class="empty-state">No mentor review comments have been added yet.</div>';
+    return;
+  }
+  commentList.innerHTML = comments.slice().reverse().map((comment) => `
+    <div class="comment-item">
+      <strong>${escapeHtml(comment.author)} | ${escapeHtml(comment.visibility)}</strong>
+      <span>${escapeHtml(formatDate(comment.at))}</span>
+      <span>${escapeHtml(comment.text)}</span>
+    </div>
+  `).join('');
+}
+
+function renderTrail(plan) {
+  const items = plan.workflow.auditTrail || [];
+  if (!items.length) {
+    trailList.innerHTML = '<div class="empty-state">No audit events recorded yet.</div>';
+    return;
+  }
+  trailList.innerHTML = items.slice().reverse().map((entry) => `
+    <div class="trail-item">
+      <strong>${escapeHtml(entry.actor)} | ${escapeHtml(entry.role)}</strong>
+      <span>${escapeHtml(formatDate(entry.at))}</span>
+      <span>${escapeHtml(entry.previousStatus)} -> ${escapeHtml(entry.newStatus)}</span>
+      <span>${escapeHtml(entry.comments || 'No comments recorded.')}</span>
+    </div>
+  `).join('');
+}
+
+function renderReminders(plan) {
+  const items = plan.workflow.reminderSchedule || [];
+  if (!items.length) {
+    reminderList.innerHTML = '<div class="empty-state">Reminder dates will appear after submission.</div>';
+    return;
+  }
+  reminderList.innerHTML = items.map((item) => `
+    <div class="reminder-item">
+      <strong>${item.dayCount}-day reminder</strong>
+      <span>Due ${escapeHtml(formatShortDate(item.dueDate))}</span>
+      <span>${item.sent ? `Sent ${escapeHtml(formatDate(item.sentAt))}` : 'Not sent yet'}</span>
+    </div>
+  `).join('');
+}
+
+function renderCompetencies(plan) {
+  const comp = competencySnapshot || createDemoCompetencies();
+  const coreModeMap = {
+    fr: ['Financial Reporting'],
+    ma: ['Management Accounting'],
+    both: ['Financial Reporting', 'Management Accounting']
+  };
+  const selectedCore = coreModeMap[comp.coreMode] || [];
+  const selectedTasks = Object.entries(comp.taskSelections || {}).filter(([, value]) => value.selected);
+  const selectedSubtasks = Object.entries(comp.subtaskSelections || {}).filter(([, value]) => value.applicable === 'Yes');
+  const dcComplete = Object.values(comp.dcLevels || {}).filter(Boolean).length;
+
+  competencySection.innerHTML = `
+    <div class="notice-box">
+      <strong>Selected core competencies</strong>
+      <div class="pill-row" style="margin-top:.5rem;">
+        ${selectedCore.length ? selectedCore.map((item) => `<span class="pill">${escapeHtml(item)}</span>`).join('') : '<span class="pill">None selected</span>'}
+        ${(/Audit & Assurance/.test(plan.roleType) || (plan.jobInformation.rolePlans || []).includes('Audit and assurance')) ? '<span class="pill">Assurance and Trust</span>' : ''}
+      </div>
+    </div>
+    <div class="task-card">
+      <strong>Core task statements</strong>
+      <span>${selectedTasks.length} selected with current levels.</span>
+    </div>
+    <div class="task-card">
+      <strong>Sub-task statements</strong>
+      <span>${selectedSubtasks.length} marked Yes with current levels.</span>
+    </div>
+    <div class="task-card">
+      <strong>DC statements</strong>
+      <span>${dcComplete} completed current level selections.</span>
+    </div>
+  `;
+}
+
+function renderMeta(plan) {
+  metaStatus.innerHTML = `<span class="status-badge ${statusClass(plan.workflow.status)}"><span class="dot"></span>${escapeHtml(plan.workflow.status)}</span>`;
+  metaSubmitted.textContent = formatDate(plan.workflow.submittedAt);
+  metaMentor.textContent = plan.approvals.mentorName
+    ? `${plan.approvals.mentorName} (${plan.approvals.mentorSelectedEmail || 'email not available'})`
+    : 'No mentor recorded.';
+  metaRoute.textContent = plan.workflow.route || 'Mentor review occurs before CPA Staff review.';
+
+  const pending = plan.workflow.status === 'Pending Mentor Approval';
+  approveBtn.disabled = !pending;
+  returnBtn.disabled = !pending;
+  reminderBtn.disabled = !pending;
+  approvalDeclaration.disabled = !pending;
+
+  if (plan.workflow.status === 'Pending CPA Review') {
+    decisionNote.className = 'notice-box success';
+    decisionNote.innerHTML = '<strong>Approved</strong><span>This work plan has been approved by the mentor, recorded with declaration and timestamp, and routed to the CPA Staff triage queue for assignment to a CPA Staff Reviewer.</span>';
+  } else if (plan.workflow.status === 'Declined') {
+    decisionNote.className = 'notice-box error';
+    decisionNote.innerHTML = '<strong>Returned for revision</strong><span>The original submitted work plan remains read-only for historical reference. A new prepopulated work plan version was created for the learner to revise and resubmit, and the resubmitted plan will return to mentor review.</span>';
+  } else {
+    decisionNote.className = 'notice-box warn';
+    decisionNote.innerHTML = '<strong>Pending mentor review</strong><span>The mentor can approve the work plan to route it to CPA Staff review or return it to the learner for revision with required learner-facing comments.</span>';
+  }
+}
+
+function renderActiveVersion() {
+  const plan = getActiveVersion();
+  if (!plan) return;
+
+  detailTitle.textContent = `${plan.employerDetails.positionTitle || 'Submitted work plan'} | Version ${plan.version}`;
+  detailCopy.textContent = `Current status: ${plan.workflow.status}. All work plan sections are read-only during mentor review.`;
+
+  renderValueCards(overviewGrid, [
+    { label:'Given legal name', value: plan.learnerInfo.legalName || 'Not provided' },
+    { label:'Preferred name', value: plan.learnerInfo.preferredName || 'Not provided' },
+    { label:'CPA ID', value: plan.learnerInfo.cpaId || 'Not provided' },
+    { label:'Employer', value: plan.employerDetails.organizationName || 'Not provided' },
+    { label:'Role type', value: plan.roleType || 'Not provided' },
+    { label:'Template path', value: plan.preReviewed.templatePath || 'Not provided' }
+  ]);
+
+  renderValueCards(durationGrid, [
+    { label:'Work plan start date', value: formatShortDate(plan.employerDetails.professionalStartDate || plan.employerDetails.positionStartDate) },
+    { label:'Expected completion', value: formatShortDate(plan.employerDetails.expectedCompletionDate) },
+    { label:'Expected leave days', value: String(plan.employerDetails.expectedLeaveDays ?? 0) },
+    { label:'Potential PE', value: `${Number(plan.duration.potentialMonths || 0).toFixed(2)} months` },
+    { label:'Estimated hours', value: `${Math.round(Number(plan.duration.estimatedHours || 0))}` },
+    { label:'Actual gained PE', value: plan.duration.actualGainedPE || 'Pending CPA Reviewer' }
+  ]);
+
+  renderValueCards(roleGrid, [
+    { label:'Position title', value: plan.employerDetails.positionTitle || 'Not provided' },
+    { label:'Organization website', value: plan.employerDetails.organizationWebsite || 'Not provided' },
+    { label:'Organization address', value: plan.employerDetails.organizationAddress || 'Not provided' },
+    { label:'Role plans', value: (plan.jobInformation.rolePlans || []).join(', ') || 'Not provided' },
+    { label:'Department', value: plan.jobInformation.departmentName || 'Not provided' },
+    { label:'Mentor / Senior Leader', value: `${plan.approvals.mentorName || 'Mentor not set'} / ${plan.approvals.seniorLeaderName || 'Senior leader not set'}` }
+  ]);
+
+  renderDocuments(plan);
+  renderCompetencies(plan);
+  renderComments(plan);
+  renderReminders(plan);
+  renderTrail(plan);
+  renderMeta(plan);
+}
+
+function updateHero() {
+  const pendingCount = versions.filter((plan) => plan.workflow.status === 'Pending Mentor Approval').length;
+  heroSummary.textContent = `${versions.length} work plan version${versions.length === 1 ? '' : 's'} | ${pendingCount} pending mentor review`;
+}
+
+function renderAll() {
+  renderQueue();
+  renderActiveVersion();
+  updateHero();
+  persistVersions();
+}
+
+function switchVersion(versionId) {
+  activeVersionId = versionId;
+  approvalDeclaration.checked = false;
+  learnerComment.value = '';
+  staffComment.value = '';
+  renderAll();
+}
+
+function addAudit(plan, previousStatus, newStatus, comments) {
+  plan.workflow.auditTrail.push({
+    at: new Date().toISOString(),
+    actor: getActor(),
+    role: 'Mentor',
+    previousStatus,
+    newStatus,
+    comments
+  });
+}
+
+function addCommentEntry(plan, text, visibility) {
+  if (!text) return;
+  plan.workflow.comments.push({
+    at: new Date().toISOString(),
+    author: getActor(),
+    role: 'Mentor',
+    visibility,
+    text
+  });
+}
+
+function addCommentsFromInput(requiredLearnerComment) {
+  const plan = getActiveVersion();
+  const learnerText = learnerComment.value.trim();
+  const staffText = staffComment.value.trim();
+  if (requiredLearnerComment && !learnerText) {
+    setMessage('A learner-facing comment is required when returning the work plan for revision.');
+    return false;
+  }
+  addCommentEntry(plan, learnerText, 'Learner and CPA Staff Reviewer');
+  addCommentEntry(plan, staffText, 'CPA Staff Reviewer');
+  if (learnerText || staffText) {
+    addAudit(plan, plan.workflow.status, plan.workflow.status, `Comments added. Learner note: ${learnerText || 'None'}. Staff note: ${staffText || 'None'}.`);
+  }
+  learnerComment.value = '';
+  staffComment.value = '';
+  return true;
+}
+
+function runReminderCheck() {
+  const plan = getActiveVersion();
+  if (plan.workflow.status !== 'Pending Mentor Approval') {
+    setMessage('Reminders apply only while the work plan is pending mentor review.');
+    return;
+  }
+  const now = new Date();
+  const due = (plan.workflow.reminderSchedule || []).filter((entry) => !entry.sent && now >= new Date(`${entry.dueDate}T00:00:00`));
+  if (!due.length) {
+    setMessage('No 30, 60, or 90 day reminder emails are due yet for this work plan.');
+    return;
+  }
+  due.forEach((entry) => {
+    entry.sent = true;
+    entry.sentAt = new Date().toISOString();
+    plan.workflow.notifications.push({
+      type: `${entry.dayCount}-day mentor reminder email`,
+      sentAt: entry.sentAt,
+      recipient: plan.approvals.mentorSelectedEmail || 'mentor'
+    });
+    addAudit(plan, plan.workflow.status, plan.workflow.status, `${entry.dayCount}-day reminder email sent to mentor.`);
+  });
+  renderAll();
+  setMessage(`Sent ${due.length} reminder email${due.length === 1 ? '' : 's'} for this pending mentor review.`);
+}
+
+function approveWorkPlan() {
+  const plan = getActiveVersion();
+  if (plan.workflow.status !== 'Pending Mentor Approval') {
+    setMessage('Only work plans pending mentor approval can be approved.');
+    return;
+  }
+  if (!approvalDeclaration.checked) {
+    setMessage('The mentor approval declaration must be completed before approval.');
+    return;
+  }
+
+  addCommentsFromInput(false);
+  const previousStatus = plan.workflow.status;
+  plan.workflow.status = 'Pending CPA Review';
+  plan.workflow.route = 'Approved by mentor and routed to CPA Staff triage queue for assignment to a CPA Staff Reviewer.';
+  plan.workflow.approvedBy = getActor();
+  plan.workflow.approvedAt = new Date().toISOString();
+  plan.workflow.notifications.push(
+    { type:'Learner status change notification', sentAt: plan.workflow.approvedAt, recipient: plan.learnerInfo.email || 'learner' },
+    { type:'CPA Staff triage queue routing', sentAt: plan.workflow.approvedAt, recipient:'CPA Staff triage queue' },
+    { type:'Assigned reviewer email notification (on assignment)', sentAt: plan.workflow.approvedAt, recipient:'CPA Staff Reviewer' }
+  );
+  addAudit(plan, previousStatus, plan.workflow.status, 'Mentor approved the work plan declaration and routed it to CPA Staff review.');
+  approvalDeclaration.checked = false;
+  renderAll();
+  setMessage('Work plan approved. Status updated to Pending CPA Review and the file has been routed to CPA Staff triage.');
+}
+
+function createRevisionVersion(plan) {
+  const nextVersion = (plan.version || 1) + 1;
+  const draft = cloneDeep(plan);
+  draft.id = `${plan.id}-v${nextVersion}`;
+  draft.version = nextVersion;
+  draft.workflow = {
+    ...draft.workflow,
+    status: 'Draft',
+    submittedAt: '',
+    route: `Prepopulated draft created from declined work plan version ${plan.version}. Learner must revise and resubmit; resubmissions return to mentor review.`,
+    notifications: [],
+    reminderSchedule: [],
+    comments: [],
+    auditTrail: [],
+    resubmissionCount: (plan.workflow.resubmissionCount || 0) + 1
+  };
+  return draft;
+}
+
+function returnForRevision() {
+  const plan = getActiveVersion();
+  if (plan.workflow.status !== 'Pending Mentor Approval') {
+    setMessage('Only work plans pending mentor approval can be returned for revision.');
+    return;
+  }
+  if (!addCommentsFromInput(true)) return;
+
+  const previousStatus = plan.workflow.status;
+  plan.workflow.status = 'Declined';
+  plan.workflow.route = 'Returned by mentor for learner revision. Original submission remains read-only for historical reference.';
+  plan.workflow.declinedBy = getActor();
+  plan.workflow.declinedAt = new Date().toISOString();
+  plan.workflow.notifications.push(
+    { type:'Learner revision request notification', sentAt: plan.workflow.declinedAt, recipient: plan.learnerInfo.email || 'learner' },
+    { type:'Learner revision request email', sentAt: plan.workflow.declinedAt, recipient: plan.learnerInfo.email || 'learner' }
+  );
+  addAudit(plan, previousStatus, plan.workflow.status, 'Mentor returned the work plan for revision.');
+
+  const draft = createRevisionVersion(plan);
+  versions.push(draft);
+  renderAll();
+  setMessage('Work plan returned for revision. The original remains read-only and a new prepopulated draft version has been created for the learner.');
+}
+
+document.getElementById('add-comment-btn').addEventListener('click', () => {
+  const learnerText = learnerComment.value.trim();
+  const staffText = staffComment.value.trim();
+  if (!learnerText && !staffText) {
+    setMessage('Enter a learner-facing comment, a staff-facing note, or both before adding them.');
+    return;
+  }
+  addCommentsFromInput(false);
+  renderAll();
+  setMessage('Mentor comments added to the work plan review history.');
+});
+
+approveBtn.addEventListener('click', approveWorkPlan);
+returnBtn.addEventListener('click', returnForRevision);
+reminderBtn.addEventListener('click', runReminderCheck);
+
+queueList.addEventListener('click', (event) => {
+  const card = event.target.closest('[data-version-id]');
+  if (!card) return;
+  switchVersion(card.dataset.versionId);
+});
+
+loadVersions();
+renderAll();
+</script>
+</body>
+</html>
+
+
+

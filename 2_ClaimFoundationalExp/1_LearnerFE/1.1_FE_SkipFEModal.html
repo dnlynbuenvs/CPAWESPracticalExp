@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPA - Confirm Skip Foundational Experience</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:#0B1F3A; --blue:#1B5EA8; --amber:#E76F1A; --green:#2D7A4E;
+    --sand:#F7F5F2; --white:#FFFFFF; --gray-100:#F2F1EF; --gray-200:#E4E2DE;
+    --gray-400:#A8A49E; --gray-600:#6B6760; --gray-800:#2E2C2A;
+    --shadow-sm:0 1px 3px rgba(11,31,58,0.07),0 1px 2px rgba(11,31,58,0.05);
+    --shadow-md:0 18px 42px rgba(11,31,58,0.14);
+    --radius-sm:6px; --radius-md:10px; --radius-lg:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'DM Sans',sans-serif;background:linear-gradient(180deg,#efe8de 0%,#f7f5f2 34%,#f7f5f2 100%);color:var(--gray-800);min-height:100vh}
+  a{text-decoration:none;color:inherit}
+  .shell{min-height:100vh;display:grid;place-items:center;padding:2rem}
+  .modal-card{width:min(720px,100%);background:var(--white);border:1px solid var(--gray-200);border-radius:24px;box-shadow:var(--shadow-md);padding:2rem}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;border-radius:999px;background:#FFF8F1;border:1px solid rgba(231,111,26,.18);color:var(--amber);padding:7px 11px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+  .eyebrow-dot{width:8px;height:8px;border-radius:50%;background:var(--amber)}
+  h1{font-family:'DM Serif Display',serif;font-size:42px;font-weight:400;color:var(--navy);margin:1rem 0 .75rem}
+  .lead{font-size:16px;color:var(--gray-600);line-height:1.65;max-width:62ch;margin-top:1rem}
+  .button-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:1.75rem}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:0 18px;border-radius:var(--radius-sm);border:1px solid var(--gray-200);background:var(--white);color:var(--navy);font-size:13px;font-weight:700;cursor:pointer;text-decoration:none}
+  .btn.primary{background:#FFF4F1;border-color:rgba(231,111,26,.24);color:var(--amber)}
+  .btn.secondary{background:#EBF3FF;border-color:rgba(27,94,168,.24);color:var(--blue)}
+  .btn:hover{transform:translateY(-1px)}
+  @media(max-width:760px){
+    .shell{padding:1rem}
+    .modal-card{padding:1.5rem}
+    h1{font-size:34px}
+    .button-row{flex-direction:column}
+    .btn{width:100%}
+  }
+</style>
+</head>
+<body>
+<main class="shell">
+  <section class="modal-card" aria-labelledby="skip-modal-title">
+    <div class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span><span>Confirmation required</span></div>
+    <h1 id="skip-modal-title">Are you sure you want to skip foundational experience?</h1>
+    <p class="lead">Warning: If you continue, you will not be able to claim Foundational Experience after skipping this process. You will proceed directly to creating your Professional Experience Plan.</p>
+
+    <div class="button-row">
+      <a class="btn primary" id="confirm-skip-btn" href="../../1_Dashboard/1_LearnerDashboard_SkipFE.html">Yes, continue without FE</a>
+      <a class="btn secondary" href="1_FE_YesorNo.html">No, go back</a>
+    </div>
+  </section>
+</main>
+
+<script>
+const decisionKey = 'feDecision:learner-101';
+
+document.getElementById('confirm-skip-btn').addEventListener('click', function () {
+  localStorage.setItem(decisionKey, JSON.stringify({
+    choice: 'skip',
+    updatedAt: new Date().toISOString(),
+    referencedBy: ['CPA Reviewer', 'CPA Staff']
+  }));
+});
+</script>
+</body>
+</html>

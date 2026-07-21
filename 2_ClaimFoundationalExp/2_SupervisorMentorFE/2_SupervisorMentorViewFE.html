@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPA - View Submitted Foundational Experience</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:#0B1F3A; --blue:#1B5EA8; --accent:#2A9D8F; --amber:#E76F1A; --green:#2D7A4E; --red:#C0392B;
+    --sand:#F7F5F2; --white:#FFFFFF; --gray-100:#F2F1EF; --gray-200:#E4E2DE; --gray-300:#D2CEC8;
+    --gray-400:#A8A49E; --gray-600:#6B6760; --gray-800:#2E2C2A;
+    --shadow-sm:0 1px 3px rgba(11,31,58,0.07),0 1px 2px rgba(11,31,58,0.05);
+    --shadow-md:0 10px 28px rgba(11,31,58,0.10);
+    --radius-sm:6px; --radius-md:10px; --radius-lg:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'DM Sans',sans-serif;background:var(--sand);color:var(--gray-800);min-height:100vh}
+  a{text-decoration:none;color:inherit}
+  .topbar{background:var(--navy);min-height:60px;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:0 2rem}
+  .logo-group{display:flex;align-items:center;gap:10px;min-width:225px}
+  .logo-mark{width:36px;height:36px;background:var(--white);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .logo-text{display:flex;flex-direction:column;line-height:1.1}
+  .logo-text .brand{font-size:13px;font-weight:600;color:var(--white);letter-spacing:.04em}
+  .logo-text .sub{font-size:10px;color:rgba(255,255,255,.5);letter-spacing:.02em;text-transform:uppercase}
+  .topbar-right{display:flex;align-items:center;gap:12px}
+  .nav-links{display:flex;align-items:center;gap:2px}
+  .nav-links a{color:rgba(255,255,255,.55);font-size:14px;padding:8px 16px;border-radius:var(--radius-sm);white-space:nowrap}
+  .nav-links a.active,.nav-links a:hover{color:var(--white);background:rgba(255,255,255,.08)}
+    .role-dropdown{position:relative}
+  .role-trigger{list-style:none;display:flex;align-items:center;gap:10px;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);color:var(--white);font-size:13px;font-weight:600;cursor:pointer}
+  .role-trigger::-webkit-details-marker{display:none}
+  .role-label{display:inline-flex;align-items:center;justify-content:center;min-width:92px}
+  .role-caret{font-size:11px;color:rgba(255,255,255,.72)}
+  .role-menu{position:absolute;right:0;top:calc(100% + 10px);min-width:190px;padding:8px;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);box-shadow:0 12px 30px rgba(11,31,58,.14);display:flex;flex-direction:column;gap:4px;z-index:20}
+  .role-option{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:var(--radius-sm);font-size:13px;color:var(--gray-800);text-decoration:none}
+  .role-option:hover{background:var(--gray-100)}
+  .role-option.active{background:#EBF3FF;color:var(--blue);font-weight:600}
+  .page{max-width:1320px;margin:0 auto;padding:2rem 2rem 4rem}
+  .hero{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--gray-200)}
+  .hero h1{font-family:'DM Serif Display',serif;font-size:38px;font-weight:400;color:var(--navy);margin-bottom:6px}
+  .hero p{font-size:14px;color:var(--gray-600);max-width:780px;line-height:1.5}
+  .hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);padding:10px 16px;box-shadow:var(--shadow-sm);font-size:13px;color:var(--gray-600)}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--blue);flex:0 0 auto}
+  .panel{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm)}
+  .panel h2{font-size:17px;color:var(--navy);margin-bottom:4px}
+  .panel-copy{font-size:12px;color:var(--gray-600);line-height:1.45}
+  .section-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gray-400);margin-bottom:.75rem}
+  .workspace{display:grid;grid-template-columns:320px minmax(0,1fr);gap:16px}
+  .sidebar-panel,.detail-panel,.meta-panel{padding:1.25rem}
+  .sidebar-stack,.meta-stack,.timeline-stack,.doc-list{display:flex;flex-direction:column;gap:12px}
+  .queue-card{padding:12px;border-radius:var(--radius-md);border:1px solid var(--gray-200);background:var(--sand);cursor:pointer;transition:all .15s ease}
+  .queue-card.active{border-color:rgba(27,94,168,.32);box-shadow:0 0 0 3px rgba(27,94,168,.08);background:#F7FAFF}
+  .queue-card strong{display:block;font-size:14px;color:var(--navy);margin-bottom:4px}
+  .queue-card span{display:block;font-size:12px;color:var(--gray-600);line-height:1.4}
+  .workspace-main{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:16px}
+  .detail-stack{display:flex;flex-direction:column;gap:16px}
+  .info-section{padding:1rem;border:1px solid var(--gray-200);border-radius:var(--radius-md);background:var(--sand)}
+  .info-section h3{font-size:15px;color:var(--navy);margin-bottom:6px}
+  .grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .value-card{padding:11px;border-radius:var(--radius-sm);border:1px solid var(--gray-200);background:var(--white)}
+  .value-card span{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--gray-400);font-weight:700;margin-bottom:4px}
+  .value-card strong{display:block;font-size:13px;color:var(--gray-800);line-height:1.45}
+  .readonly-copy{padding:12px;border-radius:var(--radius-md);border:1px solid var(--gray-200);background:#F7FAFF;font-size:12px;color:var(--gray-600);line-height:1.45}
+  .meta-card,.timeline-item,.doc-item{padding:12px;border-radius:var(--radius-md);border:1px solid var(--gray-200);background:var(--sand)}
+  .meta-card strong,.timeline-item strong,.doc-item strong{display:block;font-size:13px;color:var(--navy);margin-bottom:4px}
+  .meta-card span,.timeline-item span,.doc-item span{display:block;font-size:12px;color:var(--gray-600);line-height:1.45}
+  .status-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:5px 10px;border-radius:20px;white-space:nowrap}
+  .status-badge .dot{width:6px;height:6px}
+  .badge-approved{background:#E8F5EE;color:var(--green)} .badge-approved .dot{background:var(--green)}
+  .badge-pending{background:#FEF3E8;color:var(--amber)} .badge-pending .dot{background:var(--amber)}
+  .badge-progress{background:#EBF3FF;color:var(--blue)} .badge-progress .dot{background:var(--blue)}
+  .badge-declined{background:#FDECEA;color:var(--red)} .badge-declined .dot{background:var(--red)}
+  .badge-neutral{background:var(--gray-100);color:var(--gray-600)} .badge-neutral .dot{background:var(--gray-400)}
+  .progress-shell{display:flex;flex-direction:column;gap:8px}
+  .progress-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .progress-value{font-family:'DM Serif Display',serif;font-size:32px;color:var(--navy)}
+  .progress-track{height:8px;width:100%;background:var(--gray-100);border-radius:999px;overflow:hidden}
+  .progress-fill{height:100%;background:var(--blue);border-radius:999px}
+  .empty-state{padding:20px;border:1px dashed var(--gray-300);border-radius:var(--radius-md);font-size:13px;color:var(--gray-600);text-align:center;background:var(--sand)}
+  @media(max-width:1120px){
+    .workspace,.workspace-main{grid-template-columns:1fr}
+  }
+  @media(max-width:760px){
+    .topbar{align-items:flex-start;flex-direction:column;padding:1rem}
+    .nav-links{display:none}
+    .topbar-right{width:100%;justify-content:space-between}
+    .page{padding:1.25rem 1rem 3rem}
+    .hero{flex-direction:column;align-items:flex-start}
+    .hero h1{font-size:34px}
+    .grid-2{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="logo-group">
+    <div class="logo-mark">
+      <svg width="24" height="20" viewBox="0 0 24 20" fill="none" aria-hidden="true">
+        <path d="M2 10C2 5.58 5.58 2 10 2h4c4.42 0 8 3.58 8 8s-3.58 8-8 8h-4C5.58 18 2 14.42 2 10z" fill="#0B1F3A" opacity="0.12"/>
+        <path d="M7 10.5l3 3 7-7" stroke="#0B1F3A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="logo-text"><span class="brand">CPA Canada</span><span class="sub">Chartered Professional Accountants</span></div>
+  </div>
+  <div class="topbar-right">
+    <nav class="nav-links" aria-label="Primary navigation">
+      <a href="../../1_Dashboard/LearnerDashboard.html">Dashboard</a>
+      <a href="1_FE_YesorNo.html">Foundational experience</a>
+      <a href="2_FE_RecordExpDuration.html">FE reports</a>
+      <a href="3_LearnerViewFE.html" class="active">View FE</a>
+    </nav>
+                <details class="role-dropdown">
+      <summary class="role-trigger"><span class="role-label">Learner</span><span class="role-caret">&#9662;</span></summary>
+      <div class="role-menu">
+        <a class="role-option active" href="../../index.html">Learner</a>
+        <a class="role-option" href="../../1_Dashboard/CPAReviewer.html">CPA Reviewer</a>
+        <a class="role-option" href="../../1_Dashboard/MentorDashboard.html">Mentor</a>
+        <a class="role-option" href="../../1_Dashboard/PTSBStaffDashboard.html">PTSB Staff</a>
+      </div>
+    </details>
+  </div>
+</header>
+
+<main class="page">
+  <section class="hero" aria-labelledby="view-fe-title">
+    <div>
+      <h1 id="view-fe-title">View submitted foundational experience</h1>
+      <p>Review each submitted foundational experience report in read-only mode, see your current status, and track progress to date without changing the original submission.</p>
+    </div>
+    <div class="hero-badge"><span class="dot"></span><span id="hero-summary">Loading submitted FE reports</span></div>
+  </section>
+
+  <section class="workspace">
+    <aside class="panel sidebar-panel">
+      <div class="section-label">Submitted reports</div>
+      <h2>Foundational experience history</h2>
+      <p class="panel-copy">Each employment experience appears as its own report. Open any submitted FE record to review its details and current status.</p>
+      <div id="report-list" class="sidebar-stack" style="margin-top:1rem;"></div>
+    </aside>
+
+    <section class="workspace-main">
+      <section class="panel detail-panel">
+        <div class="section-label">Submitted FE details</div>
+        <h2 id="detail-title">Foundational experience report</h2>
+        <p class="panel-copy" id="detail-copy">All learner and role fields are displayed in read-only mode.</p>
+
+        <div class="detail-stack">
+          <div class="readonly-copy">This is a read-only view of the submitted foundational experience. You can review what was submitted and track its status, but you cannot make changes from this page.</div>
+
+          <section class="info-section">
+            <h3>Learner information</h3>
+            <div class="grid-2" id="learner-grid"></div>
+          </section>
+
+          <section class="info-section">
+            <h3>Role information</h3>
+            <div class="grid-2" id="role-grid"></div>
+          </section>
+
+          <section class="info-section">
+            <h3>Supporting documents</h3>
+            <div class="doc-list" id="document-list"></div>
+          </section>
+<!--
+          <section class="info-section">
+            <h3>Status timeline</h3>
+            <div class="timeline-stack" id="timeline-list"></div>
+          </section>
+        </div>
+      </section>
+
+      <aside class="panel meta-panel">
+        <div class="section-label">Progress to date</div>
+        <h2>Submission progress</h2>
+        <div class="meta-stack">
+          <div class="meta-card">
+            <strong>Current status</strong>
+            <span id="meta-status">Not available</span>
+          </div>
+          <div class="meta-card">
+            <strong>Program expiry date</strong>
+            <span id="meta-expiry">Not available</span>
+          </div>
+          <div class="meta-card">
+            <strong>Progress to date</strong>
+            <div class="progress-shell" style="margin-top:.75rem;">
+              <div class="progress-head">
+                <span id="progress-label">Submitted</span>
+                <span class="progress-value" id="progress-value">0%</span>
+              </div>
+              <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+            </div>
+          </div>
+          <div class="meta-card">
+            <strong>Submitted date and time</strong>
+            <span id="meta-submitted">Not submitted</span>
+          </div>
+          <div class="meta-card">
+            <strong>Current route</strong>
+            <span id="meta-route">No workflow route recorded.</span>
+          </div>
+          <div class="meta-card">
+            <strong>Eligible duration</strong>
+            <span id="meta-duration">Not available</span>
+          </div>
+        </div>
+      </aside>
+    </section>
+  </section>
+</main>
+-->
+<script>
+const reportsKey = 'feReports:learner-101';
+const activeViewKey = 'feLearnerViewActive:learner-101';
+
+const reportList = document.getElementById('report-list');
+const detailTitle = document.getElementById('detail-title');
+const detailCopy = document.getElementById('detail-copy');
+const heroSummary = document.getElementById('hero-summary');
+const learnerGrid = document.getElementById('learner-grid');
+const roleGrid = document.getElementById('role-grid');
+const documentList = document.getElementById('document-list');
+const timelineList = document.getElementById('timeline-list');
+const metaStatus = document.getElementById('meta-status');
+const metaExpiry = document.getElementById('meta-expiry');
+const progressLabel = document.getElementById('progress-label');
+const progressValue = document.getElementById('progress-value');
+const progressFill = document.getElementById('progress-fill');
+const metaSubmitted = document.getElementById('meta-submitted');
+const metaRoute = document.getElementById('meta-route');
+const metaDuration = document.getElementById('meta-duration');
+
+let reports = [];
+let activeReportId = null;
+
+function cloneDeep(value) {
+  return JSON.parse(JSON.stringify(value));
+}
+
+function escapeHtml(value) {
+  return String(value || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function formatDate(dateValue) {
+  if (!dateValue) return 'Not available';
+  const date = new Date(dateValue);
+  if (Number.isNaN(date.getTime())) return 'Not available';
+  return date.toLocaleString('en-CA', { year:'numeric', month:'short', day:'numeric', hour:'numeric', minute:'2-digit' });
+}
+
+function formatShortDate(dateValue) {
+  if (!dateValue) return 'Not available';
+  const date = new Date(`${dateValue}T00:00:00`);
+  if (Number.isNaN(date.getTime())) return 'Not available';
+  return date.toLocaleDateString('en-CA', { year:'numeric', month:'short', day:'numeric' });
+}
+
+function statusClass(status) {
+  if (/pending/i.test(status)) return 'badge-pending';
+  if (/review|draft|more information/i.test(status)) return 'badge-progress';
+  if (/declined|rejected|limit/i.test(status)) return 'badge-declined';
+  if (/approved/i.test(status)) return 'badge-approved';
+  return 'badge-neutral';
+}
+
+function createDemoReports() {
+  const now = Date.now();
+  const fortyDaysAgo = new Date(now - 40 * 86400000).toISOString();
+  const twelveDaysAgo = new Date(now - 12 * 86400000).toISOString();
+  return [
+    {
+      id: 'fe-view-1',
+      status: 'Approved',
+      learnerInfo: {
+        legalName: 'Amelia Reyes',
+        preferredName: 'Amelia',
+        cpaId: 'CPA-772401',
+        governingBody: 'CPA British Columbia',
+        email: 'amelia.reyes@example.com',
+        phone: '604-555-0186',
+        programExpiryDate: '2028-11-30'
+      },
+      roleInfo: {
+        employer: 'Northline Advisory Group',
+        reportTitle: 'Audit Associate at Northline Advisory Group',
+        jobDescription: 'Audit associate role supporting external assurance engagements and client reporting.',
+        experienceDates: 'Jan 02, 2026 to Aug 31, 2026',
+        supervisorName: 'Marcus Chen, CPA'
+      },
+      duration: {
+        startDate: '2026-01-02',
+        endDate: '2026-08-31',
+        leaveDays: 3,
+        avgHoursPerWeek: 37.5
+      },
+      documents: {
+        jobDescriptions: [{ id: 'jd-1', name: 'job-description.pdf', category: 'Job description', sizeLabel: '212 KB', uploadedAt: fortyDaysAgo }],
+        supporting: [{ id: 'sd-1', name: 'employment-letter.pdf', category: 'Supporting document', sizeLabel: '145 KB', uploadedAt: fortyDaysAgo }]
+      },
+      submittedAt: fortyDaysAgo,
+      workflowRoute: 'Approved in CPA staff review. Learner may proceed to create and submit a work plan.',
+      notifications: [{ type: 'Learner FE approval notice', sentAt: twelveDaysAgo, recipient: 'amelia.reyes@example.com' }],
+      review: {
+        auditTrail: [{
+          id: 'a-1',
+          at: twelveDaysAgo,
+          actor: 'Priya Sharma, CPA',
+          role: 'CPA Staff Reviewer',
+          previousStatus: 'In CPA Review',
+          newStatus: 'Approved',
+          comments: 'Approved 7.88 months of eligible foundational experience.'
+        }],
+        approvedMonths: 7.88
+      }
+    },
+    {
+      id: 'fe-view-2',
+      status: 'Pending CPA Review',
+      learnerInfo: {
+        legalName: 'Amelia Reyes',
+        preferredName: 'Amelia',
+        cpaId: 'CPA-772401',
+        governingBody: 'CPA British Columbia',
+        email: 'amelia.reyes@example.com',
+        phone: '604-555-0186',
+        programExpiryDate: '2028-11-30'
+      },
+      roleInfo: {
+        employer: 'Harbour Tax Advisory',
+        reportTitle: 'Tax Analyst at Harbour Tax Advisory',
+        jobDescription: 'Tax analyst role supporting compliance reviews and tax return preparation.',
+        experienceDates: 'Sep 15, 2025 to Dec 20, 2025',
+        supervisorName: 'Elena Flores, CPA'
+      },
+      duration: {
+        startDate: '2025-09-15',
+        endDate: '2025-12-20',
+        leaveDays: 0,
+        avgHoursPerWeek: 40
+      },
+      documents: {
+        jobDescriptions: [{ id: 'jd-2', name: 'tax-analyst-job-description.pdf', category: 'Job description', sizeLabel: '198 KB', uploadedAt: fortyDaysAgo }],
+        supporting: []
+      },
+      submittedAt: twelveDaysAgo,
+      workflowRoute: 'Supervisor approved this FE and routed it to the CPA review queue for triage and assignment.',
+      notifications: [{ type: 'Supervisor approval notice', sentAt: twelveDaysAgo, recipient: 'amelia.reyes@example.com' }],
+      review: {
+        auditTrail: [{
+          id: 'a-2',
+          at: twelveDaysAgo,
+          actor: 'Elena Flores, CPA',
+          role: 'Supervisor',
+          previousStatus: 'Pending Supervisor/Mentor Review',
+          newStatus: 'Pending CPA Review',
+          comments: 'Supervisor approved foundational experience and routed it to CPA review.'
+        }]
+      }
+    }
+  ];
+}
+
+function calculateEligibility(report) {
+  const duration = report.duration || {};
+  const startDate = duration.startDate;
+  const endDate = duration.endDate;
+  const leaveDays = Number(duration.leaveDays || 0);
+  const avgHoursPerWeek = Number(duration.avgHoursPerWeek || 0);
+  if (!startDate || !endDate) {
+    return { creditedMonths: 0, estimatedHours: 0 };
+  }
+
+  const start = new Date(`${startDate}T00:00:00`);
+  const end = new Date(`${endDate}T00:00:00`);
+  if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime()) || end < start) {
+    return { creditedMonths: 0, estimatedHours: 0 };
+  }
+
+  const totalDays = Math.floor((end - start) / 86400000) + 1;
+  const eligibleDays = Math.max(0, totalDays - Math.max(0, Math.min(leaveDays, totalDays)));
+  const creditedMonths = Math.min(eligibleDays / 30.4375, 8);
+  const estimatedHours = (eligibleDays / 7) * avgHoursPerWeek;
+  return { creditedMonths, estimatedHours };
+}
+
+function normaliseReport(report) {
+  const clone = cloneDeep(report);
+  clone.learnerInfo = clone.learnerInfo || {};
+  clone.roleInfo = clone.roleInfo || {};
+  clone.duration = clone.duration || {};
+  clone.documents = clone.documents || { jobDescriptions: [], supporting: [] };
+  clone.documents.jobDescriptions = clone.documents.jobDescriptions || [];
+  clone.documents.supporting = clone.documents.supporting || [];
+  clone.notifications = clone.notifications || [];
+  clone.review = clone.review || {};
+  clone.review.auditTrail = clone.review.auditTrail || [];
+  clone.calculatedEligibility = calculateEligibility(clone);
+  if (!clone.roleInfo.experienceDates && clone.duration.startDate && clone.duration.endDate) {
+    clone.roleInfo.experienceDates = `${formatShortDate(clone.duration.startDate)} to ${formatShortDate(clone.duration.endDate)}`;
+  }
+  if (!clone.learnerInfo.programExpiryDate) clone.learnerInfo.programExpiryDate = '2028-12-31';
+  return clone;
+}
+
+function loadReports() {
+  const stored = JSON.parse(localStorage.getItem(reportsKey) || '[]');
+  const submitted = Array.isArray(stored)
+    ? stored.filter((report) => report.status && report.status !== 'Draft').map(normaliseReport)
+    : [];
+
+  reports = submitted.length ? submitted : createDemoReports().map(normaliseReport);
+  activeReportId = localStorage.getItem(activeViewKey) || reports[0].id;
+  if (!reports.some((report) => report.id === activeReportId)) {
+    activeReportId = reports[0].id;
+  }
+}
+
+function saveState() {
+  localStorage.setItem(activeViewKey, activeReportId);
+}
+
+function getActiveReport() {
+  return reports.find((report) => report.id === activeReportId);
+}
+
+function getProgress(report) {
+  const status = report.status || '';
+  if (/approved/i.test(status)) return { label: 'Approved', value: 100 };
+  if (/in cpa review/i.test(status)) return { label: 'In CPA review', value: 85 };
+  if (/pending cpa review/i.test(status)) return { label: 'Pending CPA review', value: 70 };
+  if (/pending supervisor|pending mentor/i.test(status)) return { label: 'Pending supervisor review', value: 45 };
+  if (/declined|rejected/i.test(status)) return { label: 'Returned for revision', value: 35 };
+  return { label: 'Submitted', value: 25 };
+}
+
+function renderReportList() {
+  reportList.innerHTML = reports.map((report) => `
+    <article class="queue-card ${report.id === activeReportId ? 'active' : ''}" data-report-id="${report.id}">
+      <strong>${escapeHtml(report.roleInfo.reportTitle || report.roleInfo.employer || 'Foundational experience report')}</strong>
+      <span>${escapeHtml(report.roleInfo.employer || 'Employer not provided')}</span>
+      <span>${escapeHtml(report.roleInfo.experienceDates || 'Dates not available')}</span>
+      <span class="status-badge ${statusClass(report.status)}"><span class="dot"></span>${escapeHtml(report.status)}</span>
+    </article>
+  `).join('');
+}
+
+function renderValueCards(container, values) {
+  container.innerHTML = values.map((item) => `
+    <div class="value-card">
+      <span>${escapeHtml(item.label)}</span>
+      <strong>${escapeHtml(item.value)}</strong>
+    </div>
+  `).join('');
+}
+
+function renderDocuments(report) {
+  const docs = [...report.documents.jobDescriptions, ...report.documents.supporting];
+  if (!docs.length) {
+    documentList.innerHTML = '<div class="empty-state">No supporting documents were attached to this submitted report.</div>';
+    return;
+  }
+  documentList.innerHTML = docs.map((doc) => `
+    <div class="doc-item">
+      <strong>${escapeHtml(doc.name)}</strong>
+      <span>${escapeHtml(doc.category)} | ${escapeHtml(doc.sizeLabel || 'File attached')} | Uploaded ${escapeHtml(formatDate(doc.uploadedAt))}</span>
+    </div>
+  `).join('');
+}
+
+function renderTimeline(report) {
+  const audit = (report.review.auditTrail || []).slice().reverse();
+  const events = [];
+
+  if (report.submittedAt) {
+    events.push({
+      title: 'Learner submission recorded',
+      meta: formatDate(report.submittedAt),
+      copy: 'The foundational experience was submitted and became read-only for the learner.'
+    });
+  }
+
+  audit.forEach((entry) => {
+    events.push({
+      title: `${entry.previousStatus || 'Previous status'} -> ${entry.newStatus || 'Current status'}`,
+      meta: `${entry.actor || 'System'} | ${entry.role || 'Workflow'} | ${formatDate(entry.at)}`,
+      copy: entry.comments || 'No comments recorded.'
+    });
+  });
+
+  if (report.notifications && report.notifications.length) {
+    report.notifications.slice().reverse().forEach((entry) => {
+      events.push({
+        title: entry.type || 'Notification',
+        meta: formatDate(entry.sentAt),
+        copy: `Notification sent to ${entry.recipient || 'recipient'}.`
+      });
+    });
+  }
+
+  if (!events.length) {
+    timelineList.innerHTML = '<div class="empty-state">No submission history is available for this report yet.</div>';
+    return;
+  }
+
+  timelineList.innerHTML = events.map((event) => `
+    <div class="timeline-item">
+      <strong>${escapeHtml(event.title)}</strong>
+      <span>${escapeHtml(event.meta)}</span>
+      <span>${escapeHtml(event.copy)}</span>
+    </div>
+  `).join('');
+}
+
+function renderMeta(report) {
+  const progress = getProgress(report);
+  metaStatus.innerHTML = `<span class="status-badge ${statusClass(report.status)}"><span class="dot"></span>${escapeHtml(report.status)}</span>`;
+  metaExpiry.textContent = formatShortDate(report.learnerInfo.programExpiryDate);
+  progressLabel.textContent = progress.label;
+  progressValue.textContent = `${progress.value}%`;
+  progressFill.style.width = `${progress.value}%`;
+  metaSubmitted.textContent = formatDate(report.submittedAt);
+  metaRoute.textContent = report.workflowRoute || 'No workflow route recorded.';
+
+  const approvedMonths = report.review && report.review.approvedMonths
+    ? `${Number(report.review.approvedMonths).toFixed(2)} approved months`
+    : `${report.calculatedEligibility.creditedMonths.toFixed(2)} calculated credited months`;
+  metaDuration.textContent = `${approvedMonths} | ${Math.round(report.calculatedEligibility.estimatedHours)} estimated hours`;
+}
+
+function renderActiveReport() {
+  const report = getActiveReport();
+  if (!report) return;
+
+  detailTitle.textContent = report.roleInfo.reportTitle || 'Foundational experience report';
+  detailCopy.textContent = report.roleInfo.employer
+    ? `Submitted record for ${report.roleInfo.employer}. All fields are shown exactly as a learner would review them after submission.`
+    : 'All learner and role fields are displayed in read-only mode.';
+
+  renderValueCards(learnerGrid, [
+    { label: 'Given legal name', value: report.learnerInfo.legalName || 'Not provided' },
+    { label: 'Preferred name', value: report.learnerInfo.preferredName || 'Not provided' },
+    { label: 'CPA ID', value: report.learnerInfo.cpaId || 'Not provided' },
+    { label: 'Governing body', value: report.learnerInfo.governingBody || 'Not provided' },
+    { label: 'Email address', value: report.learnerInfo.email || 'Not provided' },
+    { label: 'Phone number', value: report.learnerInfo.phone || 'Not provided' }
+  ]);
+
+  renderValueCards(roleGrid, [
+    { label: 'Employer', value: report.roleInfo.employer || 'Not provided' },
+    { label: 'Job description', value: report.roleInfo.jobDescription || 'Not provided' },
+    { label: 'Experience dates', value: report.roleInfo.experienceDates || 'Not provided' },
+    { label: 'Leave days', value: report.duration.leaveDays ?? 'Not provided' },
+    { label: 'Average hours worked per week', value: report.duration.avgHoursPerWeek ?? 'Not provided' },
+    { label: 'Supervisor', value: report.roleInfo.supervisorName || 'Not provided' }
+  ]);
+
+  renderDocuments(report);
+  renderTimeline(report);
+  renderMeta(report);
+}
+
+function updateHero() {
+  const approvedCount = reports.filter((report) => /approved/i.test(report.status || '')).length;
+  heroSummary.textContent = `${reports.length} submitted FE report${reports.length === 1 ? '' : 's'} | ${approvedCount} approved`;
+}
+
+function renderAll() {
+  renderReportList();
+  renderActiveReport();
+  updateHero();
+  saveState();
+}
+
+function switchReport(reportId) {
+  activeReportId = reportId;
+  renderAll();
+}
+
+reportList.addEventListener('click', (event) => {
+  const card = event.target.closest('[data-report-id]');
+  if (!card) return;
+  switchReport(card.dataset.reportId);
+});
+
+loadReports();
+renderAll();
+</script>
+</body>
+</html>
+
+
+

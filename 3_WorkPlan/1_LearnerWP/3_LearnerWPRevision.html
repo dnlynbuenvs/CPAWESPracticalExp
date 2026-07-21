@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPA - Work Plan Revision</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:#0B1F3A; --blue:#1B5EA8; --accent:#2A9D8F; --amber:#E76F1A; --green:#2D7A4E; --red:#C0392B;
+    --sand:#F7F5F2; --white:#FFFFFF; --gray-100:#F2F1EF; --gray-200:#E4E2DE; --gray-300:#D2CEC8;
+    --gray-400:#A8A49E; --gray-600:#6B6760; --gray-800:#2E2C2A;
+    --shadow-sm:0 1px 3px rgba(11,31,58,0.07),0 1px 2px rgba(11,31,58,0.05);
+    --radius-sm:6px; --radius-md:10px; --radius-lg:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'DM Sans',sans-serif;background:var(--sand);color:var(--gray-800);min-height:100vh}
+  a{text-decoration:none;color:inherit}
+  button,input,select,textarea{font:inherit}
+  textarea{resize:vertical}
+  .topbar{background:var(--navy);min-height:60px;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:0 2rem}
+  .logo-group{display:flex;align-items:center;gap:10px;min-width:225px}
+  .logo-mark{width:36px;height:36px;background:var(--white);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .logo-text{display:flex;flex-direction:column;line-height:1.1}
+  .logo-text .brand{font-size:13px;font-weight:600;color:var(--white);letter-spacing:.04em}
+  .logo-text .sub{font-size:10px;color:rgba(255,255,255,.5);letter-spacing:.02em;text-transform:uppercase}
+  .topbar-right{display:flex;align-items:center;gap:12px}
+  .nav-links{display:flex;align-items:center;gap:2px}
+  .nav-links a{color:rgba(255,255,255,.55);font-size:14px;padding:8px 16px;border-radius:var(--radius-sm);white-space:nowrap}
+  .nav-links a.active,.nav-links a:hover{color:var(--white);background:rgba(255,255,255,.08)}
+    .role-dropdown{position:relative}
+  .role-trigger{list-style:none;display:flex;align-items:center;gap:10px;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);color:var(--white);font-size:13px;font-weight:600;cursor:pointer}
+  .role-trigger::-webkit-details-marker{display:none}
+  .role-label{display:inline-flex;align-items:center;justify-content:center;min-width:92px}
+  .role-caret{font-size:11px;color:rgba(255,255,255,.72)}
+  .role-menu{position:absolute;right:0;top:calc(100% + 10px);min-width:190px;padding:8px;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);box-shadow:0 12px 30px rgba(11,31,58,.14);display:flex;flex-direction:column;gap:4px;z-index:20}
+  .role-option{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:var(--radius-sm);font-size:13px;color:var(--gray-800);text-decoration:none}
+  .role-option:hover{background:var(--gray-100)}
+  .role-option.active{background:#EBF3FF;color:var(--blue);font-weight:600}
+  .page{max-width:1400px;margin:0 auto;padding:2rem 2rem 4rem}
+  .hero{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--gray-200)}
+  .hero h1{font-family:'DM Serif Display',serif;font-size:38px;font-weight:400;color:var(--navy);margin-bottom:6px}
+  .hero p{font-size:14px;color:var(--gray-600);max-width:860px;line-height:1.5}
+  .hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);padding:10px 16px;box-shadow:var(--shadow-sm);font-size:13px;color:var(--gray-600)}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--blue);flex:0 0 auto}
+  .message-bar{display:none;align-items:center;gap:10px;margin-bottom:1rem;padding:12px 14px;border-radius:var(--radius-md);background:#EBF3FF;border:1px solid rgba(27,94,168,.18);color:var(--navy);box-shadow:var(--shadow-sm)}
+  .message-bar.visible{display:flex}
+  .panel{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm)}
+  .panel h2{font-size:17px;color:var(--navy);margin-bottom:4px}
+  .panel-copy{font-size:12px;color:var(--gray-600);line-height:1.45}
+  .section-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gray-400);margin-bottom:.75rem}
+  .workspace{display:grid;grid-template-columns:330px minmax(0,1fr);gap:16px}
+  .workspace-main{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:16px}
+  .sidebar-panel,.detail-panel,.meta-panel{padding:1.25rem}
+  .sidebar-stack,.meta-stack,.comment-list,.trail-list,.doc-list,.section-stack{display:flex;flex-direction:column;gap:12px}
+  .queue-card{padding:12px;border-radius:var(--radius-md);border:1px solid var(--gray-200);background:var(--sand);cursor:pointer;transition:all .15s ease}
+  .queue-card.active{border-color:rgba(27,94,168,.32);box-shadow:0 0 0 3px rgba(27,94,168,.08);background:#F7FAFF}
+  .queue-card strong{display:block;font-size:14px;color:var(--navy);margin-bottom:4px}
+  .queue-card span{display:block;font-size:12px;color:var(--gray-600);line-height:1.4}
+  .detail-stack{display:flex;flex-direction:column;gap:16px}
+  .info-section{padding:1rem;border:1px solid var(--gray-200);border-radius:var(--radius-md);background:var(--sand)}
+  .info-section h3{font-size:15px;color:var(--navy);margin-bottom:6px}
+  .grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+  .value-card{padding:11px;border-radius:var(--radius-sm);border:1px solid var(--gray-200);background:var(--white)}
+  .value-card span{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--gray-400);font-weight:700;margin-bottom:4px}
+  .value-card strong{display:block;font-size:13px;color:var(--gray-800);line-height:1.45}
+  .readonly-copy{padding:12px;border-radius:var(--radius-md);border:1px solid var(--gray-200);background:#F7FAFF;font-size:12px;color:var(--gray-600);line-height:1.5}
+  .notice-box,.comment-item,.trail-item,.doc-item,.meta-card{padding:12px;border-radius:var(--radius-md);border:1px solid var(--gray-200);background:var(--sand)}
+  .notice-box strong,.comment-item strong,.trail-item strong,.doc-item strong,.meta-card strong{display:block;font-size:13px;color:var(--navy);margin-bottom:4px}
+  .notice-box span,.comment-item span,.trail-item span,.doc-item span,.meta-card span{display:block;font-size:12px;color:var(--gray-600);line-height:1.45}
+  .comment-form{display:flex;flex-direction:column;gap:8px}
+  .comment-form input,.comment-form textarea,.comment-form select{border:1px solid var(--gray-200);border-radius:var(--radius-sm);background:var(--white);padding:10px 12px;color:var(--gray-800)}
+  .comment-form textarea{min-height:96px}
+  .comment-form input:focus,.comment-form textarea:focus,.comment-form select:focus{outline:none;border-color:rgba(27,94,168,.32);box-shadow:0 0 0 3px rgba(27,94,168,.08)}
+  .button-row{display:flex;flex-wrap:wrap;gap:8px}
+  .action-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:var(--radius-sm);border:1px solid var(--gray-200);padding:9px 12px;background:var(--white);color:var(--navy);font-size:12px;font-weight:700;cursor:pointer;transition:all .15s ease}
+  .action-btn:hover{border-color:rgba(27,94,168,.28);background:#F7FAFF}
+  .action-btn.primary{background:#EBF3FF;border-color:rgba(27,94,168,.28);color:var(--blue)}
+  .action-btn.success{background:#E8F5EE;border-color:rgba(45,122,78,.22);color:var(--green)}
+  .action-btn.warn{background:#FEF3E8;border-color:rgba(231,111,26,.24);color:var(--amber)}
+  .action-btn[disabled]{opacity:.55;cursor:not-allowed;background:var(--gray-100);color:var(--gray-600)}
+  .status-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:5px 10px;border-radius:20px;white-space:nowrap}
+  .status-badge .dot{width:6px;height:6px}
+  .badge-draft{background:#EBF3FF;color:var(--blue)} .badge-draft .dot{background:var(--blue)}
+  .badge-pending{background:#FEF3E8;color:var(--amber)} .badge-pending .dot{background:var(--amber)}
+  .badge-review{background:#F5F1FF;color:#6B4EC9} .badge-review .dot{background:#6B4EC9}
+  .badge-declined{background:#FDECEA;color:var(--red)} .badge-declined .dot{background:var(--red)}
+  .badge-approved{background:#E8F5EE;color:var(--green)} .badge-approved .dot{background:var(--green)}
+  .pill{display:inline-flex;align-items:center;gap:6px;background:#EBF3FF;color:var(--blue);border:1px solid rgba(27,94,168,.18);border-radius:999px;padding:5px 9px;font-size:11px;font-weight:700}
+  .pill-row{display:flex;flex-wrap:wrap;gap:8px}
+  .field-hint{font-size:11px;color:var(--gray-600);line-height:1.45}
+  .empty-state{padding:18px;border:1px dashed var(--gray-300);border-radius:var(--radius-md);background:var(--sand);text-align:center;font-size:13px;color:var(--gray-600)}
+  @media(max-width:1180px){
+    .workspace,.workspace-main{grid-template-columns:1fr}
+  }
+  @media(max-width:760px){
+    .topbar{align-items:flex-start;flex-direction:column;padding:1rem}
+    .nav-links{display:none}
+    .topbar-right{width:100%;justify-content:space-between}
+    .page{padding:1.25rem 1rem 3rem}
+    .hero{flex-direction:column;align-items:flex-start}
+    .hero h1{font-size:34px}
+    .grid-2,.grid-3{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="logo-group">
+    <div class="logo-mark">
+      <svg width="24" height="20" viewBox="0 0 24 20" fill="none" aria-hidden="true">
+        <path d="M2 10C2 5.58 5.58 2 10 2h4c4.42 0 8 3.58 8 8s-3.58 8-8 8h-4C5.58 18 2 14.42 2 10z" fill="#0B1F3A" opacity="0.12"/>
+        <path d="M7 10.5l3 3 7-7" stroke="#0B1F3A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="logo-text"><span class="brand">CPA Canada</span><span class="sub">Chartered Professional Accountants</span></div>
+  </div>
+  <div class="topbar-right">
+    <nav class="nav-links" aria-label="Primary navigation">
+      <a href="../../1_Dashboard/LearnerDashboard.html">Dashboard</a>
+      <a href="1_LearnerWorkPlanInfo.html">Work plan setup</a>
+      <a href="2_LearnerWorkPlanInfo.html">Competencies</a>
+      <a href="3_LearnerWPRevision.html" class="active">Revisions</a>
+    </nav>
+                <details class="role-dropdown">
+      <summary class="role-trigger"><span class="role-label">Learner</span><span class="role-caret">&#9662;</span></summary>
+      <div class="role-menu">
+        <a class="role-option active" href="../../index.html">Learner</a>
+        <a class="role-option" href="../../1_Dashboard/CPAReviewer.html">CPA Reviewer</a>
+        <a class="role-option" href="../../1_Dashboard/MentorDashboard.html">Mentor</a>
+        <a class="role-option" href="../../1_Dashboard/PTSBStaffDashboard.html">PTSB Staff</a>
+      </div>
+    </details>
+  </div>
+</header>
+
+<main class="page">
+  <section class="hero" aria-labelledby="revision-title">
+    <div>
+      <h1 id="revision-title">Revise and resubmit work plan</h1>
+      <p>Review revision requests from your mentor or CPA Staff reviewer, keep prior submissions read-only for history, update a prepopulated revision draft, and resubmit it back into the review path selected for this work plan.</p>
+    </div>
+    <div class="hero-badge"><span class="dot"></span><span id="hero-summary">Loading revision history</span></div>
+  </section>
+
+  <div class="message-bar" id="message-bar" role="status" aria-live="polite">
+    <span class="dot"></span>
+    <span id="message-text"></span>
+  </div>
+
+  <section class="workspace">
+    <aside class="panel sidebar-panel">
+      <div class="section-label">Version history</div>
+      <h2>Work plan versions</h2>
+      <p class="panel-copy">Earlier submitted versions stay read-only for historical reference. If a work plan is returned, the learner revises a new prepopulated version and submits that version back to the review workflow.</p>
+      <div class="sidebar-stack" style="margin-top:1rem;">
+        <div class="meta-card">
+          <strong>Learner</strong>
+          <span id="learner-summary">Loading learner details.</span>
+        </div>
+        <div id="queue-list"></div>
+      </div>
+    </aside>
+
+    <section class="workspace-main">
+      <section class="panel detail-panel">
+        <div class="section-label">Revision workspace</div>
+        <h2 id="detail-title">Selected version</h2>
+        <p class="panel-copy" id="detail-copy">Revision requests, version history, and the active revision draft appear here.</p>
+
+        <div class="detail-stack">
+          <div class="notice-box" id="workflow-note">
+            <strong>Read-only history</strong>
+            <span>Previously submitted work plan versions remain locked. Only a revision draft can be updated before resubmission.</span>
+          </div>
+
+          <section class="info-section">
+            <h3>Revision request summary</h3>
+            <div class="grid-3" id="request-grid"></div>
+          </section>
+
+          <section class="info-section">
+            <h3>Revision details</h3>
+            <div class="comment-form">
+              <label for="response-note">Learner revision response</label>
+              <textarea id="response-note" placeholder="Summarize what changed in this revised work plan before resubmission."></textarea>
+              <div class="field-hint">This response is recorded in the work plan history when the learner saves or resubmits the revision.</div>
+            </div>
+            <div class="grid-2" style="margin-top:1rem;">
+              <div class="comment-form">
+                <label for="position-title">Position title</label>
+                <input id="position-title" type="text">
+              </div>
+              <div class="comment-form">
+                <label for="mentor-name">Current mentor</label>
+                <input id="mentor-name" type="text">
+              </div>
+              <div class="comment-form">
+                <label for="expected-completion">Expected completion date</label>
+                <input id="expected-completion" type="date">
+              </div>
+              <div class="comment-form">
+                <label for="leave-days">Expected leave days</label>
+                <input id="leave-days" type="number" min="0" step="1">
+              </div>
+              <div class="comment-form">
+                <label for="hours-per-week">Average hours worked per week</label>
+                <input id="hours-per-week" type="number" min="0" step="0.5">
+              </div>
+              <div class="comment-form">
+                <label for="next-route">Next review route after resubmission</label>
+                <input id="next-route" type="text" readonly>
+              </div>
+            </div>
+          </section>
+
+          <section class="info-section">
+            <h3>Supporting documents</h3>
+            <div class="button-row" style="margin-bottom:1rem;">
+              <input id="job-description-upload" type="file" multiple hidden>
+              <input id="supporting-upload" type="file" multiple hidden>
+              <button class="action-btn primary" id="attach-job-description-btn" type="button">Attach job description</button>
+              <button class="action-btn primary" id="attach-supporting-btn" type="button">Attach supporting document</button>
+            </div>
+            <div class="doc-list" id="document-list"></div>
+          </section>
+
+          <section class="info-section">
+            <h3>Review comments</h3>
+            <div class="comment-list" id="comment-list"></div>
+          </section>
+
+          <section class="info-section">
+            <h3>Version actions</h3>
+            <div class="button-row">
+              <button class="action-btn warn" id="create-revision-btn" type="button">Create revision version</button>
+              <button class="action-btn primary" id="save-draft-btn" type="button">Save revision draft</button>
+              <button class="action-btn success" id="submit-btn" type="button">Submit revised work plan</button>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <aside class="panel meta-panel">
+        <div class="section-label">Audit and route</div>
+        <h2>Submission history</h2>
+        <div class="meta-stack">
+          <div class="meta-card">
+            <strong>Current status</strong>
+            <span id="meta-status">Not available</span>
+          </div>
+          <div class="meta-card">
+            <strong>Submitted date and time</strong>
+            <span id="meta-submitted">Not submitted</span>
+          </div>
+          <div class="meta-card">
+            <strong>Next workflow destination</strong>
+            <span id="meta-route">No route recorded.</span>
+          </div>
+          <div class="meta-card">
+            <strong>Program state</strong>
+            <span id="meta-program">No active work plan recorded.</span>
+          </div>
+          <div class="meta-card">
+            <strong>Version summary</strong>
+            <span id="meta-version">No version selected.</span>
+          </div>
+          <div class="meta-card">
+            <strong>Audit trail</strong>
+            <div class="trail-list" id="trail-list" style="margin-top:.75rem;"></div>
+          </div>
+        </div>
+      </aside>
+    </section>
+  </section>
+</main>
+
+<script>
+const workPlanKey = 'workPlanRecord:learner-101';
+const versionsKey = 'workPlanVersions:learner-101';
+const activeApprovedKey = 'activeApprovedWorkPlan:learner-101';
+const activeRevisionKey = 'learnerWorkPlanRevisionActive:learner-101';
+
+const queueList = document.getElementById('queue-list');
+const learnerSummary = document.getElementById('learner-summary');
+const heroSummary = document.getElementById('hero-summary');
+const detailTitle = document.getElementById('detail-title');
+const detailCopy = document.getElementById('detail-copy');
+const workflowNote = document.getElementById('workflow-note');
+const requestGrid = document.getElementById('request-grid');
+const responseNote = document.getElementById('response-note');
+const positionTitle = document.getElementById('position-title');
+const mentorName = document.getElementById('mentor-name');
+const expectedCompletion = document.getElementById('expected-completion');
+const leaveDays = document.getElementById('leave-days');
+const hoursPerWeek = document.getElementById('hours-per-week');
+const nextRoute = document.getElementById('next-route');
+const documentList = document.getElementById('document-list');
+const commentList = document.getElementById('comment-list');
+const metaStatus = document.getElementById('meta-status');
+const metaSubmitted = document.getElementById('meta-submitted');
+const metaRoute = document.getElementById('meta-route');
+const metaProgram = document.getElementById('meta-program');
+const metaVersion = document.getElementById('meta-version');
+const trailList = document.getElementById('trail-list');
+const messageBar = document.getElementById('message-bar');
+const messageText = document.getElementById('message-text');
+const createRevisionBtn = document.getElementById('create-revision-btn');
+const saveDraftBtn = document.getElementById('save-draft-btn');
+const submitBtn = document.getElementById('submit-btn');
+const jobDescriptionUpload = document.getElementById('job-description-upload');
+const supportingUpload = document.getElementById('supporting-upload');
+
+let versions = [];
+let activeVersionId = null;
+
+function setMessage(text) {
+  messageText.textContent = text;
+  messageBar.classList.add('visible');
+}
+
+function escapeHtml(value) {
+  return String(value || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function cloneDeep(value) {
+  return JSON.parse(JSON.stringify(value));
+}
+
+function formatDate(dateValue) {
+  if (!dateValue) return 'Not available';
+  const date = new Date(dateValue);
+  if (Number.isNaN(date.getTime())) return 'Not available';
+  return date.toLocaleString('en-CA', { year:'numeric', month:'short', day:'numeric', hour:'numeric', minute:'2-digit' });
+}
+
+function formatShortDate(dateValue) {
+  if (!dateValue) return 'Not available';
+  const source = String(dateValue).includes('T') ? new Date(dateValue) : new Date(`${dateValue}T00:00:00`);
+  if (Number.isNaN(source.getTime())) return 'Not available';
+  return source.toLocaleDateString('en-CA', { year:'numeric', month:'short', day:'numeric' });
+}
+
+function statusClass(status) {
+  if (/draft/i.test(status)) return 'badge-draft';
+  if (/pending mentor approval|pending cpa review/i.test(status)) return 'badge-pending';
+  if (/in cpa review/i.test(status)) return 'badge-review';
+  if (/more information needed|declined/i.test(status)) return 'badge-declined';
+  if (/approved/i.test(status)) return 'badge-approved';
+  return 'badge-review';
+}
+
+function fileToMeta(file, category) {
+  return {
+    id: `${category.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}-${Math.random().toString(16).slice(2, 7)}`,
+    name: file.name,
+    category,
+    sizeLabel: `${Math.max(1, Math.round(file.size / 1024))} KB`,
+    uploadedAt: new Date().toISOString()
+  };
+}
+
+function createDefaultPlan() {
+  return {
+    id: `wp-${Date.now()}`,
+    version: 1,
+    learnerInfo: {
+      legalName: 'Amelia Reyes',
+      preferredName: 'Amelia',
+      cpaId: 'CPA-772401',
+      email: 'amelia.reyes@example.com'
+    },
+    approvals: {
+      mentorName: 'Marcus Chen, CPA',
+      mentorSelectedEmail: 'marcus.chen@northlineadvisory.example'
+    },
+    employerDetails: {
+      organizationName: 'Northline Advisory Group',
+      positionTitle: 'Audit Associate',
+      expectedCompletionDate: '2027-08-30',
+      expectedLeaveDays: 8,
+      averageHoursPerWeek: 37.5
+    },
+    duration: {
+      potentialMonths: 19.66,
+      estimatedHours: 3060,
+      actualGainedPE: ''
+    },
+    documents: {
+      jobDescriptions: [{ id:'jd-1', name:'audit-associate-job-description.pdf', category:'Job description', sizeLabel:'212 KB', uploadedAt:new Date(Date.now() - 15 * 86400000).toISOString() }],
+      supporting: [{ id:'sd-1', name:'organization-chart.pdf', category:'Supporting document', sizeLabel:'84 KB', uploadedAt:new Date(Date.now() - 13 * 86400000).toISOString() }]
+    },
+    workflow: {
+      status: 'More information needed',
+      submittedAt: new Date(Date.now() - 10 * 86400000).toISOString(),
+      route: 'Returned for revision by CPA Staff Reviewer. Resubmission returns directly to CPA Staff review.',
+      nextReviewStatus: 'Pending CPA Review',
+      requestedRevisionDueDate: new Date(Date.now() + 7 * 86400000).toISOString().slice(0,10),
+      requiresMentorReapproval: false,
+      resubmissionCount: 1,
+      comments: [
+        { at:new Date(Date.now() - 10 * 86400000).toISOString(), author:'Jordan Patel, CPA', role:'CPA Staff Reviewer', visibility:'Learner and CPA Staff Reviewer', text:'Please clarify the expected completion timeline and update the supporting documents to reflect your current role scope.' }
+      ],
+      auditTrail: [
+        { at:new Date(Date.now() - 10 * 86400000).toISOString(), actor:'Jordan Patel, CPA', role:'CPA Staff Reviewer', previousStatus:'In CPA Review', newStatus:'More information needed', comments:'Work plan returned for revision with requested due date.' }
+      ],
+      notifications: []
+    },
+    updatedAt: new Date().toISOString()
+  };
+}
+
+function createDefaultVersions() {
+  const returned = createDefaultPlan();
+  const draft = cloneDeep(returned);
+  draft.id = `${returned.id}-v2`;
+  draft.version = 2;
+  draft.workflow.status = 'Draft';
+  draft.workflow.submittedAt = '';
+  draft.workflow.route = 'Prepopulated draft created from returned work plan version 1. Resubmit directly to CPA Staff review.';
+  draft.workflow.nextReviewStatus = 'Pending CPA Review';
+  draft.workflow.comments = [];
+  draft.workflow.auditTrail = [
+    { at:new Date().toISOString(), actor:'System', role:'System', previousStatus:'More information needed', newStatus:'Draft', comments:'Revision draft created from version 1 for learner resubmission.' }
+  ];
+  draft.workflow.notifications = [];
+  draft.workflow.learnerResponse = '';
+  draft.workflow.sourceVersion = 1;
+  return [returned, draft];
+}
+
+function normaliseVersion(plan) {
+  const base = createDefaultPlan();
+  const current = {
+    ...base,
+    ...plan,
+    learnerInfo: { ...base.learnerInfo, ...(plan.learnerInfo || {}) },
+    approvals: { ...base.approvals, ...(plan.approvals || {}) },
+    employerDetails: { ...base.employerDetails, ...(plan.employerDetails || {}) },
+    duration: { ...base.duration, ...(plan.duration || {}) },
+    documents: {
+      jobDescriptions: ((plan.documents && plan.documents.jobDescriptions) || []).slice(),
+      supporting: ((plan.documents && plan.documents.supporting) || []).slice()
+    },
+    workflow: {
+      ...base.workflow,
+      ...(plan.workflow || {}),
+      comments: ((plan.workflow && plan.workflow.comments) || []).slice(),
+      auditTrail: ((plan.workflow && plan.workflow.auditTrail) || []).slice(),
+      notifications: ((plan.workflow && plan.workflow.notifications) || []).slice()
+    }
+  };
+
+  if (!current.workflow.nextReviewStatus) {
+    if (/mentor approval before|mentor review/i.test(current.workflow.route || '')) {
+      current.workflow.nextReviewStatus = 'Pending Mentor Approval';
+    } else if (/directly to cpa staff|cpa staff review/i.test(current.workflow.route || '')) {
+      current.workflow.nextReviewStatus = 'Pending CPA Review';
+    } else if (/pending mentor approval/i.test(current.workflow.status || '')) {
+      current.workflow.nextReviewStatus = 'Pending Mentor Approval';
+    } else {
+      current.workflow.nextReviewStatus = 'Pending CPA Review';
+    }
+  }
+
+  if (!current.workflow.submittedAt && /pending mentor approval|pending cpa review/i.test(current.workflow.status || '')) {
+    current.workflow.nextReviewStatus = current.workflow.status;
+    current.workflow.status = 'Draft';
+  }
+
+  return current;
+}
+
+function createRevisionVersionFrom(plan) {
+  const nextVersionNumber = Math.max(...versions.map((item) => item.version || 0), 0) + 1;
+  const draft = cloneDeep(plan);
+  draft.id = `${plan.id}-revision-${nextVersionNumber}`;
+  draft.version = nextVersionNumber;
+  draft.workflow.status = 'Draft';
+  draft.workflow.submittedAt = '';
+  draft.workflow.route = plan.workflow.nextReviewStatus === 'Pending Mentor Approval'
+    ? `Prepopulated draft created from returned work plan version ${plan.version}. Resubmit to mentor review before CPA Staff review.`
+    : `Prepopulated draft created from returned work plan version ${plan.version}. Resubmit directly to CPA Staff review.`;
+  draft.workflow.comments = [];
+  draft.workflow.notifications = [];
+  draft.workflow.auditTrail = [
+    { at:new Date().toISOString(), actor:'System', role:'System', previousStatus:plan.workflow.status, newStatus:'Draft', comments:`Revision draft created from work plan version ${plan.version}.` }
+  ];
+  draft.workflow.learnerResponse = '';
+  draft.workflow.sourceVersion = plan.version;
+  return draft;
+}
+
+function ensureRevisionDraft() {
+  const hasDraft = versions.some((plan) => plan.workflow.status === 'Draft');
+  if (hasDraft) return;
+  const returned = versions.filter((plan) => /more information needed|declined/i.test(plan.workflow.status || ''));
+  if (!returned.length) return;
+  const latestReturned = returned.sort((a, b) => (b.version || 0) - (a.version || 0))[0];
+  versions.push(createRevisionVersionFrom(latestReturned));
+}
+
+function loadVersions() {
+  const storedVersions = JSON.parse(localStorage.getItem(versionsKey) || '[]');
+  if (Array.isArray(storedVersions) && storedVersions.length) {
+    versions = storedVersions.map(normaliseVersion);
+  } else {
+    const storedPlan = JSON.parse(localStorage.getItem(workPlanKey) || 'null');
+    versions = storedPlan ? [normaliseVersion(storedPlan)] : createDefaultVersions().map(normaliseVersion);
+  }
+  ensureRevisionDraft();
+  versions.sort((a, b) => (a.version || 0) - (b.version || 0));
+  activeVersionId = localStorage.getItem(activeRevisionKey) || (versions.find((item) => item.workflow.status === 'Draft') || versions[versions.length - 1]).id;
+  if (!versions.some((item) => item.id === activeVersionId)) activeVersionId = versions[versions.length - 1].id;
+}
+
+function persistVersions() {
+  localStorage.setItem(versionsKey, JSON.stringify(versions));
+  localStorage.setItem(activeRevisionKey, activeVersionId);
+  const active = getActiveVersion();
+  if (active) localStorage.setItem(workPlanKey, JSON.stringify(active));
+}
+
+function getActiveVersion() {
+  return versions.find((item) => item.id === activeVersionId);
+}
+
+function isEditable(plan) {
+  return plan && plan.workflow.status === 'Draft';
+}
+
+function renderQueue() {
+  queueList.innerHTML = versions.map((plan) => `
+    <article class="queue-card ${plan.id === activeVersionId ? 'active' : ''}" data-version-id="${plan.id}">
+      <strong>${escapeHtml(plan.employerDetails.positionTitle || 'Work Plan')} | Version ${plan.version}</strong>
+      <span>${escapeHtml(plan.employerDetails.organizationName || 'Employer not provided')}</span>
+      <span class="status-badge ${statusClass(plan.workflow.status)}"><span class="dot"></span>${escapeHtml(plan.workflow.status)}</span>
+      <span>${isEditable(plan) ? 'Editable revision draft' : 'Read-only submitted version'}</span>
+    </article>
+  `).join('');
+}
+
+function renderValueCards(container, values) {
+  container.innerHTML = values.map((item) => `
+    <div class="value-card">
+      <span>${escapeHtml(item.label)}</span>
+      <strong>${escapeHtml(item.value)}</strong>
+    </div>
+  `).join('');
+}
+
+function renderDocuments(plan) {
+  const docs = [...(plan.documents.jobDescriptions || []), ...(plan.documents.supporting || [])];
+  if (!docs.length) {
+    documentList.innerHTML = '<div class="empty-state">No documents attached to this version.</div>';
+    return;
+  }
+  documentList.innerHTML = docs.map((doc) => `
+    <div class="doc-item">
+      <strong>${escapeHtml(doc.name)}</strong>
+      <span>${escapeHtml(doc.category)} | ${escapeHtml(doc.sizeLabel)} | Uploaded ${escapeHtml(formatDate(doc.uploadedAt))}</span>
+      ${isEditable(plan) ? `<div class="button-row" style="margin-top:.75rem;"><button class="action-btn" type="button" data-remove-doc="${escapeHtml(doc.id)}">Remove</button></div>` : ''}
+    </div>
+  `).join('');
+}
+
+function renderComments(plan) {
+  const comments = plan.workflow.comments || [];
+  if (!comments.length) {
+    commentList.innerHTML = '<div class="empty-state">No review comments are recorded for this version.</div>';
+    return;
+  }
+  commentList.innerHTML = comments.slice().reverse().map((comment) => `
+    <div class="comment-item">
+      <strong>${escapeHtml(comment.author)} | ${escapeHtml(comment.visibility || comment.role || 'Review history')}</strong>
+      <span>${escapeHtml(formatDate(comment.at))}</span>
+      <span>${escapeHtml(comment.text)}</span>
+    </div>
+  `).join('');
+}
+
+function renderTrail(plan) {
+  const items = plan.workflow.auditTrail || [];
+  if (!items.length) {
+    trailList.innerHTML = '<div class="empty-state">No audit events recorded for this version.</div>';
+    return;
+  }
+  trailList.innerHTML = items.slice().reverse().map((entry) => `
+    <div class="trail-item">
+      <strong>${escapeHtml(entry.actor)} | ${escapeHtml(entry.role)}</strong>
+      <span>${escapeHtml(formatDate(entry.at))}</span>
+      <span>${escapeHtml(entry.previousStatus)} -> ${escapeHtml(entry.newStatus)}</span>
+      <span>${escapeHtml(entry.comments || 'No comments recorded.')}</span>
+    </div>
+  `).join('');
+}
+
+function renderMeta(plan) {
+  metaStatus.innerHTML = `<span class="status-badge ${statusClass(plan.workflow.status)}"><span class="dot"></span>${escapeHtml(plan.workflow.status)}</span>`;
+  metaSubmitted.textContent = plan.workflow.submittedAt ? formatDate(plan.workflow.submittedAt) : 'Not submitted yet';
+  metaRoute.textContent = plan.workflow.status === 'Draft'
+    ? `On submission, route to ${plan.workflow.nextReviewStatus === 'Pending Mentor Approval' ? 'Mentor review first' : 'CPA Staff review directly'}.`
+    : (plan.workflow.route || 'No route recorded.');
+  const activeProgram = JSON.parse(localStorage.getItem(activeApprovedKey) || 'null');
+  metaProgram.textContent = activeProgram
+    ? `Active work plan version ${activeProgram.version} approved ${formatDate(activeProgram.approvedAt)}`
+    : 'No active approved work plan recorded.';
+  metaVersion.textContent = `Version ${plan.version}${plan.workflow.sourceVersion ? ` | Created from version ${plan.workflow.sourceVersion}` : ''}${plan.workflow.resubmissionCount !== undefined ? ` | Resubmissions used: ${plan.workflow.resubmissionCount}` : ''}`;
+}
+
+function renderForm(plan) {
+  const editable = isEditable(plan);
+  responseNote.value = plan.workflow.learnerResponse || '';
+  positionTitle.value = plan.employerDetails.positionTitle || '';
+  mentorName.value = plan.approvals.mentorName || '';
+  expectedCompletion.value = plan.employerDetails.expectedCompletionDate || '';
+  leaveDays.value = plan.employerDetails.expectedLeaveDays ?? '';
+  hoursPerWeek.value = plan.employerDetails.averageHoursPerWeek ?? '';
+  nextRoute.value = editable
+    ? (plan.workflow.nextReviewStatus === 'Pending Mentor Approval' ? 'Mentor review before CPA Staff review' : 'CPA Staff review directly')
+    : 'No edits allowed on submitted versions';
+
+  [responseNote, positionTitle, mentorName, expectedCompletion, leaveDays, hoursPerWeek].forEach((field) => {
+    field.disabled = !editable;
+  });
+  jobDescriptionUpload.disabled = !editable;
+  supportingUpload.disabled = !editable;
+  saveDraftBtn.disabled = !editable;
+  submitBtn.disabled = !editable;
+  createRevisionBtn.disabled = editable;
+
+  if (editable) {
+    workflowNote.className = 'notice-box';
+    workflowNote.innerHTML = '<strong>Editable revision draft</strong><span>This prepopulated draft can be updated and saved until it is resubmitted. After resubmission, the version becomes read-only.</span>';
+  } else {
+    workflowNote.className = 'notice-box';
+    workflowNote.innerHTML = '<strong>Read-only submitted version</strong><span>This version has already been submitted and cannot be edited. Create a new revision version if the learner needs to respond to a return request.</span>';
+  }
+}
+
+function renderActiveVersion() {
+  const plan = getActiveVersion();
+  if (!plan) return;
+  detailTitle.textContent = `Work plan version ${plan.version}`;
+  detailCopy.textContent = isEditable(plan)
+    ? 'This is the active revision draft. Update the prepopulated content and resubmit when ready.'
+    : 'This is a submitted version retained for historical reference and read-only review.';
+
+  renderValueCards(requestGrid, [
+    { label:'Requested by', value: plan.workflow.declinedBy || 'No return request recorded' },
+    { label:'Requested due date', value: plan.workflow.requestedRevisionDueDate ? formatShortDate(plan.workflow.requestedRevisionDueDate) : 'Not specified' },
+    { label:'Destination after submit', value: plan.workflow.nextReviewStatus === 'Pending Mentor Approval' ? 'Mentor review' : 'CPA Staff review' },
+    { label:'Current employer', value: plan.employerDetails.organizationName || 'Not provided' },
+    { label:'Potential PE', value: `${Number(plan.duration.potentialMonths || 0).toFixed(2)} months` },
+    { label:'Actual gained PE', value: plan.duration.actualGainedPE || 'Pending CPA Reviewer' }
+  ]);
+
+  renderForm(plan);
+  renderDocuments(plan);
+  renderComments(plan);
+  renderTrail(plan);
+  renderMeta(plan);
+}
+
+function updateHero() {
+  const drafts = versions.filter((plan) => plan.workflow.status === 'Draft').length;
+  const submitted = versions.length - drafts;
+  heroSummary.textContent = `${versions.length} version${versions.length === 1 ? '' : 's'} | ${drafts} draft | ${submitted} submitted`;
+  const basePlan = versions[0];
+  learnerSummary.textContent = basePlan
+    ? `${basePlan.learnerInfo.legalName || 'Learner'} | ${basePlan.learnerInfo.cpaId || 'CPA ID not recorded'}`
+    : 'No learner record loaded.';
+}
+
+function renderAll() {
+  renderQueue();
+  renderActiveVersion();
+  updateHero();
+  persistVersions();
+}
+
+function switchVersion(versionId) {
+  activeVersionId = versionId;
+  renderAll();
+}
+
+function readFormIntoPlan(plan) {
+  plan.workflow.learnerResponse = responseNote.value.trim();
+  plan.employerDetails.positionTitle = positionTitle.value.trim();
+  plan.approvals.mentorName = mentorName.value.trim();
+  plan.employerDetails.expectedCompletionDate = expectedCompletion.value;
+  plan.employerDetails.expectedLeaveDays = leaveDays.value === '' ? '' : Number(leaveDays.value);
+  plan.employerDetails.averageHoursPerWeek = hoursPerWeek.value === '' ? '' : Number(hoursPerWeek.value);
+  plan.updatedAt = new Date().toISOString();
+}
+
+function validateEditablePlan(plan) {
+  const issues = [];
+  if (!plan.employerDetails.positionTitle) issues.push('position title');
+  if (!plan.approvals.mentorName) issues.push('mentor name');
+  if (!plan.employerDetails.expectedCompletionDate) issues.push('expected completion date');
+  if (plan.employerDetails.expectedLeaveDays === '' || plan.employerDetails.expectedLeaveDays === null || plan.employerDetails.expectedLeaveDays === undefined) issues.push('expected leave days');
+  if (plan.employerDetails.averageHoursPerWeek === '' || plan.employerDetails.averageHoursPerWeek === null || plan.employerDetails.averageHoursPerWeek === undefined) issues.push('average hours worked per week');
+  return issues;
+}
+
+function addAudit(plan, previousStatus, newStatus, comments, actor = 'Learner', role = 'Learner') {
+  plan.workflow.auditTrail.push({
+    at: new Date().toISOString(),
+    actor,
+    role,
+    previousStatus,
+    newStatus,
+    comments
+  });
+}
+
+function saveDraft() {
+  const plan = getActiveVersion();
+  if (!isEditable(plan)) {
+    setMessage('Only the current revision draft can be updated.');
+    return;
+  }
+  readFormIntoPlan(plan);
+  const issues = validateEditablePlan(plan);
+  addAudit(plan, 'Draft', 'Draft', plan.workflow.learnerResponse
+    ? `Learner saved draft updates. Response: ${plan.workflow.learnerResponse}`
+    : 'Learner saved draft updates.');
+  renderAll();
+  setMessage(issues.length
+    ? `Revision draft saved with ${issues.length} field${issues.length === 1 ? '' : 's'} still needing attention.`
+    : 'Revision draft saved. The prepopulated work plan remains editable until you resubmit it.');
+}
+
+function submitRevision() {
+  const plan = getActiveVersion();
+  if (!isEditable(plan)) {
+    setMessage('Only the active revision draft can be resubmitted.');
+    return;
+  }
+
+  readFormIntoPlan(plan);
+  const issues = validateEditablePlan(plan);
+  if (issues.length) {
+    setMessage(`Before resubmission, complete ${issues.length} required field${issues.length === 1 ? '' : 's'} in this revision draft.`);
+    renderAll();
+    return;
+  }
+
+  const previousStatus = plan.workflow.status;
+  const now = new Date().toISOString();
+  plan.workflow.status = plan.workflow.nextReviewStatus || 'Pending CPA Review';
+  plan.workflow.submittedAt = now;
+  plan.workflow.route = plan.workflow.status === 'Pending Mentor Approval'
+    ? 'Resubmitted by learner. Routed back to mentor review before CPA Staff review.'
+    : 'Resubmitted by learner. Routed directly to CPA Staff review.';
+  plan.workflow.resubmissionCount = Number(plan.workflow.resubmissionCount || 0) + 1;
+  plan.workflow.notifications.push({
+    type: plan.workflow.status === 'Pending Mentor Approval' ? 'Mentor resubmission notification' : 'CPA Staff resubmission notification',
+    sentAt: now,
+    recipient: plan.workflow.status === 'Pending Mentor Approval'
+      ? (plan.approvals.mentorSelectedEmail || 'mentor')
+      : 'CPA Staff review queue'
+  });
+  addAudit(plan, previousStatus, plan.workflow.status, plan.workflow.learnerResponse
+    ? `Learner resubmitted revision. Response: ${plan.workflow.learnerResponse}`
+    : 'Learner resubmitted revision.');
+  renderAll();
+  setMessage(`Revised work plan submitted. This version is now read-only and routed to ${plan.workflow.status === 'Pending Mentor Approval' ? 'mentor review first' : 'CPA Staff review'} based on the recorded workflow.`);
+}
+
+function createRevisionVersion() {
+  const source = getActiveVersion();
+  if (!source || isEditable(source)) {
+    setMessage('Select a read-only returned version to create a new revision draft.');
+    return;
+  }
+  const existingDraft = versions.find((plan) => plan.workflow.status === 'Draft');
+  if (existingDraft) {
+    activeVersionId = existingDraft.id;
+    renderAll();
+    setMessage('A revision draft already exists. Opened the current editable draft for you.');
+    return;
+  }
+  const draft = createRevisionVersionFrom(source);
+  versions.push(draft);
+  activeVersionId = draft.id;
+  renderAll();
+  setMessage(`Revision draft version ${draft.version} created from submitted version ${source.version}.`);
+}
+
+function removeDocument(docId) {
+  const plan = getActiveVersion();
+  if (!isEditable(plan)) return;
+  plan.documents.jobDescriptions = plan.documents.jobDescriptions.filter((doc) => doc.id !== docId);
+  plan.documents.supporting = plan.documents.supporting.filter((doc) => doc.id !== docId);
+  addAudit(plan, 'Draft', 'Draft', `Learner removed document ${docId} from the revision draft.`);
+  renderAll();
+}
+
+function attachFiles(input, targetKey, categoryLabel) {
+  const plan = getActiveVersion();
+  if (!isEditable(plan)) return;
+  if (!input.files || !input.files.length) {
+    setMessage(`Select file(s) before attaching ${categoryLabel.toLowerCase()}.`);
+    return;
+  }
+  const docs = Array.from(input.files).map((file) => fileToMeta(file, categoryLabel));
+  plan.documents[targetKey].push(...docs);
+  input.value = '';
+  addAudit(plan, 'Draft', 'Draft', `${docs.length} ${categoryLabel.toLowerCase()} file${docs.length === 1 ? '' : 's'} attached to the revision draft.`);
+  renderAll();
+  setMessage(`${docs.length} ${categoryLabel.toLowerCase()} file${docs.length === 1 ? '' : 's'} attached to this revision draft.`);
+}
+
+document.getElementById('attach-job-description-btn').addEventListener('click', () => {
+  if (!isEditable(getActiveVersion())) {
+    setMessage('Documents can only be updated on an editable revision draft.');
+    return;
+  }
+  jobDescriptionUpload.click();
+});
+
+document.getElementById('attach-supporting-btn').addEventListener('click', () => {
+  if (!isEditable(getActiveVersion())) {
+    setMessage('Documents can only be updated on an editable revision draft.');
+    return;
+  }
+  supportingUpload.click();
+});
+
+jobDescriptionUpload.addEventListener('change', () => attachFiles(jobDescriptionUpload, 'jobDescriptions', 'Job description'));
+supportingUpload.addEventListener('change', () => attachFiles(supportingUpload, 'supporting', 'Supporting document'));
+
+documentList.addEventListener('click', (event) => {
+  const button = event.target.closest('[data-remove-doc]');
+  if (!button) return;
+  removeDocument(button.dataset.removeDoc);
+});
+
+queueList.addEventListener('click', (event) => {
+  const card = event.target.closest('[data-version-id]');
+  if (!card) return;
+  switchVersion(card.dataset.versionId);
+});
+
+createRevisionBtn.addEventListener('click', createRevisionVersion);
+saveDraftBtn.addEventListener('click', saveDraft);
+submitBtn.addEventListener('click', submitRevision);
+
+loadVersions();
+renderAll();
+</script>
+</body>
+</html>
+
+
+

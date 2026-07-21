@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPA - Work Plan Competencies</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:#0B1F3A; --blue:#1B5EA8; --accent:#2A9D8F; --amber:#E76F1A; --green:#2D7A4E; --red:#C0392B;
+    --sand:#F7F5F2; --white:#FFFFFF; --gray-100:#F2F1EF; --gray-200:#E4E2DE; --gray-300:#D2CEC8;
+    --gray-400:#A8A49E; --gray-600:#6B6760; --gray-800:#2E2C2A;
+    --shadow-sm:0 1px 3px rgba(11,31,58,0.07),0 1px 2px rgba(11,31,58,0.05);
+    --shadow-md:0 10px 28px rgba(11,31,58,0.10);
+    --radius-sm:6px; --radius-md:10px; --radius-lg:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'DM Sans',sans-serif;background:var(--sand);color:var(--gray-800);min-height:100vh}
+  a{text-decoration:none;color:inherit}
+  button,input,select,textarea{font:inherit}
+  .topbar{background:var(--navy);min-height:60px;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:0 2rem}
+  .logo-group{display:flex;align-items:center;gap:10px;min-width:225px}
+  .logo-mark{width:36px;height:36px;background:var(--white);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .logo-text{display:flex;flex-direction:column;line-height:1.1}
+  .logo-text .brand{font-size:13px;font-weight:600;color:var(--white);letter-spacing:.04em}
+  .logo-text .sub{font-size:10px;color:rgba(255,255,255,.5);letter-spacing:.02em;text-transform:uppercase}
+  .topbar-right{display:flex;align-items:center;gap:12px}
+  .nav-links{display:flex;align-items:center;gap:2px}
+  .nav-links a{color:rgba(255,255,255,.55);font-size:14px;padding:8px 16px;border-radius:var(--radius-sm);white-space:nowrap}
+  .nav-links a.active,.nav-links a:hover{color:var(--white);background:rgba(255,255,255,.08)}
+    .role-dropdown{position:relative}
+  .role-trigger{list-style:none;display:flex;align-items:center;gap:10px;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);color:var(--white);font-size:13px;font-weight:600;cursor:pointer}
+  .role-trigger::-webkit-details-marker{display:none}
+  .role-label{display:inline-flex;align-items:center;justify-content:center;min-width:92px}
+  .role-caret{font-size:11px;color:rgba(255,255,255,.72)}
+  .role-menu{position:absolute;right:0;top:calc(100% + 10px);min-width:190px;padding:8px;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);box-shadow:0 12px 30px rgba(11,31,58,.14);display:flex;flex-direction:column;gap:4px;z-index:20}
+  .role-option{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:var(--radius-sm);font-size:13px;color:var(--gray-800);text-decoration:none}
+  .role-option:hover{background:var(--gray-100)}
+  .role-option.active{background:#EBF3FF;color:var(--blue);font-weight:600}
+  .page{max-width:1380px;margin:0 auto;padding:2rem 2rem 4rem}
+  .hero{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--gray-200)}
+  .hero h1{font-family:'DM Serif Display',serif;font-size:38px;font-weight:400;color:var(--navy);margin-bottom:6px}
+  .hero p{font-size:14px;color:var(--gray-600);max-width:820px;line-height:1.5}
+  .hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);padding:10px 16px;box-shadow:var(--shadow-sm);font-size:13px;color:var(--gray-600)}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--blue);flex:0 0 auto}
+  .message-bar{display:none;align-items:center;gap:10px;margin-bottom:1rem;padding:12px 14px;border-radius:var(--radius-md);background:#EBF3FF;border:1px solid rgba(27,94,168,.18);color:var(--navy);box-shadow:var(--shadow-sm)}
+  .message-bar.visible{display:flex}
+  .section-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gray-400);margin-bottom:.75rem}
+  .panel{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm)}
+  .panel h2{font-size:17px;color:var(--navy);margin-bottom:4px}
+  .panel-copy{font-size:12px;color:var(--gray-600);line-height:1.45}
+  .workspace{display:grid;grid-template-columns:minmax(0,1fr) 350px;gap:16px}
+  .form-panel,.meta-panel{padding:1.25rem}
+  .form-stack,.meta-stack,.section-stack,.task-stack,.statement-stack{display:flex;flex-direction:column;gap:16px}
+  .form-section{padding:1rem;border:1px solid var(--gray-200);border-radius:var(--radius-md);background:var(--sand)}
+  .form-section h3{font-size:15px;color:var(--navy);margin-bottom:6px}
+  .field-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .field{display:flex;flex-direction:column;gap:6px}
+  .field.full{grid-column:1 / -1}
+  .field label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gray-400)}
+  .field input,.field select,.field textarea{border:1px solid var(--gray-200);border-radius:var(--radius-sm);background:var(--white);padding:10px 12px;color:var(--gray-800)}
+  .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:rgba(27,94,168,.32);box-shadow:0 0 0 3px rgba(27,94,168,.08)}
+  .option-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .reference-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+  .option-card,.reference-card,.meta-card,.notice-box,.task-card,.statement-card{padding:12px;border-radius:var(--radius-md);border:1px solid var(--gray-200);background:var(--white)}
+  .option-card strong,.reference-card strong,.meta-card strong,.notice-box strong,.task-card strong,.statement-card strong{display:block;font-size:13px;color:var(--navy);margin-bottom:4px}
+  .option-card span,.reference-card span,.meta-card span,.notice-box span,.task-card span,.statement-card span{display:block;font-size:12px;color:var(--gray-600);line-height:1.45}
+  .option-card{background:var(--sand);cursor:pointer;transition:all .15s ease}
+  .option-card.selected{border-color:rgba(27,94,168,.32);box-shadow:0 0 0 3px rgba(27,94,168,.08);background:#F7FAFF}
+  .reference-card.auto{background:#F2FBF6;border-color:rgba(45,122,78,.22)}
+  .reference-card.core{background:#F7FAFF;border-color:rgba(27,94,168,.18)}
+  .notice-box{background:#F7FAFF}
+  .notice-box.warn{background:#FFF8F1;border-color:rgba(231,111,26,.22)}
+  .notice-box.success{background:#F2FBF6;border-color:rgba(45,122,78,.22)}
+  .pill-row{display:flex;flex-wrap:wrap;gap:8px}
+  .pill{display:inline-flex;align-items:center;gap:6px;background:#EBF3FF;color:var(--blue);border:1px solid rgba(27,94,168,.18);border-radius:999px;padding:5px 9px;font-size:11px;font-weight:700}
+  .task-card,.statement-card{background:var(--sand)}
+  .task-head,.statement-row{display:grid;grid-template-columns:minmax(0,1.1fr) 180px 180px;gap:12px;align-items:start}
+  .task-list,.subtask-list,.dc-list{display:flex;flex-direction:column;gap:10px}
+  .checkbox-inline{display:flex;align-items:flex-start;gap:10px}
+  .checkbox-inline input{margin-top:3px}
+  .table-head{display:grid;grid-template-columns:minmax(0,1.1fr) 180px 180px;gap:12px;padding:0 12px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gray-400)}
+  .subcopy{font-size:11px;color:var(--gray-600);line-height:1.4}
+  .button-row{display:flex;flex-wrap:wrap;gap:8px}
+  .action-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:var(--radius-sm);border:1px solid var(--gray-200);padding:9px 12px;background:var(--white);color:var(--navy);font-size:12px;font-weight:700;cursor:pointer;transition:all .15s ease}
+  .action-btn:hover{border-color:rgba(27,94,168,.28);background:#F7FAFF}
+  .action-btn.primary{background:#EBF3FF;border-color:rgba(27,94,168,.28);color:var(--blue)}
+  .action-btn.success{background:#E8F5EE;border-color:rgba(45,122,78,.22);color:var(--green)}
+  .empty-state{padding:18px;border:1px dashed var(--gray-300);border-radius:var(--radius-md);font-size:13px;color:var(--gray-600);text-align:center;background:var(--sand)}
+  .metric-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .metric-card{padding:12px;border-radius:var(--radius-md);border:1px solid var(--gray-200);background:var(--white)}
+  .metric-card .value{font-family:'DM Serif Display',serif;font-size:30px;line-height:1;color:var(--navy);margin-bottom:6px}
+  .metric-card strong{display:block;font-size:13px;color:var(--navy);margin-bottom:4px}
+  .metric-card span{display:block;font-size:12px;color:var(--gray-600);line-height:1.45}
+  @media(max-width:1180px){
+    .workspace{grid-template-columns:1fr}
+  }
+  @media(max-width:860px){
+    .reference-grid,.option-grid,.field-grid,.metric-grid,.task-head,.statement-row,.table-head{grid-template-columns:1fr}
+  }
+  @media(max-width:760px){
+    .topbar{align-items:flex-start;flex-direction:column;padding:1rem}
+    .nav-links{display:none}
+    .topbar-right{width:100%;justify-content:space-between}
+    .page{padding:1.25rem 1rem 3rem}
+    .hero{flex-direction:column;align-items:flex-start}
+    .hero h1{font-size:34px}
+  }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="logo-group">
+    <div class="logo-mark">
+      <svg width="24" height="20" viewBox="0 0 24 20" fill="none" aria-hidden="true">
+        <path d="M2 10C2 5.58 5.58 2 10 2h4c4.42 0 8 3.58 8 8s-3.58 8-8 8h-4C5.58 18 2 14.42 2 10z" fill="#0B1F3A" opacity="0.12"/>
+        <path d="M7 10.5l3 3 7-7" stroke="#0B1F3A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="logo-text"><span class="brand">CPA Canada</span><span class="sub">Chartered Professional Accountants</span></div>
+  </div>
+  <div class="topbar-right">
+    <nav class="nav-links" aria-label="Primary navigation">
+      <a href="../1_Dashboard/LearnerDashboard.html">Dashboard</a>
+      <a href="1_WorkPlanInfo.html">Work plan setup</a>
+      <a href="2_WorkPlanInfo.html" class="active">Competencies</a>
+    </nav>
+                <details class="role-dropdown">
+      <summary class="role-trigger"><span class="role-label">Learner</span><span class="role-caret">&#9662;</span></summary>
+      <div class="role-menu">
+        <a class="role-option active" href="../../index.html">Learner</a>
+        <a class="role-option" href="../../1_Dashboard/CPAReviewer.html">CPA Reviewer</a>
+        <a class="role-option" href="../../1_Dashboard/MentorDashboard.html">Mentor</a>
+        <a class="role-option" href="../../1_Dashboard/PTSBStaffDashboard.html">PTSB Staff</a>
+      </div>
+    </details>
+  </div>
+</header>
+
+<main class="page">
+  <section class="hero" aria-labelledby="competency-title">
+    <div>
+      <h1 id="competency-title">Select work plan competencies</h1>
+      <p>Choose the core competency path for the learner's professional experience, select core task statements and current levels, confirm all required sub-task statements, and complete every DC statement before the work plan moves forward for approval.</p>
+    </div>
+    <div class="hero-badge"><span class="dot"></span><span id="hero-summary">Competency setup in progress</span></div>
+  </section>
+
+  <div class="message-bar" id="message-bar" role="status" aria-live="polite">
+    <span class="dot"></span>
+    <span id="message-text"></span>
+  </div>
+
+  <section class="workspace">
+    <section class="panel form-panel">
+      <div class="section-label">Reporting work plan experience</div>
+      <h2>Competency mapping</h2>
+      <p class="panel-copy">Core competency choices drive which task statement sections appear. Where the learner's role type or template requires it, Assurance and Trust is added automatically.</p>
+
+      <div class="form-stack" style="margin-top:1rem;">
+        <section class="form-section">
+          <h3>Work plan dates snapshot</h3>
+          <div class="field-grid">
+            <div class="field">
+              <label>Work plan start date</label>
+              <input id="snapshot-start-date" type="text" readonly>
+            </div>
+            <div class="field">
+              <label>Expected completion date</label>
+              <input id="snapshot-completion-date" type="text" readonly>
+            </div>
+            <div class="field">
+              <label>Expected leave days</label>
+              <input id="snapshot-leaves" type="text" readonly>
+            </div>
+            <div class="field">
+              <label>Actual gained PE</label>
+              <input id="snapshot-actual-pe" type="text" readonly>
+            </div>
+          </div>
+          <div class="metric-grid" id="date-snapshot-metrics" style="margin-top:1rem;"></div>
+        </section>
+
+        <section class="form-section">
+          <h3>Core competency selection</h3>
+          <div class="option-grid" id="core-competency-grid"></div>
+          <div class="notice-box" id="competency-note" style="margin-top:1rem;">
+            <strong>Competency form logic</strong>
+            <span>Select Financial Reporting, Management Accounting, or a combination of both. The system will then display the corresponding task statement sections and any required Assurance and Trust content.</span>
+          </div>
+          <div class="subcopy" style="margin-top:.75rem;">Available competency areas for work plan mapping are shown below. Core competency choices are required; additional areas may be auto-applied based on the learner's role type and template.</div>
+          <div class="reference-grid" id="competency-reference-grid" style="margin-top:1rem;"></div>
+        </section>
+
+        <section class="form-section">
+          <h3>Core task statements and current levels</h3>
+          <div class="subcopy" style="margin-bottom:1rem;">Select at least 2 core task statements for each selected core competency area and set the learner's current level for every selected task.</div>
+          <div class="table-head">
+            <div>Core task statement</div>
+            <div>Include in work plan</div>
+            <div>Current level</div>
+          </div>
+          <div id="core-task-sections" class="section-stack"></div>
+        </section>
+
+        <section class="form-section">
+          <h3>Sub-task statements and current levels</h3>
+          <div class="subcopy" style="margin-bottom:1rem;">For every selected core task statement, all associated sub-task statements are displayed. The learner must mark each applicable statement as Yes and choose the current level.</div>
+          <div class="table-head">
+            <div>Sub-task statement</div>
+            <div>Applicable</div>
+            <div>Current level</div>
+          </div>
+          <div id="subtask-sections" class="section-stack"></div>
+        </section>
+
+        <section class="form-section">
+          <h3>DC statements</h3>
+          <div class="subcopy" style="margin-bottom:1rem;">All DC statements are mandatory. The learner must select the current proficiency level for every DC statement before the work plan can be completed.</div>
+          <div class="table-head">
+            <div>DC statement</div>
+            <div>Required</div>
+            <div>Current level</div>
+          </div>
+          <div id="dc-section" class="dc-list"></div>
+        </section>
+
+        <section class="form-section">
+          <h3>Save competency setup</h3>
+          <div class="notice-box success" id="save-note">
+            <strong>Competency draft</strong>
+            <span>Core competency choices, task statements, current levels, and DC statements are stored as part of the learner's work plan record.</span>
+          </div>
+          <div class="button-row" style="margin-top:1rem;">
+            <button class="action-btn" id="save-draft-btn" type="button">Save draft</button>
+            <button class="action-btn primary" id="continue-btn" type="button">Continue</button>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <aside class="panel meta-panel">
+      <div class="section-label">Completion summary</div>
+      <h2>Current progress</h2>
+      <div class="meta-stack">
+        <div class="meta-card">
+          <strong>Work plan context</strong>
+          <span id="summary-context">Loading work plan context.</span>
+        </div>
+        <div class="meta-card">
+          <strong>Work plan dates and duration</strong>
+          <span id="summary-duration">Loading saved work plan duration.</span>
+        </div>
+        <div class="meta-card">
+          <strong>Selected core competencies</strong>
+          <div class="pill-row" id="summary-competencies"></div>
+        </div>
+        <div class="metric-grid">
+          <div class="metric-card">
+            <div class="value" id="metric-core-tasks">0</div>
+            <strong>Core tasks selected</strong>
+            <span>Minimum 2 are required in each selected core competency area.</span>
+          </div>
+          <div class="metric-card">
+            <div class="value" id="metric-subtasks">0</div>
+            <strong>Sub-task statements confirmed</strong>
+            <span>All displayed sub-task statements must be Yes with a current level.</span>
+          </div>
+          <div class="metric-card">
+            <div class="value" id="metric-dc">0</div>
+            <strong>DC statements completed</strong>
+            <span>Every DC statement needs a current level before submission.</span>
+          </div>
+          <div class="metric-card">
+            <div class="value" id="metric-issues">0</div>
+            <strong>Open validation items</strong>
+            <span>Resolve all required items before continuing.</span>
+          </div>
+        </div>
+        <div class="meta-card">
+          <strong>Assurance and Trust</strong>
+          <span id="summary-assurance">Checking if Assurance and Trust is required from the current work plan context.</span>
+        </div>
+      </div>
+    </aside>
+  </section>
+</main>
+
+<script>
+const workPlanKey = 'workPlanRecord:learner-101';
+const competencyKey = 'workPlanCompetencies:learner-101';
+
+const levelOptions = ['', 'Level 0 - Not yet exposed', 'Level 1 - Foundational', 'Level 2 - Emerging', 'Level 3 - Proficient'];
+
+const competencyCatalog = {
+  fr: {
+    id: 'fr',
+    name: 'Financial Reporting',
+    kind: 'core',
+    description: 'External reporting, accounting policy application, and financial statement preparation.',
+    tasks: [
+      {
+        id: 'fr-1',
+        title: 'Prepare financial information and working papers',
+        subtasks: [
+          'Prepare reconciliations and supporting schedules',
+          'Document accounting entries and review adjustments',
+          'Explain reporting impacts to stakeholders'
+        ]
+      },
+      {
+        id: 'fr-2',
+        title: 'Apply accounting policies and standards',
+        subtasks: [
+          'Assess treatment of common transactions',
+          'Document policy conclusions and judgments',
+          'Identify disclosure implications'
+        ]
+      },
+      {
+        id: 'fr-3',
+        title: 'Analyze financial reporting results',
+        subtasks: [
+          'Interpret variances and reporting trends',
+          'Summarize drivers affecting results',
+          'Communicate implications to management'
+        ]
+      }
+    ]
+  },
+  ma: {
+    id: 'ma',
+    name: 'Management Accounting',
+    kind: 'core',
+    description: 'Planning, analysis, budgeting, performance, and management decision support.',
+    tasks: [
+      {
+        id: 'ma-1',
+        title: 'Support planning and budgeting',
+        subtasks: [
+          'Prepare budget inputs and assumptions',
+          'Analyze forecast changes and risks',
+          'Present planning outputs to management'
+        ]
+      },
+      {
+        id: 'ma-2',
+        title: 'Measure operational performance',
+        subtasks: [
+          'Track KPIs and operating metrics',
+          'Interpret cost and margin movements',
+          'Recommend performance follow-up actions'
+        ]
+      },
+      {
+        id: 'ma-3',
+        title: 'Support management decisions',
+        subtasks: [
+          'Assess financial implications of alternatives',
+          'Model decision scenarios and sensitivities',
+          'Summarize recommendations for leadership'
+        ]
+      }
+    ]
+  },
+  at: {
+    id: 'at',
+    name: 'Assurance and Trust',
+    kind: 'auto',
+    description: 'Automatically included when the learner role type or template requires audit and assurance exposure.',
+    tasks: [
+      {
+        id: 'at-1',
+        title: 'Plan and perform assurance procedures',
+        subtasks: [
+          'Confirm procedure objectives and scope',
+          'Perform testing and document results',
+          'Communicate exceptions and conclusions'
+        ]
+      },
+      {
+        id: 'at-2',
+        title: 'Evaluate evidence and reporting implications',
+        subtasks: [
+          'Assess sufficiency of evidence obtained',
+          'Relate findings to reporting outcomes',
+          'Document professional judgment applied'
+        ]
+      }
+    ]
+  }
+};
+
+const competencyReferenceAreas = [
+  { id:'fr', name:'Financial Reporting', kind:'core' },
+  { id:'ma', name:'Management Accounting', kind:'core' },
+  { id:'at', name:'Assurance and Trust', kind:'auto' },
+  { id:'sg', name:'Strategy and Governance', kind:'reference' },
+  { id:'md', name:'Management Decision-Making', kind:'reference' },
+  { id:'fi', name:'Finance', kind:'reference' },
+  { id:'tx', name:'Taxation', kind:'reference' },
+  { id:'rm', name:'Risk Management and Governance', kind:'reference' }
+];
+
+const dcStatements = [
+  'Demonstrate ethical awareness and professional judgment',
+  'Communicate clearly with stakeholders and team members',
+  'Use data, systems, and digital tools appropriately',
+  'Manage time, priorities, and personal accountability',
+  'Collaborate effectively with others in a professional setting',
+  'Apply critical thinking and problem-solving in day-to-day work'
+];
+
+const workPlan = JSON.parse(localStorage.getItem(workPlanKey) || 'null') || {};
+const savedCompetencies = JSON.parse(localStorage.getItem(competencyKey) || 'null');
+
+const defaultState = {
+  coreMode: '',
+  taskSelections: {},
+  subtaskSelections: {},
+  dcLevels: {},
+  updatedAt: new Date().toISOString()
+};
+
+let competencyState = savedCompetencies || defaultState;
+
+const coreCompetencyGrid = document.getElementById('core-competency-grid');
+const competencyNote = document.getElementById('competency-note');
+const referenceGrid = document.getElementById('competency-reference-grid');
+const coreTaskSections = document.getElementById('core-task-sections');
+const subtaskSections = document.getElementById('subtask-sections');
+const dcSection = document.getElementById('dc-section');
+const messageBar = document.getElementById('message-bar');
+const messageText = document.getElementById('message-text');
+const heroSummary = document.getElementById('hero-summary');
+const summaryContext = document.getElementById('summary-context');
+const summaryDuration = document.getElementById('summary-duration');
+const summaryCompetencies = document.getElementById('summary-competencies');
+const metricCoreTasks = document.getElementById('metric-core-tasks');
+const metricSubtasks = document.getElementById('metric-subtasks');
+const metricDc = document.getElementById('metric-dc');
+const metricIssues = document.getElementById('metric-issues');
+const summaryAssurance = document.getElementById('summary-assurance');
+const snapshotStartDate = document.getElementById('snapshot-start-date');
+const snapshotCompletionDate = document.getElementById('snapshot-completion-date');
+const snapshotLeaves = document.getElementById('snapshot-leaves');
+const snapshotActualPe = document.getElementById('snapshot-actual-pe');
+const dateSnapshotMetrics = document.getElementById('date-snapshot-metrics');
+
+function setMessage(text) {
+  messageText.textContent = text;
+  messageBar.classList.add('visible');
+}
+
+function escapeHtml(value) {
+  return String(value || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function formatShortDate(dateValue) {
+  if (!dateValue) return 'Not available';
+  const date = new Date(`${dateValue}T00:00:00`);
+  if (Number.isNaN(date.getTime())) return 'Not available';
+  return date.toLocaleDateString('en-CA', { year:'numeric', month:'short', day:'numeric' });
+}
+
+function calculateWorkPlanDuration() {
+  const details = workPlan.employerDetails || {};
+  const startDate = details.professionalStartDate || details.positionStartDate;
+  const endDate = details.expectedCompletionDate;
+  const leaveDays = Number(details.expectedLeaveDays || 0);
+  const avgHours = Number(details.averageHoursPerWeek || 0);
+  const metrics = { valid:false, totalDays:0, eligibleDays:0, potentialMonths:0, estimatedHours:0 };
+  if (!startDate || !endDate) return metrics;
+  const start = new Date(`${startDate}T00:00:00`);
+  const end = new Date(`${endDate}T00:00:00`);
+  if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime()) || end < start) return metrics;
+  const totalDays = Math.floor((end - start) / 86400000) + 1;
+  const eligibleDays = Math.max(0, totalDays - Math.max(0, Math.min(leaveDays, totalDays)));
+  metrics.valid = true;
+  metrics.totalDays = totalDays;
+  metrics.eligibleDays = eligibleDays;
+  metrics.potentialMonths = eligibleDays / 30.4375;
+  metrics.estimatedHours = (eligibleDays / 7) * avgHours;
+  return metrics;
+}
+
+function persists() {
+  competencyState.updatedAt = new Date().toISOString();
+  localStorage.setItem(competencyKey, JSON.stringify(competencyState));
+}
+
+function roleTypeLabel() {
+  return workPlan.roleType || 'Role type not selected';
+}
+
+function selectedRolePlans() {
+  return workPlan.jobInformation && Array.isArray(workPlan.jobInformation.rolePlans)
+    ? workPlan.jobInformation.rolePlans
+    : [];
+}
+
+function assuranceRequired() {
+  const preReviewedRole = workPlan.preReviewed && workPlan.preReviewed.roleName ? workPlan.preReviewed.roleName : '';
+  return roleTypeLabel() === 'Firm - Audit & Assurance'
+    || selectedRolePlans().includes('Audit and assurance')
+    || /audit|assurance/i.test(preReviewedRole);
+}
+
+function activeCoreCompetencies() {
+  if (competencyState.coreMode === 'fr') return ['fr'];
+  if (competencyState.coreMode === 'ma') return ['ma'];
+  if (competencyState.coreMode === 'both') return ['fr', 'ma'];
+  return [];
+}
+
+function activeApplicableCompetencies() {
+  const active = [...activeCoreCompetencies()];
+  if (assuranceRequired()) active.push('at');
+  return active;
+}
+
+function taskSelection(taskId) {
+  if (!competencyState.taskSelections[taskId]) {
+    competencyState.taskSelections[taskId] = { selected: false, level: '' };
+  }
+  return competencyState.taskSelections[taskId];
+}
+
+function subtaskSelection(taskId, index) {
+  const key = `${taskId}-${index}`;
+  if (!competencyState.subtaskSelections[key]) {
+    competencyState.subtaskSelections[key] = { applicable: '', level: '' };
+  }
+  return competencyState.subtaskSelections[key];
+}
+
+function parseSubtaskKey(key) {
+  const lastDash = String(key).lastIndexOf('-');
+  return {
+    taskId: String(key).slice(0, lastDash),
+    index: String(key).slice(lastDash + 1)
+  };
+}
+
+function dcLevel(index) {
+  if (!competencyState.dcLevels[index]) {
+    competencyState.dcLevels[index] = '';
+  }
+  return competencyState.dcLevels[index];
+}
+
+function renderCoreCompetencySelection() {
+  const options = [
+    { id:'fr', title:'Financial Reporting', description:'Use Financial Reporting as the primary core competency area.' },
+    { id:'ma', title:'Management Accounting', description:'Use Management Accounting as the primary core competency area.' },
+    { id:'both', title:'Combination of FR + MA', description:'Use both core competency areas and complete the required task mapping for each.' }
+  ];
+
+  coreCompetencyGrid.innerHTML = options.map((option) => `
+    <article class="option-card ${competencyState.coreMode === option.id ? 'selected' : ''}" data-core-mode="${option.id}">
+      <strong>${escapeHtml(option.title)}</strong>
+      <span>${escapeHtml(option.description)}</span>
+    </article>
+  `).join('');
+
+  competencyNote.className = assuranceRequired() ? 'notice-box success' : 'notice-box';
+  competencyNote.innerHTML = assuranceRequired()
+    ? '<strong>Assurance and Trust included</strong><span>Because the learner work plan context includes audit and assurance exposure, the system automatically applies Assurance and Trust sections alongside the selected core competency area.</span>'
+    : '<strong>Competency form logic</strong><span>Select Financial Reporting, Management Accounting, or a combination of both. The system will then display the corresponding task statement sections and any required Assurance and Trust content.</span>';
+}
+
+function renderReferenceGrid() {
+  referenceGrid.innerHTML = competencyReferenceAreas.map((area) => {
+    const classes = [
+      'reference-card',
+      activeCoreCompetencies().includes(area.id) ? 'core' : '',
+      area.id === 'at' && assuranceRequired() ? 'auto' : ''
+    ].filter(Boolean).join(' ');
+    let helper = 'Available in the broader work plan framework.';
+    if (area.id === 'at' && assuranceRequired()) helper = 'Automatically included from the current work plan context.';
+    if (activeCoreCompetencies().includes(area.id)) helper = 'Selected as a required core competency for this work plan.';
+    return `<div class="${classes}"><strong>${escapeHtml(area.name)}</strong><span>${escapeHtml(helper)}</span></div>`;
+  }).join('');
+}
+
+function selectOptionsMarkup(value) {
+  return levelOptions.map((option) => `<option value="${escapeHtml(option)}" ${option === value ? 'selected' : ''}>${escapeHtml(option || 'Select current level')}</option>`).join('');
+}
+
+function renderCoreTaskSections() {
+  const active = activeApplicableCompetencies().filter((id) => competencyCatalog[id]);
+  if (!active.length) {
+    coreTaskSections.innerHTML = '<div class="empty-state">Select a core competency first to display the corresponding core task statements.</div>';
+    return;
+  }
+
+  coreTaskSections.innerHTML = active.map((competencyId) => {
+    const competency = competencyCatalog[competencyId];
+    const requiredCopy = competency.kind === 'core'
+      ? 'Select at least 2 core task statements in this competency area.'
+      : 'Assurance and Trust applies automatically based on the learner role type or template.';
+
+    const tasks = competency.tasks.map((task) => {
+      const selection = taskSelection(task.id);
+      return `
+        <div class="task-card">
+          <div class="task-head">
+            <div>
+              <strong>${escapeHtml(task.title)}</strong>
+              <span>${escapeHtml(competency.name)}</span>
+            </div>
+            <div class="field">
+              <label class="checkbox-inline">
+                <input type="checkbox" data-task-check="${task.id}" ${selection.selected ? 'checked' : ''}>
+                <span>Include in work plan</span>
+              </label>
+            </div>
+            <div class="field">
+              <label for="level-${task.id}">Current level</label>
+              <select id="level-${task.id}" data-task-level="${task.id}" ${selection.selected ? '' : 'disabled'}>
+                ${selectOptionsMarkup(selection.level)}
+              </select>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    return `
+      <section class="form-section">
+        <h3>${escapeHtml(competency.name)}</h3>
+        <div class="subcopy" style="margin-bottom:1rem;">${escapeHtml(requiredCopy)}</div>
+        <div class="task-stack">${tasks}</div>
+      </section>
+    `;
+  }).join('');
+}
+
+function selectedTasksForCompetency(competencyId) {
+  const competency = competencyCatalog[competencyId];
+  return competency.tasks.filter((task) => taskSelection(task.id).selected);
+}
+
+function renderSubtaskSections() {
+  const active = activeApplicableCompetencies().filter((id) => competencyCatalog[id]);
+  const blocks = active.map((competencyId) => {
+    const competency = competencyCatalog[competencyId];
+    const selectedTasks = selectedTasksForCompetency(competencyId);
+    if (!selectedTasks.length) return '';
+
+    return `
+      <section class="form-section">
+        <h3>${escapeHtml(competency.name)}</h3>
+        <div class="section-stack">
+          ${selectedTasks.map((task) => `
+            <div>
+              <div class="subcopy" style="margin-bottom:.75rem;"><strong>${escapeHtml(task.title)}</strong></div>
+              <div class="subtask-list">
+                ${task.subtasks.map((subtask, index) => {
+                  const selection = subtaskSelection(task.id, index);
+                  return `
+                    <div class="statement-card">
+                      <div class="statement-row">
+                        <div>
+                          <strong>${escapeHtml(subtask)}</strong>
+                          <span>${escapeHtml(task.title)}</span>
+                        </div>
+                        <div class="field">
+                          <label for="applicable-${task.id}-${index}">Applicable</label>
+                          <select id="applicable-${task.id}-${index}" data-subtask-applicable="${task.id}-${index}">
+                            <option value="" ${selection.applicable === '' ? 'selected' : ''}>Select</option>
+                            <option value="Yes" ${selection.applicable === 'Yes' ? 'selected' : ''}>Yes</option>
+                            <option value="No" ${selection.applicable === 'No' ? 'selected' : ''}>No</option>
+                          </select>
+                        </div>
+                        <div class="field">
+                          <label for="sublevel-${task.id}-${index}">Current level</label>
+                          <select id="sublevel-${task.id}-${index}" data-subtask-level="${task.id}-${index}">
+                            ${selectOptionsMarkup(selection.level)}
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </section>
+    `;
+  }).filter(Boolean);
+
+  subtaskSections.innerHTML = blocks.length
+    ? blocks.join('')
+    : '<div class="empty-state">Select core task statements first to display the related sub-task statements.</div>';
+}
+
+function renderDcSection() {
+  dcSection.innerHTML = dcStatements.map((statement, index) => `
+    <div class="statement-card">
+      <div class="statement-row">
+        <div>
+          <strong>${escapeHtml(statement)}</strong>
+          <span>Mandatory DC statement</span>
+        </div>
+        <div class="field">
+          <label>Required</label>
+          <input type="text" value="Yes" readonly>
+        </div>
+        <div class="field">
+          <label for="dc-${index}">Current level</label>
+          <select id="dc-${index}" data-dc-level="${index}">
+            ${selectOptionsMarkup(dcLevel(index))}
+          </select>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function validateState() {
+  const issues = [];
+  const activeCore = activeCoreCompetencies();
+  const activeAll = activeApplicableCompetencies();
+
+  if (!competencyState.coreMode) {
+    issues.push('A core competency selection is required.');
+  }
+
+  activeCore.forEach((competencyId) => {
+    const selectedTasks = selectedTasksForCompetency(competencyId);
+    if (selectedTasks.length < 2) {
+      issues.push(`Select at least 2 core task statements for ${competencyCatalog[competencyId].name}.`);
+    }
+    selectedTasks.forEach((task) => {
+      if (!taskSelection(task.id).level) {
+        issues.push(`Current level is required for selected core task "${task.title}".`);
+      }
+    });
+  });
+
+  activeAll.forEach((competencyId) => {
+    selectedTasksForCompetency(competencyId).forEach((task) => {
+      task.subtasks.forEach((subtask, index) => {
+        const selection = subtaskSelection(task.id, index);
+        if (selection.applicable !== 'Yes') {
+          issues.push(`"${subtask}" must be marked Yes for ${task.title}.`);
+        }
+        if (!selection.level) {
+          issues.push(`Current level is required for sub-task "${subtask}".`);
+        }
+      });
+    });
+  });
+
+  dcStatements.forEach((statement, index) => {
+    if (!dcLevel(index)) {
+      issues.push(`Current level is required for DC statement "${statement}".`);
+    }
+  });
+
+  return issues;
+}
+
+function renderSummary() {
+  const activeCore = activeCoreCompetencies();
+  const activeAll = activeApplicableCompetencies();
+  const selectedTaskCount = activeAll.reduce((count, competencyId) => count + selectedTasksForCompetency(competencyId).length, 0);
+  const subtaskCount = activeAll.reduce((count, competencyId) => count + selectedTasksForCompetency(competencyId).reduce((sum, task) => sum + task.subtasks.filter((subtask, index) => {
+    const selection = subtaskSelection(task.id, index);
+    return selection.applicable === 'Yes' && Boolean(selection.level);
+  }).length, 0), 0);
+  const completedDcCount = dcStatements.filter((statement, index) => Boolean(dcLevel(index))).length;
+  const issues = validateState();
+  const duration = calculateWorkPlanDuration();
+
+  summaryContext.textContent = `${roleTypeLabel()} | ${workPlan.preReviewed && workPlan.preReviewed.templatePath ? workPlan.preReviewed.templatePath : 'Standard template path'} | ${workPlan.employerDetails && workPlan.employerDetails.organizationName ? workPlan.employerDetails.organizationName : 'Employer not yet stored'}`;
+  summaryDuration.textContent = duration.valid
+    ? `${duration.potentialMonths.toFixed(2)} potential month(s) | ${Math.round(duration.estimatedHours)} estimated hour(s) | Actual gained PE: ${(workPlan.duration && workPlan.duration.actualGainedPE) || 'Pending CPA Reviewer'}`
+    : 'Saved work plan dates are incomplete, so duration cannot be calculated yet.';
+  summaryCompetencies.innerHTML = activeCore.length
+    ? activeCore.map((id) => `<span class="pill">${escapeHtml(competencyCatalog[id].name)}</span>`).concat(assuranceRequired() ? ['<span class="pill">Assurance and Trust</span>'] : []).join('')
+    : '<span class="pill">No core competency selected</span>';
+
+  metricCoreTasks.textContent = String(selectedTaskCount);
+  metricSubtasks.textContent = String(subtaskCount);
+  metricDc.textContent = String(completedDcCount);
+  metricIssues.textContent = String(issues.length);
+
+  summaryAssurance.textContent = assuranceRequired()
+    ? 'Assurance and Trust applies automatically from the learner role type, selected role plan, or pre-reviewed role context.'
+    : 'Assurance and Trust is not currently required from the saved work plan context.';
+
+  heroSummary.textContent = issues.length
+    ? `Competency setup | ${issues.length} item${issues.length === 1 ? '' : 's'} still to complete`
+    : 'Competency setup ready for the next step';
+}
+
+function renderDateSnapshot() {
+  const details = workPlan.employerDetails || {};
+  const duration = calculateWorkPlanDuration();
+  snapshotStartDate.value = formatShortDate(details.professionalStartDate || details.positionStartDate);
+  snapshotCompletionDate.value = formatShortDate(details.expectedCompletionDate);
+  snapshotLeaves.value = String(details.expectedLeaveDays ?? '0');
+  snapshotActualPe.value = (workPlan.duration && workPlan.duration.actualGainedPE) || 'To be entered by CPA Reviewer';
+
+  if (!duration.valid) {
+    dateSnapshotMetrics.innerHTML = '<div class="empty-state">Saved work plan dates are incomplete. Enter a work plan start date, expected completion date, and expected leaves on the previous step to see the calculation here.</div>';
+    return;
+  }
+
+  dateSnapshotMetrics.innerHTML = `
+    <div class="metric-card">
+      <div class="value">${duration.potentialMonths.toFixed(2)}</div>
+      <strong>Potential professional experience</strong>
+      <span>${duration.eligibleDays} eligible day(s) after expected leaves.</span>
+    </div>
+    <div class="metric-card">
+      <div class="value">${Math.round(duration.estimatedHours)}</div>
+      <strong>Estimated hours</strong>
+      <span>Calculated from the saved work plan dates and weekly hours.</span>
+    </div>
+  `;
+}
+
+function renderAll() {
+  renderDateSnapshot();
+  renderCoreCompetencySelection();
+  renderReferenceGrid();
+  renderCoreTaskSections();
+  renderSubtaskSections();
+  renderDcSection();
+  renderSummary();
+  persists();
+}
+
+coreCompetencyGrid.addEventListener('click', (event) => {
+  const card = event.target.closest('[data-core-mode]');
+  if (!card) return;
+  competencyState.coreMode = card.dataset.coreMode;
+  renderAll();
+});
+
+coreTaskSections.addEventListener('change', (event) => {
+  const taskId = event.target.dataset.taskCheck || event.target.dataset.taskLevel;
+  if (!taskId) return;
+
+  if (event.target.dataset.taskCheck) {
+    taskSelection(taskId).selected = event.target.checked;
+    if (!event.target.checked) {
+      taskSelection(taskId).level = '';
+      const relatedTask = Object.values(competencyCatalog).flatMap((item) => item.tasks || []).find((task) => task.id === taskId);
+      if (relatedTask) {
+        relatedTask.subtasks.forEach((subtask, index) => {
+          competencyState.subtaskSelections[`${taskId}-${index}`] = { applicable: '', level: '' };
+        });
+      }
+    }
+  }
+
+  if (event.target.dataset.taskLevel) {
+    taskSelection(taskId).level = event.target.value;
+  }
+
+  renderAll();
+});
+
+subtaskSections.addEventListener('change', (event) => {
+  const key = event.target.dataset.subtaskApplicable || event.target.dataset.subtaskLevel;
+  if (!key) return;
+  const { taskId, index } = parseSubtaskKey(key);
+  const selection = subtaskSelection(taskId, index);
+  if (event.target.dataset.subtaskApplicable) selection.applicable = event.target.value;
+  if (event.target.dataset.subtaskLevel) selection.level = event.target.value;
+  renderSummary();
+  persists();
+});
+
+dcSection.addEventListener('change', (event) => {
+  const index = event.target.dataset.dcLevel;
+  if (index === undefined) return;
+  competencyState.dcLevels[index] = event.target.value;
+  renderSummary();
+  persists();
+});
+
+document.getElementById('save-draft-btn').addEventListener('click', () => {
+  persists();
+  const issues = validateState();
+  setMessage(issues.length
+    ? `Competency draft saved with ${issues.length} item${issues.length === 1 ? '' : 's'} still to complete.`
+    : 'Competency draft saved. Core tasks, subtasks, and DC statements are complete for this step.');
+  renderSummary();
+});
+
+document.getElementById('continue-btn').addEventListener('click', () => {
+  persists();
+  const issues = validateState();
+  if (issues.length) {
+    setMessage(`Competency setup saved. Before the next step, ${issues.length} required item${issues.length === 1 ? '' : 's'} still need attention.`);
+    renderSummary();
+    return;
+  }
+  setMessage('Competency setup saved. Continue to the next work plan step.');
+  renderSummary();
+});
+
+renderAll();
+</script>
+</body>
+</html>
+
+
+

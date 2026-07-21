@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPA - Learner Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:#0B1F3A; --blue:#1B5EA8; --accent:#2A9D8F; --amber:#E76F1A; --green:#2D7A4E; --red:#C0392B;
+    --sand:#F7F5F2; --white:#FFFFFF; --gray-100:#F2F1EF; --gray-200:#E4E2DE; --gray-300:#D2CEC8;
+    --gray-400:#A8A49E; --gray-600:#6B6760; --gray-800:#2E2C2A;
+    --shadow-sm:0 1px 3px rgba(11,31,58,0.07),0 1px 2px rgba(11,31,58,0.05);
+    --shadow-md:0 10px 28px rgba(11,31,58,0.10);
+    --radius-sm:6px; --radius-md:10px; --radius-lg:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'DM Sans',sans-serif;background:var(--sand);color:var(--gray-800);min-height:100vh}
+  a{color:inherit}
+  .topbar{background:var(--navy);min-height:60px;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:0 2rem}
+  .logo-group{display:flex;align-items:center;gap:10px;min-width:225px}
+  .logo-mark{width:36px;height:36px;background:var(--white);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .logo-text{display:flex;flex-direction:column;line-height:1.1}
+  .logo-text .brand{font-size:13px;font-weight:600;color:var(--white);letter-spacing:.04em}
+  .logo-text .sub{font-size:10px;color:rgba(255,255,255,.5);letter-spacing:.02em;text-transform:uppercase}
+  .nav-links{display:flex;align-items:center;justify-content:center;gap:2px}
+  .nav-links a{color:rgba(255,255,255,.55);font-size:14px;text-decoration:none;padding:8px 16px;border-radius:var(--radius-sm);white-space:nowrap}
+  .nav-links a.active,.nav-links a:hover{color:var(--white);background:rgba(255,255,255,.08)}
+  .topbar-right{display:flex;align-items:center;gap:12px}
+    .role-dropdown{position:relative}
+  .role-trigger{list-style:none;display:flex;align-items:center;gap:10px;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);color:var(--white);font-size:13px;font-weight:600;cursor:pointer}
+  .role-trigger::-webkit-details-marker{display:none}
+  .role-label{display:inline-flex;align-items:center;justify-content:center;min-width:92px}
+  .role-caret{font-size:11px;color:rgba(255,255,255,.72)}
+  .role-menu{position:absolute;right:0;top:calc(100% + 10px);min-width:190px;padding:8px;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);box-shadow:0 12px 30px rgba(11,31,58,.14);display:flex;flex-direction:column;gap:4px;z-index:20}
+  .role-option{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:var(--radius-sm);font-size:13px;color:var(--gray-800);text-decoration:none}
+  .role-option:hover{background:var(--gray-100)}
+  .role-option.active{background:#EBF3FF;color:var(--blue);font-weight:600}
+  .page{max-width:1180px;margin:0 auto;padding:2rem 2rem 4rem}
+  .hero{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--gray-200)}
+  .hero h1{font-family:'DM Serif Display',serif;font-size:38px;font-weight:400;color:var(--navy);margin-bottom:4px}
+  .hero p{font-size:14px;color:var(--gray-600);max-width:620px}
+  .hero-badge{display:flex;align-items:center;gap:8px;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);padding:10px 16px;box-shadow:var(--shadow-sm);font-size:13px;color:var(--gray-600);white-space:nowrap}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--blue);flex:0 0 auto}
+  .section-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gray-400);margin-bottom:.75rem}
+  .journey-panel{padding:1.25rem;margin-bottom:1.75rem}
+  .journey-head{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:1rem}
+  .journey-flow{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  .journey-card{position:relative;padding:1rem 1rem 1.1rem;border:1px solid var(--gray-200);border-radius:var(--radius-md);background:linear-gradient(180deg,#fff 0%,#fbfaf8 100%)}
+  .journey-card.current{border-color:rgba(27,94,168,.28);box-shadow:var(--shadow-sm)}
+  .journey-card.complete{background:linear-gradient(180deg,#f6fcf8 0%,#edf7f1 100%);border-color:rgba(45,122,78,.2)}
+  .journey-card.locked{background:var(--gray-100)}
+  .journey-card:not(:last-child)::after{content:"";position:absolute;top:28px;right:-13px;width:14px;height:2px;background:var(--gray-300)}
+  .journey-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+  .journey-index{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--white);border:1px solid var(--gray-200);font-size:12px;font-weight:700;color:var(--gray-600)}
+  .journey-card.complete .journey-index{color:var(--green);border-color:rgba(45,122,78,.18)}
+  .journey-card.current .journey-index{color:var(--blue);border-color:rgba(27,94,168,.22)}
+  .journey-card h3{font-size:15px;color:var(--navy);margin-bottom:6px}
+  .journey-card p{font-size:12px;color:var(--gray-600);line-height:1.45}
+  .journey-percent{font-size:12px;font-weight:700;color:var(--gray-600)}
+  .dashboard-grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(300px,.8fr);gap:16px;margin-bottom:1.75rem}
+  .panel{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm)}
+  .profile-panel{padding:1.25rem}
+  .profile-head{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:1.1rem}
+  .profile-title{display:flex;align-items:center;gap:12px}
+  .avatar{width:52px;height:52px;border-radius:50%;background:#EBF3FF;color:var(--blue);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px}
+  .profile-title h2{font-size:18px;color:var(--navy);margin-bottom:2px}
+  .profile-title p{font-size:12px;color:var(--gray-600)}
+  .expiry-pill{display:inline-flex;align-items:center;gap:7px;background:#E8F5EE;color:var(--green);border:1px solid rgba(45,122,78,.18);border-radius:999px;padding:7px 11px;font-size:12px;font-weight:600}
+  .detail-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .detail-item{background:var(--sand);border:1px solid var(--gray-200);border-radius:var(--radius-md);padding:12px;min-height:72px}
+  .detail-item span{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--gray-400);margin-bottom:6px;font-weight:700}
+  .detail-item strong{display:block;font-size:13px;color:var(--gray-800);line-height:1.35}
+  .stage-panel{padding:1.25rem}
+  .stage-panel h2,.actions-panel h2,.history-panel h2,.options-panel h2{font-size:17px;color:var(--navy);margin-bottom:4px}
+  .panel-copy{font-size:12px;color:var(--gray-600);line-height:1.45}
+  .stage-summary{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:1rem 0 1.1rem}
+  .stage-number{font-family:'DM Serif Display',serif;font-size:42px;font-weight:400;color:var(--navy);line-height:1}
+  .stage-ring{width:76px;height:76px;border-radius:50%;background:conic-gradient(var(--blue) 0 62%, var(--gray-200) 62% 100%);display:grid;place-items:center;box-shadow:inset 0 0 0 1px rgba(11,31,58,.04)}
+  .stage-ring span{width:54px;height:54px;border-radius:50%;background:var(--white);display:grid;place-items:center;color:var(--blue);font-size:13px;font-weight:700}
+  .timeline{display:flex;flex-direction:column;gap:10px}
+  .timeline-step{display:grid;grid-template-columns:36px 1fr minmax(116px,auto);align-items:center;gap:10px}
+  .step-node{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--gray-100);border:1px solid var(--gray-200);color:var(--gray-600);font-size:12px;font-weight:700}
+  .timeline-step.complete .step-node{background:#E8F5EE;border-color:rgba(45,122,78,.2);color:var(--green)}
+  .timeline-step.current .step-node{background:#EBF3FF;border-color:rgba(27,94,168,.28);color:var(--blue)}
+  .timeline-step h3{font-size:13px;color:var(--gray-800);margin-bottom:3px}
+  .timeline-step p{font-size:12px;color:var(--gray-600)}
+  .progress-cell{display:flex;align-items:center;justify-content:flex-end;gap:8px}
+  .progress-value{min-width:34px;text-align:right;font-size:12px;font-weight:700;color:var(--gray-600)}
+  .progress-track{height:7px;width:82px;background:var(--gray-100);border-radius:999px;overflow:hidden}
+  .progress-fill{height:100%;background:var(--blue);border-radius:999px}
+  .progress-fill.green{background:var(--green)}
+  .progress-fill.amber{background:var(--amber)}
+  .options-panel{padding:1.25rem;margin-bottom:1.75rem}
+  .options-head{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:1rem}
+  .option-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  .option-card{position:relative;display:flex;flex-direction:column;justify-content:space-between;gap:16px;min-height:172px;padding:1rem;border:1px solid var(--gray-200);border-radius:var(--radius-md);background:var(--sand);text-decoration:none;transition:transform .15s ease,border-color .15s ease,box-shadow .15s ease}
+  .option-card:hover{transform:translateY(-2px);border-color:rgba(27,94,168,.35);box-shadow:var(--shadow-md)}
+  .option-icon{width:34px;height:34px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;background:var(--white);border:1px solid var(--gray-200);color:var(--blue)}
+  .option-card h3{font-size:15px;color:var(--navy);margin-bottom:6px}
+  .option-card p{font-size:12px;color:var(--gray-600);line-height:1.45}
+  .option-card .cta{font-size:12px;font-weight:700;color:var(--blue)}
+  .content-grid{display:grid;grid-template-columns:minmax(320px,.9fr) minmax(0,1.1fr);gap:16px}
+  .checkin-banner{margin-top:1rem;padding:12px 14px;border-radius:var(--radius-md);border:1px solid rgba(230,111,26,.2);background:#FFF8F1;display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+  .checkin-banner strong{display:block;font-size:13px;color:var(--navy);margin-bottom:3px}
+  .checkin-banner span{font-size:12px;color:var(--gray-600);line-height:1.45}
+  .checkin-pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;background:rgba(230,111,26,.12);color:var(--amber);padding:6px 10px;font-size:11px;font-weight:700;white-space:nowrap}
+  .actions-panel,.history-panel{padding:1.25rem}
+  .action-list{display:flex;flex-direction:column;gap:10px;margin-top:1rem}
+  .action-item{display:grid;grid-template-columns:28px 1fr auto;gap:10px;align-items:center;border:1px solid var(--gray-200);border-radius:var(--radius-md);background:var(--sand);padding:11px;text-decoration:none}
+  .action-item:hover{border-color:rgba(27,94,168,.32);background:#F7FAFF}
+  .action-icon{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--white);border:1px solid var(--gray-200);color:var(--blue);font-size:13px;font-weight:700}
+  .action-copy strong{display:block;font-size:13px;color:var(--navy);margin-bottom:2px}
+  .action-copy span{font-size:12px;color:var(--gray-600)}
+  .due{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--amber);white-space:nowrap}
+  .due.green{color:var(--green)}
+  .history-head{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:1rem}
+  .expected-date{display:inline-flex;align-items:center;gap:7px;background:#EBF3FF;color:var(--blue);border:1px solid rgba(27,94,168,.22);border-radius:999px;padding:7px 11px;font-size:12px;font-weight:700;white-space:nowrap}
+  .experience-list{display:grid;grid-template-columns:1fr;gap:12px}
+  .experience-card{display:grid;grid-template-columns:1fr auto;gap:12px;border:1px solid var(--gray-200);border-radius:var(--radius-md);background:var(--sand);padding:1rem;text-decoration:none}
+  .experience-card:hover{border-color:rgba(27,94,168,.32);background:#F7FAFF}
+  .experience-title{display:flex;align-items:center;gap:9px;margin-bottom:8px}
+  .type-dot{width:8px;height:8px;border-radius:50%;background:var(--blue);flex:0 0 auto}
+  .type-dot.accent{background:var(--accent)}
+  .type-dot.amber{background:var(--amber)}
+  .type-dot.green{background:var(--green)}
+  .type-dot.red{background:var(--red)}
+  .experience-title h3{font-size:15px;color:var(--navy)}
+  .experience-meta{display:grid;grid-template-columns:repeat(3,minmax(90px,1fr));gap:8px;margin-top:10px}
+  .meta-box span{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--gray-400);font-weight:700;margin-bottom:3px}
+  .meta-box strong{display:block;font-size:12px;color:var(--gray-800);font-weight:600}
+  .status-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:5px 10px;border-radius:20px;white-space:nowrap}
+  .status-badge .dot{width:6px;height:6px}
+  .badge-approved{background:#E8F5EE;color:var(--green)} .badge-approved .dot{background:var(--green)}
+  .badge-pending{background:#FEF3E8;color:var(--amber)} .badge-pending .dot{background:var(--amber)}
+  .badge-draft{background:#EBF3FF;color:var(--blue)} .badge-draft .dot{background:var(--blue)}
+  .badge-declined{background:#FDECEA;color:var(--red)} .badge-declined .dot{background:var(--red)}
+  .badge-neutral{background:var(--gray-100);color:var(--gray-600)} .badge-neutral .dot{background:var(--gray-400)}
+  .card-side{display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between;gap:12px}
+  .view-btn{display:inline-flex;align-items:center;justify-content:center;gap:5px;font-size:12px;font-weight:700;color:var(--blue);border:1px solid rgba(27,94,168,.3);background:#EBF3FF;border-radius:var(--radius-sm);padding:7px 12px;text-decoration:none}
+  .small-note{font-size:11px;color:var(--gray-600);text-align:right;max-width:132px;line-height:1.35}
+  [data-checkin-required="false"] .checkin-card,[data-checkin-required="false"] .checkin-action,[data-checkin-required="false"] .checkin-step{display:none}
+  [data-checkin-required="false"] .checkin-banner{display:none}
+  @media(max-width:1040px){
+    .dashboard-grid,.content-grid{grid-template-columns:1fr}
+    .option-grid{grid-template-columns:repeat(2,1fr)}
+    .journey-flow{grid-template-columns:repeat(2,1fr)}
+    .journey-card:nth-child(2)::after{display:none}
+  }
+  @media(max-width:760px){
+    .topbar{align-items:flex-start;flex-direction:column;padding:1rem}
+    .nav-links{display:none}
+    .topbar-right{width:100%;justify-content:space-between}
+    .page{padding:1.25rem 1rem 3rem}
+    .hero,.options-head,.history-head,.profile-head,.journey-head,.checkin-banner{flex-direction:column;align-items:flex-start}
+    .hero h1{font-size:34px}
+    .detail-grid,.option-grid,.experience-meta,.journey-flow{grid-template-columns:1fr}
+    .journey-card::after{display:none}
+    .timeline-step{grid-template-columns:32px 1fr}
+    .progress-cell{grid-column:2;justify-content:flex-start}
+    .progress-track{width:100%}
+    .experience-card{grid-template-columns:1fr}
+    .card-side{align-items:flex-start}
+    .small-note{text-align:left;max-width:none}
+  }
+</style>
+</head>
+<body data-checkin-required="true">
+<header class="topbar">
+  <div class="logo-group">
+    <div class="logo-mark">
+      <svg width="24" height="20" viewBox="0 0 24 20" fill="none" aria-hidden="true">
+        <path d="M2 10C2 5.58 5.58 2 10 2h4c4.42 0 8 3.58 8 8s-3.58 8-8 8h-4C5.58 18 2 14.42 2 10z" fill="#0B1F3A" opacity="0.12"/>
+        <path d="M7 10.5l3 3 7-7" stroke="#0B1F3A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="logo-text"><span class="brand">CPA Canada</span><span class="sub">Chartered Professional Accountants</span></div>
+  </div>
+  <div class="topbar-right">
+    <nav class="nav-links" aria-label="Primary navigation">
+      <a href="index.html" class="active">Dashboard</a>
+      <a href="#">Experience</a>
+      <a href="#">Reports</a>
+      <a href="#">Messages</a>
+    </nav>
+                <details class="role-dropdown">
+      <summary class="role-trigger"><span class="role-label">Learner</span><span class="role-caret">&#9662;</span></summary>
+      <div class="role-menu">
+        <a class="role-option active" href="index.html">Learner</a>
+        <a class="role-option" href="1_Dashboard/CPAReviewer.html">CPA Reviewer</a>
+        <a class="role-option" href="1_Dashboard/MentorDashboard.html">Mentor</a>
+        <a class="role-option" href="1_Dashboard/PTSBStaffDashboard.html">PTSB Staff</a>
+      </div>
+    </details>
+  </div>
+</header>
+
+<main class="page">
+  <section class="hero" aria-labelledby="dashboard-title">
+    <div>
+      <h1 id="dashboard-title">Learner dashboard</h1>
+      <p>Start, continue, and review each experience milestone from foundational experience through professional readiness.</p>
+    </div>
+    <div class="hero-badge"><span class="dot"></span><span>Current stage: Experience plan in progress</span></div>
+  </section>
+
+  <section class="panel journey-panel" aria-labelledby="journey-flow-title">
+    <div class="journey-head">
+      <div>
+        <div class="section-label">Journey flow</div>
+        <h2 id="journey-flow-title">Foundational experience to professional readiness</h2>
+        <p class="panel-copy">The main learner flow follows four core stages. Check-ins appear separately when they are required.</p>
+      </div>
+      <div class="expected-date">Overall progress: 62%</div>
+    </div>
+    <div class="journey-flow">
+      <article class="journey-card complete">
+        <div class="journey-top">
+          <div class="journey-index">1</div>
+          <div class="journey-percent">100%</div>
+        </div>
+        <h3>Foundational experience</h3>
+        <p>Submitted, reviewed, and approved.</p>
+      </article>
+      <article class="journey-card current">
+        <div class="journey-top">
+          <div class="journey-index">2</div>
+          <div class="journey-percent">60%</div>
+        </div>
+        <h3>Experience plan</h3>
+        <p>Draft and approval activity for the current work plan.</p>
+      </article>
+      <article class="journey-card">
+        <div class="journey-top">
+          <div class="journey-index">3</div>
+          <div class="journey-percent">0%</div>
+        </div>
+        <h3>Completion report</h3>
+        <p>Final report opens once the planned experience period is complete.</p>
+      </article>
+      <article class="journey-card locked">
+        <div class="journey-top">
+          <div class="journey-index">4</div>
+          <div class="journey-percent">0%</div>
+        </div>
+        <h3>Professional readiness</h3>
+        <p>Registration is available after the experience is marked complete.</p>
+      </article>
+    </div>
+  </section>
+
+  <!--
+  <div class="section-label">Learner details</div>
+  <section class="dashboard-grid" aria-label="Learner overview">
+    <div class="panel profile-panel">
+      <div class="profile-head">
+        <div class="profile-title">
+          <div class="avatar" aria-hidden="true">AR</div>
+          <div>
+            <h2>Amelia Reyes</h2>
+            <p>Learner ID: LRN-248109</p>
+          </div>
+        </div>
+        <div class="expiry-pill"><span class="dot"></span><span>Program expires Dec 31, 2027</span></div>
+      </div>
+      <div class="detail-grid">
+        <div class="detail-item"><span>Current employer</span><strong>Northline Advisory Group</strong></div>
+        <div class="detail-item"><span>Current mentor</span><strong>Marcus Chen, CPA</strong></div>
+        <div class="detail-item"><span>Current supervisor</span><strong>Priya Nair</strong></div>
+        <div class="detail-item"><span>Expected completion</span><strong>Aug 30, 2027</strong></div>
+        <div class="detail-item"><span>Current stage</span><strong>Experience plan review</strong></div>
+        <div class="detail-item"><span>Overall progress</span><strong>62%</strong></div>
+      </div>
+    </div>
+
+    <div class="panel stage-panel">
+      <h2>Current experience stage</h2>
+      <p class="panel-copy">Progress is tracked across each required stage toward professional readiness.</p>
+      <div class="stage-summary">
+        <div>
+          <div class="stage-number">62%</div>
+          <p class="panel-copy">Overall completion</p>
+        </div>
+        <div class="stage-ring" aria-label="62 percent complete"><span>62%</span></div>
+      </div>
+      <div class="timeline">
+        <div class="timeline-step complete">
+          <div class="step-node">1</div>
+          <div><h3>Foundational experience</h3><p>Approved</p></div>
+          <div class="progress-cell"><span class="progress-value">100%</span><div class="progress-track"><div class="progress-fill green" style="width:100%"></div></div></div>
+        </div>
+        <div class="timeline-step current">
+          <div class="step-node">2</div>
+          <div><h3>Experience plan</h3><p>Pending mentor approval</p></div>
+          <div class="progress-cell"><span class="progress-value">60%</span><div class="progress-track"><div class="progress-fill" style="width:60%"></div></div></div>
+        </div>
+        <div class="timeline-step current checkin-step">
+          <div class="step-node">3</div>
+          <div><h3>Partial completion report</h3><p>Next check-in due Jul 30, 2026</p></div>
+          <div class="progress-cell"><span class="progress-value">25%</span><div class="progress-track"><div class="progress-fill amber" style="width:25%"></div></div></div>
+        </div>
+        <div class="timeline-step">
+          <div class="step-node">4</div>
+          <div><h3>Completion report</h3><p>Not started</p></div>
+          <div class="progress-cell"><span class="progress-value">0%</span><div class="progress-track"><div class="progress-fill" style="width:0%"></div></div></div>
+        </div>
+        <div class="timeline-step" id="professional-readiness">
+          <div class="step-node">5</div>
+          <div><h3>Experience complete</h3><p>Ready for professional readiness</p></div>
+          <div class="progress-cell"><span class="progress-value">0%</span><div class="progress-track"><div class="progress-fill" style="width:0%"></div></div></div>
+        </div>
+      </div>
+      <div class="checkin-banner checkin-step">
+        <div>
+          <strong>Partial completion report is required for this learner</strong>
+          <span>The main journey stays focused on the four core stages, while required check-ins are tracked as supporting milestones.</span>
+        </div>
+        <div class="checkin-pill">Due Jul 30, 2026</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel options-panel" aria-labelledby="experience-options-title">
+    <div class="options-head">
+      <div>
+        <div class="section-label">Experience options</div>
+        <h2 id="experience-options-title">Submit or continue an experience item</h2>
+        <p class="panel-copy">Choose the next item you want to work on.</p>
+      </div>
+      <div class="expected-date">Expected completion: Aug 30, 2027</div>
+    </div>
+    <div class="option-grid">
+      <a class="option-card" href="#foundational-card">
+        <div>
+          <div class="option-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 4h10l4 4v12H5V4z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M15 4v5h4M8 13h8M8 17h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </div>
+          <h3>Foundational experience</h3>
+          <p>Submit or revise your foundational experience record.</p>
+        </div>
+        <span class="cta">View approved record</span>
+      </a>
+      <a class="option-card" href="#workplan-card">
+        <div>
+          <div class="option-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 5h12M6 12h12M6 19h8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M4 5h.01M4 12h.01M4 19h.01" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+          </div>
+          <h3>Experience plan</h3>
+          <p>Continue your experience plan and submit updates or revisions.</p>
+        </div>
+        <span class="cta">Continue draft</span>
+      </a>
+      <a class="option-card" href="#checkin-card">
+        <div>
+          <div class="option-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 19V5M4 19h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M8 16v-5M12 16V8M16 16v-8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </div>
+          <h3>Partial completion report</h3>
+          <p>Complete your required check-in and report current progress.</p>
+        </div>
+        <span class="cta">Start check-in</span>
+      </a>
+      <a class="option-card" href="#completion-card">
+        <div>
+          <div class="option-icon" aria-hidden="true">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M8 4h8l3 3v13H5V4h3z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9 14l2 2 4-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h3>Completion report</h3>
+          <p>Prepare the final completion report when your experience is complete.</p>
+        </div>
+        <span class="cta">View requirements</span>
+      </a>
+    </div>
+  </section>
+-->
+
+  <div class="content-grid">
+    <section class="panel actions-panel" aria-labelledby="actions-title">
+      <div class="section-label">Outstanding action items</div>
+      <h2 id="actions-title">Next actions</h2>
+      <p class="panel-copy">Items that need learner attention are listed by due date and stage.</p>
+      <div class="action-list">
+        <a class="action-item" href="#foundational-card">
+          <div class="action-icon">1</div>
+          <div class="action-copy"><strong>Submit or revise foundational experience</strong><span>Approved record is available if revisions are requested later.</span></div>
+          <div class="due green">Done</div>
+        </a>
+        <a class="action-item" href="#workplan-card">
+          <div class="action-icon">2</div>
+          <div class="action-copy"><strong>Submit or revise experience plan</strong><span>Mentor requested more detail on planned enabling competencies.</span></div>
+          <div class="due">Due Jul 22</div>
+        </a>
+        <a class="action-item checkin-action" href="#checkin-card">
+          <div class="action-icon">3</div>
+          <div class="action-copy"><strong>Submit check-in report</strong><span>Partial completion report is required for this learner.</span></div>
+          <div class="due">Due Jul 30</div>
+        </a>
+        <a class="action-item" href="#completion-card">
+          <div class="action-icon">4</div>
+          <div class="action-copy"><strong>Submit completion report</strong><span>The final completion report opens after the plan period is complete.</span></div>
+          <div class="due">Upcoming</div>
+        </a>
+        <a class="action-item" href="#professional-readiness">
+          <div class="action-icon">5</div>
+          <div class="action-copy"><strong>Register for Professional Readiness</strong><span>Available after experience is complete.</span></div>
+          <div class="due">Locked</div>
+        </a>
+      </div>
+    </section>
+
+    <section class="panel history-panel" aria-labelledby="experience-progress-title">
+      <div class="history-head">
+        <div>
+          <div class="section-label">In-progress and past experience</div>
+          <h2 id="experience-progress-title">Experience progress</h2>
+          <p class="panel-copy">Open any item to view status details, feedback, and submission history.</p>
+        </div>
+        <div class="expected-date">Plan target: Aug 30, 2027</div>
+      </div>
+      <div class="experience-list">
+        <a class="experience-card" id="foundational-card" href="2_ClaimFoundationalExp/1_LearnerFE/3_LearnerViewFE.html">
+          <div>
+            <div class="experience-title"><span class="type-dot green"></span><h3>Foundational experience</h3></div>
+            <span class="status-badge badge-approved"><span class="dot"></span>Approved</span>
+            <div class="experience-meta">
+              <div class="meta-box"><span>Submitted</span><strong>Apr 19, 2026</strong></div>
+              <div class="meta-box"><span>Approved</span><strong>May 03, 2026</strong></div>
+              <div class="meta-box"><span>Declined</span><strong>Not applicable</strong></div>
+            </div>
+          </div>
+          <div class="card-side"><span class="view-btn">View details</span><span class="small-note">Supervisor, mentor, and CPA review complete</span></div>
+        </a>
+        <a class="experience-card" id="workplan-card" href="#workplan-card">
+          <div>
+            <div class="experience-title"><span class="type-dot accent"></span><h3>Experience plan</h3></div>
+            <span class="status-badge badge-pending"><span class="dot"></span>Pending mentor approval</span>
+            <div class="experience-meta">
+              <div class="meta-box"><span>Submitted</span><strong>Jul 08, 2026</strong></div>
+              <div class="meta-box"><span>Approved</span><strong>Pending</strong></div>
+              <div class="meta-box"><span>Declined</span><strong>Not applicable</strong></div>
+            </div>
+          </div>
+          <div class="card-side"><span class="view-btn">View details</span><span class="small-note">Expected completion date: Aug 30, 2027</span></div>
+        </a>
+        <a class="experience-card checkin-card" id="checkin-card" href="#checkin-card">
+          <div>
+            <div class="experience-title"><span class="type-dot amber"></span><h3>Check-in progress</h3></div>
+            <span class="status-badge badge-draft"><span class="dot"></span>Draft</span>
+            <div class="experience-meta">
+              <div class="meta-box"><span>Next due</span><strong>Jul 30, 2026</strong></div>
+              <div class="meta-box"><span>Competencies</span><strong>4 awarded</strong></div>
+              <div class="meta-box"><span>Submitted</span><strong>Not submitted</strong></div>
+            </div>
+          </div>
+          <div class="card-side"><span class="view-btn">View details</span><span class="small-note">Displayed because a check-in is required</span></div>
+        </a>
+        <a class="experience-card" id="completion-card" href="#completion-card">
+          <div>
+            <div class="experience-title"><span class="type-dot"></span><h3>Completion report</h3></div>
+            <span class="status-badge badge-neutral"><span class="dot"></span>Not started</span>
+            <div class="experience-meta">
+              <div class="meta-box"><span>Submitted</span><strong>Not submitted</strong></div>
+              <div class="meta-box"><span>Approved</span><strong>Pending</strong></div>
+              <div class="meta-box"><span>Declined</span><strong>Not applicable</strong></div>
+            </div>
+          </div>
+          <div class="card-side"><span class="view-btn">View details</span><span class="small-note">Next milestone after plan period</span></div>
+        </a>
+      </div>
+    </section>
+  </div>
+</main>
+
+<script>
+const savedCheckInRequirement = localStorage.getItem('learnerDashboard:checkInRequired');
+if (savedCheckInRequirement === 'false') {
+  document.body.dataset.checkinRequired = 'false';
+}
+</script>
+</body>
+</html>
+
+
+

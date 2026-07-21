@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPA - PTB Staff Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:#0B1F3A; --blue:#1B5EA8; --accent:#2A9D8F; --amber:#E76F1A; --green:#2D7A4E; --red:#C0392B;
+    --sand:#F7F5F2; --white:#FFFFFF; --gray-100:#F2F1EF; --gray-200:#E4E2DE; --gray-300:#D2CEC8;
+    --gray-400:#A8A49E; --gray-600:#6B6760; --gray-800:#2E2C2A;
+    --shadow-sm:0 1px 3px rgba(11,31,58,0.07),0 1px 2px rgba(11,31,58,0.05);
+    --shadow-md:0 10px 28px rgba(11,31,58,0.10);
+    --radius-sm:6px; --radius-md:10px; --radius-lg:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'DM Sans',sans-serif;background:var(--sand);color:var(--gray-800);min-height:100vh}
+  a{text-decoration:none;color:inherit}
+  button{font:inherit}
+  .topbar{background:var(--navy);min-height:60px;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:0 2rem}
+  .logo-group{display:flex;align-items:center;gap:10px;min-width:225px}
+  .logo-mark{width:36px;height:36px;background:var(--white);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .logo-text{display:flex;flex-direction:column;line-height:1.1}
+  .logo-text .brand{font-size:13px;font-weight:600;color:var(--white);letter-spacing:.04em}
+  .logo-text .sub{font-size:10px;color:rgba(255,255,255,.5);letter-spacing:.02em;text-transform:uppercase}
+  .nav-links{display:flex;align-items:center;gap:2px}
+  .nav-links a{color:rgba(255,255,255,.55);font-size:14px;padding:8px 16px;border-radius:var(--radius-sm);white-space:nowrap}
+  .nav-links a.active,.nav-links a:hover{color:var(--white);background:rgba(255,255,255,.08)}
+  .topbar-right{display:flex;align-items:center;gap:12px}
+    .role-dropdown{position:relative}
+  .role-trigger{list-style:none;display:flex;align-items:center;gap:10px;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);color:var(--white);font-size:13px;font-weight:600;cursor:pointer}
+  .role-trigger::-webkit-details-marker{display:none}
+  .role-label{display:inline-flex;align-items:center;justify-content:center;min-width:92px}
+  .role-caret{font-size:11px;color:rgba(255,255,255,.72)}
+  .role-menu{position:absolute;right:0;top:calc(100% + 10px);min-width:190px;padding:8px;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);box-shadow:0 12px 30px rgba(11,31,58,.14);display:flex;flex-direction:column;gap:4px;z-index:20}
+  .role-option{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:var(--radius-sm);font-size:13px;color:var(--gray-800);text-decoration:none}
+  .role-option:hover{background:var(--gray-100)}
+  .role-option.active{background:#EBF3FF;color:var(--blue);font-weight:600}
+  .page{max-width:1300px;margin:0 auto;padding:2rem 2rem 4rem}
+  .hero{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--gray-200)}
+  .hero h1{font-family:'DM Serif Display',serif;font-size:38px;font-weight:400;color:var(--navy);margin-bottom:4px}
+  .hero p{font-size:14px;color:var(--gray-600);max-width:760px}
+  .hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);padding:10px 16px;box-shadow:var(--shadow-sm);font-size:13px;color:var(--gray-600);white-space:nowrap}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--blue);flex:0 0 auto}
+  .section-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gray-400);margin-bottom:.75rem}
+  .panel{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);animation:rise .35s ease}
+  .panel h2{font-size:17px;color:var(--navy);margin-bottom:4px}
+  .panel-copy{font-size:12px;color:var(--gray-600);line-height:1.45}
+  .message-bar{display:none;align-items:center;gap:10px;margin-bottom:1rem;padding:12px 14px;border-radius:var(--radius-md);background:#EBF3FF;border:1px solid rgba(27,94,168,.18);color:var(--navy);box-shadow:var(--shadow-sm)}
+  .message-bar.visible{display:flex}
+  .summary-panel,.learner-panel,.risk-panel,.mentor-panel,.prr-panel{padding:1.25rem}
+  .summary-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:1.5rem}
+  .summary-card{background:var(--sand);border:1px solid var(--gray-200);border-radius:var(--radius-md);padding:12px;min-height:90px}
+  .summary-card span{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--gray-400);margin-bottom:8px;font-weight:700}
+  .summary-card strong{display:block;font-family:'DM Serif Display',serif;font-size:30px;font-weight:400;color:var(--navy);line-height:1}
+  .summary-card small{display:block;font-size:12px;color:var(--gray-600);margin-top:8px;line-height:1.35}
+  .stacked-panels{display:flex;flex-direction:column;gap:16px;margin-bottom:1.5rem}
+  .queue-head{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:1rem}
+  .table-wrap{overflow:auto;border:1px solid var(--gray-200);border-radius:var(--radius-lg)}
+  table{width:100%;min-width:980px;border-collapse:collapse;background:var(--white)}
+  .compact-table{min-width:720px}
+  thead th{padding:11px 14px;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--gray-400);background:var(--sand);border-bottom:1px solid var(--gray-200);vertical-align:top}
+  tbody td{padding:14px;vertical-align:top;border-bottom:1px solid var(--gray-100);font-size:13px}
+  tbody tr:last-child td{border-bottom:none}
+  .learner-cell strong,.mentor-cell strong,.employer-cell strong{display:block;font-size:14px;color:var(--navy);margin-bottom:4px}
+  .subline{display:block;font-size:12px;color:var(--gray-600);line-height:1.45}
+  .status-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:5px 10px;border-radius:20px;white-space:nowrap}
+  .status-badge .dot{width:6px;height:6px}
+  .badge-approved{background:#E8F5EE;color:var(--green)} .badge-approved .dot{background:var(--green)}
+  .badge-pending{background:#FEF3E8;color:var(--amber)} .badge-pending .dot{background:var(--amber)}
+  .badge-progress{background:#EBF3FF;color:var(--blue)} .badge-progress .dot{background:var(--blue)}
+  .badge-declined{background:#FDECEA;color:var(--red)} .badge-declined .dot{background:var(--red)}
+  .badge-neutral{background:var(--gray-100);color:var(--gray-600)} .badge-neutral .dot{background:var(--gray-400)}
+  .risk-chip{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:5px 10px;font-size:11px;font-weight:700}
+  .risk-high{background:#FDECEA;color:var(--red)}
+  .risk-medium{background:#FEF3E8;color:var(--amber)}
+  .risk-low{background:#E8F5EE;color:var(--green)}
+  .action-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:var(--radius-sm);border:1px solid var(--gray-200);padding:8px 12px;background:var(--white);color:var(--navy);font-size:12px;font-weight:700;cursor:pointer;transition:all .15s ease}
+  .action-btn:hover{border-color:rgba(27,94,168,.28);background:#F7FAFF}
+  .action-btn.primary{background:#EBF3FF;border-color:rgba(27,94,168,.28);color:var(--blue)}
+  .pill{display:inline-flex;align-items:center;gap:6px;background:#EBF3FF;color:var(--blue);border:1px solid rgba(27,94,168,.18);border-radius:999px;padding:5px 9px;font-size:11px;font-weight:700}
+  .stack span{display:block;font-size:12px;color:var(--gray-600);line-height:1.45}
+  .hint{font-size:11px;color:var(--gray-600);line-height:1.4;margin-top:8px}
+  .empty-state{padding:20px;text-align:center;font-size:13px;color:var(--gray-600);background:var(--sand)}
+  @keyframes rise {
+    from {opacity:0; transform:translateY(8px)}
+    to {opacity:1; transform:translateY(0)}
+  }
+  @media(max-width:1180px){
+    .summary-grid{grid-template-columns:repeat(3,1fr)}
+  }
+  @media(max-width:760px){
+    .topbar{align-items:flex-start;flex-direction:column;padding:1rem}
+    .nav-links{display:none}
+    .topbar-right{width:100%;justify-content:space-between}
+    .page{padding:1.25rem 1rem 3rem}
+    .hero,.queue-head{flex-direction:column;align-items:flex-start}
+    .hero h1{font-size:34px}
+    .summary-grid{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="logo-group">
+    <div class="logo-mark">
+      <svg width="24" height="20" viewBox="0 0 24 20" fill="none" aria-hidden="true">
+        <path d="M2 10C2 5.58 5.58 2 10 2h4c4.42 0 8 3.58 8 8s-3.58 8-8 8h-4C5.58 18 2 14.42 2 10z" fill="#0B1F3A" opacity="0.12"/>
+        <path d="M7 10.5l3 3 7-7" stroke="#0B1F3A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="logo-text"><span class="brand">CPA Canada</span><span class="sub">Chartered Professional Accountants</span></div>
+  </div>
+  <div class="topbar-right">
+    <nav class="nav-links" aria-label="Primary navigation">
+      <a href="PTSBStaffDashboard.html" class="active">Dashboard</a>
+      <a href="#learner-monitoring">Learners</a>
+      <a href="#mentor-monitoring">Mentors</a>
+      <a href="#prr-positions">Pre-reviewed positions</a>
+    </nav>
+                <details class="role-dropdown">
+      <summary class="role-trigger"><span class="role-label">PTSB Staff</span><span class="role-caret">&#9662;</span></summary>
+      <div class="role-menu">
+        <a class="role-option" href="../index.html">Learner</a>
+        <a class="role-option" href="CPAReviewer.html">CPA Reviewer</a>
+        <a class="role-option" href="MentorDashboard.html">Mentor</a>
+        <a class="role-option active" href="PTSBStaffDashboard.html">PTSB Staff</a>
+      </div>
+    </details>
+  </div>
+</header>
+
+<main class="page">
+  <section class="hero" aria-labelledby="ptb-dashboard-title">
+    <div>
+      <h1 id="ptb-dashboard-title">PTB staff dashboard</h1>
+      <p>Monitor learners, mentors, pre-reviewed positions, and operational exceptions so the practical experience program can be managed proactively.</p>
+    </div>
+    <div class="hero-badge"><span class="dot"></span><span id="hero-summary">Loading PTB oversight</span></div>
+  </section>
+
+  <div class="message-bar" id="message-bar" role="status" aria-live="polite">
+    <span class="dot"></span>
+    <span id="message-text"></span>
+  </div>
+
+  <section class="panel summary-panel">
+    <div class="section-label">Program summary</div>
+    <div class="summary-grid" id="summary-grid"></div>
+  </section>
+
+  <div class="stacked-panels">
+    <section class="panel risk-panel">
+      <div class="queue-head">
+        <div>
+          <div class="section-label">High-risk learner queue</div>
+          <h2>Priority exceptions</h2>
+          <p class="panel-copy">Learners with elevated operational or progression risk.</p>
+        </div>
+        <div class="hero-badge"><span class="dot"></span><span id="high-risk-count">0 high-risk learners</span></div>
+      </div>
+      <div class="table-wrap">
+        <table class="compact-table">
+          <thead>
+            <tr><th>Learner</th><th>Risk level</th><th>Risk reason</th><th>Reviewer assigned</th><th>Check-in due</th></tr>
+          </thead>
+          <tbody id="high-risk-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel learner-panel" id="learner-monitoring">
+      <div class="queue-head">
+        <div>
+          <div class="section-label">Learner monitoring queue</div>
+          <h2>Learner monitoring</h2>
+          <p class="panel-copy">Track learner stage, employer, mentor coverage, current status, reviewer assignment, and mentor application progress.</p>
+        </div>
+        <div class="hero-badge"><span class="dot"></span><span id="learner-count">0 active learners</span></div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Learner</th>
+              <th>Current stage</th>
+              <th>Employer</th>
+              <th>Mentor</th>
+              <th>Current status</th>
+              <th>Assigned staff reviewer</th>
+              <th>Mentor application status</th>
+            </tr>
+          </thead>
+          <tbody id="learner-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel mentor-panel" id="mentor-monitoring">
+      <div class="queue-head">
+        <div>
+          <div class="section-label">Mentor monitoring queue</div>
+          <h2>Mentor monitoring</h2>
+          <p class="panel-copy">Active learner load, missing mentor validation, learners needing a new mentor, and mentor application intake.</p>
+        </div>
+        <div class="hero-badge"><span class="dot"></span><span id="mentor-count">0 active mentors</span></div>
+      </div>
+      <div class="table-wrap">
+        <table class="compact-table">
+          <thead>
+            <tr>
+              <th>Mentor</th>
+              <th>Active learners</th>
+              <th>Without validation</th>
+              <th>Requiring new mentor</th>
+              <th>New mentor application</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="mentor-body"></tbody>
+        </table>
+      </div>
+      <div class="hint">PTB staff can view mentor applications directly from this queue.</div>
+    </section>
+
+    <section class="panel prr-panel" id="prr-positions">
+      <div class="queue-head">
+        <div>
+          <div class="section-label">Pre-reviewed positions by employer</div>
+          <h2>Employer rollup</h2>
+          <p class="panel-copy">A quick count of employers with pre-reviewed positions and the learners currently assigned to them.</p>
+        </div>
+        <div class="hero-badge"><span class="dot"></span><span id="employer-count">0 employers tracked</span></div>
+      </div>
+      <div class="table-wrap">
+        <table class="compact-table">
+          <thead>
+            <tr><th>Employer</th><th>Pre-reviewed positions</th><th>Learners assigned</th><th>PTB note</th></tr>
+          </thead>
+          <tbody id="employer-body"></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</main>
+
+<script>
+const learners = [
+  {
+    name: 'Amelia Reyes',
+    learnerId: 'LRN-248109',
+    currentStage: 'Submit work plan',
+    employer: 'Northline Advisory Group',
+    mentor: 'Marcus Chen, CPA',
+    currentStatus: 'Pending mentor approval',
+    assignedReviewer: 'Avery Patel, CPA',
+    mentorApplicationStatus: 'Validated',
+    stageGroup: 'Submit work plan',
+    hasEmployer: true,
+    preReviewed: false,
+    riskLevel: 'Medium',
+    riskReason: 'Work plan revision overdue by 6 days.',
+    checkInDueDate: '2026-07-30'
+  },
+  {
+    name: 'Daniel Brooks',
+    learnerId: 'LRN-251004',
+    currentStage: 'Foundational stage',
+    employer: 'Cedar & Finch LLP',
+    mentor: 'Unassigned',
+    currentStatus: 'Awaiting mentor match',
+    assignedReviewer: 'Noah Ramirez, CPA',
+    mentorApplicationStatus: 'New mentor application',
+    stageGroup: 'Foundational stage',
+    hasEmployer: true,
+    preReviewed: false,
+    riskLevel: 'High',
+    riskReason: 'No mentor assigned and transfer request opened.',
+    checkInDueDate: '2026-08-02'
+  },
+  {
+    name: 'Mina Hassan',
+    learnerId: 'LRN-251887',
+    currentStage: 'Professional stage',
+    employer: 'Summit Rail Finance',
+    mentor: 'Sofia Chen, CPA',
+    currentStatus: 'Check-in under review',
+    assignedReviewer: 'Lena Ortiz, CPA',
+    mentorApplicationStatus: 'Validated',
+    stageGroup: 'Professional stage',
+    hasEmployer: true,
+    preReviewed: true,
+    riskLevel: 'High',
+    riskReason: 'Check-in due within 3 days and competencies gap flagged.',
+    checkInDueDate: '2026-07-18'
+  },
+  {
+    name: 'Ethan Cole',
+    learnerId: 'LRN-253102',
+    currentStage: 'Eligible PE complete',
+    employer: 'Avery Health Group',
+    mentor: 'Jules Ortega, CPA',
+    currentStatus: 'Completion report in CPA review',
+    assignedReviewer: 'Avery Patel, CPA',
+    mentorApplicationStatus: 'Validated',
+    stageGroup: 'Eligible PE complete',
+    hasEmployer: true,
+    preReviewed: false,
+    riskLevel: 'Medium',
+    riskReason: 'Completion report approval pending final evidence check.',
+    checkInDueDate: '2026-08-15'
+  },
+  {
+    name: 'Olivia Park',
+    learnerId: 'LRN-247771',
+    currentStage: 'Professional stage',
+    employer: 'Grant Mercer Tax',
+    mentor: 'Elena Flores, CPA',
+    currentStatus: 'More information requested',
+    assignedReviewer: 'Harper Singh, CPA',
+    mentorApplicationStatus: 'Validated',
+    stageGroup: 'Professional stage',
+    hasEmployer: true,
+    preReviewed: false,
+    riskLevel: 'High',
+    riskReason: 'Repeated evidence request on tax competencies.',
+    checkInDueDate: '2026-07-21'
+  },
+  {
+    name: 'Lucas Bennett',
+    learnerId: 'LRN-245664',
+    currentStage: 'Professional stage',
+    employer: '',
+    mentor: 'Priya Das, CPA',
+    currentStatus: 'Employment confirmation required',
+    assignedReviewer: 'Noah Ramirez, CPA',
+    mentorApplicationStatus: 'Validated',
+    stageGroup: 'Professional stage',
+    hasEmployer: false,
+    preReviewed: false,
+    riskLevel: 'High',
+    riskReason: 'No employer on file after recent transfer.',
+    checkInDueDate: '2026-07-26'
+  },
+  {
+    name: 'Sofia Morales',
+    learnerId: 'LRN-254210',
+    currentStage: 'Professional stage',
+    employer: 'Meridian Hydro',
+    mentor: 'Aiden Walsh, CPA',
+    currentStatus: 'On track',
+    assignedReviewer: 'Lena Ortiz, CPA',
+    mentorApplicationStatus: 'Validated',
+    stageGroup: 'Professional stage',
+    hasEmployer: true,
+    preReviewed: true,
+    riskLevel: 'Low',
+    riskReason: 'No immediate exception.',
+    checkInDueDate: '2026-09-05'
+  },
+  {
+    name: 'Nina Patel',
+    learnerId: 'LRN-254771',
+    currentStage: 'Foundational stage',
+    employer: 'Grant Mercer Tax',
+    mentor: 'Elena Flores, CPA',
+    currentStatus: 'Foundational experience submitted',
+    assignedReviewer: 'Avery Patel, CPA',
+    mentorApplicationStatus: 'Pending validation',
+    stageGroup: 'Foundational stage',
+    hasEmployer: true,
+    preReviewed: true,
+    riskLevel: 'Medium',
+    riskReason: 'Mentor validation still pending.',
+    checkInDueDate: '2026-08-28'
+  }
+];
+
+const mentors = [
+  {
+    name: 'Marcus Chen, CPA',
+    activeLearners: 3,
+    withoutValidation: 0,
+    requiringNewMentor: 0,
+    newMentorApplication: 'No new application',
+    applicationDetails: 'All assigned learners currently validated.',
+    transferRequests: 0
+  },
+  {
+    name: 'Sofia Chen, CPA',
+    activeLearners: 4,
+    withoutValidation: 1,
+    requiringNewMentor: 0,
+    newMentorApplication: 'Review submitted',
+    applicationDetails: 'Application submitted for expanded pre-reviewed portfolio coverage.',
+    transferRequests: 1
+  },
+  {
+    name: 'Elena Flores, CPA',
+    activeLearners: 5,
+    withoutValidation: 1,
+    requiringNewMentor: 0,
+    newMentorApplication: 'No new application',
+    applicationDetails: 'Validation follow-up needed for one learner.',
+    transferRequests: 0
+  },
+  {
+    name: 'Unassigned mentor pool',
+    activeLearners: 1,
+    withoutValidation: 1,
+    requiringNewMentor: 1,
+    newMentorApplication: 'New mentor application',
+    applicationDetails: 'Daniel Brooks requires a mentor match and intake application review.',
+    transferRequests: 1
+  }
+];
+
+const preReviewedEmployers = [
+  { employer: 'Summit Rail Finance', positions: 2, learnersAssigned: 3, note: 'Stable cohort with one check-in priority item.' },
+  { employer: 'Grant Mercer Tax', positions: 1, learnersAssigned: 2, note: 'Validation follow-up needed for Nina Patel.' },
+  { employer: 'Meridian Hydro', positions: 1, learnersAssigned: 1, note: 'No current exceptions.' }
+];
+
+const summaryDefinitions = [
+  { label: 'Active learners', key: 'activeLearners', description: 'Learners currently in the practical experience pipeline' },
+  { label: 'Learners in foundational stage', key: 'foundational', description: 'Still completing foundational requirements' },
+  { label: 'Learners in submit workplan stage', key: 'submitWorkplan', description: 'At the work plan start or revision milestone' },
+  { label: 'Learners in professional stage', key: 'professional', description: 'Past foundational setup and progressing through reports' },
+  { label: 'Learners eligible PE complete', key: 'eligibleComplete', description: 'Ready for the final completion milestone' },
+  { label: 'Learners with no employer', key: 'noEmployer', description: 'Requires operational follow-up to confirm placement' },
+  { label: 'Learners with pre-reviewed positions', key: 'preReviewed', description: 'Assigned to an employer with pre-reviewed status' },
+  { label: 'Active mentors', key: 'activeMentors', description: 'Mentors with active learner relationships' },
+  { label: 'High-risk learners', key: 'highRisk', description: 'Priority learners with elevated risk flags' },
+  { label: 'Open transfer requests for mentor', key: 'transferRequests', description: 'Learners waiting on mentor change processing' }
+];
+
+const summaryGrid = document.getElementById('summary-grid');
+const learnerBody = document.getElementById('learner-body');
+const highRiskBody = document.getElementById('high-risk-body');
+const mentorBody = document.getElementById('mentor-body');
+const employerBody = document.getElementById('employer-body');
+const messageBar = document.getElementById('message-bar');
+const messageText = document.getElementById('message-text');
+
+function setMessage(text) {
+  messageText.textContent = text;
+  messageBar.classList.add('visible');
+}
+
+function formatDate(dateValue) {
+  const date = new Date(`${dateValue}T00:00:00`);
+  return date.toLocaleDateString('en-CA', { year:'numeric', month:'short', day:'numeric' });
+}
+
+function statusClass(status) {
+  if (/validated|on track/i.test(status)) return 'badge-approved';
+  if (/pending|submitted|under review|awaiting/i.test(status)) return 'badge-pending';
+  if (/more information|required/i.test(status)) return 'badge-declined';
+  if (/review|complete/i.test(status)) return 'badge-progress';
+  return 'badge-neutral';
+}
+
+function riskClass(level) {
+  if (level === 'High') return 'risk-high';
+  if (level === 'Medium') return 'risk-medium';
+  return 'risk-low';
+}
+
+function escapeHtml(value) {
+  return String(value || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function getSummaryValues() {
+  return {
+    activeLearners: learners.length,
+    foundational: learners.filter((learner) => learner.stageGroup === 'Foundational stage').length,
+    submitWorkplan: learners.filter((learner) => learner.stageGroup === 'Submit work plan').length,
+    professional: learners.filter((learner) => learner.stageGroup === 'Professional stage').length,
+    eligibleComplete: learners.filter((learner) => learner.stageGroup === 'Eligible PE complete').length,
+    noEmployer: learners.filter((learner) => !learner.hasEmployer).length,
+    preReviewed: learners.filter((learner) => learner.preReviewed).length,
+    activeMentors: mentors.filter((mentor) => mentor.name !== 'Unassigned mentor pool').length,
+    highRisk: learners.filter((learner) => learner.riskLevel === 'High').length,
+    transferRequests: mentors.reduce((total, mentor) => total + mentor.transferRequests, 0)
+  };
+}
+
+function renderSummaryCards() {
+  const values = getSummaryValues();
+  summaryGrid.innerHTML = summaryDefinitions.map((definition) => `
+    <div class="summary-card">
+      <span>${escapeHtml(definition.label)}</span>
+      <strong>${escapeHtml(values[definition.key])}</strong>
+      <small>${escapeHtml(definition.description)}</small>
+    </div>
+  `).join('');
+}
+
+function renderLearnerQueue() {
+  document.getElementById('learner-count').textContent = `${learners.length} active learners`;
+  learnerBody.innerHTML = learners.map((learner) => `
+    <tr>
+      <td class="learner-cell">
+        <strong>${escapeHtml(learner.name)}</strong>
+        <span class="subline">${escapeHtml(learner.learnerId)}</span>
+      </td>
+      <td>${escapeHtml(learner.currentStage)}</td>
+      <td>${escapeHtml(learner.employer || 'No employer on file')}</td>
+      <td>${escapeHtml(learner.mentor)}</td>
+      <td><span class="status-badge ${statusClass(learner.currentStatus)}"><span class="dot"></span>${escapeHtml(learner.currentStatus)}</span></td>
+      <td>${escapeHtml(learner.assignedReviewer)}</td>
+      <td><span class="status-badge ${statusClass(learner.mentorApplicationStatus)}"><span class="dot"></span>${escapeHtml(learner.mentorApplicationStatus)}</span></td>
+    </tr>
+  `).join('');
+}
+
+function renderHighRiskQueue() {
+  const highRiskLearners = learners.filter((learner) => learner.riskLevel === 'High');
+  document.getElementById('high-risk-count').textContent = `${highRiskLearners.length} high-risk learner${highRiskLearners.length === 1 ? '' : 's'}`;
+
+  if (!highRiskLearners.length) {
+    highRiskBody.innerHTML = '<tr><td colspan="5" class="empty-state">No high-risk learners currently flagged.</td></tr>';
+    return;
+  }
+
+  highRiskBody.innerHTML = highRiskLearners.map((learner) => `
+    <tr>
+      <td class="learner-cell">
+        <strong>${escapeHtml(learner.name)}</strong>
+        <span class="subline">${escapeHtml(learner.learnerId)}</span>
+      </td>
+      <td><span class="risk-chip ${riskClass(learner.riskLevel)}">${escapeHtml(learner.riskLevel)}</span></td>
+      <td>${escapeHtml(learner.riskReason)}</td>
+      <td>${escapeHtml(learner.assignedReviewer)}</td>
+      <td>${escapeHtml(formatDate(learner.checkInDueDate))}</td>
+    </tr>
+  `).join('');
+}
+
+function renderMentorQueue() {
+  document.getElementById('mentor-count').textContent = `${mentors.filter((mentor) => mentor.name !== 'Unassigned mentor pool').length} active mentors`;
+  mentorBody.innerHTML = mentors.map((mentor, index) => `
+    <tr>
+      <td class="mentor-cell">
+        <strong>${escapeHtml(mentor.name)}</strong>
+        <span class="subline">${mentor.transferRequests} open transfer request${mentor.transferRequests === 1 ? '' : 's'}</span>
+      </td>
+      <td>${escapeHtml(mentor.activeLearners)}</td>
+      <td>${escapeHtml(mentor.withoutValidation)}</td>
+      <td>${escapeHtml(mentor.requiringNewMentor)}</td>
+      <td><span class="status-badge ${statusClass(mentor.newMentorApplication)}"><span class="dot"></span>${escapeHtml(mentor.newMentorApplication)}</span></td>
+      <td><button class="action-btn primary" type="button" data-mentor-index="${index}">View application</button></td>
+    </tr>
+  `).join('');
+}
+
+function renderEmployerQueue() {
+  document.getElementById('employer-count').textContent = `${preReviewedEmployers.length} employers tracked`;
+  employerBody.innerHTML = preReviewedEmployers.map((entry) => `
+    <tr>
+      <td class="employer-cell">
+        <strong>${escapeHtml(entry.employer)}</strong>
+      </td>
+      <td>${escapeHtml(entry.positions)}</td>
+      <td>${escapeHtml(entry.learnersAssigned)}</td>
+      <td>${escapeHtml(entry.note)}</td>
+    </tr>
+  `).join('');
+}
+
+mentorBody.addEventListener('click', (event) => {
+  const button = event.target.closest('button[data-mentor-index]');
+  if (!button) return;
+  const mentor = mentors[Number(button.dataset.mentorIndex)];
+  if (!mentor) return;
+  setMessage(`${mentor.name}: ${mentor.applicationDetails}`);
+});
+
+function renderAll() {
+  const summaryValues = getSummaryValues();
+  renderSummaryCards();
+  renderLearnerQueue();
+  renderHighRiskQueue();
+  renderMentorQueue();
+  renderEmployerQueue();
+  document.getElementById('hero-summary').textContent = `${summaryValues.activeLearners} learners | ${summaryValues.activeMentors} active mentors | ${summaryValues.highRisk} high-risk cases`;
+}
+
+renderAll();
+</script>
+</body>
+</html>
+
+
+

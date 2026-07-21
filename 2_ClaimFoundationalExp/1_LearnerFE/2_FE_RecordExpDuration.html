@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPA - Foundational Experience Reports</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:#0B1F3A; --blue:#1B5EA8; --accent:#2A9D8F; --amber:#E76F1A; --green:#2D7A4E; --red:#C0392B;
+    --sand:#F7F5F2; --white:#FFFFFF; --gray-100:#F2F1EF; --gray-200:#E4E2DE; --gray-300:#D2CEC8;
+    --gray-400:#A8A49E; --gray-600:#6B6760; --gray-800:#2E2C2A;
+    --shadow-sm:0 1px 3px rgba(11,31,58,0.07),0 1px 2px rgba(11,31,58,0.05);
+    --shadow-md:0 10px 28px rgba(11,31,58,0.10);
+    --radius-sm:6px; --radius-md:10px; --radius-lg:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'DM Sans',sans-serif;background:var(--sand);color:var(--gray-800);min-height:100vh}
+  a{text-decoration:none;color:inherit}
+  button,input,select,textarea{font:inherit}
+  textarea{resize:vertical}
+  .topbar{background:var(--navy);min-height:60px;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:0 2rem}
+  .logo-group{display:flex;align-items:center;gap:10px;min-width:225px}
+  .logo-mark{width:36px;height:36px;background:var(--white);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .logo-text{display:flex;flex-direction:column;line-height:1.1}
+  .logo-text .brand{font-size:13px;font-weight:600;color:var(--white);letter-spacing:.04em}
+  .logo-text .sub{font-size:10px;color:rgba(255,255,255,.5);letter-spacing:.02em;text-transform:uppercase}
+  .topbar-right{display:flex;align-items:center;gap:12px}
+  .nav-links{display:flex;align-items:center;gap:2px}
+  .nav-links a{color:rgba(255,255,255,.55);font-size:14px;padding:8px 16px;border-radius:var(--radius-sm);white-space:nowrap}
+  .nav-links a.active,.nav-links a:hover{color:var(--white);background:rgba(255,255,255,.08)}
+    .role-dropdown{position:relative}
+  .role-trigger{list-style:none;display:flex;align-items:center;gap:10px;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);color:var(--white);font-size:13px;font-weight:600;cursor:pointer}
+  .role-trigger::-webkit-details-marker{display:none}
+  .role-label{display:inline-flex;align-items:center;justify-content:center;min-width:92px}
+  .role-caret{font-size:11px;color:rgba(255,255,255,.72)}
+  .role-menu{position:absolute;right:0;top:calc(100% + 10px);min-width:190px;padding:8px;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);box-shadow:0 12px 30px rgba(11,31,58,.14);display:flex;flex-direction:column;gap:4px;z-index:20}
+  .role-option{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:var(--radius-sm);font-size:13px;color:var(--gray-800);text-decoration:none}
+  .role-option:hover{background:var(--gray-100)}
+  .role-option.active{background:#EBF3FF;color:var(--blue);font-weight:600}
+  .page{max-width:1280px;margin:0 auto;padding:2rem 2rem 4rem}
+  .hero{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--gray-200)}
+  .hero h1{font-family:'DM Serif Display',serif;font-size:38px;font-weight:400;color:var(--navy);margin-bottom:6px}
+  .hero p{font-size:14px;color:var(--gray-600);max-width:760px;line-height:1.5}
+  .hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);padding:10px 16px;box-shadow:var(--shadow-sm);font-size:13px;color:var(--gray-600)}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--blue);flex:0 0 auto}
+  .message-bar{display:none;align-items:center;gap:10px;margin-bottom:1rem;padding:12px 14px;border-radius:var(--radius-md);background:#EBF3FF;border:1px solid rgba(27,94,168,.18);color:var(--navy);box-shadow:var(--shadow-sm)}
+  .message-bar.visible{display:flex}
+  .workspace{display:grid;grid-template-columns:320px minmax(0,1fr);gap:16px}
+  .panel{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm)}
+  .sidebar-panel,.form-panel,.meta-panel{padding:1.25rem}
+  .section-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gray-400);margin-bottom:.75rem}
+  .panel h2{font-size:17px;color:var(--navy);margin-bottom:4px}
+  .panel-copy{font-size:12px;color:var(--gray-600);line-height:1.45}
+  .sidebar-stack{display:flex;flex-direction:column;gap:16px}
+  .report-list{display:flex;flex-direction:column;gap:10px;margin-top:1rem}
+  .report-card{padding:12px;border-radius:var(--radius-md);border:1px solid var(--gray-200);background:var(--sand);cursor:pointer;transition:all .15s ease}
+  .report-card.active{border-color:rgba(27,94,168,.32);box-shadow:0 0 0 3px rgba(27,94,168,.08);background:#F7FAFF}
+  .report-card strong{display:block;font-size:14px;color:var(--navy);margin-bottom:4px}
+  .report-card span{display:block;font-size:12px;color:var(--gray-600);line-height:1.4}
+  .status-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:5px 10px;border-radius:20px;white-space:nowrap;margin-top:.75rem}
+  .status-badge .dot{width:6px;height:6px}
+  .badge-approved{background:#E8F5EE;color:var(--green)} .badge-approved .dot{background:var(--green)}
+  .badge-pending{background:#FEF3E8;color:var(--amber)} .badge-pending .dot{background:var(--amber)}
+  .badge-progress{background:#EBF3FF;color:var(--blue)} .badge-progress .dot{background:var(--blue)}
+  .badge-declined{background:#FDECEA;color:var(--red)} .badge-declined .dot{background:var(--red)}
+  .badge-neutral{background:var(--gray-100);color:var(--gray-600)} .badge-neutral .dot{background:var(--gray-400)}
+  .action-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:var(--radius-sm);border:1px solid var(--gray-200);padding:9px 12px;background:var(--white);color:var(--navy);font-size:12px;font-weight:700;cursor:pointer;transition:all .15s ease}
+  .action-btn:hover{border-color:rgba(27,94,168,.28);background:#F7FAFF}
+  .action-btn.primary{background:#EBF3FF;border-color:rgba(27,94,168,.28);color:var(--blue)}
+  .action-btn.success{background:#E8F5EE;border-color:rgba(45,122,78,.22);color:var(--green)}
+  .action-btn.warn{background:#FEF3E8;border-color:rgba(231,111,26,.24);color:var(--amber)}
+  .action-btn.danger{background:#FFF4F1;border-color:rgba(192,57,43,.22);color:var(--red)}
+  .action-btn[disabled]{opacity:.55;cursor:not-allowed;background:var(--gray-100);color:var(--gray-600)}
+  .form-layout{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:16px}
+  .form-shell{display:flex;flex-direction:column;gap:16px}
+  .form-section{padding:1rem;border:1px solid var(--gray-200);border-radius:var(--radius-md);background:var(--sand)}
+  .form-section h3{font-size:15px;color:var(--navy);margin-bottom:6px}
+  .field-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .field{display:flex;flex-direction:column;gap:6px}
+  .field.full{grid-column:1 / -1}
+  .field label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gray-400)}
+  .field input,.field textarea,.field select{border:1px solid var(--gray-200);border-radius:var(--radius-sm);background:var(--white);padding:10px 12px;color:var(--gray-800)}
+  .field textarea{min-height:92px}
+  .field input:focus,.field textarea:focus,.field select:focus{outline:none;border-color:rgba(27,94,168,.32);box-shadow:0 0 0 3px rgba(27,94,168,.08)}
+  .field input[disabled],.field textarea[disabled],.field select[disabled]{background:var(--gray-100);color:var(--gray-600)}
+  .subcopy{font-size:11px;color:var(--gray-600);line-height:1.4}
+  .metric-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .metric-card{padding:12px;border-radius:var(--radius-md);border:1px solid var(--gray-200);background:var(--white)}
+  .metric-card span{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--gray-400);font-weight:700;margin-bottom:6px}
+  .metric-card strong{display:block;font-size:18px;color:var(--navy)}
+  .metric-card small{display:block;font-size:11px;color:var(--gray-600);margin-top:4px;line-height:1.35}
+  .upload-shell{display:flex;flex-direction:column;gap:10px}
+  .upload-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  .doc-list{display:flex;flex-direction:column;gap:8px}
+  .doc-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border-radius:var(--radius-sm);border:1px solid var(--gray-200);background:var(--white)}
+  .doc-copy strong{display:block;font-size:13px;color:var(--navy);margin-bottom:2px}
+  .doc-copy span{display:block;font-size:11px;color:var(--gray-600);line-height:1.35}
+  .warning-box,.success-box{padding:12px;border-radius:var(--radius-md);border:1px solid var(--gray-200);background:var(--sand)}
+  .warning-box{border-color:rgba(231,111,26,.22);background:#FFF8F1}
+  .success-box{border-color:rgba(45,122,78,.22);background:#F2FBF6}
+  .warning-box strong,.success-box strong{display:block;font-size:13px;color:var(--navy);margin-bottom:4px}
+  .warning-box span,.success-box span{display:block;font-size:12px;color:var(--gray-600);line-height:1.45}
+  .error-list{display:flex;flex-direction:column;gap:8px}
+  .error-item{padding:10px 12px;border-radius:var(--radius-sm);border:1px solid rgba(192,57,43,.16);background:#FDECEA;color:var(--red);font-size:12px;line-height:1.4}
+  .meta-stack{display:flex;flex-direction:column;gap:12px}
+  .meta-card{padding:12px;border-radius:var(--radius-md);border:1px solid var(--gray-200);background:var(--sand)}
+  .meta-card strong{display:block;font-size:13px;color:var(--navy);margin-bottom:4px}
+  .meta-card span{display:block;font-size:12px;color:var(--gray-600);line-height:1.45}
+  .flow-step{display:flex;align-items:flex-start;gap:8px}
+  .flow-index{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:var(--white);border:1px solid var(--gray-200);font-size:11px;font-weight:700;color:var(--blue);flex:0 0 auto}
+  .button-row{display:flex;flex-wrap:wrap;gap:8px}
+  @media(max-width:1120px){
+    .workspace,.form-layout{grid-template-columns:1fr}
+  }
+  @media(max-width:760px){
+    .topbar{align-items:flex-start;flex-direction:column;padding:1rem}
+    .nav-links{display:none}
+    .topbar-right{width:100%;justify-content:space-between}
+    .page{padding:1.25rem 1rem 3rem}
+    .hero{flex-direction:column;align-items:flex-start}
+    .hero h1{font-size:34px}
+    .field-grid,.metric-grid{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="logo-group">
+    <div class="logo-mark">
+      <svg width="24" height="20" viewBox="0 0 24 20" fill="none" aria-hidden="true">
+        <path d="M2 10C2 5.58 5.58 2 10 2h4c4.42 0 8 3.58 8 8s-3.58 8-8 8h-4C5.58 18 2 14.42 2 10z" fill="#0B1F3A" opacity="0.12"/>
+        <path d="M7 10.5l3 3 7-7" stroke="#0B1F3A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="logo-text"><span class="brand">CPA Canada</span><span class="sub">Chartered Professional Accountants</span></div>
+  </div>
+  <div class="topbar-right">
+    <nav class="nav-links" aria-label="Primary navigation">
+      <a href="../../1_Dashboard/LearnerDashboard.html">Dashboard</a>
+      <a href="1_FE_YesorNo.html">Foundational experience</a>
+      <a href="2_FE_RecordExpDuration.html" class="active">FE reports</a>
+      <a href="../../1_Dashboard/LearnerDashboard.html#workplan-card">Work plan</a>
+    </nav>
+                <details class="role-dropdown">
+      <summary class="role-trigger"><span class="role-label">Learner</span><span class="role-caret">&#9662;</span></summary>
+      <div class="role-menu">
+        <a class="role-option active" href="../../index.html">Learner</a>
+        <a class="role-option" href="../../1_Dashboard/CPAReviewer.html">CPA Reviewer</a>
+        <a class="role-option" href="../../1_Dashboard/MentorDashboard.html">Mentor</a>
+        <a class="role-option" href="../../1_Dashboard/PTSBStaffDashboard.html">PTSB Staff</a>
+      </div>
+    </details>
+  </div>
+</header>
+
+<main class="page">
+  <section class="hero" aria-labelledby="fe-record-title">
+    <div>
+      <h1 id="fe-record-title">Capture foundational experience</h1>
+      <p>Create one foundational experience report per employment experience, attach supporting documents, calculate eligible duration, save drafts, and submit each report independently to its assigned supervisor.</p>
+    </div>
+    <div class="hero-badge"><span class="dot"></span><span id="hero-summary">Loading foundational experience reports</span></div>
+  </section>
+
+  <div class="message-bar" id="message-bar" role="status" aria-live="polite">
+    <span class="dot"></span>
+    <span id="message-text"></span>
+  </div>
+
+  <section class="workspace">
+    <aside class="sidebar-stack">
+      <section class="panel sidebar-panel">
+        <div class="section-label">Employment experiences</div>
+        <h2>Foundational experience reports</h2>
+        <p class="panel-copy">Each report represents one employment experience and is routed to its own supervisor.</p>
+        <div class="button-row" style="margin-top:1rem;">
+          <button class="action-btn primary" id="add-report-btn" type="button">Add another FE report</button>
+        </div>
+        <div class="report-list" id="report-list"></div>
+      </section>
+
+    </aside>
+
+    <section class="form-layout">
+      <section class="panel form-panel">
+        <div class="section-label">Report details</div>
+        <h2 id="active-report-title">Experience report</h2>
+        <p class="panel-copy" id="active-report-copy">Enter learner, role, duration, and document details for this employment experience.</p>
+
+        <div class="form-shell">
+          <section class="form-section">
+            <h3>Learner information</h3>
+            <div class="field-grid">
+              <div class="field">
+                <label for="legal-name">Given legal name</label>
+                <input id="legal-name" type="text">
+              </div>
+              <div class="field">
+                <label for="preferred-name">Preferred name</label>
+                <input id="preferred-name" type="text">
+              </div>
+              <div class="field">
+                <label for="cpa-id">CPA ID</label>
+                <input id="cpa-id" type="text">
+              </div>
+              <div class="field">
+                <label for="governing-body">Governing body</label>
+                <input id="governing-body" type="text">
+              </div>
+              <div class="field">
+                <label for="email-address">Email address</label>
+                <input id="email-address" type="email">
+              </div>
+              <div class="field">
+                <label for="phone-number">Phone number</label>
+                <input id="phone-number" type="tel">
+              </div>
+            </div>
+          </section>
+
+          <section class="form-section">
+            <h3>Role and supervisor information</h3>
+            <div class="field-grid">
+              <div class="field">
+                <label for="supervisor-name">Supervisor name</label>
+                <input id="supervisor-name" type="text">
+              </div>
+              <div class="field">
+                <label for="supervisor-email">Supervisor email</label>
+                <input id="supervisor-email" type="email">
+              </div>
+              <div class="field full">
+                <label for="employer-name">Employer</label>
+                <input id="employer-name" type="text">
+              </div>
+              <div class="field full">
+                <label for="report-title">Employment experience label</label>
+                <input id="report-title" type="text" placeholder="Example: Audit Associate at Northline Advisory Group">
+                <span class="subcopy">This label helps the learner track multiple FE reports.</span>
+              </div>
+              <div class="field full">
+                <label for="job-summary">Role summary</label>
+                <textarea id="job-summary" placeholder="Briefly describe the role, responsibilities, and context for this employment experience."></textarea>
+                <span class="subcopy">The assigned supervisor is not required to be a CPA. This report routes to the supervisor entered here.</span>
+              </div>
+            </div>
+          </section>
+
+          <section class="form-section">
+            <h3>Experience duration</h3>
+            <div class="field-grid">
+              <div class="field">
+                <label for="start-date">Start date</label>
+                <input id="start-date" type="date">
+              </div>
+              <div class="field">
+                <label for="end-date">End date</label>
+                <input id="end-date" type="date">
+              </div>
+              <div class="field">
+                <label for="leave-days">Leave days</label>
+                <input id="leave-days" type="number" min="0" step="1" value="0">
+              </div>
+              <div class="field">
+                <label for="hours-per-week">Average hours worked per week</label>
+                <input id="hours-per-week" type="number" min="0" step="0.5" value="37.5">
+              </div>
+            </div>
+            <div class="metric-grid" id="duration-metrics" style="margin-top:1rem;"></div>
+            <div class="warning-box" id="duration-note" style="margin-top:1rem;">
+              <strong>Eligible duration</strong>
+              <span>Enter valid start and end dates to calculate eligible days, credited months, and estimated hours.</span>
+            </div>
+          </section>
+
+          <section class="form-section">
+            <h3>Supporting documents</h3>
+            <div class="upload-shell">
+              <div class="field full">
+                <label for="job-description-upload">Job description upload</label>
+                <input id="job-description-upload" type="file" multiple>
+                <span class="subcopy">A job description is required before this report can be submitted.</span>
+              </div>
+              <div class="button-row">
+                <button class="action-btn" id="attach-job-description-btn" type="button">Attach job description</button>
+              </div>
+              <div class="doc-list" id="job-description-list"></div>
+
+              <div class="field full" style="margin-top:.5rem;">
+                <label for="supporting-docs-upload">Other supporting documents</label>
+                <input id="supporting-docs-upload" type="file" multiple>
+                <span class="subcopy">Upload one or more supporting documents for this foundational experience report.</span>
+              </div>
+              <div class="button-row">
+                <button class="action-btn" id="attach-supporting-btn" type="button">Attach supporting documents</button>
+              </div>
+              <div class="doc-list" id="supporting-doc-list"></div>
+            </div>
+          </section>
+
+          <section class="form-section">
+            <h3>Validation and submission</h3>
+            <div class="success-box" id="submission-summary">
+              <strong>Draft state</strong>
+              <span>This report can be saved as a draft until all required learner, role, date, and job description fields are complete.</span>
+            </div>
+            <div class="error-list" id="validation-errors" style="margin-top:1rem;"></div>
+            <div class="button-row" style="margin-top:1rem;">
+              <button class="action-btn" id="save-draft-btn" type="button">Save draft</button>
+              <button class="action-btn success" id="submit-report-btn" type="button">Submit report</button>
+              <button class="action-btn danger" id="withdraw-report-btn" type="button">Withdraw report</button>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <aside class="panel meta-panel">
+        <div class="section-label">Current report</div>
+        <h2>Submission status</h2>
+        <div class="meta-stack">
+          <div class="meta-card">
+            <strong>Status</strong>
+            <span id="meta-status">Draft</span>
+          </div>
+          <div class="meta-card">
+            <strong>Submission date and time</strong>
+            <span id="meta-submitted-at">Not submitted</span>
+          </div>
+          <div class="meta-card">
+            <strong>Supporting documents</strong>
+            <span id="meta-doc-count">0 document(s) attached.</span>
+          </div>
+        </div>
+      </aside>
+    </section>
+  </section>
+</main>
+
+<script>
+const decisionKey = 'feDecision:learner-101';
+const reportsKey = 'feReports:learner-101';
+const activeReportKey = 'feActiveReport:learner-101';
+const workPlanCompleteKey = 'workPlanEligibleExperienceComplete:learner-101';
+
+const defaultLearner = {
+  legalName: 'Amelia Reyes',
+  preferredName: 'Amelia',
+  cpaId: 'CPA-772401',
+  governingBody: 'CPA British Columbia',
+  email: 'amelia.reyes@example.com',
+  phone: '604-555-0186'
+};
+
+const reportList = document.getElementById('report-list');
+const activeReportTitle = document.getElementById('active-report-title');
+const activeReportCopy = document.getElementById('active-report-copy');
+const heroSummary = document.getElementById('hero-summary');
+const messageBar = document.getElementById('message-bar');
+const messageText = document.getElementById('message-text');
+const durationMetrics = document.getElementById('duration-metrics');
+const durationNote = document.getElementById('duration-note');
+const jobDescriptionList = document.getElementById('job-description-list');
+const supportingDocList = document.getElementById('supporting-doc-list');
+const validationErrors = document.getElementById('validation-errors');
+const submissionSummary = document.getElementById('submission-summary');
+const metaStatus = document.getElementById('meta-status');
+const metaSubmittedAt = document.getElementById('meta-submitted-at');
+const metaDocCount = document.getElementById('meta-doc-count');
+const jobDescriptionUpload = document.getElementById('job-description-upload');
+const supportingDocsUpload = document.getElementById('supporting-docs-upload');
+const claimDecision = JSON.parse(localStorage.getItem(decisionKey) || 'null');
+
+const formIds = {
+  legalName: 'legal-name',
+  preferredName: 'preferred-name',
+  cpaId: 'cpa-id',
+  governingBody: 'governing-body',
+  email: 'email-address',
+  phone: 'phone-number',
+  supervisorName: 'supervisor-name',
+  supervisorEmail: 'supervisor-email',
+  employer: 'employer-name',
+  reportTitle: 'report-title',
+  roleSummary: 'job-summary',
+  startDate: 'start-date',
+  endDate: 'end-date',
+  leaveDays: 'leave-days',
+  avgHoursPerWeek: 'hours-per-week'
+};
+
+let reports = [];
+let activeReportId = null;
+
+function setMessage(text) {
+  messageText.textContent = text;
+  messageBar.classList.add('visible');
+}
+
+function createEmptyReport(index) {
+  const label = `Employment experience ${index}`;
+  return {
+    id: `fe-${Date.now()}-${index}`,
+    status: 'Draft',
+    learnerInfo: { ...defaultLearner },
+    roleInfo: {
+      supervisorName: '',
+      supervisorEmail: '',
+      employer: '',
+      reportTitle: label,
+      roleSummary: ''
+    },
+    duration: {
+      startDate: '',
+      endDate: '',
+      leaveDays: 0,
+      avgHoursPerWeek: 37.5
+    },
+    documents: {
+      jobDescriptions: [],
+      supporting: []
+    },
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    submittedAt: '',
+    workflowRoute: 'Learner draft -> assigned supervisor -> CPA review queue.',
+    notifications: []
+  };
+}
+
+function loadReports() {
+  const stored = JSON.parse(localStorage.getItem(reportsKey) || '[]');
+  reports = Array.isArray(stored) && stored.length ? stored : [createEmptyReport(1)];
+  activeReportId = localStorage.getItem(activeReportKey) || reports[0].id;
+  if (!reports.some((report) => report.id === activeReportId)) {
+    activeReportId = reports[0].id;
+  }
+}
+
+function persistReports() {
+  localStorage.setItem(reportsKey, JSON.stringify(reports));
+  localStorage.setItem(activeReportKey, activeReportId);
+}
+
+function getActiveReport() {
+  return reports.find((report) => report.id === activeReportId);
+}
+
+function formatDate(dateValue) {
+  if (!dateValue) return 'Not available';
+  const date = new Date(dateValue);
+  if (Number.isNaN(date.getTime())) return 'Not available';
+  return date.toLocaleString('en-CA', { year:'numeric', month:'short', day:'numeric', hour:'numeric', minute:'2-digit' });
+}
+
+function formatShortDate(dateValue) {
+  if (!dateValue) return 'Not set';
+  const date = new Date(`${dateValue}T00:00:00`);
+  return date.toLocaleDateString('en-CA', { year:'numeric', month:'short', day:'numeric' });
+}
+
+function statusClass(status) {
+  if (/pending/i.test(status)) return 'badge-pending';
+  if (/submitted|review/i.test(status)) return 'badge-progress';
+  if (/withdrawn/i.test(status)) return 'badge-declined';
+  if (/approved/i.test(status)) return 'badge-approved';
+  return 'badge-neutral';
+}
+
+function readFormIntoReport() {
+  const report = getActiveReport();
+  if (!report) return;
+
+  report.learnerInfo.legalName = document.getElementById(formIds.legalName).value.trim();
+  report.learnerInfo.preferredName = document.getElementById(formIds.preferredName).value.trim();
+  report.learnerInfo.cpaId = document.getElementById(formIds.cpaId).value.trim();
+  report.learnerInfo.governingBody = document.getElementById(formIds.governingBody).value.trim();
+  report.learnerInfo.email = document.getElementById(formIds.email).value.trim();
+  report.learnerInfo.phone = document.getElementById(formIds.phone).value.trim();
+
+  report.roleInfo.supervisorName = document.getElementById(formIds.supervisorName).value.trim();
+  report.roleInfo.supervisorEmail = document.getElementById(formIds.supervisorEmail).value.trim();
+  report.roleInfo.employer = document.getElementById(formIds.employer).value.trim();
+  report.roleInfo.reportTitle = document.getElementById(formIds.reportTitle).value.trim();
+  report.roleInfo.roleSummary = document.getElementById(formIds.roleSummary).value.trim();
+
+  report.duration.startDate = document.getElementById(formIds.startDate).value;
+  report.duration.endDate = document.getElementById(formIds.endDate).value;
+  report.duration.leaveDays = Number(document.getElementById(formIds.leaveDays).value || 0);
+  report.duration.avgHoursPerWeek = Number(document.getElementById(formIds.avgHoursPerWeek).value || 0);
+  report.updatedAt = new Date().toISOString();
+}
+
+function loadReportIntoForm(report) {
+  document.getElementById(formIds.legalName).value = report.learnerInfo.legalName || '';
+  document.getElementById(formIds.preferredName).value = report.learnerInfo.preferredName || '';
+  document.getElementById(formIds.cpaId).value = report.learnerInfo.cpaId || '';
+  document.getElementById(formIds.governingBody).value = report.learnerInfo.governingBody || '';
+  document.getElementById(formIds.email).value = report.learnerInfo.email || '';
+  document.getElementById(formIds.phone).value = report.learnerInfo.phone || '';
+
+  document.getElementById(formIds.supervisorName).value = report.roleInfo.supervisorName || '';
+  document.getElementById(formIds.supervisorEmail).value = report.roleInfo.supervisorEmail || '';
+  document.getElementById(formIds.employer).value = report.roleInfo.employer || '';
+  document.getElementById(formIds.reportTitle).value = report.roleInfo.reportTitle || '';
+  document.getElementById(formIds.roleSummary).value = report.roleInfo.roleSummary || '';
+
+  document.getElementById(formIds.startDate).value = report.duration.startDate || '';
+  document.getElementById(formIds.endDate).value = report.duration.endDate || '';
+  document.getElementById(formIds.leaveDays).value = report.duration.leaveDays ?? 0;
+  document.getElementById(formIds.avgHoursPerWeek).value = report.duration.avgHoursPerWeek ?? 0;
+}
+
+function calculateDuration(report) {
+  const { startDate, endDate, leaveDays, avgHoursPerWeek } = report.duration;
+  const metrics = {
+    valid: false,
+    totalDays: 0,
+    eligibleDays: 0,
+    actualMonths: 0,
+    creditedMonths: 0,
+    estimatedHours: 0,
+    notes: []
+  };
+
+  if (!startDate || !endDate) {
+    metrics.notes.push('Start and end dates are required for experience duration.');
+    return metrics;
+  }
+
+  const start = new Date(`${startDate}T00:00:00`);
+  const end = new Date(`${endDate}T00:00:00`);
+  if (end < start) {
+    metrics.notes.push('End date must be on or after the start date.');
+    return metrics;
+  }
+
+  const totalDays = Math.floor((end - start) / 86400000) + 1;
+  if (leaveDays < 0) {
+    metrics.notes.push('Leave days cannot be negative.');
+    return metrics;
+  }
+  if (leaveDays > totalDays) {
+    metrics.notes.push('Leave days cannot exceed the total number of calendar days in the experience.');
+    return metrics;
+  }
+
+  const eligibleDays = totalDays - leaveDays;
+  const actualMonths = eligibleDays / 30.4375;
+  const creditedMonths = Math.min(actualMonths, 8);
+  const estimatedHours = (eligibleDays / 7) * avgHoursPerWeek;
+
+  metrics.valid = true;
+  metrics.totalDays = totalDays;
+  metrics.eligibleDays = eligibleDays;
+  metrics.actualMonths = actualMonths;
+  metrics.creditedMonths = creditedMonths;
+  metrics.estimatedHours = estimatedHours;
+  if (actualMonths > 8) {
+    metrics.notes.push('This report may include more than 8 months of experience, but the system will only credit a maximum of 8 months toward foundational experience.');
+  }
+  if (avgHoursPerWeek <= 0) {
+    metrics.notes.push('Average hours worked per week should be greater than zero for eligible hours to calculate.');
+  }
+
+  return metrics;
+}
+
+function validateReport(report, forSubmit) {
+  const errors = [];
+  const metrics = calculateDuration(report);
+
+  if (forSubmit && claimDecision && claimDecision.choice === 'skip' && localStorage.getItem(workPlanCompleteKey) === 'true') {
+    errors.push('This learner previously skipped foundational experience and eligible work-plan experience is already complete, so foundational experience can no longer be submitted.');
+  }
+
+  const requiredChecks = [
+    [report.learnerInfo.legalName, 'Given legal name is required.'],
+    [report.learnerInfo.preferredName, 'Preferred name is required.'],
+    [report.learnerInfo.cpaId, 'CPA ID is required.'],
+    [report.learnerInfo.governingBody, 'Governing body is required.'],
+    [report.learnerInfo.email, 'Email address is required.'],
+    [report.learnerInfo.phone, 'Phone number is required.'],
+    [report.roleInfo.supervisorName, 'Supervisor name is required.'],
+    [report.roleInfo.supervisorEmail, 'Supervisor email is required.'],
+    [report.roleInfo.employer, 'Employer is required.'],
+    [report.duration.startDate, 'Experience start date is required.'],
+    [report.duration.endDate, 'Experience end date is required.']
+  ];
+
+  if (forSubmit) {
+    requiredChecks.forEach(([value, message]) => {
+      if (!value) errors.push(message);
+    });
+    if (!report.documents.jobDescriptions.length) {
+      errors.push('At least one job description document must be uploaded before submission.');
+    }
+  }
+
+  if (report.roleInfo.supervisorEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(report.roleInfo.supervisorEmail)) {
+    errors.push('Supervisor email must be a valid email address.');
+  }
+  if (report.learnerInfo.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(report.learnerInfo.email)) {
+    errors.push('Learner email must be a valid email address.');
+  }
+  if (report.duration.leaveDays < 0) {
+    errors.push('Leave days cannot be negative.');
+  }
+  if (report.duration.avgHoursPerWeek < 0) {
+    errors.push('Average hours worked per week cannot be negative.');
+  }
+  metrics.notes.forEach((note) => {
+    if (note.includes('required') || note.includes('must') || note.includes('cannot')) {
+      errors.push(note);
+    }
+  });
+
+  return { errors: Array.from(new Set(errors)), metrics };
+}
+
+function renderReportList() {
+  reportList.innerHTML = reports.map((report, index) => `
+    <article class="report-card ${report.id === activeReportId ? 'active' : ''}" data-report-id="${report.id}">
+      <strong>${escapeHtml(report.roleInfo.reportTitle || `Employment experience ${index + 1}`)}</strong>
+      <span>${escapeHtml(report.roleInfo.employer || 'Employer not entered yet')}</span>
+      <span>${escapeHtml(report.roleInfo.supervisorName || 'Supervisor not assigned yet')}</span>
+      <span class="status-badge ${statusClass(report.status)}"><span class="dot"></span>${escapeHtml(report.status)}</span>
+    </article>
+  `).join('');
+}
+
+function renderDuration(metrics) {
+  durationMetrics.innerHTML = `
+    <div class="metric-card">
+      <span>Total calendar days</span>
+      <strong>${metrics.valid ? metrics.totalDays : '--'}</strong>
+      <small>Inclusive of both start and end date.</small>
+    </div>
+    <div class="metric-card">
+      <span>Eligible days</span>
+      <strong>${metrics.valid ? metrics.eligibleDays : '--'}</strong>
+      <small>Total days less leave days.</small>
+    </div>
+    <div class="metric-card">
+      <span>Actual months</span>
+      <strong>${metrics.valid ? metrics.actualMonths.toFixed(2) : '--'}</strong>
+      <small>Calculated before any foundational experience cap.</small>
+    </div>
+    <div class="metric-card">
+      <span>Credited months</span>
+      <strong>${metrics.valid ? metrics.creditedMonths.toFixed(2) : '--'}</strong>
+      <small>Credited months are capped at 8.00.</small>
+    </div>
+    <div class="metric-card">
+      <span>Estimated hours</span>
+      <strong>${metrics.valid ? Math.round(metrics.estimatedHours) : '--'}</strong>
+      <small>Derived from eligible weeks and average hours per week.</small>
+    </div>
+    <div class="metric-card">
+      <span>Average hours per week</span>
+      <strong>${metrics.valid ? getActiveReport().duration.avgHoursPerWeek : '--'}</strong>
+      <small>Used in the eligible experience calculation.</small>
+    </div>
+  `;
+
+  if (!metrics.valid) {
+    durationNote.className = 'warning-box';
+    durationNote.innerHTML = '<strong>Eligible duration</strong><span>Enter valid start and end dates to calculate eligible days, credited months, and estimated hours.</span>';
+    return;
+  }
+
+  const noteText = metrics.notes.length
+    ? metrics.notes.join(' ')
+    : 'The system calculated eligible duration successfully and will display this to the learner before submission.';
+  durationNote.className = metrics.notes.length ? 'warning-box' : 'success-box';
+  durationNote.innerHTML = `<strong>${metrics.notes.length ? 'Duration note' : 'Duration calculated'}</strong><span>${escapeHtml(noteText)}</span>`;
+}
+
+function renderDocuments(report) {
+  const renderDocGroup = (docs, container, emptyText, removable) => {
+    if (!docs.length) {
+      container.innerHTML = `<div class="meta-card"><span>${emptyText}</span></div>`;
+      return;
+    }
+    container.innerHTML = docs.map((doc) => `
+      <div class="doc-item">
+        <div class="doc-copy">
+          <strong>${escapeHtml(doc.name)}</strong>
+          <span>${escapeHtml(doc.category)} | ${escapeHtml(doc.sizeLabel)} | Uploaded ${escapeHtml(formatDate(doc.uploadedAt))}</span>
+        </div>
+        ${removable ? `<button class="action-btn" type="button" data-remove-doc="${doc.id}">Remove</button>` : ''}
+      </div>
+    `).join('');
+  };
+
+  const editable = report.status === 'Draft' || report.status === 'Withdrawn';
+  renderDocGroup(report.documents.jobDescriptions, jobDescriptionList, 'No job description uploaded yet.', editable);
+  renderDocGroup(report.documents.supporting, supportingDocList, 'No supporting documents uploaded yet.', editable);
+}
+
+function renderMeta(report, validation) {
+  metaStatus.textContent = report.status;
+  metaSubmittedAt.textContent = report.submittedAt ? formatDate(report.submittedAt) : 'Not submitted';
+  metaDocCount.textContent = `${report.documents.jobDescriptions.length + report.documents.supporting.length} document(s) attached.`;
+
+  submissionSummary.className = report.status === 'Pending Supervisor/mentor approval' ? 'success-box' : 'success-box';
+  if (report.status === 'Pending Supervisor/mentor approval') {
+    submissionSummary.innerHTML = `<strong>Submission complete</strong><span>This report is read-only for the learner. It has been routed to the assigned supervisor and will move to the CPA review queue after supervisor approval.</span>`;
+  } else {
+    submissionSummary.innerHTML = `<strong>${escapeHtml(report.status)}</strong><span>${validation.errors.length
+      ? 'This report still has validation items to resolve before submission.'
+      : 'This report can be saved as a draft until all required learner, role, date, and job description fields are complete.'}</span>`;
+  }
+}
+
+function renderValidation(errors) {
+  if (!errors.length) {
+    validationErrors.innerHTML = '';
+    return;
+  }
+  validationErrors.innerHTML = errors.map((error) => `<div class="error-item">${escapeHtml(error)}</div>`).join('');
+}
+
+function setReadonlyState(report) {
+  const readonly = report.status === 'Pending Supervisor/mentor approval';
+  Object.values(formIds).forEach((id) => {
+    document.getElementById(id).disabled = readonly;
+  });
+  jobDescriptionUpload.disabled = readonly;
+  supportingDocsUpload.disabled = readonly;
+  document.getElementById('attach-job-description-btn').disabled = readonly;
+  document.getElementById('attach-supporting-btn').disabled = readonly;
+  document.getElementById('save-draft-btn').disabled = false;
+  document.getElementById('submit-report-btn').disabled = readonly;
+  document.getElementById('withdraw-report-btn').disabled = reports.length === 0;
+}
+
+function renderActiveReport() {
+  const report = getActiveReport();
+  if (!report) return;
+
+  loadReportIntoForm(report);
+  const validation = validateReport(report, false);
+  const metrics = validation.metrics;
+  renderDuration(metrics);
+  renderDocuments(report);
+  renderMeta(report, validation);
+  renderValidation([]);
+  setReadonlyState(report);
+
+  activeReportTitle.textContent = report.roleInfo.reportTitle || 'Experience report';
+  activeReportCopy.textContent = report.roleInfo.employer
+    ? `Report for ${report.roleInfo.employer}. Each report is submitted independently to the named supervisor.`
+    : 'Enter learner, role, duration, and document details for this employment experience.';
+}
+
+function updateHero() {
+  const submittedCount = reports.filter((report) => report.status === 'Pending Supervisor/mentor approval').length;
+  heroSummary.textContent = `${reports.length} FE report${reports.length === 1 ? '' : 's'} | ${submittedCount} submitted`;
+}
+
+function renderAll() {
+  renderReportList();
+  renderActiveReport();
+  updateHero();
+  persistReports();
+}
+
+function switchReport(reportId) {
+  readFormIntoReport();
+  activeReportId = reportId;
+  renderAll();
+}
+
+function addReport() {
+  readFormIntoReport();
+  const newReport = createEmptyReport(reports.length + 1);
+  reports.push(newReport);
+  activeReportId = newReport.id;
+  setMessage('Added a new foundational experience report for another employment experience.');
+  renderAll();
+}
+
+function fileToMeta(file, category) {
+  return {
+    id: `${category}-${Date.now()}-${Math.random().toString(16).slice(2)}`,
+    name: file.name,
+    category,
+    sizeLabel: `${Math.max(1, Math.round(file.size / 1024))} KB`,
+    uploadedAt: new Date().toISOString()
+  };
+}
+
+function attachFiles(input, targetKey, categoryLabel) {
+  const report = getActiveReport();
+  if (!report || report.status === 'Pending Supervisor/mentor approval') return;
+  if (!input.files || !input.files.length) {
+    setMessage(`Select file(s) before attaching ${categoryLabel.toLowerCase()}.`);
+    return;
+  }
+  const docs = Array.from(input.files).map((file) => fileToMeta(file, categoryLabel));
+  report.documents[targetKey].push(...docs);
+  report.updatedAt = new Date().toISOString();
+  input.value = '';
+  setMessage(`${docs.length} ${categoryLabel.toLowerCase()} file${docs.length === 1 ? '' : 's'} attached to the current report.`);
+  renderAll();
+}
+
+function removeDocument(docId) {
+  const report = getActiveReport();
+  if (!report || report.status === 'Pending Supervisor/mentor approval') return;
+  report.documents.jobDescriptions = report.documents.jobDescriptions.filter((doc) => doc.id !== docId);
+  report.documents.supporting = report.documents.supporting.filter((doc) => doc.id !== docId);
+  report.updatedAt = new Date().toISOString();
+  setMessage('Removed the selected document from this report.');
+  renderAll();
+}
+
+function ensureClaimDecision() {
+  const storedDecision = JSON.parse(localStorage.getItem(decisionKey) || 'null');
+  if (!storedDecision || storedDecision.choice !== 'claim') {
+    if (localStorage.getItem(workPlanCompleteKey) === 'true') {
+      return false;
+    }
+    localStorage.setItem(decisionKey, JSON.stringify({
+      choice: 'claim',
+      updatedAt: new Date().toISOString(),
+      referencedBy: ['CPA Reviewer', 'CPA Staff']
+    }));
+  }
+  return true;
+}
+
+function saveDraft() {
+  const report = getActiveReport();
+  readFormIntoReport();
+  report.status = 'Draft';
+  report.updatedAt = new Date().toISOString();
+  renderAll();
+  window.location.href = '../../index.html';
+}
+
+function submitReport() {
+  const report = getActiveReport();
+  readFormIntoReport();
+
+  if (!ensureClaimDecision()) {
+    renderValidation(['This learner cannot return to claim foundational experience because eligible work-plan experience is already complete.']);
+    setMessage('Submission blocked because returning to claim foundational experience is no longer allowed.');
+    return;
+  }
+
+  const validation = validateReport(report, true);
+  renderDuration(validation.metrics);
+  renderValidation(validation.errors);
+
+  if (validation.errors.length) {
+    setMessage('Submission blocked until the required foundational experience fields and job description upload are complete.');
+    return;
+  }
+
+  const now = new Date().toISOString();
+  report.status = 'Pending Supervisor/mentor approval';
+  report.submittedAt = now;
+  report.updatedAt = now;
+  report.workflowRoute = `Submitted independently to ${report.roleInfo.supervisorName} (${report.roleInfo.supervisorEmail}). After supervisor approval, the report moves to the CPA review queue for triage and assignment.`;
+  report.notifications.push({
+    type: 'Supervisor notification',
+    sentAt: now,
+    recipient: report.roleInfo.supervisorEmail
+  });
+
+  renderAll();
+  renderValidation([]);
+  window.location.href = '../../index.html';
+}
+
+function withdrawReport() {
+  const report = getActiveReport();
+  if (!report) {
+    setMessage('No foundational experience report is available to delete.');
+    return;
+  }
+
+  const reportIndex = reports.findIndex((item) => item.id === report.id);
+  if (reportIndex === -1) return;
+
+  reports.splice(reportIndex, 1);
+
+  if (!reports.length) {
+    const replacementReport = createEmptyReport(1);
+    reports.push(replacementReport);
+    activeReportId = replacementReport.id;
+  } else {
+    const nextIndex = Math.min(reportIndex, reports.length - 1);
+    activeReportId = reports[nextIndex].id;
+  }
+
+  renderAll();
+  setMessage('Foundational experience report deleted.');
+}
+
+function escapeHtml(value) {
+  return String(value || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+reportList.addEventListener('click', (event) => {
+  const card = event.target.closest('[data-report-id]');
+  if (!card) return;
+  switchReport(card.dataset.reportId);
+});
+
+jobDescriptionList.addEventListener('click', (event) => {
+  const button = event.target.closest('[data-remove-doc]');
+  if (!button) return;
+  removeDocument(button.dataset.removeDoc);
+});
+
+supportingDocList.addEventListener('click', (event) => {
+  const button = event.target.closest('[data-remove-doc]');
+  if (!button) return;
+  removeDocument(button.dataset.removeDoc);
+});
+
+document.getElementById('add-report-btn').addEventListener('click', addReport);
+document.getElementById('attach-job-description-btn').addEventListener('click', () => attachFiles(jobDescriptionUpload, 'jobDescriptions', 'Job description'));
+document.getElementById('attach-supporting-btn').addEventListener('click', () => attachFiles(supportingDocsUpload, 'supporting', 'Supporting document'));
+document.getElementById('save-draft-btn').addEventListener('click', saveDraft);
+document.getElementById('submit-report-btn').addEventListener('click', submitReport);
+document.getElementById('withdraw-report-btn').addEventListener('click', withdrawReport);
+
+Object.values(formIds).forEach((id) => {
+  document.getElementById(id).addEventListener('input', () => {
+    readFormIntoReport();
+    const report = getActiveReport();
+    const validation = validateReport(report, false);
+    renderDuration(validation.metrics);
+    renderMeta(report, validation);
+  });
+});
+
+loadReports();
+renderAll();
+</script>
+</body>
+</html>
+
+
+
