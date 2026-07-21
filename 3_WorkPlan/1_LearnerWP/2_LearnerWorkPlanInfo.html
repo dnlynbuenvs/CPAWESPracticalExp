@@ -49,9 +49,9 @@
   .panel{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm)}
   .panel h2{font-size:17px;color:var(--navy);margin-bottom:4px}
   .panel-copy{font-size:12px;color:var(--gray-600);line-height:1.45}
-  .workspace{display:grid;grid-template-columns:minmax(0,1fr) 350px;gap:16px}
-  .form-panel,.meta-panel{padding:1.25rem}
-  .form-stack,.meta-stack,.section-stack,.task-stack,.statement-stack{display:flex;flex-direction:column;gap:16px}
+  .workspace{display:grid;grid-template-columns:minmax(0,1fr);gap:16px}
+  .form-panel{padding:1.25rem}
+  .form-stack,.section-stack,.task-stack,.statement-stack{display:flex;flex-direction:column;gap:16px}
   .form-section{padding:1rem;border:1px solid var(--gray-200);border-radius:var(--radius-md);background:var(--sand)}
   .form-section h3{font-size:15px;color:var(--navy);margin-bottom:6px}
   .field-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
@@ -141,7 +141,7 @@
   <section class="hero" aria-labelledby="competency-title">
     <div>
       <h1 id="competency-title">Select work plan competencies</h1>
-      <p>Choose the core competency path for the learner's professional experience, select core task statements and current levels, confirm all required sub-task statements, and complete every DC statement before the work plan moves forward for approval.</p>
+      <p>Choose the core competency path for the learner's professional experience, select core task statements and current levels, and complete every DC statement before the work plan moves forward for approval.</p>
     </div>
     <div class="hero-badge"><span class="dot"></span><span id="hero-summary">Competency setup in progress</span></div>
   </section>
@@ -155,7 +155,7 @@
     <section class="panel form-panel">
       <div class="section-label">Reporting work plan experience</div>
       <h2>Competency mapping</h2>
-      <p class="panel-copy">Core competency choices drive which task statement sections appear. Where the learner's role type or template requires it, Assurance and Trust is added automatically.</p>
+      <p class="panel-copy">Core competency choices drive which task statement sections appear for the learner's work plan.</p>
 
       <div class="form-stack" style="margin-top:1rem;">
         <section class="form-section">
@@ -184,11 +184,7 @@
         <section class="form-section">
           <h3>Core competency selection</h3>
           <div class="option-grid" id="core-competency-grid"></div>
-          <div class="notice-box" id="competency-note" style="margin-top:1rem;">
-            <strong>Competency form logic</strong>
-            <span>Select Financial Reporting, Management Accounting, or a combination of both. The system will then display the corresponding task statement sections and any required Assurance and Trust content.</span>
-          </div>
-          <div class="subcopy" style="margin-top:.75rem;">Available competency areas for work plan mapping are shown below. Core competency choices are required; additional areas may be auto-applied based on the learner's role type and template.</div>
+          <div class="subcopy" style="margin-top:.75rem;">Available competency areas for work plan mapping are shown below. Core competency choices are required for this work plan.</div>
           <div class="reference-grid" id="competency-reference-grid" style="margin-top:1rem;"></div>
         </section>
 
@@ -226,11 +222,7 @@
         </section>
 
         <section class="form-section">
-          <h3>Save competency setup</h3>
-          <div class="notice-box success" id="save-note">
-            <strong>Competency draft</strong>
-            <span>Core competency choices, task statements, current levels, and DC statements are stored as part of the learner's work plan record.</span>
-          </div>
+          <h3>Actions</h3>
           <div class="button-row" style="margin-top:1rem;">
             <button class="action-btn" id="save-draft-btn" type="button">Save draft</button>
             <button class="action-btn primary" id="continue-btn" type="button">Continue</button>
@@ -238,51 +230,6 @@
         </section>
       </div>
     </section>
-
-    <aside class="panel meta-panel">
-      <div class="section-label">Completion summary</div>
-      <h2>Current progress</h2>
-      <div class="meta-stack">
-        <div class="meta-card">
-          <strong>Work plan context</strong>
-          <span id="summary-context">Loading work plan context.</span>
-        </div>
-        <div class="meta-card">
-          <strong>Work plan dates and duration</strong>
-          <span id="summary-duration">Loading saved work plan duration.</span>
-        </div>
-        <div class="meta-card">
-          <strong>Selected core competencies</strong>
-          <div class="pill-row" id="summary-competencies"></div>
-        </div>
-        <div class="metric-grid">
-          <div class="metric-card">
-            <div class="value" id="metric-core-tasks">0</div>
-            <strong>Core tasks selected</strong>
-            <span>Minimum 2 are required in each selected core competency area.</span>
-          </div>
-          <div class="metric-card">
-            <div class="value" id="metric-subtasks">0</div>
-            <strong>Sub-task statements confirmed</strong>
-            <span>All displayed sub-task statements must be Yes with a current level.</span>
-          </div>
-          <div class="metric-card">
-            <div class="value" id="metric-dc">0</div>
-            <strong>DC statements completed</strong>
-            <span>Every DC statement needs a current level before submission.</span>
-          </div>
-          <div class="metric-card">
-            <div class="value" id="metric-issues">0</div>
-            <strong>Open validation items</strong>
-            <span>Resolve all required items before continuing.</span>
-          </div>
-        </div>
-        <div class="meta-card">
-          <strong>Assurance and Trust</strong>
-          <span id="summary-assurance">Checking if Assurance and Trust is required from the current work plan context.</span>
-        </div>
-      </div>
-    </aside>
   </section>
 </main>
 
@@ -301,91 +248,46 @@ const competencyCatalog = {
     tasks: [
       {
         id: 'fr-1',
-        title: 'Prepare financial information and working papers',
-        subtasks: [
-          'Prepare reconciliations and supporting schedules',
-          'Document accounting entries and review adjustments',
-          'Explain reporting impacts to stakeholders'
-        ]
+        title: 'FR1 - Assess decision makers\' needs and actively design the development/ modification of reporting requirements or financial-reporting systems required to meet external user needs, such as an MD&A or financing needs (a large, complex example, or several smaller ones).',
+        subtasks: []
       },
       {
         id: 'fr-2',
-        title: 'Apply accounting policies and standards',
-        subtasks: [
-          'Assess treatment of common transactions',
-          'Document policy conclusions and judgments',
-          'Identify disclosure implications'
-        ]
+        title: 'FR2 - Critically evaluate and reach a preliminary conclusion on three distinct GAAP (or equivalent) transactions based on management requests, using the CPA Canada Handbook (or equivalent) as guidance.',
+        subtasks: []
       },
       {
         id: 'fr-3',
-        title: 'Analyze financial reporting results',
-        subtasks: [
-          'Interpret variances and reporting trends',
-          'Summarize drivers affecting results',
-          'Communicate implications to management'
-        ]
-      }
-    ]
-  },
-  ma: {
-    id: 'ma',
-    name: 'Management Accounting',
-    kind: 'core',
-    description: 'Planning, analysis, budgeting, performance, and management decision support.',
-    tasks: [
-      {
-        id: 'ma-1',
-        title: 'Support planning and budgeting',
-        subtasks: [
-          'Prepare budget inputs and assumptions',
-          'Analyze forecast changes and risks',
-          'Present planning outputs to management'
-        ]
+        title: 'FR3 - Prepare and critically evaluate financial statements and notes in accordance with GAAP or equivalent over two business periods (at least one of which is year-end).',
+        subtasks: []
       },
       {
-        id: 'ma-2',
-        title: 'Measure operational performance',
-        subtasks: [
-          'Track KPIs and operating metrics',
-          'Interpret cost and margin movements',
-          'Recommend performance follow-up actions'
-        ]
-      },
-      {
-        id: 'ma-3',
-        title: 'Support management decisions',
-        subtasks: [
-          'Assess financial implications of alternatives',
-          'Model decision scenarios and sensitivities',
-          'Summarize recommendations for leadership'
-        ]
+        id: 'fr-4',
+        title: 'FR4 - Assess variances on historical, year-over-year financial statements and interpret the root causes, including insights into interconnectivity of multiple line items (over two business periods, at least one of which needs to be year-end).',
+        subtasks: []
       }
     ]
   },
   at: {
     id: 'at',
-    name: 'Assurance and Trust',
-    kind: 'auto',
-    description: 'Automatically included when the learner role type or template requires audit and assurance exposure.',
+    name: 'Assurance & Trust',
+    kind: 'core',
+    description: 'Assurance engagement planning, procedure design, and evidence-based conclusions.',
     tasks: [
       {
-        id: 'at-1',
-        title: 'Plan and perform assurance procedures',
-        subtasks: [
-          'Confirm procedure objectives and scope',
-          'Perform testing and document results',
-          'Communicate exceptions and conclusions'
-        ]
+        id: 'at-1a',
+        title: 'AT1a - Formulate the planning and risk assessment of the assurance engagement (including calculating materiality and assessing the control environment).',
+        subtasks: []
       },
       {
-        id: 'at-2',
-        title: 'Evaluate evidence and reporting implications',
-        subtasks: [
-          'Assess sufficiency of evidence obtained',
-          'Relate findings to reporting outcomes',
-          'Document professional judgment applied'
-        ]
+        id: 'at-1b',
+        title: 'AT1b - Design appropriate planned procedures that meet the objective of the engagement.',
+        subtasks: []
+      },
+      {
+        id: 'at-1c',
+        title: 'AT1c - Critically evaluate supporting information and results of analysis to draw conclusions and communicate results.',
+        subtasks: []
       }
     ]
   }
@@ -393,8 +295,7 @@ const competencyCatalog = {
 
 const competencyReferenceAreas = [
   { id:'fr', name:'Financial Reporting', kind:'core' },
-  { id:'ma', name:'Management Accounting', kind:'core' },
-  { id:'at', name:'Assurance and Trust', kind:'auto' },
+  { id:'at', name:'Assurance & Trust', kind:'core' },
   { id:'sg', name:'Strategy and Governance', kind:'reference' },
   { id:'md', name:'Management Decision-Making', kind:'reference' },
   { id:'fi', name:'Finance', kind:'reference' },
@@ -403,12 +304,37 @@ const competencyReferenceAreas = [
 ];
 
 const dcStatements = [
-  'Demonstrate ethical awareness and professional judgment',
-  'Communicate clearly with stakeholders and team members',
-  'Use data, systems, and digital tools appropriately',
-  'Manage time, priorities, and personal accountability',
-  'Collaborate effectively with others in a professional setting',
-  'Apply critical thinking and problem-solving in day-to-day work'
+  {
+    title: 'DC1 (Professional Skepticism)',
+    description: 'Critically evaluate actions and decisions by consistently demonstrating:',
+    bullets: [
+      'A questioning mindset',
+      'Awareness of new information and changes in facts and circumstances which could indicate possible misstatement due to error or fraud (spotting trends and irregularities)',
+      'Critical thinking skills applied to the evidence (how you interpret the story)',
+      'Awareness of how conscious and unconscious bias might impact how data or information is used, analyzed, or reported'
+    ]
+  },
+  {
+    title: 'DC2 (Ethical Decision Making)',
+    description: 'Critically evaluate a decision by consistently demonstrating:',
+    bullets: [
+      'Understanding of the higher level of accountability and responsibility afforded by being part of the CPA profession',
+      'Adherence to the Provincial/Regional Body\'s CPA Code of Professional Conduct including:',
+      'i) maintaining the good reputation of the profession, protecting the public and acting in the public interest',
+      'ii) performing with integrity and due care',
+      'iii) avoiding compromise of professional judgment by bias, conflict of interest or undue influence',
+      'iv) exhibiting behaviours to comply with laws, regulations, organizational policies, societal norms and personal ideals',
+      'v) identifying and raising unethical behaviours (if applicable)'
+    ]
+  },
+  {
+    title: 'DC3 (Communication)',
+    description: 'Demonstrate ability to consistently:',
+    bullets: [
+      'Communicate analyses, findings, decision and next steps in a transparent, understandable, and professional manner, with due consideration of audience and appropriate communication channels/tools.',
+      'Assess that all communications fairly reflect underlying substance without bias.'
+    ]
+  }
 ];
 
 const workPlan = JSON.parse(localStorage.getItem(workPlanKey) || 'null') || {};
@@ -425,7 +351,6 @@ const defaultState = {
 let competencyState = savedCompetencies || defaultState;
 
 const coreCompetencyGrid = document.getElementById('core-competency-grid');
-const competencyNote = document.getElementById('competency-note');
 const referenceGrid = document.getElementById('competency-reference-grid');
 const coreTaskSections = document.getElementById('core-task-sections');
 const subtaskSections = document.getElementById('subtask-sections');
@@ -433,14 +358,6 @@ const dcSection = document.getElementById('dc-section');
 const messageBar = document.getElementById('message-bar');
 const messageText = document.getElementById('message-text');
 const heroSummary = document.getElementById('hero-summary');
-const summaryContext = document.getElementById('summary-context');
-const summaryDuration = document.getElementById('summary-duration');
-const summaryCompetencies = document.getElementById('summary-competencies');
-const metricCoreTasks = document.getElementById('metric-core-tasks');
-const metricSubtasks = document.getElementById('metric-subtasks');
-const metricDc = document.getElementById('metric-dc');
-const metricIssues = document.getElementById('metric-issues');
-const summaryAssurance = document.getElementById('summary-assurance');
 const snapshotStartDate = document.getElementById('snapshot-start-date');
 const snapshotCompletionDate = document.getElementById('snapshot-completion-date');
 const snapshotLeaves = document.getElementById('snapshot-leaves');
@@ -504,24 +421,14 @@ function selectedRolePlans() {
     : [];
 }
 
-function assuranceRequired() {
-  const preReviewedRole = workPlan.preReviewed && workPlan.preReviewed.roleName ? workPlan.preReviewed.roleName : '';
-  return roleTypeLabel() === 'Firm - Audit & Assurance'
-    || selectedRolePlans().includes('Audit and assurance')
-    || /audit|assurance/i.test(preReviewedRole);
-}
-
 function activeCoreCompetencies() {
   if (competencyState.coreMode === 'fr') return ['fr'];
-  if (competencyState.coreMode === 'ma') return ['ma'];
-  if (competencyState.coreMode === 'both') return ['fr', 'ma'];
+  if (competencyState.coreMode === 'at') return ['at'];
   return [];
 }
 
 function activeApplicableCompetencies() {
-  const active = [...activeCoreCompetencies()];
-  if (assuranceRequired()) active.push('at');
-  return active;
+  return [...activeCoreCompetencies()];
 }
 
 function taskSelection(taskId) {
@@ -547,6 +454,10 @@ function parseSubtaskKey(key) {
   };
 }
 
+function displayedSubtasks(task) {
+  return task.subtasks && task.subtasks.length ? task.subtasks : [task.title];
+}
+
 function dcLevel(index) {
   if (!competencyState.dcLevels[index]) {
     competencyState.dcLevels[index] = '';
@@ -557,8 +468,7 @@ function dcLevel(index) {
 function renderCoreCompetencySelection() {
   const options = [
     { id:'fr', title:'Financial Reporting', description:'Use Financial Reporting as the primary core competency area.' },
-    { id:'ma', title:'Management Accounting', description:'Use Management Accounting as the primary core competency area.' },
-    { id:'both', title:'Combination of FR + MA', description:'Use both core competency areas and complete the required task mapping for each.' }
+    { id:'at', title:'Assurance & Trust', description:'Use Assurance & Trust as the primary core competency area.' }
   ];
 
   coreCompetencyGrid.innerHTML = options.map((option) => `
@@ -568,21 +478,15 @@ function renderCoreCompetencySelection() {
     </article>
   `).join('');
 
-  competencyNote.className = assuranceRequired() ? 'notice-box success' : 'notice-box';
-  competencyNote.innerHTML = assuranceRequired()
-    ? '<strong>Assurance and Trust included</strong><span>Because the learner work plan context includes audit and assurance exposure, the system automatically applies Assurance and Trust sections alongside the selected core competency area.</span>'
-    : '<strong>Competency form logic</strong><span>Select Financial Reporting, Management Accounting, or a combination of both. The system will then display the corresponding task statement sections and any required Assurance and Trust content.</span>';
 }
 
 function renderReferenceGrid() {
   referenceGrid.innerHTML = competencyReferenceAreas.map((area) => {
     const classes = [
       'reference-card',
-      activeCoreCompetencies().includes(area.id) ? 'core' : '',
-      area.id === 'at' && assuranceRequired() ? 'auto' : ''
+      activeCoreCompetencies().includes(area.id) ? 'core' : ''
     ].filter(Boolean).join(' ');
     let helper = 'Available in the broader work plan framework.';
-    if (area.id === 'at' && assuranceRequired()) helper = 'Automatically included from the current work plan context.';
     if (activeCoreCompetencies().includes(area.id)) helper = 'Selected as a required core competency for this work plan.';
     return `<div class="${classes}"><strong>${escapeHtml(area.name)}</strong><span>${escapeHtml(helper)}</span></div>`;
   }).join('');
@@ -661,7 +565,7 @@ function renderSubtaskSections() {
             <div>
               <div class="subcopy" style="margin-bottom:.75rem;"><strong>${escapeHtml(task.title)}</strong></div>
               <div class="subtask-list">
-                ${task.subtasks.map((subtask, index) => {
+                ${displayedSubtasks(task).map((subtask, index) => {
                   const selection = subtaskSelection(task.id, index);
                   return `
                     <div class="statement-card">
@@ -706,8 +610,9 @@ function renderDcSection() {
     <div class="statement-card">
       <div class="statement-row">
         <div>
-          <strong>${escapeHtml(statement)}</strong>
-          <span>Mandatory DC statement</span>
+          <strong>${escapeHtml(statement.title)}</strong>
+          <span>${escapeHtml(statement.description)}</span>
+          <span>${statement.bullets.map((bullet) => `- ${escapeHtml(bullet)}`).join('<br>')}</span>
         </div>
         <div class="field">
           <label>Required</label>
@@ -747,7 +652,7 @@ function validateState() {
 
   activeAll.forEach((competencyId) => {
     selectedTasksForCompetency(competencyId).forEach((task) => {
-      task.subtasks.forEach((subtask, index) => {
+      displayedSubtasks(task).forEach((subtask, index) => {
         const selection = subtaskSelection(task.id, index);
         if (selection.applicable !== 'Yes') {
           issues.push(`"${subtask}" must be marked Yes for ${task.title}.`);
@@ -761,7 +666,7 @@ function validateState() {
 
   dcStatements.forEach((statement, index) => {
     if (!dcLevel(index)) {
-      issues.push(`Current level is required for DC statement "${statement}".`);
+      issues.push(`Current level is required for DC statement "${statement.title}".`);
     }
   });
 
@@ -769,34 +674,7 @@ function validateState() {
 }
 
 function renderSummary() {
-  const activeCore = activeCoreCompetencies();
-  const activeAll = activeApplicableCompetencies();
-  const selectedTaskCount = activeAll.reduce((count, competencyId) => count + selectedTasksForCompetency(competencyId).length, 0);
-  const subtaskCount = activeAll.reduce((count, competencyId) => count + selectedTasksForCompetency(competencyId).reduce((sum, task) => sum + task.subtasks.filter((subtask, index) => {
-    const selection = subtaskSelection(task.id, index);
-    return selection.applicable === 'Yes' && Boolean(selection.level);
-  }).length, 0), 0);
-  const completedDcCount = dcStatements.filter((statement, index) => Boolean(dcLevel(index))).length;
   const issues = validateState();
-  const duration = calculateWorkPlanDuration();
-
-  summaryContext.textContent = `${roleTypeLabel()} | ${workPlan.preReviewed && workPlan.preReviewed.templatePath ? workPlan.preReviewed.templatePath : 'Standard template path'} | ${workPlan.employerDetails && workPlan.employerDetails.organizationName ? workPlan.employerDetails.organizationName : 'Employer not yet stored'}`;
-  summaryDuration.textContent = duration.valid
-    ? `${duration.potentialMonths.toFixed(2)} potential month(s) | ${Math.round(duration.estimatedHours)} estimated hour(s) | Actual gained PE: ${(workPlan.duration && workPlan.duration.actualGainedPE) || 'Pending CPA Reviewer'}`
-    : 'Saved work plan dates are incomplete, so duration cannot be calculated yet.';
-  summaryCompetencies.innerHTML = activeCore.length
-    ? activeCore.map((id) => `<span class="pill">${escapeHtml(competencyCatalog[id].name)}</span>`).concat(assuranceRequired() ? ['<span class="pill">Assurance and Trust</span>'] : []).join('')
-    : '<span class="pill">No core competency selected</span>';
-
-  metricCoreTasks.textContent = String(selectedTaskCount);
-  metricSubtasks.textContent = String(subtaskCount);
-  metricDc.textContent = String(completedDcCount);
-  metricIssues.textContent = String(issues.length);
-
-  summaryAssurance.textContent = assuranceRequired()
-    ? 'Assurance and Trust applies automatically from the learner role type, selected role plan, or pre-reviewed role context.'
-    : 'Assurance and Trust is not currently required from the saved work plan context.';
-
   heroSummary.textContent = issues.length
     ? `Competency setup | ${issues.length} item${issues.length === 1 ? '' : 's'} still to complete`
     : 'Competency setup ready for the next step';
@@ -851,16 +729,16 @@ coreTaskSections.addEventListener('change', (event) => {
   const taskId = event.target.dataset.taskCheck || event.target.dataset.taskLevel;
   if (!taskId) return;
 
-  if (event.target.dataset.taskCheck) {
-    taskSelection(taskId).selected = event.target.checked;
-    if (!event.target.checked) {
-      taskSelection(taskId).level = '';
-      const relatedTask = Object.values(competencyCatalog).flatMap((item) => item.tasks || []).find((task) => task.id === taskId);
-      if (relatedTask) {
-        relatedTask.subtasks.forEach((subtask, index) => {
-          competencyState.subtaskSelections[`${taskId}-${index}`] = { applicable: '', level: '' };
-        });
-      }
+    if (event.target.dataset.taskCheck) {
+      taskSelection(taskId).selected = event.target.checked;
+      if (!event.target.checked) {
+        taskSelection(taskId).level = '';
+        const relatedTask = Object.values(competencyCatalog).flatMap((item) => item.tasks || []).find((task) => task.id === taskId);
+        if (relatedTask) {
+          displayedSubtasks(relatedTask).forEach((subtask, index) => {
+            competencyState.subtaskSelections[`${taskId}-${index}`] = { applicable: '', level: '' };
+          });
+        }
     }
   }
 
@@ -895,7 +773,7 @@ document.getElementById('save-draft-btn').addEventListener('click', () => {
   const issues = validateState();
   setMessage(issues.length
     ? `Competency draft saved with ${issues.length} item${issues.length === 1 ? '' : 's'} still to complete.`
-    : 'Competency draft saved. Core tasks, subtasks, and DC statements are complete for this step.');
+    : 'Competency draft saved. Core tasks and DC statements are complete for this step.');
   renderSummary();
 });
 
