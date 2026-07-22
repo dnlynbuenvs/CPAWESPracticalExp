@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPA - CPA Approval Final Report</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {--navy:#0B1F3A;--blue:#1B5EA8;--green:#2D7A4E;--amber:#E76F1A;--red:#C0392B;--sand:#F7F5F2;--white:#FFF;--gray-100:#F2F1EF;--gray-200:#E4E2DE;--gray-400:#A8A49E;--gray-600:#6B6760;--gray-800:#2E2C2A;--shadow-sm:0 1px 3px rgba(11,31,58,.07),0 1px 2px rgba(11,31,58,.05);--radius-sm:6px;--radius-md:10px;--radius-lg:16px}
+  *{box-sizing:border-box;margin:0;padding:0} body{font-family:'DM Sans',sans-serif;background:var(--sand);color:var(--gray-800);min-height:100vh} a{text-decoration:none;color:inherit} button,textarea{font:inherit} textarea{resize:vertical}
+  .topbar{background:var(--navy);min-height:60px;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:0 2rem}.logo-group{display:flex;align-items:center;gap:10px;min-width:225px}.logo-mark{width:36px;height:36px;background:var(--white);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center}.logo-text{display:flex;flex-direction:column;line-height:1.1}.logo-text .brand{font-size:13px;font-weight:600;color:var(--white);letter-spacing:.04em}.logo-text .sub{font-size:10px;color:rgba(255,255,255,.5);letter-spacing:.02em;text-transform:uppercase}.topbar-right{display:flex;align-items:center;gap:12px}.nav-links{display:flex;align-items:center;gap:2px}.nav-links a{color:rgba(255,255,255,.55);font-size:14px;padding:8px 16px;border-radius:var(--radius-sm)}.nav-links a.active,.nav-links a:hover{color:var(--white);background:rgba(255,255,255,.08)}
+  .role-dropdown{position:relative}.role-trigger{list-style:none;display:flex;align-items:center;gap:10px;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);color:var(--white);font-size:13px;font-weight:600;cursor:pointer}.role-trigger::-webkit-details-marker{display:none}.role-label{display:inline-flex;align-items:center;justify-content:center;min-width:92px}.role-caret{font-size:11px;color:rgba(255,255,255,.72)}.role-menu{position:absolute;right:0;top:calc(100% + 10px);min-width:190px;padding:8px;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);box-shadow:0 12px 30px rgba(11,31,58,.14);display:flex;flex-direction:column;gap:4px;z-index:20}.role-option{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:var(--radius-sm);font-size:13px;color:var(--gray-800)}.role-option:hover{background:var(--gray-100)}.role-option.active{background:#EBF3FF;color:var(--blue);font-weight:600}
+  .page{max-width:1440px;margin:0 auto;padding:2rem 2rem 4rem}.hero{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--gray-200)}.hero h1{font-family:'DM Serif Display',serif;font-size:38px;font-weight:400;color:var(--navy);margin-bottom:6px}.hero p{font-size:14px;color:var(--gray-600);max-width:840px;line-height:1.5}.hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);padding:10px 16px;box-shadow:var(--shadow-sm);font-size:13px;color:var(--gray-600)}.dot{width:8px;height:8px;border-radius:50%;background:var(--blue)}
+  .message-bar{display:none;align-items:center;gap:10px;margin-bottom:1rem;padding:12px 14px;border-radius:var(--radius-md);background:#EBF3FF;border:1px solid rgba(27,94,168,.18);color:var(--navy);box-shadow:var(--shadow-sm)}.message-bar.visible{display:flex}
+  .workspace{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:16px}.panel{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm)}.main-panel,.side-panel{padding:1.25rem}.section-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gray-400);margin-bottom:.75rem}.panel h2{font-size:17px;color:var(--navy);margin-bottom:4px}.panel-copy{font-size:12px;color:var(--gray-600);line-height:1.45}.stack,.meta-stack{display:flex;flex-direction:column;gap:16px}
+  .info-section{padding:1rem;border:1px solid var(--gray-200);border-radius:var(--radius-md);background:var(--sand)}.info-section h3{font-size:15px;color:var(--navy);margin-bottom:6px}.grid-2,.grid-3{display:grid;gap:12px}.grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}.grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}.value-card,.meta-card,.readonly-block,.task-card{padding:12px;border-radius:var(--radius-md);border:1px solid var(--gray-200);background:var(--white)}.value-card span,.meta-card span,.readonly-block span,.task-card span{display:block;font-size:12px;color:var(--gray-600);line-height:1.45}.value-card strong,.meta-card strong,.readonly-block strong,.task-card strong{display:block;font-size:13px;color:var(--navy);margin-bottom:4px}.readonly-block{background:#F7FAFF}.task-list{display:flex;flex-direction:column;gap:10px}
+  .field{display:flex;flex-direction:column;gap:6px}.field label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gray-400)}.field textarea{border:1px solid var(--gray-200);border-radius:var(--radius-sm);background:var(--white);padding:10px 12px;color:var(--gray-800);min-height:120px}.button-row{display:flex;flex-wrap:wrap;gap:8px}.action-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:var(--radius-sm);border:1px solid var(--gray-200);padding:9px 12px;background:var(--white);color:var(--navy);font-size:12px;font-weight:700;cursor:pointer}.action-btn.success{background:#E8F5EE;border-color:rgba(45,122,78,.22);color:var(--green)}.action-btn.danger{background:#FDECEA;border-color:rgba(192,57,43,.18);color:var(--red)}.action-btn.primary{background:#EBF3FF;border-color:rgba(27,94,168,.28);color:var(--blue)}
+  .status-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:5px 10px;border-radius:20px}.status-badge .dot{width:6px;height:6px}.badge-pending{background:#FEF3E8;color:var(--amber)} .badge-pending .dot{background:var(--amber)}.badge-approved{background:#E8F5EE;color:var(--green)} .badge-approved .dot{background:var(--green)}.badge-declined{background:#FDECEA;color:var(--red)} .badge-declined .dot{background:var(--red)}
+  .empty-state{padding:18px;border:1px dashed var(--gray-200);border-radius:var(--radius-md);background:var(--white);font-size:13px;color:var(--gray-600);text-align:center}
+  @media(max-width:1080px){.workspace{grid-template-columns:1fr}} @media(max-width:760px){.topbar{align-items:flex-start;flex-direction:column;padding:1rem}.nav-links{display:none}.topbar-right{width:100%;justify-content:space-between}.page{padding:1.25rem 1rem 3rem}.hero{flex-direction:column;align-items:flex-start}.hero h1{font-size:34px}.grid-2,.grid-3{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="logo-group"><div class="logo-mark"><svg width="24" height="20" viewBox="0 0 24 20" fill="none" aria-hidden="true"><path d="M2 10C2 5.58 5.58 2 10 2h4c4.42 0 8 3.58 8 8s-3.58 8-8 8h-4C5.58 18 2 14.42 2 10z" fill="#0B1F3A" opacity="0.12"/><path d="M7 10.5l3 3 7-7" stroke="#0B1F3A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="logo-text"><span class="brand">CPA Canada</span><span class="sub">Chartered Professional Accountants</span></div></div>
+  <div class="topbar-right">
+    <nav class="nav-links" aria-label="Primary navigation"><a href="../1_Dashboard/CPAReviewer.html">Dashboard</a><a href="4_CPAApprovalFinalReport.html" class="active">Final report review</a></nav>
+    <details class="role-dropdown"><summary class="role-trigger"><span class="role-label">CPA Reviewer</span><span class="role-caret">&#9662;</span></summary><div class="role-menu"><a class="role-option" href="../index.html">Learner</a><a class="role-option active" href="../1_Dashboard/CPAReviewer.html">CPA Reviewer</a><a class="role-option" href="../1_Dashboard/MentorDashboard.html">Mentor</a><a class="role-option" href="../1_Dashboard/PTSBStaffDashboard.html">PTSB Staff</a>        <a class="role-option" href="../8_MentorOnboarding/1_MentorOnboarding.html">Mentor onboarding</a>
+      </div></details>
+  </div>
+</header>
+
+<main class="page">
+  <section class="hero" aria-labelledby="cpa-final-title">
+    <div><h1 id="cpa-final-title">CPA approval final report</h1><p>Review the full final experience report, then approve, reject, or request revisions. A comment is required for rejection or revision requests.</p></div>
+    <div class="hero-badge"><span class="dot"></span><span id="hero-summary">Pending CPA review</span></div>
+  </section>
+  <div class="message-bar" id="message-bar" role="status" aria-live="polite"><span class="dot"></span><span id="message-text"></span></div>
+  <section class="workspace">
+    <section class="panel main-panel">
+      <div class="section-label">CPA review</div>
+      <h2>Final report details</h2>
+      <p class="panel-copy">All learner-submitted final report details are shown below in read-only mode for CPA review.</p>
+      <div class="stack" style="margin-top:1rem;">
+        <section class="info-section"><h3>Final report summary</h3><div class="grid-2" id="summary-grid"></div><div class="readonly-block" style="margin-top:1rem;"><strong>Final experience summary</strong><span id="final-summary"></span></div><div class="readonly-block" style="margin-top:1rem;"><strong>Completion rationale</strong><span id="completion-rationale"></span></div></section>
+        <section class="info-section"><h3>Duration confirmation and leave</h3><div class="grid-3" id="duration-grid"></div></section>
+        <section class="info-section"><h3>Chargeable hours attachment</h3><div id="attachment-list" class="task-list"></div></section>
+        <section class="info-section"><h3>Final competency assessment</h3><div id="core-list" class="task-list"></div></section>
+        <section class="info-section"><h3>DC statements</h3><div id="dc-list" class="task-list"></div></section>
+        <section class="info-section"><h3>CPA decision</h3><div class="field"><label for="cpa-comment">CPA reviewer comment</label><textarea id="cpa-comment" placeholder="Enter review comments. This is required for rejection or revision requests."></textarea></div><div class="button-row" style="margin-top:1rem;"><button class="action-btn success" id="approve-btn" type="button">Approve final report</button><button class="action-btn danger" id="reject-btn" type="button">Reject final report</button><button class="action-btn primary" id="revision-btn" type="button">Request revisions</button></div></section>
+      </div>
+    </section>
+    <aside class="panel side-panel"><div class="section-label">Status and routing</div><h2>Review metadata</h2><div class="meta-stack"><div class="meta-card"><strong>Current status</strong><span id="meta-status"></span></div><div class="meta-card"><strong>Mentor decision</strong><span id="meta-mentor"></span></div><div class="meta-card"><strong>Learner notifications</strong><span id="meta-notification"></span></div><div class="meta-card"><strong>Submitted date and time</strong><span id="meta-submitted"></span></div></div></aside>
+  </section>
+</main>
+
+<script>
+const finalReportKey='finalExperienceReport:learner-101';
+const report=JSON.parse(localStorage.getItem(finalReportKey)||'null');
+const coreOrder=['fr1','fr2','fr3','fr4','at1a','at1b','at1c'];
+const coreTitles={fr1:'FR1 - Assess decision makers\' needs and actively design the development/ modification of reporting requirements or financial-reporting systems required to meet external user needs, such as an MD&A or financing needs (a large, complex example, or several smaller ones).',fr2:'FR2 - Critically evaluate and reach a preliminary conclusion on three distinct GAAP (or equivalent) transactions based on management requests, using the CPA Canada Handbook (or equivalent) as guidance.',fr3:'FR3 - Prepare and critically evaluate financial statements and notes in accordance with GAAP or equivalent over two business periods (at least one of which is year-end).',fr4:'FR4 - Assess variances on historical, year-over-year financial statements and interpret the root causes, including insights into interconnectivity of multiple line items (over two business periods, at least one of which needs to be year-end).',at1a:'AT1a - Formulate the planning and risk assessment of the assurance engagement (including calculating materiality and assessing the control environment).',at1b:'AT1b - Design appropriate planned procedures that meet the objective of the engagement.',at1c:'AT1c - Critically evaluate supporting information and results of analysis to draw conclusions and communicate results.'};
+const dcOrder=['dc1','dc2','dc3']; const dcTitles={dc1:'DC1 (Professional Skepticism)',dc2:'DC2 (Ethical Decision Making)',dc3:'DC3 (Communication)'};
+function escapeHtml(value){return String(value||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
+function formatDate(dateValue){if(!dateValue)return'Not submitted';const d=new Date(dateValue);if(Number.isNaN(d.getTime()))return'Not submitted';return d.toLocaleString('en-CA',{year:'numeric',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})}
+function renderCards(id, values){document.getElementById(id).innerHTML=values.map((item)=>`<div class="value-card"><span>${escapeHtml(item.label)}</span><strong>${escapeHtml(item.value)}</strong></div>`).join('')}
+function badge(status){if(status==='Approved')return `<span class="status-badge badge-approved"><span class="dot"></span>${escapeHtml(status)}</span>`;if(/reject|revision/i.test(status||''))return `<span class="status-badge badge-declined"><span class="dot"></span>${escapeHtml(status)}</span>`;return `<span class="status-badge badge-pending"><span class="dot"></span>${escapeHtml(status||'Pending CPA Review')}</span>`}
+function save(){localStorage.setItem(finalReportKey, JSON.stringify(report))}
+function notify(message){const bar=document.getElementById('message-bar');document.getElementById('message-text').textContent=message;bar.classList.add('visible')}
+if(!report){document.querySelector('.workspace').innerHTML='<div class="panel main-panel"><div class="empty-state">No final experience report is available for CPA review yet.</div></div>'} else {
+  document.getElementById('hero-summary').textContent=`Current status: ${report.status || 'Pending CPA Review'}`;
+  renderCards('summary-grid',[{label:'Learner name',value:report.learnerName||'Not recorded'},{label:'Learner ID',value:report.learnerId||'Not recorded'},{label:'Current employer',value:report.employer||'Not recorded'},{label:'Current mentor',value:report.mentor||'Not recorded'}]);
+  document.getElementById('final-summary').textContent=report.finalSummary||'Not provided.';
+  document.getElementById('completion-rationale').textContent=report.completionRationale||'Not provided.';
+  renderCards('duration-grid',[{label:'Confirmed eligible duration (months)',value:report.confirmedMonths===''?'Not confirmed':Number(report.confirmedMonths).toFixed(2)},{label:'Confirmed total hours',value:report.confirmedHours||'Not confirmed'},{label:'Leave days shown',value:report.leaveDaysShown||'From work plan'}]);
+  const attachments=report.attachments||[];
+  document.getElementById('attachment-list').innerHTML=attachments.length?attachments.map((item)=>`<div class="task-card"><strong>${escapeHtml(item.name)}</strong><span>${escapeHtml(item.note || 'Chargeable hour form')} | ${escapeHtml(item.uploadedAt || 'Saved')}</span></div>`).join(''):'<div class="empty-state">No chargeable hour form attached.</div>';
+  document.getElementById('core-list').innerHTML=coreOrder.map((id)=>{const item=(report.competencies||{})[id]||{};return `<div class="task-card"><strong>${escapeHtml(coreTitles[id])}</strong><span>Final level: ${escapeHtml(item.level || 'Not selected')}</span><span>${escapeHtml(item.evidence || 'No evidence summary recorded.')}</span></div>`}).join('');
+  document.getElementById('dc-list').innerHTML=dcOrder.map((id)=>{const item=(report.dc||{})[id]||{};return `<div class="task-card"><strong>${escapeHtml(dcTitles[id])}</strong><span>Final level: ${escapeHtml(item.level || 'Not selected')}</span><span>${escapeHtml(item.evidence || 'No evidence summary recorded.')}</span></div>`}).join('');
+  document.getElementById('meta-status').innerHTML=badge(report.status || 'Pending CPA Review');
+  document.getElementById('meta-mentor').textContent=report.mentorDecision || 'Pending mentor review.';
+  document.getElementById('meta-notification').textContent=(report.notifications||[]).length ? `${report.notifications.length} learner notification(s) recorded` : 'No learner notification recorded yet.';
+  document.getElementById('meta-submitted').textContent=formatDate(report.submittedAt);
+
+  function requireComment(actionLabel){
+    const comment = document.getElementById('cpa-comment').value.trim();
+    if(!comment){notify(`A comment is required to ${actionLabel}.`);return null;}
+    return comment;
+  }
+
+  document.getElementById('approve-btn').addEventListener('click', ()=> {
+    report.status='Approved';
+    report.cpaDecision='Approved by CPA Reviewer';
+    report.notifications = report.notifications || [];
+    report.notifications.push({type:'CPA approval notice', sentAt:new Date().toISOString(), recipient:report.learnerName || 'Learner', comments:document.getElementById('cpa-comment').value.trim() || 'Final report approved by CPA Reviewer.'});
+    save();
+    notify('Final report approved by CPA Reviewer.');
+    window.location.href='../1_Dashboard/CPAReviewer.html';
+  });
+  document.getElementById('reject-btn').addEventListener('click', ()=> {
+    const comment = requireComment('reject the final report');
+    if(comment === null) return;
+    report.status='Rejected by CPA Reviewer';
+    report.cpaDecision='Rejected by CPA Reviewer';
+    report.notifications = report.notifications || [];
+    report.notifications.push({type:'CPA rejection notice', sentAt:new Date().toISOString(), recipient:report.learnerName || 'Learner', comments:comment});
+    save();
+    notify('Final report rejected by CPA Reviewer.');
+    window.location.href='../1_Dashboard/CPAReviewer.html';
+  });
+  document.getElementById('revision-btn').addEventListener('click', ()=> {
+    const comment = requireComment('request revisions');
+    if(comment === null) return;
+    report.status='Revisions Requested by CPA Reviewer';
+    report.cpaDecision='Revisions requested by CPA Reviewer';
+    report.notifications = report.notifications || [];
+    report.notifications.push({type:'CPA revision request', sentAt:new Date().toISOString(), recipient:report.learnerName || 'Learner', comments:comment});
+    save();
+    notify('Revisions requested by CPA Reviewer.');
+    window.location.href='../1_Dashboard/CPAReviewer.html';
+  });
+}
+</script>
+</body>
+</html>

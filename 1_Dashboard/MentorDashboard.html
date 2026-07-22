@@ -166,6 +166,7 @@
         <a class="role-option" href="CPAReviewer.html">CPA Reviewer</a>
         <a class="role-option active" href="MentorDashboard.html">Mentor</a>
         <a class="role-option" href="PTSBStaffDashboard.html">PTSB Staff</a>
+              <a class="role-option" href="../8_MentorOnboarding/1_MentorOnboarding.html">Mentor onboarding</a>
       </div>
     </details>
   </div>
@@ -616,13 +617,8 @@ function renderLearners() {
         </td>
         <td>
           <div class="row-actions">
-            <button class="table-btn"
-                    type="button"
-                    data-action="open-learner"
-                    data-learner-id="${escapeHtml(learner.id)}"
-                    onclick="location.href='../2_ClaimFoundationalExp/2_SupervisorMentorFE/1_SupervisorMentorFEReview.html'">
-                Open submission
-            </button>            <button class="table-btn primary" type="button" data-action="approve-learner" data-learner-id="${escapeHtml(learner.id)}" ${disableApproval ? 'disabled' : ''}>Approve</button>
+            <button class="table-btn" type="button" data-action="open-learner" data-learner-id="${escapeHtml(learner.id)}">Open submission</button>
+            <button class="table-btn primary" type="button" data-action="approve-learner" data-learner-id="${escapeHtml(learner.id)}" ${disableApproval ? 'disabled' : ''}>Approve</button>
             <button class="table-btn danger" type="button" data-action="reject-learner" data-learner-id="${escapeHtml(learner.id)}" ${disableApproval ? 'disabled' : ''}>Reject</button>
             <button class="table-btn" type="button" data-action="competencies-learner" data-learner-id="${escapeHtml(learner.id)}">View competencies</button>
           </div>
@@ -706,6 +702,22 @@ function openLearnerSubmission(learnerId) {
   const review = getFirstPendingReview(learnerId);
 
   if (review) {
+    if (review.type === 'Work Plan') {
+      window.location.href = '../2_ClaimFoundationalExp/2_SupervisorMentorFE/1_SupervisorMentorFEReview.html';
+      return;
+    }
+    if (review.type === 'Foundational Experience') {
+      window.location.href = '../3_WorkPlan/2_MentorWP/1_MentorReviewWP.html';
+      return;
+    }
+    if (review.type === 'Check-In Report') {
+      window.location.href = '../4_RiskAssessment/2_MentorRiskAssessment/2_MentorReviewCheckin.html';
+      return;
+    }
+    if (review.type === 'Completion Report') {
+      window.location.href = '../5_FinalExperienceReport/3_MentorApprovalFinalReport.html';
+      return;
+    }
     openReview(review.id);
     return;
   }
@@ -746,22 +758,8 @@ function handleRosterDecision(learnerId, decision) {
 }
 
 function endSelectedRelationships() {
-  const selectedIds = Array.from(selectedLearners);
-  if (!selectedIds.length) return;
-
-  const selectedNames = selectedIds.map((id) => getLearnerById(id).name);
-  const confirmed = window.confirm(`End mentor relationship with ${selectedNames.length} learner${selectedNames.length === 1 ? '' : 's'}?`);
-  if (!confirmed) return;
-
-  selectedIds.forEach((id) => {
-    const learner = getLearnerById(id);
-    learner.relationshipEnded = true;
-  });
-
-  reviews = reviews.filter((review) => !selectedLearners.has(review.learnerId));
-  selectedLearners.clear();
-  setMessage(`Ended mentor relationship with ${selectedNames.join(', ')}.`);
-  renderAll();
+  if (!selectedLearners.size) return;
+  window.location.href = '../7_ReportJobChange/2_MentorJobChange/2_MentorEndRelationshipWithLearner.html';
 }
 
 function renderAll() {
@@ -809,6 +807,3 @@ renderAll();
 </script>
 </body>
 </html>
-
-
-

@@ -133,6 +133,7 @@
         <a class="role-option active" href="../../1_Dashboard/CPAReviewer.html">CPA Reviewer</a>
         <a class="role-option" href="../../1_Dashboard/MentorDashboard.html">Mentor</a>
         <a class="role-option" href="../../1_Dashboard/PTSBStaffDashboard.html">PTSB Staff</a>
+              <a class="role-option" href="../../8_MentorOnboarding/1_MentorOnboarding.html">Mentor onboarding</a>
       </div>
     </details>
   </div>
@@ -156,7 +157,7 @@
     <aside class="panel sidebar-panel">
       <div class="section-label">Review queue</div>
       <h2>CPA Staff work plan queue</h2>
-      <p class="panel-copy">Only mentor-approved work plans move into CPA Staff review. Returned versions stay read-only for history, while learners can revise through a new prepopulated version.</p>
+      <p class="panel-copy">Review submitted work plans, record CPA Staff comments, and complete approval or revision decisions from the current queue.</p>
       <div class="sidebar-stack" style="margin-top:1rem;">
         <div class="meta-card">
           <strong>Acting reviewer</strong>
@@ -180,8 +181,6 @@
         <p class="panel-copy" id="detail-copy">All work plan details remain read-only during CPA Staff review.</p>
 
         <div class="detail-stack">
-          <div class="readonly-copy">The original submitted work plan remains read-only throughout CPA Staff review. If the reviewer requests changes, the learner revises a new version without altering the historical submission. Once approved, the work plan becomes the learner's active work plan.</div>
-
           <section class="info-section">
             <h3>Learner and employer details</h3>
             <div class="grid-3" id="overview-grid"></div>
@@ -298,10 +297,6 @@
             <span id="meta-assignees">No assignee information recorded.</span>
           </div>
           <div class="meta-card">
-            <strong>Workflow route</strong>
-            <span id="meta-route">No workflow route recorded.</span>
-          </div>
-          <div class="meta-card">
             <strong>Current risk assessment</strong>
             <span id="meta-risk">No risk assessment recorded.</span>
           </div>
@@ -357,7 +352,6 @@ const rerouteMentor = document.getElementById('reroute-mentor');
 const metaStatus = document.getElementById('meta-status');
 const metaSubmitted = document.getElementById('meta-submitted');
 const metaAssignees = document.getElementById('meta-assignees');
-const metaRoute = document.getElementById('meta-route');
 const metaRisk = document.getElementById('meta-risk');
 const metaActive = document.getElementById('meta-active');
 const riskHistoryList = document.getElementById('risk-history-list');
@@ -736,7 +730,6 @@ function renderMeta(plan) {
   metaStatus.innerHTML = `<span class="status-badge ${statusClass(plan.workflow.status)}"><span class="dot"></span>${escapeHtml(plan.workflow.status)}</span>`;
   metaSubmitted.textContent = formatDate(plan.workflow.submittedAt);
   metaAssignees.textContent = `${plan.approvals.mentorName || 'Mentor not set'} | ${plan.approvals.cpaReviewerName || getActor()}`;
-  metaRoute.textContent = plan.workflow.route || 'CPA Staff review is in progress.';
   metaRisk.textContent = plan.workflow.currentRisk
     ? `${plan.workflow.currentRisk.level} risk${plan.workflow.currentRisk.nextCheckInDate ? ` | Next check-in ${formatShortDate(plan.workflow.currentRisk.nextCheckInDate)}` : ''}`
     : 'No risk assessment recorded.';
@@ -745,17 +738,16 @@ function renderMeta(plan) {
     : 'Not active';
 
   const riskEditable = /in cpa review|approved|more information needed/i.test(plan.workflow.status);
-  const reviewable = /in cpa review/i.test(plan.workflow.status);
-  approveBtn.disabled = !reviewable;
-  returnBtn.disabled = !reviewable;
-  revisedExpectedCompletion.disabled = !reviewable;
-  revisionDueDate.disabled = !reviewable;
-  rerouteMentor.disabled = !reviewable;
+  approveBtn.disabled = false;
+  returnBtn.disabled = false;
+  revisedExpectedCompletion.disabled = false;
+  revisionDueDate.disabled = false;
+  rerouteMentor.disabled = false;
   riskLevel.disabled = !riskEditable;
   nextCheckInDate.disabled = !riskEditable;
   riskNotes.disabled = !riskEditable;
   saveRiskBtn.disabled = !riskEditable;
-  reminderBtn.disabled = !/more information needed/i.test(plan.workflow.status);
+  reminderBtn.disabled = false;
 
   if (plan.workflow.status === 'Approved') {
     decisionNote.className = 'notice-box success';
@@ -992,26 +984,6 @@ function runReminderCheck() {
 
 function approveWorkPlan() {
   const plan = getActiveVersion();
-  if (plan.workflow.status !== 'In CPA Review') {
-    setMessage('Only work plans in CPA review can be approved.');
-    return;
-  }
-  const existingRisk = plan.workflow.currentRisk;
-  const currentLevel = riskLevel.value || (existingRisk && existingRisk.level) || '';
-  const currentNotes = riskNotes.value.trim() || (existingRisk && existingRisk.notes) || '';
-  const currentCheckIn = nextCheckInDate.value || (existingRisk && existingRisk.nextCheckInDate) || '';
-  const riskError = validateRiskAssessment(currentLevel, currentNotes, currentCheckIn, { requireCheckInForApproval:true });
-  if (riskError) {
-    setMessage(riskError);
-    return;
-  }
-  if (riskLevel.value || riskNotes.value.trim() || nextCheckInDate.value) {
-    if (!saveRiskAssessment({ silent:true })) {
-      setMessage('The risk assessment must be completed before approval.');
-      return;
-    }
-  }
-
   addCommentsFromInput(false);
   const previousStatus = plan.workflow.status;
   plan.workflow.status = 'Approved';
@@ -1021,6 +993,15 @@ function approveWorkPlan() {
   plan.workflow.activeWorkPlan = true;
   plan.approvals.cpaReviewerName = getActor();
   plan.workflow.revisedExpectedCompletionDate = revisedExpectedCompletion.value || plan.workflow.revisedExpectedCompletionDate || '';
+  if (riskLevel.value || riskNotes.value.trim() || nextCheckInDate.value) {
+    plan.workflow.currentRisk = {
+      level: riskLevel.value || '',
+      notes: riskNotes.value.trim(),
+      nextCheckInDate: nextCheckInDate.value || '',
+      assignedBy: getActor(),
+      assignedAt: new Date().toISOString()
+    };
+  }
   if (plan.workflow.revisedExpectedCompletionDate) {
     plan.workflow.notifications.push({
       type:'Reviewer revised expected completion date recorded',
@@ -1050,7 +1031,7 @@ function approveWorkPlan() {
     nextCheckInDate: plan.workflow.currentRisk ? (plan.workflow.currentRisk.nextCheckInDate || '') : ''
   }));
   renderAll();
-  setMessage('Work plan approved. Status is now Approved and the record has been marked as the learner active work plan.');
+  window.location.href = '../../1_Dashboard/CPAReviewer.html';
 }
 
 function createRevisionVersion(plan) {
@@ -1079,11 +1060,7 @@ function createRevisionVersion(plan) {
 
 function returnForRevision() {
   const plan = getActiveVersion();
-  if (plan.workflow.status !== 'In CPA Review') {
-    setMessage('Only work plans in CPA review can be returned for revision.');
-    return;
-  }
-  if (!addCommentsFromInput(true)) return;
+  addCommentsFromInput(false);
 
   const requestedDate = revisionDueDate.value;
   const previousStatus = plan.workflow.status;
@@ -1106,7 +1083,7 @@ function returnForRevision() {
   const draft = createRevisionVersion(plan);
   versions.push(draft);
   renderAll();
-  setMessage('Work plan returned for revision. The original remains read-only and a new prepopulated version has been created for resubmission.');
+  window.location.href = '../../1_Dashboard/CPAReviewer.html';
 }
 
 document.getElementById('add-comment-btn').addEventListener('click', () => {

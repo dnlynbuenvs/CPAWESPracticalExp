@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPA - PTB Review Mentor Change Request</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:#0B1F3A; --blue:#1B5EA8; --amber:#E76F1A; --green:#2D7A4E; --red:#C0392B;
+    --sand:#F7F5F2; --white:#FFFFFF; --gray-100:#F2F1EF; --gray-200:#E4E2DE; --gray-300:#D2CEC8;
+    --gray-400:#A8A49E; --gray-600:#6B6760; --gray-800:#2E2C2A;
+    --shadow-sm:0 1px 3px rgba(11,31,58,0.07),0 1px 2px rgba(11,31,58,0.05);
+    --radius-sm:6px; --radius-md:10px; --radius-lg:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'DM Sans',sans-serif;background:var(--sand);color:var(--gray-800);min-height:100vh}
+  a{text-decoration:none;color:inherit}
+  button,input,select,textarea{font:inherit}
+  textarea{resize:vertical}
+  .topbar{background:var(--navy);min-height:60px;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:0 2rem}
+  .logo-group{display:flex;align-items:center;gap:10px;min-width:225px}
+  .logo-mark{width:36px;height:36px;background:var(--white);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .logo-text{display:flex;flex-direction:column;line-height:1.1}
+  .logo-text .brand{font-size:13px;font-weight:600;color:var(--white);letter-spacing:.04em}
+  .logo-text .sub{font-size:10px;color:rgba(255,255,255,.5);letter-spacing:.02em;text-transform:uppercase}
+  .topbar-right{display:flex;align-items:center;gap:12px}
+  .nav-links{display:flex;align-items:center;gap:2px}
+  .nav-links a{color:rgba(255,255,255,.55);font-size:14px;padding:8px 16px;border-radius:var(--radius-sm);white-space:nowrap}
+  .nav-links a.active,.nav-links a:hover{color:var(--white);background:rgba(255,255,255,.08)}
+  .role-dropdown{position:relative}
+  .role-trigger{list-style:none;display:flex;align-items:center;gap:10px;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);color:var(--white);font-size:13px;font-weight:600;cursor:pointer}
+  .role-trigger::-webkit-details-marker{display:none}
+  .role-label{display:inline-flex;align-items:center;justify-content:center;min-width:92px}
+  .role-caret{font-size:11px;color:rgba(255,255,255,.72)}
+  .role-menu{position:absolute;right:0;top:calc(100% + 10px);min-width:190px;padding:8px;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);box-shadow:0 12px 30px rgba(11,31,58,.14);display:flex;flex-direction:column;gap:4px;z-index:20}
+  .role-option{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:var(--radius-sm);font-size:13px;color:var(--gray-800)}
+  .role-option:hover{background:var(--gray-100)}
+  .role-option.active{background:#EBF3FF;color:var(--blue);font-weight:600}
+  .page{max-width:1460px;margin:0 auto;padding:2rem 2rem 4rem}
+  .hero{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--gray-200)}
+  .hero h1{font-family:'DM Serif Display',serif;font-size:38px;font-weight:400;color:var(--navy);margin-bottom:6px}
+  .hero p{font-size:14px;color:var(--gray-600);max-width:860px;line-height:1.5}
+  .hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);padding:10px 16px;box-shadow:var(--shadow-sm);font-size:13px;color:var(--gray-600)}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--blue);flex:0 0 auto}
+  .message-bar{display:none;align-items:center;gap:10px;margin-bottom:1rem;padding:12px 14px;border-radius:var(--radius-md);background:#EBF3FF;border:1px solid rgba(27,94,168,.18);color:var(--navy);box-shadow:var(--shadow-sm)}
+  .message-bar.visible{display:flex}
+  .workspace{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:16px}
+  .panel{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm)}
+  .main-panel,.side-panel{padding:1.25rem}
+  .section-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gray-400);margin-bottom:.75rem}
+  .panel h2{font-size:17px;color:var(--navy);margin-bottom:4px}
+  .panel-copy{font-size:12px;color:var(--gray-600);line-height:1.45}
+  .stack,.meta-stack,.history-stack{display:flex;flex-direction:column;gap:16px}
+  .form-section{padding:1rem;border:1px solid var(--gray-200);border-radius:var(--radius-md);background:var(--sand)}
+  .form-section h3{font-size:15px;color:var(--navy);margin-bottom:6px}
+  .field-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .field{display:flex;flex-direction:column;gap:6px}
+  .field.full{grid-column:1 / -1}
+  .field label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gray-400)}
+  .field input,.field select,.field textarea{border:1px solid var(--gray-200);border-radius:var(--radius-sm);background:var(--white);padding:10px 12px;color:var(--gray-800)}
+  .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:rgba(27,94,168,.32);box-shadow:0 0 0 3px rgba(27,94,168,.08)}
+  .field textarea{min-height:110px}
+  .metric-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+  .metric-card,.meta-card,.notice-box,.history-card{padding:12px;border-radius:var(--radius-md);border:1px solid var(--gray-200);background:var(--white)}
+  .metric-card strong,.meta-card strong,.notice-box strong,.history-card strong{display:block;font-size:13px;color:var(--navy);margin-bottom:4px}
+  .metric-card span,.meta-card span,.notice-box span,.history-card span{display:block;font-size:12px;color:var(--gray-600);line-height:1.45}
+  .metric-card .value{font-family:'DM Serif Display',serif;font-size:28px;line-height:1;color:var(--navy);margin-bottom:6px}
+  .notice-box{background:#F7FAFF}
+  .notice-box.warn{background:#FFF8F1;border-color:rgba(231,111,26,.22)}
+  .notice-box.success{background:#F2FBF6;border-color:rgba(45,122,78,.22)}
+  .button-row{display:flex;flex-wrap:wrap;gap:8px}
+  .action-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:var(--radius-sm);border:1px solid var(--gray-200);padding:9px 12px;background:var(--white);color:var(--navy);font-size:12px;font-weight:700;cursor:pointer;transition:all .15s ease}
+  .action-btn:hover{border-color:rgba(27,94,168,.28);background:#F7FAFF}
+  .action-btn.primary{background:#EBF3FF;border-color:rgba(27,94,168,.28);color:var(--blue)}
+  .action-btn.success{background:#E8F5EE;border-color:rgba(45,122,78,.22);color:var(--green)}
+  .action-btn.danger{background:#FFF4F1;border-color:rgba(192,57,43,.22);color:var(--red)}
+  .action-btn.warn{background:#FFF8F1;border-color:rgba(231,111,26,.22);color:var(--amber)}
+  .status-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:5px 10px;border-radius:20px;white-space:nowrap}
+  .status-badge .dot{width:6px;height:6px}
+  .badge-draft{background:#EBF3FF;color:var(--blue)} .badge-draft .dot{background:var(--blue)}
+  .badge-pending{background:#FEF3E8;color:var(--amber)} .badge-pending .dot{background:var(--amber)}
+  .badge-approved{background:#E8F5EE;color:var(--green)} .badge-approved .dot{background:var(--green)}
+  .badge-declined{background:#FDECEA;color:var(--red)} .badge-declined .dot{background:var(--red)}
+  .badge-info{background:#F7FAFF;color:var(--blue)} .badge-info .dot{background:var(--blue)}
+  .empty-state{padding:18px;border:1px dashed var(--gray-300);border-radius:var(--radius-md);background:var(--white);text-align:center;font-size:13px;color:var(--gray-600)}
+  @media(max-width:1180px){.workspace{grid-template-columns:1fr}}
+  @media(max-width:920px){.field-grid,.metric-grid{grid-template-columns:1fr}}
+  @media(max-width:760px){
+    .topbar{align-items:flex-start;flex-direction:column;padding:1rem}
+    .nav-links{display:none}
+    .topbar-right{width:100%;justify-content:space-between}
+    .page{padding:1.25rem 1rem 3rem}
+    .hero{flex-direction:column;align-items:flex-start}
+    .hero h1{font-size:34px}
+  }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="logo-group">
+    <div class="logo-mark">
+      <svg width="24" height="20" viewBox="0 0 24 20" fill="none" aria-hidden="true">
+        <path d="M2 10C2 5.58 5.58 2 10 2h4c4.42 0 8 3.58 8 8s-3.58 8-8 8h-4C5.58 18 2 14.42 2 10z" fill="#0B1F3A" opacity="0.12"/>
+        <path d="M7 10.5l3 3 7-7" stroke="#0B1F3A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="logo-text"><span class="brand">CPA Canada</span><span class="sub">Chartered Professional Accountants</span></div>
+  </div>
+  <div class="topbar-right">
+    <nav class="nav-links" aria-label="Primary navigation">
+      <a href="../../1_Dashboard/PTSBStaffDashboard.html" class="active">Dashboard</a>
+      <a href="../../1_Dashboard/PTSBStaffDashboard.html#learner-monitoring">Learners</a>
+      <a href="../../1_Dashboard/PTSBStaffDashboard.html#mentor-monitoring">Mentors</a>
+    </nav>
+    <details class="role-dropdown">
+      <summary class="role-trigger"><span class="role-label">PTSB Staff</span><span class="role-caret">&#9662;</span></summary>
+      <div class="role-menu">
+        <a class="role-option" href="../../index.html">Learner</a>
+        <a class="role-option" href="../../1_Dashboard/CPAReviewer.html">CPA Reviewer</a>
+        <a class="role-option" href="../../1_Dashboard/MentorDashboard.html">Mentor</a>
+        <a class="role-option active" href="../../1_Dashboard/PTSBStaffDashboard.html">PTSB Staff</a>
+              <a class="role-option" href="../../8_MentorOnboarding/1_MentorOnboarding.html">Mentor onboarding</a>
+      </div>
+    </details>
+  </div>
+</header>
+
+<main class="page">
+  <section class="hero" aria-labelledby="ptb-review-title">
+    <div>
+      <h1 id="ptb-review-title">PTB review mentor change request</h1>
+      <p>Review the learner's request to end the current mentor relationship, confirm the replacement mentor, and record the PTB decision with a complete audit trail.</p>
+    </div>
+    <div class="hero-badge"><span class="dot"></span><span id="hero-summary">Mentor change review ready</span></div>
+  </section>
+
+  <div class="message-bar" id="message-bar" role="status" aria-live="polite">
+    <span class="dot"></span>
+    <span id="message-text"></span>
+  </div>
+
+  <section class="workspace">
+    <section class="panel main-panel">
+      <div class="section-label">Mentor relationship management</div>
+      <h2>Review learner mentor change request</h2>
+      <!-- <p class="panel-copy">PTB Staff can review the learner details, current mentor, replacement mentor, and stated reason before approving, rejecting, or requesting additional information.</p> -->
+
+      <div class="stack" style="margin-top:1rem;">
+        <section class="form-section">
+          <h3>Request snapshot</h3>
+          <div class="metric-grid" id="snapshot-grid"></div>
+        </section>
+
+        <section class="form-section">
+          <h3>Learner and mentor details</h3>
+          <div class="field-grid">
+            <div class="field">
+              <label for="learner-name">Learner</label>
+              <input id="learner-name" type="text" readonly>
+            </div>
+            <div class="field">
+              <label for="learner-id">Learner ID</label>
+              <input id="learner-id" type="text" readonly>
+            </div>
+            <div class="field">
+              <label for="current-mentor">Current mentor</label>
+              <input id="current-mentor" type="text" readonly>
+            </div>
+            <div class="field">
+              <label for="new-mentor">New mentor</label>
+              <select id="new-mentor"></select>
+            </div>
+            <div class="field">
+              <label for="request-date">Request date</label>
+              <input id="request-date" type="text" readonly>
+            </div>
+            <div class="field">
+              <label for="reason-summary">Reason for mentor change</label>
+              <input id="reason-summary" type="text" readonly>
+            </div>
+            <div class="field full">
+              <label for="request-context">Learner request details</label>
+              <textarea id="request-context" readonly></textarea>
+            </div>
+          </div>
+        </section>
+
+        <section class="form-section">
+          <h3>PTB decision</h3>
+          <div class="field-grid">
+            <div class="field">
+              <label for="decision-type">Decision</label>
+              <select id="decision-type">
+                <option value="">Select decision</option>
+                <option value="Approve mentor change">Approve mentor change</option>
+                <option value="Reject mentor change">Reject mentor change</option>
+                <option value="Request additional information">Request additional information</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="reviewer-name">PTB reviewer</label>
+              <input id="reviewer-name" type="text" value="Avery Patel, PTB Staff">
+            </div>
+            <div class="field full">
+              <label for="decision-comments">Comments</label>
+              <textarea id="decision-comments" placeholder="Add decision comments. Comments are required when rejecting the request."></textarea>
+            </div>
+          </div>
+          <!--
+          <div class="notice-box success">
+            <strong>Approval notifications</strong>
+            <span>If approved, the learner and the new mentor are both notified and the relationship status is updated to reflect the approved mentor change.</span>
+          </div>
+          -->
+
+          <!--
+          <div class="notice-box warn" style="margin-top:1rem;">
+            <strong>Audit history</strong>
+            <span>Every PTB decision is stored with the reviewer name, decision, comments, and timestamp.</span>
+          </div>
+          -->
+          
+        </section>
+
+        <section class="form-section">
+          <h3>Review actions</h3>
+          <div class="button-row">
+            <button class="action-btn success" id="approve-btn" type="button">Approve mentor change</button>
+            <button class="action-btn danger" id="reject-btn" type="button">Reject mentor change</button>
+            <button class="action-btn warn" id="more-info-btn" type="button">Request additional information</button>
+          </div>
+        </section>
+
+        <section class="form-section">
+          <h3>Audit history</h3>
+          <div class="history-stack" id="audit-history"></div>
+        </section>
+      </div>
+    </section>
+
+    <aside class="panel side-panel">
+      <div class="section-label">Decision status</div>
+      <h2>Mentor change request</h2>
+      <div class="meta-stack">
+        <div class="meta-card">
+          <strong>Current request status</strong>
+          <span id="meta-status">Pending PTB review</span>
+        </div>
+        <div class="meta-card">
+          <strong>Current mentor</strong>
+          <span id="meta-current-mentor">Loading</span>
+        </div>
+        <div class="meta-card">
+          <strong>Replacement mentor</strong>
+          <span id="meta-new-mentor">Loading</span>
+        </div>
+        <div class="meta-card">
+          <strong>Learner notification</strong>
+          <span id="meta-learner-notification">Pending decision</span>
+        </div>
+        <div class="meta-card">
+          <strong>New mentor notification</strong>
+          <span id="meta-mentor-notification">Pending decision</span>
+        </div>
+        <div class="meta-card">
+          <strong>Latest decision</strong>
+          <span id="meta-latest-decision">Not decided</span>
+        </div>
+      </div>
+    </aside>
+  </section>
+</main>
+
+<script>
+const mentorChangeKey = 'mentorRelationshipChange:learner-101';
+const mentorChangeAuditKey = 'mentorRelationshipChangeAudit:learner-101';
+const requestRecord = JSON.parse(localStorage.getItem(mentorChangeKey) || 'null') || {};
+const storedHistory = JSON.parse(localStorage.getItem(mentorChangeAuditKey) || '[]');
+
+const mentorOptions = [
+  'Harper Singh, CPA',
+  'Lena Ortiz, CPA',
+  'Noah Ramirez, CPA',
+  'Devon Clarke, CPA'
+];
+
+const reviewRecord = {
+  learnerName: requestRecord.learnerName || 'Daniel Brooks',
+  learnerId: 'LRN-251004',
+  currentMentor: requestRecord.currentMentor || 'Marcus Chen, CPA',
+  newMentor: requestRecord.newMentor || 'Harper Singh, CPA',
+  requestDate: requestRecord.requestDate || '2026-07-22',
+  reason: requestRecord.reason || 'Mentor unavailable',
+  requestSummary: requestRecord.summary || 'Learner requested a mentor change because the current mentor is unavailable to continue ongoing practical experience support.',
+  status: requestRecord.status || 'Pending PTB review',
+  learnerNotification: requestRecord.learnerNotification || 'Pending decision',
+  mentorNotification: requestRecord.newMentorNotification || 'Pending decision'
+};
+
+const snapshotGrid = document.getElementById('snapshot-grid');
+const learnerNameInput = document.getElementById('learner-name');
+const learnerIdInput = document.getElementById('learner-id');
+const currentMentorInput = document.getElementById('current-mentor');
+const newMentorSelect = document.getElementById('new-mentor');
+const requestDateInput = document.getElementById('request-date');
+const reasonSummaryInput = document.getElementById('reason-summary');
+const requestContextInput = document.getElementById('request-context');
+const decisionTypeInput = document.getElementById('decision-type');
+const reviewerNameInput = document.getElementById('reviewer-name');
+const decisionCommentsInput = document.getElementById('decision-comments');
+const auditHistory = document.getElementById('audit-history');
+const heroSummary = document.getElementById('hero-summary');
+const metaStatus = document.getElementById('meta-status');
+const metaCurrentMentor = document.getElementById('meta-current-mentor');
+const metaNewMentor = document.getElementById('meta-new-mentor');
+const metaLearnerNotification = document.getElementById('meta-learner-notification');
+const metaMentorNotification = document.getElementById('meta-mentor-notification');
+const metaLatestDecision = document.getElementById('meta-latest-decision');
+const messageBar = document.getElementById('message-bar');
+const messageText = document.getElementById('message-text');
+
+let auditEntries = Array.isArray(storedHistory) ? storedHistory : [];
+
+function setMessage(text) {
+  messageText.textContent = text;
+  messageBar.classList.add('visible');
+}
+
+function formatDateTime(value) {
+  return new Date(value).toLocaleString();
+}
+
+function getStatusBadgeClass(status) {
+  if (/approve/i.test(status)) return 'badge-approved';
+  if (/reject/i.test(status)) return 'badge-declined';
+  if (/additional information/i.test(status)) return 'badge-info';
+  return 'badge-pending';
+}
+
+function renderSnapshot() {
+  snapshotGrid.innerHTML = [
+    { value: reviewRecord.learnerId, label: 'Learner ID', detail: reviewRecord.learnerName },
+    { value: reviewRecord.currentMentor, label: 'Current mentor', detail: reviewRecord.reason },
+    { value: reviewRecord.newMentor, label: 'New mentor', detail: reviewRecord.status }
+  ].map((item) => `
+    <div class="metric-card">
+      <div class="value">${item.value}</div>
+      <strong>${item.label}</strong>
+      <span>${item.detail}</span>
+    </div>
+  `).join('');
+}
+
+function renderMeta() {
+  metaStatus.textContent = reviewRecord.status;
+  metaCurrentMentor.textContent = reviewRecord.currentMentor;
+  metaNewMentor.textContent = reviewRecord.newMentor;
+  metaLearnerNotification.textContent = reviewRecord.learnerNotification;
+  metaMentorNotification.textContent = reviewRecord.mentorNotification;
+  metaLatestDecision.textContent = auditEntries.length ? `${auditEntries[0].decision} | ${auditEntries[0].reviewer}` : 'Not decided';
+  heroSummary.textContent = reviewRecord.status;
+}
+
+function renderAuditHistory() {
+  if (!auditEntries.length) {
+    auditHistory.innerHTML = '<div class="empty-state">No PTB decisions have been recorded yet.</div>';
+    return;
+  }
+
+  auditHistory.innerHTML = auditEntries.map((entry) => `
+    <div class="history-card">
+      <strong>${entry.decision}</strong>
+      <span>${entry.reviewer} | ${formatDateTime(entry.timestamp)}</span>
+      <span>${entry.comments || 'No comments recorded.'}</span>
+    </div>
+  `).join('');
+}
+
+function saveState() {
+  const mergedRecord = {
+    ...requestRecord,
+    learnerName: reviewRecord.learnerName,
+    currentMentor: reviewRecord.currentMentor,
+    newMentor: reviewRecord.newMentor,
+    requestDate: reviewRecord.requestDate,
+    reason: reviewRecord.reason,
+    summary: reviewRecord.requestSummary,
+    status: reviewRecord.status,
+    learnerNotification: reviewRecord.learnerNotification,
+    newMentorNotification: reviewRecord.mentorNotification
+  };
+
+  localStorage.setItem(mentorChangeKey, JSON.stringify(mergedRecord));
+  localStorage.setItem(mentorChangeAuditKey, JSON.stringify(auditEntries));
+}
+
+function hydrateForm() {
+  learnerNameInput.value = reviewRecord.learnerName;
+  learnerIdInput.value = reviewRecord.learnerId;
+  currentMentorInput.value = reviewRecord.currentMentor;
+  requestDateInput.value = reviewRecord.requestDate;
+  reasonSummaryInput.value = reviewRecord.reason;
+  requestContextInput.value = reviewRecord.requestSummary;
+  newMentorSelect.innerHTML = mentorOptions.map((mentor) => `
+    <option value="${mentor}" ${mentor === reviewRecord.newMentor ? 'selected' : ''}>${mentor}</option>
+  `).join('');
+  renderSnapshot();
+  renderMeta();
+  renderAuditHistory();
+}
+
+function storeDecision(decision) {
+  const reviewer = reviewerNameInput.value.trim() || 'PTB Staff Reviewer';
+  const comments = decisionCommentsInput.value.trim();
+
+  if (decision === 'Reject mentor change' && !comments) {
+    setMessage('Comments are required when rejecting a mentor change request.');
+    return;
+  }
+
+  reviewRecord.newMentor = newMentorSelect.value;
+  reviewRecord.status = decision;
+
+  if (decision === 'Approve mentor change') {
+    reviewRecord.learnerNotification = `${reviewRecord.learnerName} notified on ${new Date().toLocaleString()}.`;
+    reviewRecord.mentorNotification = `${reviewRecord.newMentor} notified on ${new Date().toLocaleString()}.`;
+  } else if (decision === 'Reject mentor change') {
+    reviewRecord.learnerNotification = `${reviewRecord.learnerName} notified of rejection on ${new Date().toLocaleString()}.`;
+    reviewRecord.mentorNotification = 'No new mentor notification sent.';
+  } else {
+    reviewRecord.learnerNotification = `${reviewRecord.learnerName} asked for additional information on ${new Date().toLocaleString()}.`;
+    reviewRecord.mentorNotification = 'Pending PTB follow-up.';
+  }
+
+  auditEntries.unshift({
+    decision,
+    reviewer,
+    comments,
+    timestamp: new Date().toISOString()
+  });
+
+  saveState();
+  renderSnapshot();
+  renderMeta();
+  renderAuditHistory();
+  setMessage(`${decision} recorded in audit history.`);
+}
+
+newMentorSelect.addEventListener('change', () => {
+  reviewRecord.newMentor = newMentorSelect.value;
+  saveState();
+  renderSnapshot();
+  renderMeta();
+});
+
+document.getElementById('approve-btn').addEventListener('click', () => {
+  decisionTypeInput.value = 'Approve mentor change';
+  storeDecision('Approve mentor change');
+});
+
+document.getElementById('reject-btn').addEventListener('click', () => {
+  decisionTypeInput.value = 'Reject mentor change';
+  storeDecision('Reject mentor change');
+});
+
+document.getElementById('more-info-btn').addEventListener('click', () => {
+  decisionTypeInput.value = 'Request additional information';
+  storeDecision('Request additional information');
+});
+
+hydrateForm();
+</script>
+</body>
+</html>

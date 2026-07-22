@@ -141,6 +141,7 @@
         <a class="role-option active" href="CPAReviewer.html">CPA Reviewer</a>
         <a class="role-option" href="MentorDashboard.html">Mentor</a>
         <a class="role-option" href="PTSBStaffDashboard.html">PTSB Staff</a>
+              <a class="role-option" href="../8_MentorOnboarding/1_MentorOnboarding.html">Mentor onboarding</a>
       </div>
     </details>
   </div>
@@ -187,6 +188,7 @@
           <option value="all">All submission types</option>
           <option value="Foundational Experience">Foundational Experience</option>
           <option value="Work Plan">Work Plan</option>
+          <option value="Check-In Report">Check-In Report</option>
           <option value="Partial Report">Partial Report</option>
           <option value="Completion Report">Completion Report</option>
         </select>
@@ -261,9 +263,7 @@
             <th>Submission type</th>
             <th>Status</th>
             <th>Submitted date</th>
-            <th>Risk factor</th>
             <th>Last login date</th>
-            <th>Pre-reviewed</th>
             <th>Partial report type</th>
             <th>Assigned reviewer</th>
             <th>Actions</th>
@@ -323,13 +323,12 @@ const submissions = [
     learnerId: 'LRN-251887',
     cpaId: 'CPA-772993',
     iMISId: 'IMIS-10938',
-    type: 'Partial Report',
+    type: 'Check-In Report',
     status: 'Assigned for review',
     submittedDate: '2026-07-12',
     riskFactor: 'High',
     lastLoginDate: '2026-07-15',
     assignedReviewer: 'Noah Ramirez, CPA',
-    preReviewed: 'Yes',
     partialType: 'Check-in report'
   },
   {
@@ -344,7 +343,6 @@ const submissions = [
     riskFactor: 'Medium',
     lastLoginDate: '2026-07-14',
     assignedReviewer: 'Avery Patel, CPA',
-    preReviewed: 'No',
     partialType: ''
   },
   {
@@ -359,7 +357,6 @@ const submissions = [
     riskFactor: 'High',
     lastLoginDate: '2026-07-12',
     assignedReviewer: 'Harper Singh, CPA',
-    preReviewed: 'No',
     partialType: ''
   },
   {
@@ -374,7 +371,6 @@ const submissions = [
     riskFactor: 'Low',
     lastLoginDate: '2026-07-11',
     assignedReviewer: '',
-    preReviewed: 'No',
     partialType: 'Interim partial report'
   },
   {
@@ -389,7 +385,6 @@ const submissions = [
     riskFactor: 'High',
     lastLoginDate: '2026-07-15',
     assignedReviewer: 'Lena Ortiz, CPA',
-    preReviewed: 'Yes',
     partialType: ''
   },
   {
@@ -404,7 +399,6 @@ const submissions = [
     riskFactor: 'Medium',
     lastLoginDate: '2026-07-15',
     assignedReviewer: 'Avery Patel, CPA',
-    preReviewed: 'Yes',
     partialType: ''
   }
 ];
@@ -520,7 +514,7 @@ function renderQueue() {
   document.getElementById('visible-count').textContent = `${visibleItems.length} item${visibleItems.length === 1 ? '' : 's'} shown`;
 
   if (!visibleItems.length) {
-    queueBody.innerHTML = '<tr><td colspan="11" class="empty-state">No in-flight submissions match the current filters.</td></tr>';
+    queueBody.innerHTML = '<tr><td colspan="9" class="empty-state">No in-flight submissions match the current filters.</td></tr>';
     updateSelectionState();
     return;
   }
@@ -541,10 +535,8 @@ function renderQueue() {
         <td>${escapeHtml(item.type)}</td>
         <td><span class="status-badge ${statusClass(item.status)}"><span class="dot"></span>${escapeHtml(item.status)}</span></td>
         <td>${escapeHtml(formatDate(item.submittedDate))}</td>
-        <td><span class="risk-chip ${riskClass(item.riskFactor)}">${escapeHtml(item.riskFactor)} risk</span></td>
         <td>${escapeHtml(formatDate(item.lastLoginDate))}</td>
-        <td>${escapeHtml(item.preReviewed)}</td>
-        <td>${escapeHtml(item.type === 'Partial Report' ? (item.partialType || 'Partial report') : 'Not applicable')}</td>
+        <td>${escapeHtml(item.type === 'Partial Report' || item.type === 'Check-In Report' ? (item.partialType || item.type) : 'Not applicable')}</td>
         <td>
           <div class="assign-shell">
             <select data-assign-select="${escapeHtml(item.id)}">
@@ -557,13 +549,7 @@ function renderQueue() {
         </td>
         <td>
           <div class="assign-shell">
-            <button class="table-btn"
-                    type="button"
-                    data-action="open"
-                    data-id="${escapeHtml(item.id)}"
-                    onclick="location.href='../2_ClaimFoundationalExp/4_CPAStaffReviewerFE/1_CPAStaffReview.html'">
-                Open
-            </button>
+            <button class="table-btn" type="button" data-action="open" data-id="${escapeHtml(item.id)}">Open</button>
             <button class="table-btn primary" type="button" data-action="review" data-id="${escapeHtml(item.id)}" ${reviewEnabled ? '' : 'disabled'}>Review</button>
           </div>
           <div class="hint">${reviewEnabled ? 'Assigned reviewer can review this submission.' : 'Assign to current user to enable review.'}</div>
@@ -609,6 +595,22 @@ function assignSubmission(id, reviewer) {
 function openSubmission(id) {
   const submission = getSubmissionById(id);
   if (!submission) return;
+  if (submission.type === 'Work Plan') {
+    window.location.href = '../3_WorkPlan/3_CPAReviewerWP/1_CPAReviewerReviewWP.html';
+    return;
+  }
+  if (submission.type === 'Foundational Experience') {
+    window.location.href = '../2_ClaimFoundationalExp/4_CPAStaffReviewerFE/1_CPAStaffReview.html';
+    return;
+  }
+  if (submission.type === 'Check-In Report') {
+    window.location.href = '../4_RiskAssessment/3_CPAReviewerRiskAssessment/3_CPAReviewerCheckin.html';
+    return;
+  }
+  if (submission.type === 'Completion Report') {
+    window.location.href = '../5_FinalExperienceReport/4_CPAApprovalFinalReport.html';
+    return;
+  }
   document.getElementById(`row-${id}`).scrollIntoView({ behavior: 'smooth', block: 'center' });
   setMessage(`Opened ${submission.learnerName}'s ${submission.type.toLowerCase()} for CPA staff review.`);
 }
@@ -620,14 +622,27 @@ function reviewSubmission(id) {
     setMessage(`Assign ${submission.learnerName}'s ${submission.type.toLowerCase()} to ${currentReviewer} before reviewing.`);
     return;
   }
-  if (submission.status === 'In CPA review') {
-    submission.status = 'More information needed';
-    setMessage(`${currentReviewer} marked ${submission.learnerName}'s ${submission.type.toLowerCase()} as more information needed.`);
-  } else {
+  if (submission.status !== 'In CPA review') {
     submission.status = 'In CPA review';
-    setMessage(`${currentReviewer} is now reviewing ${submission.learnerName}'s ${submission.type.toLowerCase()}.`);
+  }
+  if (submission.type === 'Work Plan') {
+    window.location.href = '../3_WorkPlan/3_CPAReviewerWP/1_CPAReviewerReviewWP.html';
+    return;
+  }
+  if (submission.type === 'Foundational Experience') {
+    window.location.href = '../2_ClaimFoundationalExp/4_CPAStaffReviewerFE/1_CPAStaffReview.html';
+    return;
+  }
+  if (submission.type === 'Check-In Report') {
+    window.location.href = '../4_RiskAssessment/3_CPAReviewerRiskAssessment/3_CPAReviewerCheckin.html';
+    return;
+  }
+  if (submission.type === 'Completion Report') {
+    window.location.href = '../5_FinalExperienceReport/4_CPAApprovalFinalReport.html';
+    return;
   }
   renderAll();
+  setMessage(`${currentReviewer} is now reviewing ${submission.learnerName}'s ${submission.type.toLowerCase()}.`);
 }
 
 function resetFilters() {
@@ -709,6 +724,3 @@ renderAll();
 </script>
 </body>
 </html>
-
-
-

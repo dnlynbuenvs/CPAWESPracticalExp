@@ -17,7 +17,8 @@
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:'DM Sans',sans-serif;background:var(--sand);color:var(--gray-800);min-height:100vh}
   a{text-decoration:none;color:inherit}
-  button{font:inherit}
+  button,input,textarea{font:inherit}
+  textarea{resize:vertical}
   .topbar{background:var(--navy);min-height:60px;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:0 2rem}
   .logo-group{display:flex;align-items:center;gap:10px;min-width:225px}
   .logo-mark{width:36px;height:36px;background:var(--white);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
@@ -83,6 +84,18 @@
   .stack span{display:block;font-size:12px;color:var(--gray-600);line-height:1.45}
   .hint{font-size:11px;color:var(--gray-600);line-height:1.4;margin-top:8px}
   .empty-state{padding:20px;text-align:center;font-size:13px;color:var(--gray-600);background:var(--sand)}
+  .modal-backdrop{position:fixed;inset:0;background:rgba(11,31,58,.48);display:none;align-items:center;justify-content:center;padding:1.25rem;z-index:40}
+  .modal-backdrop.visible{display:flex}
+  .modal-card{width:min(100%,560px);background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);box-shadow:var(--shadow-md);padding:1.25rem}
+  .modal-card h3{font-size:20px;color:var(--navy);margin-bottom:6px}
+  .modal-copy{font-size:13px;color:var(--gray-600);line-height:1.5;margin-bottom:1rem}
+  .modal-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:1rem}
+  .field{display:flex;flex-direction:column;gap:6px}
+  .field.full{grid-column:1 / -1}
+  .field label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gray-400)}
+  .field input,.field textarea{border:1px solid var(--gray-200);border-radius:var(--radius-sm);background:var(--sand);padding:10px 12px;color:var(--gray-800)}
+  .field input:focus,.field textarea:focus{outline:none;border-color:rgba(27,94,168,.32);box-shadow:0 0 0 3px rgba(27,94,168,.08)}
+  .modal-actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px}
   @keyframes rise {
     from {opacity:0; transform:translateY(8px)}
     to {opacity:1; transform:translateY(0)}
@@ -98,6 +111,8 @@
     .hero,.queue-head{flex-direction:column;align-items:flex-start}
     .hero h1{font-size:34px}
     .summary-grid{grid-template-columns:1fr}
+    .modal-grid{grid-template-columns:1fr}
+    .modal-actions{justify-content:flex-start}
   }
 </style>
 </head>
@@ -126,6 +141,7 @@
         <a class="role-option" href="CPAReviewer.html">CPA Reviewer</a>
         <a class="role-option" href="MentorDashboard.html">Mentor</a>
         <a class="role-option active" href="PTSBStaffDashboard.html">PTSB Staff</a>
+              <a class="role-option" href="../8_MentorOnboarding/1_MentorOnboarding.html">Mentor onboarding</a>
       </div>
     </details>
   </div>
@@ -190,6 +206,7 @@
               <th>Current status</th>
               <th>Assigned staff reviewer</th>
               <th>Mentor application status</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody id="learner-body"></tbody>
@@ -245,6 +262,40 @@
   </div>
 </main>
 
+<div class="modal-backdrop" id="duration-modal" aria-hidden="true">
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="duration-modal-title">
+    <div class="section-label">Duration adjustment</div>
+    <h3 id="duration-modal-title">Reduce credited duration</h3>
+    <p class="modal-copy" id="duration-modal-copy">Record the reduced credited duration and capture a short reason for the adjustment.</p>
+    <div class="modal-grid">
+      <div class="field">
+        <label for="duration-learner">Learner</label>
+        <input id="duration-learner" type="text" readonly>
+      </div>
+      <div class="field">
+        <label for="current-duration">Current credited duration</label>
+        <input id="current-duration" type="text" readonly>
+      </div>
+      <div class="field">
+        <label for="reduced-duration">Reduced credited duration (months)</label>
+        <input id="reduced-duration" type="number" min="0" step="1" placeholder="Enter reduced duration">
+      </div>
+      <div class="field">
+        <label for="effective-date">Effective date</label>
+        <input id="effective-date" type="date">
+      </div>
+      <div class="field full">
+        <label for="duration-note">PTSB note</label>
+        <textarea id="duration-note" rows="4" placeholder="Explain why the credited duration was reduced and any follow-up needed."></textarea>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="action-btn" id="cancel-duration-btn" type="button">Cancel</button>
+      <button class="action-btn primary" id="save-duration-btn" type="button">Save reduction</button>
+    </div>
+  </div>
+</div>
+
 <script>
 const learners = [
   {
@@ -261,7 +312,9 @@ const learners = [
     preReviewed: false,
     riskLevel: 'Medium',
     riskReason: 'Work plan revision overdue by 6 days.',
-    checkInDueDate: '2026-07-30'
+    checkInDueDate: '2026-07-30',
+    creditedDurationMonths: 18,
+    durationAdjustmentNote: ''
   },
   {
     name: 'Daniel Brooks',
@@ -277,7 +330,9 @@ const learners = [
     preReviewed: false,
     riskLevel: 'High',
     riskReason: 'No mentor assigned and transfer request opened.',
-    checkInDueDate: '2026-08-02'
+    checkInDueDate: '2026-08-02',
+    creditedDurationMonths: 6,
+    durationAdjustmentNote: ''
   },
   {
     name: 'Mina Hassan',
@@ -293,7 +348,9 @@ const learners = [
     preReviewed: true,
     riskLevel: 'High',
     riskReason: 'Check-in due within 3 days and competencies gap flagged.',
-    checkInDueDate: '2026-07-18'
+    checkInDueDate: '2026-07-18',
+    creditedDurationMonths: 24,
+    durationAdjustmentNote: ''
   },
   {
     name: 'Ethan Cole',
@@ -309,7 +366,9 @@ const learners = [
     preReviewed: false,
     riskLevel: 'Medium',
     riskReason: 'Completion report approval pending final evidence check.',
-    checkInDueDate: '2026-08-15'
+    checkInDueDate: '2026-08-15',
+    creditedDurationMonths: 30,
+    durationAdjustmentNote: ''
   },
   {
     name: 'Olivia Park',
@@ -325,7 +384,9 @@ const learners = [
     preReviewed: false,
     riskLevel: 'High',
     riskReason: 'Repeated evidence request on tax competencies.',
-    checkInDueDate: '2026-07-21'
+    checkInDueDate: '2026-07-21',
+    creditedDurationMonths: 22,
+    durationAdjustmentNote: ''
   },
   {
     name: 'Lucas Bennett',
@@ -341,7 +402,9 @@ const learners = [
     preReviewed: false,
     riskLevel: 'High',
     riskReason: 'No employer on file after recent transfer.',
-    checkInDueDate: '2026-07-26'
+    checkInDueDate: '2026-07-26',
+    creditedDurationMonths: 16,
+    durationAdjustmentNote: ''
   },
   {
     name: 'Sofia Morales',
@@ -357,7 +420,9 @@ const learners = [
     preReviewed: true,
     riskLevel: 'Low',
     riskReason: 'No immediate exception.',
-    checkInDueDate: '2026-09-05'
+    checkInDueDate: '2026-09-05',
+    creditedDurationMonths: 14,
+    durationAdjustmentNote: ''
   },
   {
     name: 'Nina Patel',
@@ -373,7 +438,9 @@ const learners = [
     preReviewed: true,
     riskLevel: 'Medium',
     riskReason: 'Mentor validation still pending.',
-    checkInDueDate: '2026-08-28'
+    checkInDueDate: '2026-08-28',
+    creditedDurationMonths: 8,
+    durationAdjustmentNote: ''
   }
 ];
 
@@ -442,6 +509,13 @@ const mentorBody = document.getElementById('mentor-body');
 const employerBody = document.getElementById('employer-body');
 const messageBar = document.getElementById('message-bar');
 const messageText = document.getElementById('message-text');
+const durationModal = document.getElementById('duration-modal');
+const durationLearnerInput = document.getElementById('duration-learner');
+const currentDurationInput = document.getElementById('current-duration');
+const reducedDurationInput = document.getElementById('reduced-duration');
+const effectiveDateInput = document.getElementById('effective-date');
+const durationNoteInput = document.getElementById('duration-note');
+let selectedDurationLearnerIndex = null;
 
 function setMessage(text) {
   messageText.textContent = text;
@@ -516,8 +590,64 @@ function renderLearnerQueue() {
       <td><span class="status-badge ${statusClass(learner.currentStatus)}"><span class="dot"></span>${escapeHtml(learner.currentStatus)}</span></td>
       <td>${escapeHtml(learner.assignedReviewer)}</td>
       <td><span class="status-badge ${statusClass(learner.mentorApplicationStatus)}"><span class="dot"></span>${escapeHtml(learner.mentorApplicationStatus)}</span></td>
+      <td>
+        <button class="action-btn primary" type="button" data-reduce-duration="${escapeHtml(learner.learnerId)}">Reduce Credited Duration</button>
+      </td>
     </tr>
   `).join('');
+}
+
+function openDurationModal(learnerId) {
+  const learnerIndex = learners.findIndex((learner) => learner.learnerId === learnerId);
+  if (learnerIndex < 0) return;
+
+  selectedDurationLearnerIndex = learnerIndex;
+  const learner = learners[learnerIndex];
+  durationLearnerInput.value = `${learner.name} (${learner.learnerId})`;
+  currentDurationInput.value = `${learner.creditedDurationMonths} months`;
+  reducedDurationInput.value = learner.creditedDurationMonths;
+  effectiveDateInput.value = '2026-07-22';
+  durationNoteInput.value = learner.durationAdjustmentNote || '';
+  document.getElementById('duration-modal-copy').textContent = `Record the reduced credited duration for ${learner.name} and save a short operational note for follow-up.`;
+  durationModal.classList.add('visible');
+  durationModal.setAttribute('aria-hidden', 'false');
+}
+
+function closeDurationModal() {
+  durationModal.classList.remove('visible');
+  durationModal.setAttribute('aria-hidden', 'true');
+  selectedDurationLearnerIndex = null;
+}
+
+function saveReducedDuration() {
+  if (selectedDurationLearnerIndex === null) return;
+
+  const learner = learners[selectedDurationLearnerIndex];
+  const reducedDuration = Number(reducedDurationInput.value);
+  const effectiveDate = effectiveDateInput.value;
+  const note = durationNoteInput.value.trim();
+
+  if (!Number.isFinite(reducedDuration) || reducedDuration < 0) {
+    setMessage('Enter a valid reduced credited duration.');
+    return;
+  }
+
+  if (reducedDuration > learner.creditedDurationMonths) {
+    setMessage('Reduced credited duration must be less than or equal to the current credited duration.');
+    return;
+  }
+
+  if (!effectiveDate) {
+    setMessage('Enter an effective date for the duration reduction.');
+    return;
+  }
+
+  learner.creditedDurationMonths = reducedDuration;
+  learner.durationAdjustmentNote = note || `Credited duration reduced effective ${formatDate(effectiveDate)}.`;
+  learner.currentStatus = `Credited duration reduced to ${reducedDuration} months`;
+  renderLearnerQueue();
+  closeDurationModal();
+  setMessage(`${learner.name}: credited duration reduced to ${reducedDuration} months effective ${formatDate(effectiveDate)}.`);
 }
 
 function renderHighRiskQueue() {
@@ -577,9 +707,19 @@ function renderEmployerQueue() {
 mentorBody.addEventListener('click', (event) => {
   const button = event.target.closest('button[data-mentor-index]');
   if (!button) return;
-  const mentor = mentors[Number(button.dataset.mentorIndex)];
-  if (!mentor) return;
-  setMessage(`${mentor.name}: ${mentor.applicationDetails}`);
+  window.location.href = '../7_ReportJobChange/2_MentorJobChange/3_PTBReviewMentorChangeRequest.html';
+});
+
+learnerBody.addEventListener('click', (event) => {
+  const button = event.target.closest('button[data-reduce-duration]');
+  if (!button) return;
+  openDurationModal(button.dataset.reduceDuration);
+});
+
+document.getElementById('cancel-duration-btn').addEventListener('click', closeDurationModal);
+document.getElementById('save-duration-btn').addEventListener('click', saveReducedDuration);
+durationModal.addEventListener('click', (event) => {
+  if (event.target === durationModal) closeDurationModal();
 });
 
 function renderAll() {

@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPA - End Mentorship</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:#0B1F3A; --blue:#1B5EA8; --accent:#2A9D8F; --amber:#E76F1A; --green:#2D7A4E; --red:#C0392B;
+    --sand:#F7F5F2; --white:#FFFFFF; --gray-100:#F2F1EF; --gray-200:#E4E2DE; --gray-300:#D2CEC8;
+    --gray-400:#A8A49E; --gray-600:#6B6760; --gray-800:#2E2C2A;
+    --shadow-sm:0 1px 3px rgba(11,31,58,0.07),0 1px 2px rgba(11,31,58,0.05);
+    --radius-sm:6px; --radius-md:10px; --radius-lg:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'DM Sans',sans-serif;background:var(--sand);color:var(--gray-800);min-height:100vh}
+  a{text-decoration:none;color:inherit}
+  button,input,select,textarea{font:inherit}
+  textarea{resize:vertical}
+  .topbar{background:var(--navy);min-height:60px;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:0 2rem}
+  .logo-group{display:flex;align-items:center;gap:10px;min-width:225px}
+  .logo-mark{width:36px;height:36px;background:var(--white);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .logo-text{display:flex;flex-direction:column;line-height:1.1}
+  .logo-text .brand{font-size:13px;font-weight:600;color:var(--white);letter-spacing:.04em}
+  .logo-text .sub{font-size:10px;color:rgba(255,255,255,.5);letter-spacing:.02em;text-transform:uppercase}
+  .topbar-right{display:flex;align-items:center;gap:12px}
+  .nav-links{display:flex;align-items:center;gap:2px}
+  .nav-links a{color:rgba(255,255,255,.55);font-size:14px;padding:8px 16px;border-radius:var(--radius-sm);white-space:nowrap}
+  .nav-links a.active,.nav-links a:hover{color:var(--white);background:rgba(255,255,255,.08)}
+  .role-dropdown{position:relative}
+  .role-trigger{list-style:none;display:flex;align-items:center;gap:10px;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);color:var(--white);font-size:13px;font-weight:600;cursor:pointer}
+  .role-trigger::-webkit-details-marker{display:none}
+  .role-label{display:inline-flex;align-items:center;justify-content:center;min-width:92px}
+  .role-caret{font-size:11px;color:rgba(255,255,255,.72)}
+  .role-menu{position:absolute;right:0;top:calc(100% + 10px);min-width:190px;padding:8px;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);box-shadow:0 12px 30px rgba(11,31,58,.14);display:flex;flex-direction:column;gap:4px;z-index:20}
+  .role-option{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:var(--radius-sm);font-size:13px;color:var(--gray-800)}
+  .role-option:hover{background:var(--gray-100)}
+  .role-option.active{background:#EBF3FF;color:var(--blue);font-weight:600}
+  .page{max-width:1460px;margin:0 auto;padding:2rem 2rem 4rem}
+  .hero{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--gray-200)}
+  .hero h1{font-family:'DM Serif Display',serif;font-size:38px;font-weight:400;color:var(--navy);margin-bottom:6px}
+  .hero p{font-size:14px;color:var(--gray-600);max-width:860px;line-height:1.5}
+  .hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);padding:10px 16px;box-shadow:var(--shadow-sm);font-size:13px;color:var(--gray-600)}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--blue);flex:0 0 auto}
+  .message-bar{display:none;align-items:center;gap:10px;margin-bottom:1rem;padding:12px 14px;border-radius:var(--radius-md);background:#EBF3FF;border:1px solid rgba(27,94,168,.18);color:var(--navy);box-shadow:var(--shadow-sm)}
+  .message-bar.visible{display:flex}
+  .workspace{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:16px}
+  .panel{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm)}
+  .main-panel,.side-panel{padding:1.25rem}
+  .section-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gray-400);margin-bottom:.75rem}
+  .panel h2{font-size:17px;color:var(--navy);margin-bottom:4px}
+  .panel-copy{font-size:12px;color:var(--gray-600);line-height:1.45}
+  .stack,.meta-stack,.mentor-results{display:flex;flex-direction:column;gap:16px}
+  .form-section{padding:1rem;border:1px solid var(--gray-200);border-radius:var(--radius-md);background:var(--sand)}
+  .form-section h3{font-size:15px;color:var(--navy);margin-bottom:6px}
+  .field-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .field{display:flex;flex-direction:column;gap:6px}
+  .field.full{grid-column:1 / -1}
+  .field label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gray-400)}
+  .field input,.field select,.field textarea{border:1px solid var(--gray-200);border-radius:var(--radius-sm);background:var(--white);padding:10px 12px;color:var(--gray-800)}
+  .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:rgba(27,94,168,.32);box-shadow:0 0 0 3px rgba(27,94,168,.08)}
+  .field textarea{min-height:110px}
+  .subcopy{font-size:11px;color:var(--gray-600);line-height:1.45}
+  .metric-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+  .metric-card,.meta-card,.notice-box,.mentor-card{padding:12px;border-radius:var(--radius-md);border:1px solid var(--gray-200);background:var(--white)}
+  .metric-card strong,.meta-card strong,.notice-box strong,.mentor-card strong{display:block;font-size:13px;color:var(--navy);margin-bottom:4px}
+  .metric-card span,.meta-card span,.notice-box span,.mentor-card span{display:block;font-size:12px;color:var(--gray-600);line-height:1.45}
+  .metric-card .value{font-family:'DM Serif Display',serif;font-size:30px;line-height:1;color:var(--navy);margin-bottom:6px}
+  .notice-box{background:#F7FAFF}
+  .notice-box.warn{background:#FFF8F1;border-color:rgba(231,111,26,.22)}
+  .notice-box.success{background:#F2FBF6;border-color:rgba(45,122,78,.22)}
+  .button-row{display:flex;flex-wrap:wrap;gap:8px}
+  .action-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:var(--radius-sm);border:1px solid var(--gray-200);padding:9px 12px;background:var(--white);color:var(--navy);font-size:12px;font-weight:700;cursor:pointer;transition:all .15s ease}
+  .action-btn:hover{border-color:rgba(27,94,168,.28);background:#F7FAFF}
+  .action-btn.primary{background:#EBF3FF;border-color:rgba(27,94,168,.28);color:var(--blue)}
+  .action-btn.success{background:#E8F5EE;border-color:rgba(45,122,78,.22);color:var(--green)}
+  .status-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:5px 10px;border-radius:20px;white-space:nowrap}
+  .status-badge .dot{width:6px;height:6px}
+  .badge-draft{background:#EBF3FF;color:var(--blue)} .badge-draft .dot{background:var(--blue)}
+  .badge-pending{background:#FEF3E8;color:var(--amber)} .badge-pending .dot{background:var(--amber)}
+  .badge-routed{background:#E8F5EE;color:var(--green)} .badge-routed .dot{background:var(--green)}
+  .badge-requested{background:#F3EEFF;color:#5B3DB4} .badge-requested .dot{background:#5B3DB4}
+  .selection-banner{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border-radius:var(--radius-md);background:#F7FAFF;border:1px solid rgba(27,94,168,.16)}
+  .selection-banner span{font-size:12px;color:var(--gray-600)}
+  .mentor-search-shell{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}
+  .mentor-results .mentor-card.selected{border-color:rgba(27,94,168,.32);background:#EBF3FF}
+  .mentor-actions{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:10px}
+  .pill{display:inline-flex;align-items:center;gap:6px;padding:5px 9px;border-radius:999px;background:var(--gray-100);font-size:11px;font-weight:700;color:var(--gray-600)}
+  .pill.approved{background:#E8F5EE;color:var(--green)}
+  .empty-state{padding:18px;border:1px dashed var(--gray-300);border-radius:var(--radius-md);background:var(--white);text-align:center;font-size:13px;color:var(--gray-600)}
+  @media(max-width:1180px){.workspace{grid-template-columns:1fr}}
+  @media(max-width:920px){.field-grid,.metric-grid,.mentor-search-shell{grid-template-columns:1fr}}
+  @media(max-width:760px){
+    .topbar{align-items:flex-start;flex-direction:column;padding:1rem}
+    .nav-links{display:none}
+    .topbar-right{width:100%;justify-content:space-between}
+    .page{padding:1.25rem 1rem 3rem}
+    .hero{flex-direction:column;align-items:flex-start}
+    .hero h1{font-size:34px}
+    .selection-banner,.mentor-actions{flex-direction:column;align-items:flex-start}
+  }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="logo-group">
+    <div class="logo-mark">
+      <svg width="24" height="20" viewBox="0 0 24 20" fill="none" aria-hidden="true">
+        <path d="M2 10C2 5.58 5.58 2 10 2h4c4.42 0 8 3.58 8 8s-3.58 8-8 8h-4C5.58 18 2 14.42 2 10z" fill="#0B1F3A" opacity="0.12"/>
+        <path d="M7 10.5l3 3 7-7" stroke="#0B1F3A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="logo-text"><span class="brand">CPA Canada</span><span class="sub">Chartered Professional Accountants</span></div>
+  </div>
+  <div class="topbar-right">
+    <nav class="nav-links" aria-label="Primary navigation">
+      <a href="../../1_Dashboard/MentorDashboard.html">Dashboard</a>
+      <a href="../../1_Dashboard/MentorDashboard.html#assigned-learners" class="active">Mentorship changes</a>
+      <a href="../../1_Dashboard/MentorDashboard.html#roster-controls-title">Assigned learners</a>
+    </nav>
+    <details class="role-dropdown">
+      <summary class="role-trigger"><span class="role-label">Mentor</span><span class="role-caret">&#9662;</span></summary>
+      <div class="role-menu">
+        <a class="role-option" href="../../index.html">Learner</a>
+        <a class="role-option" href="../../1_Dashboard/CPAReviewer.html">CPA Reviewer</a>
+        <a class="role-option active" href="../../1_Dashboard/MentorDashboard.html">Mentor</a>
+        <a class="role-option" href="../../1_Dashboard/PTSBStaffDashboard.html">PTSB Staff</a>
+              <a class="role-option" href="../../8_MentorOnboarding/1_MentorOnboarding.html">Mentor onboarding</a>
+      </div>
+    </details>
+  </div>
+</header>
+
+<main class="page">
+  <section class="hero" aria-labelledby="mentor-end-title">
+    <div>
+      <h1 id="mentor-end-title">End mentorship and assign a replacement mentor</h1>
+      <p>Submit a mentorship termination request, notify the learner and CPA Reviewer, and prepare the learner handoff by selecting an approved replacement mentor. The mentor relationship remains in a requested state until approval is completed.</p>
+    </div>
+    <div class="hero-badge"><span class="dot"></span><span id="hero-summary">Mentor change request draft in progress</span></div>
+  </section>
+
+  <div class="message-bar" id="message-bar" role="status" aria-live="polite">
+    <span class="dot"></span>
+    <span id="message-text"></span>
+  </div>
+
+  <section class="workspace">
+    <section class="panel main-panel">
+      <div class="section-label">Mentor relationship management</div>
+      <h2>Mentorship termination and reassignment</h2>
+     <!-- <p class="panel-copy">Use this page when a mentor can no longer continue supporting the learner. Capture the reason, route the request, notify the learner, and identify a replacement mentor so the learner's work plan can continue once approval is complete.</p>-->
+
+      <div class="stack" style="margin-top:1rem;">
+        <section class="form-section">
+          <h3>Current mentorship snapshot</h3>
+          <div class="metric-grid" id="snapshot-grid"></div>
+
+          <!--
+          <div class="notice-box warn" style="margin-top:1rem;">
+            <strong>Pending closure state</strong>
+            <span>After submission, the current mentor relationship is marked Pending Closure while the learner remains in Mentor Change Requested status until the reassignment is approved.</span>
+          </div>
+          -->
+        </section>
+
+        <section class="form-section">
+          <h3>Mentor termination request</h3>
+          <div class="field-grid">
+            <div class="field">
+              <label for="request-date">Request date</label>
+              <input id="request-date" type="date">
+              <span class="subcopy">The system records the mentorship termination request date.</span>
+            </div>
+            <div class="field">
+              <label for="mentor-name">Current mentor</label>
+              <input id="mentor-name" type="text" readonly>
+            </div>
+            <div class="field">
+              <label for="learner-name">Learner</label>
+              <input id="learner-name" type="text" readonly>
+            </div>
+            <div class="field">
+              <label for="termination-reason">Reason for ending mentorship</label>
+              <select id="termination-reason">
+                <option value="">Select a reason</option>
+                <option value="Mentor left organization">Mentor left organization</option>
+                <option value="Learner left organization">Learner left organization</option>
+                <option value="No longer eligible">No longer eligible</option>
+                <option value="No longer supervising learner">No longer supervising learner</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="field full" id="other-reason-field" style="display:none;">
+              <label for="other-reason">Other reason</label>
+              <textarea id="other-reason" placeholder="Provide the reason this mentorship can no longer continue."></textarea>
+            </div>
+            <div class="field full">
+              <label for="termination-summary">Termination summary</label>
+              <textarea id="termination-summary" placeholder="Summarize the mentorship change and any context the learner, CPA Reviewer, or approving staff should understand."></textarea>
+            </div>
+          </div>
+        </section>
+
+        <section class="form-section">
+          <h3>Replacement mentor selection</h3>
+          <div class="selection-banner">
+            <div>
+              <strong style="display:block;font-size:13px;color:var(--navy);margin-bottom:4px;">Approved mentor search</strong>
+              <span>Search the approved mentor list and choose a replacement mentor to receive the assignment notification once the change is submitted.</span>
+            </div>
+            <div class="status-badge badge-requested"><span class="dot"></span><span>Mentor Change Requested</span></div>
+          </div>
+          <div class="mentor-search-shell" style="margin-top:1rem;">
+            <input id="mentor-search" type="search" placeholder="Search approved mentors by name, employer, or specialty">
+            <button class="action-btn primary" id="search-btn" type="button">Search mentors</button>
+          </div>
+          <div class="mentor-results" id="mentor-results" style="margin-top:1rem;"></div>
+          <div class="field full" style="margin-top:1rem;">
+            <label for="reassignment-notes">Reassignment notes</label>
+            <textarea id="reassignment-notes" placeholder="Capture any handoff notes that should go to the replacement mentor."></textarea>
+          </div>
+        </section>
+
+        <section class="form-section">
+          <h3>Routing and notification</h3>
+          <div class="notice-box success">
+            <strong>Learner notification</strong>
+            <span>The learner is notified when the mentorship termination request is submitted so they can track the reassignment process.</span>
+          </div>
+          <div class="notice-box" style="margin-top:1rem;">
+            <strong>CPA Reviewer dashboard notification</strong>
+            <span>The submission is added to the CPA Reviewer dashboard as a pending mentorship change requiring visibility and follow-up.</span>
+          </div>
+          <div class="notice-box warn" style="margin-top:1rem;">
+            <strong>Replacement mentor notification</strong>
+            <span>Once selected, the replacement mentor receives a mentor assignment notification and the learner stays in Mentor Change Requested status until the request is approved.</span>
+          </div>
+        </section>
+
+        <section class="form-section">
+          <h3>Submission actions</h3>
+          <div class="button-row">
+            <button class="action-btn primary" id="save-draft-btn" type="button">Save draft</button>
+            <button class="action-btn success" id="submit-btn" type="button">Submit mentorship termination request</button>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <aside class="panel side-panel">
+      <div class="section-label">Status and routing</div>
+      <h2>Mentorship change</h2>
+      <div class="meta-stack">
+        <div class="meta-card">
+          <strong>Request status</strong>
+          <span id="meta-status">Draft</span>
+        </div>
+        <div class="meta-card">
+          <strong>Relationship status</strong>
+          <span id="meta-relationship">Active</span>
+        </div>
+        <div class="meta-card">
+          <strong>Learner status</strong>
+          <span id="meta-learner-status">Active mentorship</span>
+        </div>
+        <div class="meta-card">
+          <strong>CPA Reviewer notification</strong>
+          <span id="meta-reviewer-route">Not sent</span>
+        </div>
+        <div class="meta-card">
+          <strong>Learner notification</strong>
+          <span id="meta-learner-notification">Not sent</span>
+        </div>
+        <div class="meta-card">
+          <strong>Replacement mentor</strong>
+          <span id="meta-replacement">Not selected</span>
+        </div>
+        <div class="meta-card">
+          <strong>Assignment notification</strong>
+          <span id="meta-assignment-notification">Not sent</span>
+        </div>
+        <div class="meta-card">
+          <strong>Submitted</strong>
+          <span id="meta-submitted-at">Not submitted</span>
+        </div>
+      </div>
+    </aside>
+  </section>
+</main>
+
+<script>
+const approvedMentors = [
+  { id: 'MTR-2271', name: 'Harper Singh, CPA', employer: 'Northline Advisory Group', specialty: 'Financial Reporting', location: 'Vancouver', status: 'Approved mentor' },
+  { id: 'MTR-2184', name: 'Devon Clarke, CPA', employer: 'Summit Rail Finance', specialty: 'Assurance & Trust', location: 'Burnaby', status: 'Approved mentor' },
+  { id: 'MTR-2408', name: 'Lena Ortiz, CPA', employer: 'Grant Mercer Tax', specialty: 'Ethics and communication', location: 'Richmond', status: 'Approved mentor' },
+  { id: 'MTR-2316', name: 'Noah Ramirez, CPA', employer: 'Avery Health Group', specialty: 'Risk assessment', location: 'Surrey', status: 'Approved mentor' }
+];
+
+const requestKey = 'mentorTerminationRequest:mentor-4021:learner-251004';
+const defaultRecord = {
+  requestDate: '2026-07-22',
+  mentorName: 'Sofia Chen, CPA',
+  learnerName: 'Daniel Brooks',
+  learnerId: 'LRN-251004',
+  employer: 'Cedar & Finch LLP',
+  currentStage: 'Foundational Experience review',
+  terminationReason: '',
+  otherReason: '',
+  terminationSummary: '',
+  reassignmentNotes: '',
+  selectedMentorId: '',
+  status: 'Draft',
+  relationshipStatus: 'Active',
+  learnerStatus: 'Active mentorship',
+  reviewerNotification: '',
+  learnerNotification: '',
+  assignmentNotification: '',
+  submittedAt: ''
+};
+
+let requestRecord = loadRecord();
+
+const messageBar = document.getElementById('message-bar');
+const messageText = document.getElementById('message-text');
+const requestDateInput = document.getElementById('request-date');
+const mentorNameInput = document.getElementById('mentor-name');
+const learnerNameInput = document.getElementById('learner-name');
+const reasonSelect = document.getElementById('termination-reason');
+const otherReasonField = document.getElementById('other-reason-field');
+const otherReasonInput = document.getElementById('other-reason');
+const terminationSummaryInput = document.getElementById('termination-summary');
+const reassignmentNotesInput = document.getElementById('reassignment-notes');
+const mentorSearchInput = document.getElementById('mentor-search');
+const mentorResults = document.getElementById('mentor-results');
+
+function loadRecord() {
+  try {
+    const stored = localStorage.getItem(requestKey);
+    if (!stored) return { ...defaultRecord };
+    return { ...defaultRecord, ...JSON.parse(stored) };
+  } catch (error) {
+    return { ...defaultRecord };
+  }
+}
+
+function saveRecord() {
+  localStorage.setItem(requestKey, JSON.stringify(requestRecord));
+}
+
+function setMessage(text) {
+  messageText.textContent = text;
+  messageBar.classList.add('visible');
+}
+
+function getSelectedMentor() {
+  return approvedMentors.find((mentor) => mentor.id === requestRecord.selectedMentorId) || null;
+}
+
+function renderSnapshot() {
+  const selectedMentor = getSelectedMentor();
+  const metrics = [
+    { value: requestRecord.learnerId, label: 'Learner ID', detail: requestRecord.learnerName },
+    { value: requestRecord.currentStage, label: 'Current stage', detail: requestRecord.employer },
+    { value: selectedMentor ? selectedMentor.name : 'Pending', label: 'Replacement mentor', detail: selectedMentor ? selectedMentor.specialty : 'Awaiting mentor selection' }
+  ];
+
+  document.getElementById('snapshot-grid').innerHTML = metrics.map((metric) => `
+    <div class="metric-card">
+      <div class="value">${metric.value}</div>
+      <strong>${metric.label}</strong>
+      <span>${metric.detail}</span>
+    </div>
+  `).join('');
+}
+
+function renderMeta() {
+  const selectedMentor = getSelectedMentor();
+  document.getElementById('meta-status').textContent = requestRecord.status;
+  document.getElementById('meta-relationship').textContent = requestRecord.relationshipStatus;
+  document.getElementById('meta-learner-status').textContent = requestRecord.learnerStatus;
+  document.getElementById('meta-reviewer-route').textContent = requestRecord.reviewerNotification || 'Not sent';
+  document.getElementById('meta-learner-notification').textContent = requestRecord.learnerNotification || 'Not sent';
+  document.getElementById('meta-replacement').textContent = selectedMentor ? `${selectedMentor.name} (${selectedMentor.id})` : 'Not selected';
+  document.getElementById('meta-assignment-notification').textContent = requestRecord.assignmentNotification || 'Not sent';
+  document.getElementById('meta-submitted-at').textContent = requestRecord.submittedAt || 'Not submitted';
+  document.getElementById('hero-summary').textContent = requestRecord.status === 'Submitted'
+    ? 'Mentorship change request submitted'
+    : 'Mentor change request draft in progress';
+}
+
+function toggleOtherReason() {
+  otherReasonField.style.display = reasonSelect.value === 'Other' ? 'block' : 'none';
+}
+
+function renderMentorResults() {
+  const query = mentorSearchInput.value.trim().toLowerCase();
+  const filtered = approvedMentors.filter((mentor) => {
+    if (!query) return true;
+    return [mentor.name, mentor.employer, mentor.specialty, mentor.location, mentor.id]
+      .join(' | ')
+      .toLowerCase()
+      .includes(query);
+  });
+
+  if (!filtered.length) {
+    mentorResults.innerHTML = '<div class="empty-state">No approved mentors matched your search.</div>';
+    return;
+  }
+
+  mentorResults.innerHTML = filtered.map((mentor) => `
+    <div class="mentor-card ${mentor.id === requestRecord.selectedMentorId ? 'selected' : ''}">
+      <strong>${mentor.name}</strong>
+      <span>${mentor.id} | ${mentor.employer}</span>
+      <span>${mentor.specialty} | ${mentor.location}</span>
+      <div class="mentor-actions">
+        <span class="pill approved">${mentor.status}</span>
+        <button class="action-btn primary" type="button" data-select-mentor="${mentor.id}">
+          ${mentor.id === requestRecord.selectedMentorId ? 'Selected' : 'Select mentor'}
+        </button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function hydrateForm() {
+  requestDateInput.value = requestRecord.requestDate;
+  mentorNameInput.value = requestRecord.mentorName;
+  learnerNameInput.value = `${requestRecord.learnerName} (${requestRecord.learnerId})`;
+  reasonSelect.value = requestRecord.terminationReason;
+  otherReasonInput.value = requestRecord.otherReason;
+  terminationSummaryInput.value = requestRecord.terminationSummary;
+  reassignmentNotesInput.value = requestRecord.reassignmentNotes;
+  toggleOtherReason();
+  renderSnapshot();
+  renderMeta();
+  renderMentorResults();
+}
+
+function syncRecordFromForm() {
+  requestRecord.requestDate = requestDateInput.value;
+  requestRecord.terminationReason = reasonSelect.value;
+  requestRecord.otherReason = otherReasonInput.value.trim();
+  requestRecord.terminationSummary = terminationSummaryInput.value.trim();
+  requestRecord.reassignmentNotes = reassignmentNotesInput.value.trim();
+}
+
+function validateRecord() {
+  syncRecordFromForm();
+
+  if (!requestRecord.requestDate) return 'Request date is required.';
+  if (!requestRecord.terminationReason) return 'Please select a reason for ending the mentorship.';
+  if (requestRecord.terminationReason === 'Other' && !requestRecord.otherReason) return 'Please provide the other reason.';
+  if (!requestRecord.terminationSummary) return 'Please provide a termination summary.';
+  if (!requestRecord.selectedMentorId) return 'Please select a replacement mentor.';
+  return '';
+}
+
+document.getElementById('save-draft-btn').addEventListener('click', () => {
+  syncRecordFromForm();
+  requestRecord.status = 'Draft';
+  saveRecord();
+  renderSnapshot();
+  renderMeta();
+  renderMentorResults();
+  setMessage('Mentorship termination draft saved.');
+  window.location.href = '../../index.html';
+});
+
+document.getElementById('submit-btn').addEventListener('click', () => {
+  const error = validateRecord();
+  if (error) {
+    setMessage(error);
+    window.location.href = '../../index.html';
+    return;
+  }
+
+  const now = new Date();
+  const selectedMentor = getSelectedMentor();
+  requestRecord.status = 'Submitted';
+  requestRecord.relationshipStatus = 'Pending Closure';
+  requestRecord.learnerStatus = 'Mentor Change Requested';
+  requestRecord.reviewerNotification = `Visible on CPA Reviewer dashboard as of ${now.toLocaleString()}.`;
+  requestRecord.learnerNotification = `${requestRecord.learnerName} notified on ${now.toLocaleString()}.`;
+  requestRecord.assignmentNotification = selectedMentor
+    ? `${selectedMentor.name} notified of mentor assignment on ${now.toLocaleString()}.`
+    : '';
+  requestRecord.submittedAt = now.toLocaleString();
+  saveRecord();
+  renderSnapshot();
+  renderMeta();
+  renderMentorResults();
+  setMessage('Mentorship termination request submitted and routed for follow-up.');
+  window.location.href = '../../index.html';
+});
+
+reasonSelect.addEventListener('change', () => {
+  toggleOtherReason();
+  syncRecordFromForm();
+  saveRecord();
+});
+
+mentorResults.addEventListener('click', (event) => {
+  const selectButton = event.target.closest('[data-select-mentor]');
+  if (!selectButton) return;
+
+  requestRecord.selectedMentorId = selectButton.dataset.selectMentor;
+  saveRecord();
+  renderSnapshot();
+  renderMeta();
+  renderMentorResults();
+  const selectedMentor = getSelectedMentor();
+  setMessage(`${selectedMentor.name} selected as the replacement mentor.`);
+});
+
+document.getElementById('search-btn').addEventListener('click', renderMentorResults);
+mentorSearchInput.addEventListener('input', renderMentorResults);
+
+hydrateForm();
+</script>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CPA - Learner Check-In Report</title>
+<title>CPA - View Check-In Report</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -15,8 +15,7 @@
   }
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:'DM Sans',sans-serif;background:var(--sand);color:var(--gray-800);min-height:100vh}
-  button,input,textarea{font:inherit}
-  textarea{resize:vertical}
+  a{text-decoration:none;color:inherit}
   .topbar{background:var(--navy);min-height:60px;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:0 2rem}
   .logo-group{display:flex;align-items:center;gap:10px;min-width:225px}
   .logo-mark{width:36px;height:36px;background:var(--white);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
@@ -27,7 +26,7 @@
   .nav-links{display:flex;align-items:center;gap:2px}
   .nav-links a{text-decoration:none;color:rgba(255,255,255,.55);font-size:14px;padding:8px 16px;border-radius:var(--radius-sm);white-space:nowrap}
   .nav-links a.active,.nav-links a:hover{color:var(--white);background:rgba(255,255,255,.08)}
-    .role-dropdown{position:relative}
+  .role-dropdown{position:relative}
   .role-trigger{list-style:none;display:flex;align-items:center;gap:10px;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);color:var(--white);font-size:13px;font-weight:600;cursor:pointer}
   .role-trigger::-webkit-details-marker{display:none}
   .role-label{display:inline-flex;align-items:center;justify-content:center;min-width:92px}
@@ -42,45 +41,35 @@
   .hero p{font-size:14px;color:var(--gray-600);max-width:860px;line-height:1.5}
   .hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);padding:10px 16px;box-shadow:var(--shadow-sm);font-size:13px;color:var(--gray-600)}
   .dot{width:8px;height:8px;border-radius:50%;background:var(--blue);flex:0 0 auto}
-  .message-bar{display:none;align-items:center;gap:10px;margin-bottom:1rem;padding:12px 14px;border-radius:var(--radius-md);background:#EBF3FF;border:1px solid rgba(27,94,168,.18);color:var(--navy);box-shadow:var(--shadow-sm)}
-  .message-bar.visible{display:flex}
   .workspace{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:16px}
   .panel{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm)}
   .main-panel,.side-panel{padding:1.25rem}
   .section-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gray-400);margin-bottom:.75rem}
   .panel h2{font-size:17px;color:var(--navy);margin-bottom:4px}
   .panel-copy{font-size:12px;color:var(--gray-600);line-height:1.45}
-  .stack,.meta-stack,.trail-list{display:flex;flex-direction:column;gap:16px}
+  .stack,.meta-stack,.trail-list,.doc-list{display:flex;flex-direction:column;gap:16px}
   .info-section{padding:1rem;border:1px solid var(--gray-200);border-radius:var(--radius-md);background:var(--sand)}
   .info-section h3{font-size:15px;color:var(--navy);margin-bottom:6px}
   .grid-2,.grid-3{display:grid;gap:12px}
   .grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
   .grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
-  .value-card,.meta-card,.notice-box,.trail-item{padding:12px;border-radius:var(--radius-md);border:1px solid var(--gray-200);background:var(--white)}
-  .value-card span,.meta-card span,.notice-box span,.trail-item span{display:block;font-size:12px;color:var(--gray-600);line-height:1.45}
-  .value-card strong,.meta-card strong,.notice-box strong,.trail-item strong{display:block;font-size:13px;color:var(--navy);margin-bottom:4px}
+  .value-card,.meta-card,.trail-item,.doc-item,.readonly-block{padding:12px;border-radius:var(--radius-md);border:1px solid var(--gray-200);background:var(--white)}
+  .value-card span,.meta-card span,.trail-item span,.doc-item span,.readonly-block span{display:block;font-size:12px;color:var(--gray-600);line-height:1.45}
+  .value-card strong,.meta-card strong,.trail-item strong,.doc-item strong,.readonly-block strong{display:block;font-size:13px;color:var(--navy);margin-bottom:4px}
+  .readonly-block{background:#F7FAFF}
   .status-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:5px 10px;border-radius:20px;white-space:nowrap}
   .status-badge .dot{width:6px;height:6px}
   .badge-draft{background:#EBF3FF;color:var(--blue)} .badge-draft .dot{background:var(--blue)}
   .badge-pending{background:#FEF3E8;color:var(--amber)} .badge-pending .dot{background:var(--amber)}
   .badge-approved{background:#E8F5EE;color:var(--green)} .badge-approved .dot{background:var(--green)}
-  .notice-box.warn{background:#FFF8F1;border-color:rgba(231,111,26,.22)}
-  .notice-box.success{background:#F2FBF6;border-color:rgba(45,122,78,.22)}
-  .form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-  .form-field{display:flex;flex-direction:column;gap:8px}
-  .form-field label{font-size:12px;font-weight:700;color:var(--navy)}
-  .form-field input,.form-field textarea{border:1px solid var(--gray-200);border-radius:var(--radius-sm);background:var(--white);padding:10px 12px;color:var(--gray-800)}
-  .form-field textarea{min-height:110px}
-  .form-field input:focus,.form-field textarea:focus{outline:none;border-color:rgba(27,94,168,.32);box-shadow:0 0 0 3px rgba(27,94,168,.08)}
-  .field-hint{font-size:11px;color:var(--gray-600);line-height:1.45}
-  .button-row{display:flex;flex-wrap:wrap;gap:8px}
-  .action-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:var(--radius-sm);border:1px solid var(--gray-200);padding:9px 12px;background:var(--white);color:var(--navy);font-size:12px;font-weight:700;cursor:pointer;transition:all .15s ease}
-  .action-btn:hover{border-color:rgba(27,94,168,.28);background:#F7FAFF}
-  .action-btn.primary{background:#EBF3FF;border-color:rgba(27,94,168,.28);color:var(--blue)}
-  .action-btn.success{background:#E8F5EE;border-color:rgba(45,122,78,.22);color:var(--green)}
-  .action-btn[disabled]{opacity:.55;cursor:not-allowed;background:var(--gray-100);color:var(--gray-600)}
-  .readonly-copy{padding:12px;border-radius:var(--radius-md);border:1px solid var(--gray-200);background:#F7FAFF;font-size:12px;color:var(--gray-600);line-height:1.45}
+  .badge-declined{background:#FDECEA;color:var(--red)} .badge-declined .dot{background:var(--red)}
+  .badge-neutral{background:var(--gray-100);color:var(--gray-600)} .badge-neutral .dot{background:var(--gray-400)}
   .empty-state{padding:18px;border:1px dashed var(--gray-300);border-radius:var(--radius-md);background:var(--sand);text-align:center;font-size:13px;color:var(--gray-600)}
+  .progress-shell{display:flex;flex-direction:column;gap:8px}
+  .progress-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .progress-value{font-family:'DM Serif Display',serif;font-size:32px;color:var(--navy)}
+  .progress-track{height:8px;width:100%;background:var(--gray-100);border-radius:999px;overflow:hidden}
+  .progress-fill{height:100%;background:var(--blue);border-radius:999px}
   @media(max-width:1080px){.workspace{grid-template-columns:1fr}}
   @media(max-width:760px){
     .topbar{align-items:flex-start;flex-direction:column;padding:1rem}
@@ -89,7 +78,7 @@
     .page{padding:1.25rem 1rem 3rem}
     .hero{flex-direction:column;align-items:flex-start}
     .hero h1{font-size:34px}
-    .grid-2,.grid-3,.form-grid{grid-template-columns:1fr}
+    .grid-2,.grid-3{grid-template-columns:1fr}
   }
 </style>
 </head>
@@ -106,11 +95,11 @@
   </div>
   <div class="topbar-right">
     <nav class="nav-links" aria-label="Primary navigation">
-      <a href="../1_Dashboard/LearnerDashboard.html">Dashboard</a>
-      <a href="../3_WorkPlan/1_LearnerWP/1_LearnerWorkPlanInfo.html">Work plan</a>
-      <a href="1_LearnerSubmitCheckin.html" class="active">Check-in report</a>
+      <a href="../../index.html">Dashboard</a>
+      <a href="../1_LearnerRiskAssessment/1_LearnerSubmitCheckin.html">Check-in report</a>
+      <a href="2_LearnerViewCheckInReport.html" class="active">View check-in</a>
     </nav>
-                <details class="role-dropdown">
+    <details class="role-dropdown">
       <summary class="role-trigger"><span class="role-label">Learner</span><span class="role-caret">&#9662;</span></summary>
       <div class="role-menu">
         <a class="role-option active" href="../../index.html">Learner</a>
@@ -124,26 +113,21 @@
 </header>
 
 <main class="page">
-  <section class="hero" aria-labelledby="checkin-title">
+  <section class="hero" aria-labelledby="view-title">
     <div>
-      <h1 id="checkin-title">Submit check-in report</h1>
-      <p>Share your progress against the approved work plan, summarize what changed since the last update, and submit the check-in report for mentor approval.</p>
+      <h1 id="view-title">View check-in report</h1>
+      <p>Review your submitted or draft check-in report in read-only mode, including the approved work plan context, progress details, routing, and submission history.</p>
     </div>
-    <div class="hero-badge"><span class="dot"></span><span id="hero-summary">Loading approved work plan</span></div>
+    <div class="hero-badge"><span class="dot"></span><span id="hero-summary">Loading check-in report</span></div>
   </section>
-
-  <div class="message-bar" id="message-bar" role="status" aria-live="polite">
-    <span class="dot"></span>
-    <span id="message-text"></span>
-  </div>
 
   <section class="workspace">
     <section class="panel main-panel">
-      <div class="section-label">Learner submission</div>
+      <div class="section-label">Learner view</div>
       <h2>Check-in report details</h2>
-      <p class="panel-copy" id="detail-copy">Use the approved work plan context to prepare your check-in report and route it to your mentor for approval.</p>
+      <p class="panel-copy" id="detail-copy">This page shows the learner's saved check-in information exactly as recorded in the current report.</p>
 
-      <div class="stack">
+      <div class="stack" style="margin-top:1rem;">
         <section class="info-section">
           <h3>Approved work plan context</h3>
           <div class="grid-3" id="approved-plan-grid"></div>
@@ -151,52 +135,31 @@
 
         <section class="info-section">
           <h3>Check-in report</h3>
-          <div class="form-grid">
-            <div class="form-field">
-              <label for="reporting-start">Reporting period start</label>
-              <input id="reporting-start" type="date">
-            </div>
-            <div class="form-field">
-              <label for="reporting-end">Reporting period end</label>
-              <input id="reporting-end" type="date">
-            </div>
-            <div class="form-field">
-              <label for="hours-completed">Hours completed in this period</label>
-              <input id="hours-completed" type="number" min="0" step="1">
-            </div>
-            <div class="form-field">
-              <label for="competencies-progress">Competency progress update</label>
-              <input id="competencies-progress" type="text" placeholder="Example: Financial Reporting and Management Accounting">
-            </div>
+          <div class="grid-2" id="report-grid"></div>
+          <div class="readonly-block" style="margin-top:1rem;">
+            <strong>Progress summary</strong>
+            <span id="progress-summary">Not provided.</span>
           </div>
-          <div class="form-field" style="margin-top:1rem;">
-            <label for="progress-summary">Progress summary</label>
-            <textarea id="progress-summary" placeholder="Describe your progress against the approved work plan."></textarea>
+          <div class="readonly-block" style="margin-top:1rem;">
+            <strong>Key accomplishments and updates</strong>
+            <span id="key-accomplishments">Not provided.</span>
           </div>
-          <div class="form-field" style="margin-top:1rem;">
-            <label for="key-accomplishments">Key accomplishments and updates</label>
-            <textarea id="key-accomplishments" placeholder="Summarize key work completed, role changes, or milestones reached."></textarea>
-          </div>
-          <div class="form-field" style="margin-top:1rem;">
-            <label for="support-needed">Support or guidance needed</label>
-            <textarea id="support-needed" placeholder="Identify any blockers, feedback requests, or mentor support needed."></textarea>
-            <div class="field-hint">This helps the mentor see where support or follow-up is needed during review.</div>
+          <div class="readonly-block" style="margin-top:1rem;">
+            <strong>Support or guidance needed</strong>
+            <span id="support-needed">Not provided.</span>
           </div>
         </section>
 
         <section class="info-section">
-          <h3>Submission actions</h3>
-          <div class="button-row">
-            <button class="action-btn primary" id="save-draft-btn" type="button">Save draft</button>
-            <button class="action-btn success" id="submit-btn" type="button">Submit check-in report</button>
-          </div>
+          <h3>Notification and routing</h3>
+          <div class="grid-2" id="notification-grid"></div>
         </section>
       </div>
     </section>
 
     <aside class="panel side-panel">
       <div class="section-label">Status and history</div>
-      <h2>Report metadata</h2>
+      <h2>STATUS</h2>
       <div class="meta-stack">
         <div class="meta-card">
           <strong>Current status</strong>
@@ -213,6 +176,16 @@
         <div class="meta-card">
           <strong>Submitted date and time</strong>
           <span id="meta-submitted">Not submitted</span>
+        </div>
+        <div class="meta-card">
+          <strong>Progress to date</strong>
+          <div class="progress-shell" style="margin-top:.75rem;">
+            <div class="progress-head">
+              <span id="progress-label">Not started</span>
+              <span class="progress-value" id="progress-value">0%</span>
+            </div>
+            <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+          </div>
         </div>
         <div class="meta-card">
           <strong>Audit trail</strong>
@@ -232,30 +205,22 @@ const checkInKey = 'workPlanCheckInReport:learner-101';
 const heroSummary = document.getElementById('hero-summary');
 const detailCopy = document.getElementById('detail-copy');
 const approvedPlanGrid = document.getElementById('approved-plan-grid');
-const reportingStart = document.getElementById('reporting-start');
-const reportingEnd = document.getElementById('reporting-end');
-const hoursCompleted = document.getElementById('hours-completed');
-const competenciesProgress = document.getElementById('competencies-progress');
+const reportGrid = document.getElementById('report-grid');
+const notificationGrid = document.getElementById('notification-grid');
 const progressSummary = document.getElementById('progress-summary');
 const keyAccomplishments = document.getElementById('key-accomplishments');
 const supportNeeded = document.getElementById('support-needed');
-const saveDraftBtn = document.getElementById('save-draft-btn');
-const submitBtn = document.getElementById('submit-btn');
 const metaStatus = document.getElementById('meta-status');
 const metaRoute = document.getElementById('meta-route');
 const metaDueDate = document.getElementById('meta-due-date');
 const metaSubmitted = document.getElementById('meta-submitted');
+const progressLabel = document.getElementById('progress-label');
+const progressValue = document.getElementById('progress-value');
+const progressFill = document.getElementById('progress-fill');
 const trailList = document.getElementById('trail-list');
-const messageBar = document.getElementById('message-bar');
-const messageText = document.getElementById('message-text');
 
 let approvedPlan = null;
 let checkInReport = null;
-
-function setMessage(text) {
-  messageText.textContent = text;
-  messageBar.classList.add('visible');
-}
 
 function escapeHtml(value) {
   return String(value || '')
@@ -280,6 +245,23 @@ function formatShortDate(dateValue) {
   return source.toLocaleDateString('en-CA', { year:'numeric', month:'short', day:'numeric' });
 }
 
+function renderValueCards(container, values) {
+  container.innerHTML = values.map((item) => `
+    <div class="value-card">
+      <span>${escapeHtml(item.label)}</span>
+      <strong>${escapeHtml(item.value)}</strong>
+    </div>
+  `).join('');
+}
+
+function statusBadge(status) {
+  if (status === 'Pending Mentor Approval') return `<span class="status-badge badge-pending"><span class="dot"></span>${escapeHtml(status)}</span>`;
+  if (status === 'Draft') return `<span class="status-badge badge-draft"><span class="dot"></span>${escapeHtml(status)}</span>`;
+  if (status === 'Approved') return `<span class="status-badge badge-approved"><span class="dot"></span>${escapeHtml(status)}</span>`;
+  if (status === 'Declined') return `<span class="status-badge badge-declined"><span class="dot"></span>${escapeHtml(status)}</span>`;
+  return `<span class="status-badge badge-neutral"><span class="dot"></span>${escapeHtml(status || 'Not started')}</span>`;
+}
+
 function createDefaultApprovedPlan() {
   return {
     id: 'wp-approved-demo',
@@ -298,16 +280,11 @@ function createDefaultApprovedPlan() {
       positionTitle: 'Audit Associate',
       expectedCompletionDate: '2027-08-30'
     },
-    duration: {
-      potentialMonths: 19.66,
-      actualGainedPE: ''
-    },
     workflow: {
       status: 'Approved',
-      approvedAt: new Date(Date.now() - 12 * 86400000).toISOString(),
       currentRisk: {
         level: 'Medium',
-        nextCheckInDate: new Date(Date.now() + 14 * 86400000).toISOString().slice(0,10),
+        nextCheckInDate: '2026-08-05',
         notes: 'Monitor progress against approved work plan.'
       }
     }
@@ -316,21 +293,21 @@ function createDefaultApprovedPlan() {
 
 function createDefaultCheckInReport() {
   return {
-    id: `checkin-${Date.now()}`,
+    id: 'checkin-demo',
     learnerId: 'learner-101',
     status: 'Draft',
-    reportingPeriodStart: '',
-    reportingPeriodEnd: '',
-    hoursCompleted: '',
-    competenciesProgress: '',
-    progressSummary: '',
-    keyAccomplishments: '',
-    supportNeeded: '',
-    mentorName: '',
-    mentorEmail: '',
-    nextCheckInDate: '',
-    workPlanId: '',
-    workPlanVersion: '',
+    reportingPeriodStart: '2026-06-01',
+    reportingPeriodEnd: '2026-07-15',
+    hoursCompleted: '215',
+    competenciesProgress: 'Financial Reporting and Assurance & Trust',
+    progressSummary: 'Completed core planning work, supported risk assessment activities, and continued development against the approved work plan.',
+    keyAccomplishments: 'Prepared supporting analysis, contributed to engagement planning, and documented progress for review.',
+    supportNeeded: 'Would like mentor feedback on how to strengthen documentation and prioritization for the next reporting period.',
+    mentorName: 'Marcus Chen, CPA',
+    mentorEmail: 'marcus.chen@northlineadvisory.example',
+    nextCheckInDate: '2026-08-05',
+    workPlanId: 'wp-approved-demo',
+    workPlanVersion: 2,
     submittedAt: '',
     route: '',
     notifications: [],
@@ -373,19 +350,6 @@ function loadCheckInReport() {
   }
 }
 
-function persistCheckInReport() {
-  localStorage.setItem(checkInKey, JSON.stringify(checkInReport));
-}
-
-function renderValueCards(container, values) {
-  container.innerHTML = values.map((item) => `
-    <div class="value-card">
-      <span>${escapeHtml(item.label)}</span>
-      <strong>${escapeHtml(item.value)}</strong>
-    </div>
-  `).join('');
-}
-
 function renderTrail() {
   const items = checkInReport.auditTrail || [];
   if (!items.length) {
@@ -402,150 +366,59 @@ function renderTrail() {
   `).join('');
 }
 
-function statusBadge(status) {
-  if (status === 'Pending Mentor Approval') return `<span class="status-badge badge-pending"><span class="dot"></span>${escapeHtml(status)}</span>`;
-  if (status === 'Draft') return `<span class="status-badge badge-draft"><span class="dot"></span>${escapeHtml(status)}</span>`;
-  return `<span class="status-badge badge-approved"><span class="dot"></span>${escapeHtml(status || 'Not started')}</span>`;
+function getProgressState(status) {
+  if (status === 'Approved') return { label:'Approved', value:100 };
+  if (status === 'Pending Mentor Approval') return { label:'Pending mentor approval', value:70 };
+  if (status === 'Draft') return { label:'Draft', value:35 };
+  if (status === 'Declined') return { label:'Returned for revision', value:40 };
+  return { label:'Not started', value:0 };
 }
 
-function renderMeta() {
+function renderAll() {
+  renderValueCards(approvedPlanGrid, [
+    { label:'Learner', value: approvedPlan.learnerInfo.legalName || 'Not recorded' },
+    { label:'CPA ID', value: approvedPlan.learnerInfo.cpaId || 'Not recorded' },
+    { label:'Employer', value: approvedPlan.employerDetails.organizationName || 'Not recorded' },
+    { label:'Position title', value: approvedPlan.employerDetails.positionTitle || 'Not recorded' },
+    { label:'Mentor', value: approvedPlan.approvals.mentorName || 'Not recorded' },
+    { label:'Next check-in due', value: (approvedPlan.workflow && approvedPlan.workflow.currentRisk && approvedPlan.workflow.currentRisk.nextCheckInDate) ? formatShortDate(approvedPlan.workflow.currentRisk.nextCheckInDate) : 'Not set' }
+  ]);
+
+  renderValueCards(reportGrid, [
+    { label:'Reporting period start', value: formatShortDate(checkInReport.reportingPeriodStart) },
+    { label:'Reporting period end', value: formatShortDate(checkInReport.reportingPeriodEnd) },
+    { label:'Hours completed in this period', value: checkInReport.hoursCompleted || 'Not provided' },
+    { label:'Competency progress update', value: checkInReport.competenciesProgress || 'Not provided' }
+  ]);
+
+  renderValueCards(notificationGrid, [
+    { label:'Current mentor', value: checkInReport.mentorName || 'Not recorded' },
+    { label:'Mentor email', value: checkInReport.mentorEmail || 'Not recorded' },
+    { label:'Work plan version', value: checkInReport.workPlanVersion ? `Version ${checkInReport.workPlanVersion}` : 'Not recorded' },
+    { label:'Submission route', value: checkInReport.route || 'Once submitted, the report routes to the mentor for approval.' }
+  ]);
+
+  progressSummary.textContent = checkInReport.progressSummary || 'Not provided.';
+  keyAccomplishments.textContent = checkInReport.keyAccomplishments || 'Not provided.';
+  supportNeeded.textContent = checkInReport.supportNeeded || 'Not provided.';
+
   metaStatus.innerHTML = statusBadge(checkInReport.status || 'Not started');
   metaRoute.textContent = checkInReport.route || 'Once submitted, the report routes to the mentor for approval.';
   metaDueDate.textContent = checkInReport.nextCheckInDate ? formatShortDate(checkInReport.nextCheckInDate) : 'No next check-in date recorded.';
   metaSubmitted.textContent = checkInReport.submittedAt ? formatDate(checkInReport.submittedAt) : 'Not submitted';
+
+  const progress = getProgressState(checkInReport.status || 'Not started');
+  progressLabel.textContent = progress.label;
+  progressValue.textContent = `${progress.value}%`;
+  progressFill.style.width = `${progress.value}%`;
+
+  heroSummary.textContent = `Check-in status: ${checkInReport.status || 'Not started'} | Work plan v${checkInReport.workPlanVersion || 'n/a'}`;
+  detailCopy.textContent = checkInReport.status === 'Pending Mentor Approval'
+    ? 'This learner check-in report has been submitted and is shown in read-only mode while mentor review is pending.'
+    : 'This learner check-in report is shown in read-only mode so the saved draft or submitted details can be reviewed.';
+
   renderTrail();
 }
-
-function setReadOnlyState() {
-  const readonly = checkInReport.status === 'Pending Mentor Approval';
-  [reportingStart, reportingEnd, hoursCompleted, competenciesProgress, progressSummary, keyAccomplishments, supportNeeded].forEach((field) => {
-    field.disabled = readonly || !approvedPlan;
-  });
-  saveDraftBtn.disabled = readonly || !approvedPlan;
-  submitBtn.disabled = readonly || !approvedPlan;
-}
-
-function loadStateIntoForm() {
-  reportingStart.value = checkInReport.reportingPeriodStart || '';
-  reportingEnd.value = checkInReport.reportingPeriodEnd || '';
-  hoursCompleted.value = checkInReport.hoursCompleted || '';
-  competenciesProgress.value = checkInReport.competenciesProgress || '';
-  progressSummary.value = checkInReport.progressSummary || '';
-  keyAccomplishments.value = checkInReport.keyAccomplishments || '';
-  supportNeeded.value = checkInReport.supportNeeded || '';
-}
-
-function readFormIntoState() {
-  checkInReport.reportingPeriodStart = reportingStart.value;
-  checkInReport.reportingPeriodEnd = reportingEnd.value;
-  checkInReport.hoursCompleted = hoursCompleted.value;
-  checkInReport.competenciesProgress = competenciesProgress.value.trim();
-  checkInReport.progressSummary = progressSummary.value.trim();
-  checkInReport.keyAccomplishments = keyAccomplishments.value.trim();
-  checkInReport.supportNeeded = supportNeeded.value.trim();
-}
-
-function validateCheckIn() {
-  const issues = [];
-  if (!checkInReport.reportingPeriodStart) issues.push('reporting period start');
-  if (!checkInReport.reportingPeriodEnd) issues.push('reporting period end');
-  if (checkInReport.reportingPeriodStart && checkInReport.reportingPeriodEnd && checkInReport.reportingPeriodEnd < checkInReport.reportingPeriodStart) {
-    issues.push('valid reporting period dates');
-  }
-  if (!checkInReport.progressSummary) issues.push('progress summary');
-  if (!checkInReport.keyAccomplishments) issues.push('key accomplishments');
-  return issues;
-}
-
-function addAudit(previousStatus, newStatus, comments, actor = 'Learner', role = 'Learner') {
-  checkInReport.auditTrail.push({
-    at: new Date().toISOString(),
-    actor,
-    role,
-    previousStatus,
-    newStatus,
-    comments
-  });
-}
-
-function renderAll() {
-  if (approvedPlan) {
-    renderValueCards(approvedPlanGrid, [
-      { label:'Learner', value: approvedPlan.learnerInfo.legalName || 'Not recorded' },
-      { label:'CPA ID', value: approvedPlan.learnerInfo.cpaId || 'Not recorded' },
-      { label:'Employer', value: approvedPlan.employerDetails.organizationName || 'Not recorded' },
-      { label:'Position title', value: approvedPlan.employerDetails.positionTitle || 'Not recorded' },
-      { label:'Mentor', value: approvedPlan.approvals.mentorName || 'Not recorded' },
-      { label:'Next check-in due', value: (approvedPlan.workflow && approvedPlan.workflow.currentRisk && approvedPlan.workflow.currentRisk.nextCheckInDate) ? formatShortDate(approvedPlan.workflow.currentRisk.nextCheckInDate) : 'Not set' }
-    ]);
-    heroSummary.textContent = `Approved work plan v${approvedPlan.version} | Mentor ${approvedPlan.approvals.mentorName || 'Not set'}`;
-    detailCopy.textContent = 'Use the approved work plan and risk monitoring context to prepare this check-in report for mentor approval.';
-  } else {
-    approvedPlanGrid.innerHTML = '<div class="empty-state">No approved work plan is available for check-in submission.</div>';
-    heroSummary.textContent = 'No approved work plan found';
-    detailCopy.textContent = 'A check-in report can be submitted only after the learner has an approved active work plan.';
-  }
-
-  loadStateIntoForm();
-  renderMeta();
-  setReadOnlyState();
-  persistCheckInReport();
-}
-
-function saveDraft() {
-  if (!approvedPlan) {
-    setMessage('An approved work plan is required before a check-in report can be created.');
-    return;
-  }
-  if (checkInReport.status === 'Pending Mentor Approval') {
-    setMessage('This submitted check-in report is read-only while mentor approval is pending.');
-    return;
-  }
-  readFormIntoState();
-  const issues = validateCheckIn();
-  const previousStatus = checkInReport.status || 'Not started';
-  checkInReport.status = 'Draft';
-  addAudit(previousStatus, 'Draft', issues.length
-    ? `Check-in draft saved with ${issues.length} remaining item${issues.length === 1 ? '' : 's'}.`
-    : 'Check-in draft saved.');
-  renderAll();
-  window.location.href = '../../index.html';
-}
-
-function submitCheckIn() {
-  if (!approvedPlan) {
-    setMessage('An approved work plan is required before a check-in report can be submitted.');
-    return;
-  }
-  if (checkInReport.status === 'Pending Mentor Approval') {
-    setMessage('This check-in report has already been submitted and is pending mentor approval.');
-    return;
-  }
-
-  readFormIntoState();
-  const issues = validateCheckIn();
-  if (issues.length) {
-    setMessage(`Before submitting, complete ${issues.length} required item${issues.length === 1 ? '' : 's'} in the check-in report.`);
-    renderAll();
-    return;
-  }
-
-  const now = new Date().toISOString();
-  const previousStatus = checkInReport.status || 'Draft';
-  checkInReport.status = 'Pending Mentor Approval';
-  checkInReport.submittedAt = now;
-  checkInReport.route = 'Submitted by learner and routed to mentor approval.';
-  checkInReport.notifications.push(
-    { type:'Mentor dashboard notification', sentAt: now, recipient: checkInReport.mentorEmail || 'mentor' },
-    { type:'Mentor email notification', sentAt: now, recipient: checkInReport.mentorEmail || 'mentor' }
-  );
-  addAudit(previousStatus, 'Pending Mentor Approval', 'Learner submitted the check-in report for mentor approval.');
-  renderAll();
-  window.location.href = '../../index.html';
-}
-
-document.getElementById('save-draft-btn').addEventListener('click', saveDraft);
-document.getElementById('submit-btn').addEventListener('click', submitCheckIn);
 
 loadApprovedPlan();
 loadCheckInReport();
@@ -553,6 +426,3 @@ renderAll();
 </script>
 </body>
 </html>
-
-
-

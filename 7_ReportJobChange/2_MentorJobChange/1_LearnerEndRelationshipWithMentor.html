@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPA - Request Mentor Change</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:#0B1F3A; --blue:#1B5EA8; --amber:#E76F1A; --green:#2D7A4E; --red:#C0392B;
+    --sand:#F7F5F2; --white:#FFFFFF; --gray-100:#F2F1EF; --gray-200:#E4E2DE; --gray-300:#D2CEC8;
+    --gray-400:#A8A49E; --gray-600:#6B6760; --gray-800:#2E2C2A;
+    --shadow-sm:0 1px 3px rgba(11,31,58,0.07),0 1px 2px rgba(11,31,58,0.05);
+    --radius-sm:6px; --radius-md:10px; --radius-lg:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'DM Sans',sans-serif;background:var(--sand);color:var(--gray-800);min-height:100vh}
+  a{text-decoration:none;color:inherit}
+  button,input,select,textarea{font:inherit}
+  textarea{resize:vertical}
+  .topbar{background:var(--navy);min-height:60px;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:0 2rem}
+  .logo-group{display:flex;align-items:center;gap:10px;min-width:225px}
+  .logo-mark{width:36px;height:36px;background:var(--white);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .logo-text{display:flex;flex-direction:column;line-height:1.1}
+  .logo-text .brand{font-size:13px;font-weight:600;color:var(--white);letter-spacing:.04em}
+  .logo-text .sub{font-size:10px;color:rgba(255,255,255,.5);letter-spacing:.02em;text-transform:uppercase}
+  .topbar-right{display:flex;align-items:center;gap:12px}
+  .nav-links{display:flex;align-items:center;gap:2px}
+  .nav-links a{color:rgba(255,255,255,.55);font-size:14px;padding:8px 16px;border-radius:var(--radius-sm);white-space:nowrap}
+  .nav-links a.active,.nav-links a:hover{color:var(--white);background:rgba(255,255,255,.08)}
+  .role-dropdown{position:relative}
+  .role-trigger{list-style:none;display:flex;align-items:center;gap:10px;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);color:var(--white);font-size:13px;font-weight:600;cursor:pointer}
+  .role-trigger::-webkit-details-marker{display:none}
+  .role-label{display:inline-flex;align-items:center;justify-content:center;min-width:92px}
+  .role-caret{font-size:11px;color:rgba(255,255,255,.72)}
+  .role-menu{position:absolute;right:0;top:calc(100% + 10px);min-width:190px;padding:8px;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);box-shadow:0 12px 30px rgba(11,31,58,.14);display:flex;flex-direction:column;gap:4px;z-index:20}
+  .role-option{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:var(--radius-sm);font-size:13px;color:var(--gray-800);text-decoration:none}
+  .role-option:hover{background:var(--gray-100)}
+  .role-option.active{background:#EBF3FF;color:var(--blue);font-weight:600}
+  .page{max-width:1420px;margin:0 auto;padding:2rem 2rem 4rem}
+  .hero{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--gray-200)}
+  .hero h1{font-family:'DM Serif Display',serif;font-size:38px;font-weight:400;color:var(--navy);margin-bottom:6px}
+  .hero p{font-size:14px;color:var(--gray-600);max-width:820px;line-height:1.5}
+  .hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);padding:10px 16px;box-shadow:var(--shadow-sm);font-size:13px;color:var(--gray-600)}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--blue);flex:0 0 auto}
+  .message-bar{display:none;align-items:center;gap:10px;margin-bottom:1rem;padding:12px 14px;border-radius:var(--radius-md);background:#EBF3FF;border:1px solid rgba(27,94,168,.18);color:var(--navy);box-shadow:var(--shadow-sm)}
+  .message-bar.visible{display:flex}
+  .workspace{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:16px}
+  .panel{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm)}
+  .main-panel,.side-panel{padding:1.25rem}
+  .section-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gray-400);margin-bottom:.75rem}
+  .panel h2{font-size:17px;color:var(--navy);margin-bottom:4px}
+  .panel-copy{font-size:12px;color:var(--gray-600);line-height:1.45}
+  .stack,.meta-stack{display:flex;flex-direction:column;gap:16px}
+  .form-section{padding:1rem;border:1px solid var(--gray-200);border-radius:var(--radius-md);background:var(--sand)}
+  .form-section h3{font-size:15px;color:var(--navy);margin-bottom:6px}
+  .field-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .field{display:flex;flex-direction:column;gap:6px}
+  .field.full{grid-column:1 / -1}
+  .field label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gray-400)}
+  .field input,.field select,.field textarea{border:1px solid var(--gray-200);border-radius:var(--radius-sm);background:var(--white);padding:10px 12px;color:var(--gray-800)}
+  .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:rgba(27,94,168,.32);box-shadow:0 0 0 3px rgba(27,94,168,.08)}
+  .field textarea{min-height:110px}
+  .subcopy{font-size:11px;color:var(--gray-600);line-height:1.45}
+  .metric-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+  .metric-card,.meta-card,.notice-box{padding:12px;border-radius:var(--radius-md);border:1px solid var(--gray-200);background:var(--white)}
+  .metric-card strong,.meta-card strong,.notice-box strong{display:block;font-size:13px;color:var(--navy);margin-bottom:4px}
+  .metric-card span,.meta-card span,.notice-box span{display:block;font-size:12px;color:var(--gray-600);line-height:1.45}
+  .metric-card .value{font-family:'DM Serif Display',serif;font-size:30px;line-height:1;color:var(--navy);margin-bottom:6px}
+  .notice-box{background:#F7FAFF}
+  .notice-box.warn{background:#FFF8F1;border-color:rgba(231,111,26,.22)}
+  .notice-box.success{background:#F2FBF6;border-color:rgba(45,122,78,.22)}
+  .button-row{display:flex;flex-wrap:wrap;gap:8px}
+  .action-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:var(--radius-sm);border:1px solid var(--gray-200);padding:9px 12px;background:var(--white);color:var(--navy);font-size:12px;font-weight:700;cursor:pointer;transition:all .15s ease}
+  .action-btn:hover{border-color:rgba(27,94,168,.28);background:#F7FAFF}
+  .action-btn.primary{background:#EBF3FF;border-color:rgba(27,94,168,.28);color:var(--blue)}
+  .action-btn.success{background:#E8F5EE;border-color:rgba(45,122,78,.22);color:var(--green)}
+  .status-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:5px 10px;border-radius:20px;white-space:nowrap}
+  .status-badge .dot{width:6px;height:6px}
+  .badge-draft{background:#EBF3FF;color:var(--blue)} .badge-draft .dot{background:var(--blue)}
+  .badge-pending{background:#FEF3E8;color:var(--amber)} .badge-pending .dot{background:var(--amber)}
+  .badge-routed{background:#E8F5EE;color:var(--green)} .badge-routed .dot{background:var(--green)}
+  @media(max-width:1180px){.workspace{grid-template-columns:1fr}}
+  @media(max-width:920px){.field-grid,.metric-grid{grid-template-columns:1fr}}
+  @media(max-width:760px){
+    .topbar{align-items:flex-start;flex-direction:column;padding:1rem}
+    .nav-links{display:none}
+    .topbar-right{width:100%;justify-content:space-between}
+    .page{padding:1.25rem 1rem 3rem}
+    .hero{flex-direction:column;align-items:flex-start}
+    .hero h1{font-size:34px}
+  }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="logo-group">
+    <div class="logo-mark">
+      <svg width="24" height="20" viewBox="0 0 24 20" fill="none" aria-hidden="true">
+        <path d="M2 10C2 5.58 5.58 2 10 2h4c4.42 0 8 3.58 8 8s-3.58 8-8 8h-4C5.58 18 2 14.42 2 10z" fill="#0B1F3A" opacity="0.12"/>
+        <path d="M7 10.5l3 3 7-7" stroke="#0B1F3A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="logo-text"><span class="brand">CPA Canada</span><span class="sub">Chartered Professional Accountants</span></div>
+  </div>
+  <div class="topbar-right">
+    <nav class="nav-links" aria-label="Primary navigation">
+      <a href="../../index.html">Dashboard</a>
+      <a href="../1_LearnerJobChange/1_LearnerReportJobChange.html">Job change</a>
+      <a href="1_LearnerEndRelationshipWithMentor.html" class="active">Mentor change</a>
+    </nav>
+    <details class="role-dropdown">
+      <summary class="role-trigger"><span class="role-label">Learner</span><span class="role-caret">&#9662;</span></summary>
+      <div class="role-menu">
+        <a class="role-option active" href="../../index.html">Learner</a>
+        <a class="role-option" href="../../1_Dashboard/CPAReviewer.html">CPA Reviewer</a>
+        <a class="role-option" href="../../1_Dashboard/MentorDashboard.html">Mentor</a>
+        <a class="role-option" href="../../1_Dashboard/PTSBStaffDashboard.html">PTSB Staff</a>
+              <a class="role-option" href="../../8_MentorOnboarding/1_MentorOnboarding.html">Mentor onboarding</a>
+      </div>
+    </details>
+  </div>
+</header>
+
+<main class="page">
+  <section class="hero" aria-labelledby="mentor-change-title">
+    <div>
+      <h1 id="mentor-change-title">Request mentor change</h1>
+      <p>Initiate a mentor change request, explain why the current mentor relationship should end, and route the request to PTB Staff while notifying the current mentor.</p>
+    </div>
+    <div class="hero-badge"><span class="dot"></span><span id="hero-summary">Mentor change draft in progress</span></div>
+  </section>
+
+  <div class="message-bar" id="message-bar" role="status" aria-live="polite">
+    <span class="dot"></span>
+    <span id="message-text"></span>
+  </div>
+
+  <section class="workspace">
+    <section class="panel main-panel">
+      <div class="section-label">Mentor relationship management</div>
+      <h2>End current mentor relationship</h2>
+      <p class="panel-copy">Use this request when the learner needs to continue practical experience with a different mentor. The current relationship is marked Pending and PTB Staff is asked to review the request.</p>
+
+      <div class="stack" style="margin-top:1rem;">
+        <section class="form-section">
+          <h3>Current mentor snapshot</h3>
+          <div class="metric-grid" id="snapshot-grid"></div>
+          <div class="notice-box warn" style="margin-top:1rem;">
+            <strong>Pending relationship state</strong>
+            <span>After submission, the current mentor relationship is marked Pending until PTB Staff reviews the request and coordinates the next mentor arrangement.</span>
+          </div>
+        </section>
+
+        <section class="form-section">
+          <h3>Mentor change request</h3>
+          <div class="field-grid">
+            <div class="field">
+              <label for="request-date">Request date</label>
+              <input id="request-date" type="date">
+              <span class="subcopy">The system records the learner's mentor change request date.</span>
+            </div>
+            <div class="field">
+              <label for="current-mentor-name">Current mentor</label>
+              <input id="current-mentor-name" type="text" readonly>
+            </div>
+            <div class="field">
+              <label for="reason-select">Reason for mentor change</label>
+              <select id="reason-select">
+                <option value="">Select a reason</option>
+                <option value="Mentor left organization">Mentor left organization</option>
+                <option value="Mentor unavailable">Mentor unavailable</option>
+                <option value="Role change">Role change</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div class="field full" id="other-reason-field" style="display:none;">
+              <label for="other-reason">Other reason</label>
+              <textarea id="other-reason" placeholder="Describe the reason for the mentor change request."></textarea>
+            </div>
+            <div class="field full">
+              <label for="request-summary">Request summary</label>
+              <textarea id="request-summary" placeholder="Provide any context PTB Staff should know before reviewing this mentor change request."></textarea>
+            </div>
+          </div>
+        </section>
+
+        <section class="form-section">
+          <h3>Routing and notification</h3>
+          <div class="notice-box success">
+            <strong>PTB Staff routing</strong>
+            <span>Approval is routed to PTB Staff for review and coordination.</span>
+          </div>
+          <div class="notice-box" style="margin-top:1rem;">
+            <strong>Current mentor notification</strong>
+            <span>The current mentor is notified when the learner submits this request.</span>
+          </div>
+        </section>
+
+        <section class="form-section">
+          <h3>Submission actions</h3>
+          <div class="button-row">
+            <button class="action-btn primary" id="save-draft-btn" type="button">Save draft</button>
+            <button class="action-btn success" id="submit-btn" type="button">Submit mentor change request</button>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <aside class="panel side-panel">
+      <div class="section-label">Status and routing</div>
+      <h2>Mentor change request</h2>
+      <div class="meta-stack">
+        <div class="meta-card">
+          <strong>Current status</strong>
+          <span id="meta-status">Draft</span>
+        </div>
+        <div class="meta-card">
+          <strong>Relationship status</strong>
+          <span id="meta-relationship">Active</span>
+        </div>
+        <div class="meta-card">
+          <strong>PTB Staff route</strong>
+          <span id="meta-route">Pending submission</span>
+        </div>
+        <div class="meta-card">
+          <strong>Old mentor notification</strong>
+          <span id="meta-notification">Pending submission</span>
+        </div>
+        <div class="meta-card">
+          <strong>Submitted date and time</strong>
+          <span id="meta-submitted">Not submitted</span>
+        </div>
+      </div>
+    </aside>
+  </section>
+</main>
+
+<script>
+const workPlanKey = 'workPlanRecord:learner-101';
+const mentorChangeKey = 'mentorRelationshipChange:learner-101';
+
+const workPlan = JSON.parse(localStorage.getItem(workPlanKey) || 'null') || {};
+const storedRequest = JSON.parse(localStorage.getItem(mentorChangeKey) || 'null');
+
+const snapshotGrid = document.getElementById('snapshot-grid');
+const requestDate = document.getElementById('request-date');
+const currentMentorName = document.getElementById('current-mentor-name');
+const reasonSelect = document.getElementById('reason-select');
+const otherReasonField = document.getElementById('other-reason-field');
+const otherReason = document.getElementById('other-reason');
+const requestSummary = document.getElementById('request-summary');
+const heroSummary = document.getElementById('hero-summary');
+const metaStatus = document.getElementById('meta-status');
+const metaRelationship = document.getElementById('meta-relationship');
+const metaRoute = document.getElementById('meta-route');
+const metaNotification = document.getElementById('meta-notification');
+const metaSubmitted = document.getElementById('meta-submitted');
+const messageBar = document.getElementById('message-bar');
+const messageText = document.getElementById('message-text');
+
+function escapeHtml(value) {
+  return String(value || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function formatDate(dateValue) {
+  if (!dateValue) return 'Not submitted';
+  const date = new Date(dateValue);
+  if (Number.isNaN(date.getTime())) return 'Not submitted';
+  return date.toLocaleString('en-CA', { year:'numeric', month:'short', day:'numeric', hour:'numeric', minute:'2-digit' });
+}
+
+function setMessage(text) {
+  messageText.textContent = text;
+  messageBar.classList.add('visible');
+}
+
+function createDefaultRequest() {
+  return {
+    status: 'Draft',
+    relationshipStatus: 'Active',
+    requestDate: '2026-07-22',
+    currentMentor: workPlan.approvals && workPlan.approvals.mentorName || 'Marcus Chen, CPA',
+    reason: '',
+    otherReason: '',
+    summary: '',
+    route: '',
+    oldMentorNotification: '',
+    submittedAt: ''
+  };
+}
+
+let requestRecord = storedRequest || createDefaultRequest();
+
+function persistRequest() {
+  localStorage.setItem(mentorChangeKey, JSON.stringify(requestRecord));
+}
+
+function renderSnapshot() {
+  const employer = workPlan.employerDetails && workPlan.employerDetails.organizationName || 'Current employer not recorded';
+  const role = workPlan.employerDetails && workPlan.employerDetails.positionTitle || 'Current role not recorded';
+  const mentor = requestRecord.currentMentor || 'Current mentor not recorded';
+  snapshotGrid.innerHTML = [
+    { value: employer, label: 'Current employer', copy: role },
+    { value: mentor, label: 'Current mentor', copy: workPlan.approvals && workPlan.approvals.mentorSelectedEmail || 'Mentor email not recorded' },
+    { value: requestRecord.relationshipStatus || 'Active', label: 'Relationship status', copy: 'Will change to Pending after submission.' }
+  ].map((item) => `
+    <div class="metric-card">
+      <div class="value">${escapeHtml(item.value)}</div>
+      <strong>${escapeHtml(item.label)}</strong>
+      <span>${escapeHtml(item.copy)}</span>
+    </div>
+  `).join('');
+}
+
+function loadForm() {
+  requestDate.value = requestRecord.requestDate || '2026-07-22';
+  currentMentorName.value = requestRecord.currentMentor || '';
+  reasonSelect.value = requestRecord.reason || '';
+  otherReason.value = requestRecord.otherReason || '';
+  requestSummary.value = requestRecord.summary || '';
+  toggleOtherReason();
+}
+
+function readForm() {
+  requestRecord.requestDate = requestDate.value;
+  requestRecord.reason = reasonSelect.value;
+  requestRecord.otherReason = otherReason.value.trim();
+  requestRecord.summary = requestSummary.value.trim();
+}
+
+function toggleOtherReason() {
+  otherReasonField.style.display = reasonSelect.value === 'Other' ? '' : 'none';
+}
+
+function validateRequest() {
+  readForm();
+  const issues = [];
+  if (!requestRecord.requestDate) issues.push('request date');
+  if (!requestRecord.reason) issues.push('reason for mentor change');
+  if (requestRecord.reason === 'Other' && !requestRecord.otherReason) issues.push('other reason');
+  if (!requestRecord.summary) issues.push('request summary');
+  return issues;
+}
+
+function renderMeta() {
+  const issues = validateRequest();
+  metaStatus.innerHTML = requestRecord.status === 'Submitted'
+    ? '<span class="status-badge badge-routed"><span class="dot"></span>Submitted</span>'
+    : '<span class="status-badge badge-draft"><span class="dot"></span>Draft</span>';
+  metaRelationship.textContent = requestRecord.relationshipStatus || 'Active';
+  metaRoute.textContent = requestRecord.route || 'Pending submission';
+  metaNotification.textContent = requestRecord.oldMentorNotification || 'Pending submission';
+  metaSubmitted.textContent = formatDate(requestRecord.submittedAt);
+  heroSummary.textContent = issues.length
+    ? `Mentor change draft | ${issues.length} item${issues.length === 1 ? '' : 's'} remaining`
+    : 'Mentor change request ready to submit';
+}
+
+function renderAll() {
+  renderSnapshot();
+  loadForm();
+  renderMeta();
+  persistRequest();
+}
+
+reasonSelect.addEventListener('change', () => {
+  toggleOtherReason();
+  readForm();
+  renderMeta();
+  persistRequest();
+});
+
+[requestDate, otherReason, requestSummary].forEach((field) => {
+  field.addEventListener('input', () => {
+    readForm();
+    renderMeta();
+    persistRequest();
+  });
+  field.addEventListener('change', () => {
+    readForm();
+    renderMeta();
+    persistRequest();
+  });
+});
+
+document.getElementById('save-draft-btn').addEventListener('click', () => {
+  readForm();
+  requestRecord.status = 'Draft';
+  persistRequest();
+  renderMeta();
+  setMessage('Mentor change request draft saved.');
+});
+
+document.getElementById('submit-btn').addEventListener('click', () => {
+  const issues = validateRequest();
+  if (issues.length) {
+    requestRecord.status = 'Draft';
+    persistRequest();
+    renderMeta();
+    setMessage(`Before submitting, complete ${issues.length} required item${issues.length === 1 ? '' : 's'} in the mentor change request.`);
+    return;
+  }
+
+  const now = new Date().toISOString();
+  requestRecord.status = 'Submitted';
+  requestRecord.relationshipStatus = 'Pending';
+  requestRecord.route = 'Routed to PTB Staff for approval and mentor relationship management review.';
+  requestRecord.oldMentorNotification = `Current mentor notified on ${formatDate(now)} about the pending mentor change request.`;
+  requestRecord.submittedAt = now;
+  persistRequest();
+  renderMeta();
+  setMessage('Mentor change request submitted. PTB Staff routing and old mentor notification have been recorded.');
+});
+
+renderAll();
+</script>
+</body>
+</html>

@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPA - Report Job Change</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:#0B1F3A; --blue:#1B5EA8; --accent:#2A9D8F; --amber:#E76F1A; --green:#2D7A4E; --red:#C0392B;
+    --sand:#F7F5F2; --white:#FFFFFF; --gray-100:#F2F1EF; --gray-200:#E4E2DE; --gray-300:#D2CEC8;
+    --gray-400:#A8A49E; --gray-600:#6B6760; --gray-800:#2E2C2A;
+    --shadow-sm:0 1px 3px rgba(11,31,58,0.07),0 1px 2px rgba(11,31,58,0.05);
+    --radius-sm:6px; --radius-md:10px; --radius-lg:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'DM Sans',sans-serif;background:var(--sand);color:var(--gray-800);min-height:100vh}
+  a{text-decoration:none;color:inherit}
+  button,input,select,textarea{font:inherit}
+  textarea{resize:vertical}
+  .topbar{background:var(--navy);min-height:60px;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:0 2rem}
+  .logo-group{display:flex;align-items:center;gap:10px;min-width:225px}
+  .logo-mark{width:36px;height:36px;background:var(--white);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .logo-text{display:flex;flex-direction:column;line-height:1.1}
+  .logo-text .brand{font-size:13px;font-weight:600;color:var(--white);letter-spacing:.04em}
+  .logo-text .sub{font-size:10px;color:rgba(255,255,255,.5);letter-spacing:.02em;text-transform:uppercase}
+  .topbar-right{display:flex;align-items:center;gap:12px}
+  .nav-links{display:flex;align-items:center;gap:2px}
+  .nav-links a{color:rgba(255,255,255,.55);font-size:14px;padding:8px 16px;border-radius:var(--radius-sm);white-space:nowrap}
+  .nav-links a.active,.nav-links a:hover{color:var(--white);background:rgba(255,255,255,.08)}
+  .role-dropdown{position:relative}
+  .role-trigger{list-style:none;display:flex;align-items:center;gap:10px;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);color:var(--white);font-size:13px;font-weight:600;cursor:pointer}
+  .role-trigger::-webkit-details-marker{display:none}
+  .role-label{display:inline-flex;align-items:center;justify-content:center;min-width:92px}
+  .role-caret{font-size:11px;color:rgba(255,255,255,.72)}
+  .role-menu{position:absolute;right:0;top:calc(100% + 10px);min-width:190px;padding:8px;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);box-shadow:0 12px 30px rgba(11,31,58,.14);display:flex;flex-direction:column;gap:4px;z-index:20}
+  .role-option{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:var(--radius-sm);font-size:13px;color:var(--gray-800);text-decoration:none}
+  .role-option:hover{background:var(--gray-100)}
+  .role-option.active{background:#EBF3FF;color:var(--blue);font-weight:600}
+  .page{max-width:1460px;margin:0 auto;padding:2rem 2rem 4rem}
+  .hero{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--gray-200)}
+  .hero h1{font-family:'DM Serif Display',serif;font-size:38px;font-weight:400;color:var(--navy);margin-bottom:6px}
+  .hero p{font-size:14px;color:var(--gray-600);max-width:860px;line-height:1.5}
+  .hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);padding:10px 16px;box-shadow:var(--shadow-sm);font-size:13px;color:var(--gray-600)}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--blue);flex:0 0 auto}
+  .message-bar{display:none;align-items:center;gap:10px;margin-bottom:1rem;padding:12px 14px;border-radius:var(--radius-md);background:#EBF3FF;border:1px solid rgba(27,94,168,.18);color:var(--navy);box-shadow:var(--shadow-sm)}
+  .message-bar.visible{display:flex}
+  .workspace{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:16px}
+  .panel{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm)}
+  .main-panel,.side-panel{padding:1.25rem}
+  .section-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gray-400);margin-bottom:.75rem}
+  .panel h2{font-size:17px;color:var(--navy);margin-bottom:4px}
+  .panel-copy{font-size:12px;color:var(--gray-600);line-height:1.45}
+  .stack,.meta-stack,.doc-list,.task-list{display:flex;flex-direction:column;gap:16px}
+  .form-section{padding:1rem;border:1px solid var(--gray-200);border-radius:var(--radius-md);background:var(--sand)}
+  .form-section h3{font-size:15px;color:var(--navy);margin-bottom:6px}
+  .field-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .field-grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .field{display:flex;flex-direction:column;gap:6px}
+  .field.full{grid-column:1 / -1}
+  .field label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gray-400)}
+  .field input,.field select,.field textarea{border:1px solid var(--gray-200);border-radius:var(--radius-sm);background:var(--white);padding:10px 12px;color:var(--gray-800)}
+  .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:rgba(27,94,168,.32);box-shadow:0 0 0 3px rgba(27,94,168,.08)}
+  .field textarea{min-height:110px}
+  .subcopy{font-size:11px;color:var(--gray-600);line-height:1.45}
+  .metric-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+  .metric-card,.meta-card,.notice-box,.task-card,.doc-item{padding:12px;border-radius:var(--radius-md);border:1px solid var(--gray-200);background:var(--white)}
+  .metric-card strong,.meta-card strong,.notice-box strong,.task-card strong,.doc-item strong{display:block;font-size:13px;color:var(--navy);margin-bottom:4px}
+  .metric-card span,.meta-card span,.notice-box span,.task-card span,.doc-item span{display:block;font-size:12px;color:var(--gray-600);line-height:1.45}
+  .metric-card .value{font-family:'DM Serif Display',serif;font-size:30px;line-height:1;color:var(--navy);margin-bottom:6px}
+  .notice-box{background:#F7FAFF}
+  .notice-box.warn{background:#FFF8F1;border-color:rgba(231,111,26,.22)}
+  .notice-box.success{background:#F2FBF6;border-color:rgba(45,122,78,.22)}
+  .button-row{display:flex;flex-wrap:wrap;gap:8px}
+  .action-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:var(--radius-sm);border:1px solid var(--gray-200);padding:9px 12px;background:var(--white);color:var(--navy);font-size:12px;font-weight:700;cursor:pointer;transition:all .15s ease}
+  .action-btn:hover{border-color:rgba(27,94,168,.28);background:#F7FAFF}
+  .action-btn.primary{background:#EBF3FF;border-color:rgba(27,94,168,.28);color:var(--blue)}
+  .action-btn.success{background:#E8F5EE;border-color:rgba(45,122,78,.22);color:var(--green)}
+  .status-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:5px 10px;border-radius:20px;white-space:nowrap}
+  .status-badge .dot{width:6px;height:6px}
+  .badge-draft{background:#EBF3FF;color:var(--blue)} .badge-draft .dot{background:var(--blue)}
+  .badge-pending{background:#FEF3E8;color:var(--amber)} .badge-pending .dot{background:var(--amber)}
+  .badge-closed{background:#FDECEA;color:var(--red)} .badge-closed .dot{background:var(--red)}
+  .badge-routed{background:#E8F5EE;color:var(--green)} .badge-routed .dot{background:var(--green)}
+  .empty-state{padding:18px;border:1px dashed var(--gray-300);border-radius:var(--radius-md);background:var(--sand);text-align:center;font-size:13px;color:var(--gray-600)}
+  @media(max-width:1180px){.workspace{grid-template-columns:1fr}}
+  @media(max-width:920px){.field-grid,.field-grid.three,.metric-grid{grid-template-columns:1fr}}
+  @media(max-width:760px){
+    .topbar{align-items:flex-start;flex-direction:column;padding:1rem}
+    .nav-links{display:none}
+    .topbar-right{width:100%;justify-content:space-between}
+    .page{padding:1.25rem 1rem 3rem}
+    .hero{flex-direction:column;align-items:flex-start}
+    .hero h1{font-size:34px}
+  }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="logo-group">
+    <div class="logo-mark">
+      <svg width="24" height="20" viewBox="0 0 24 20" fill="none" aria-hidden="true">
+        <path d="M2 10C2 5.58 5.58 2 10 2h4c4.42 0 8 3.58 8 8s-3.58 8-8 8h-4C5.58 18 2 14.42 2 10z" fill="#0B1F3A" opacity="0.12"/>
+        <path d="M7 10.5l3 3 7-7" stroke="#0B1F3A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="logo-text"><span class="brand">CPA Canada</span><span class="sub">Chartered Professional Accountants</span></div>
+  </div>
+  <div class="topbar-right">
+    <nav class="nav-links" aria-label="Primary navigation">
+      <a href="../../index.html">Dashboard</a>
+      <a href="../../3_WorkPlan/1_LearnerWP/1_LearnerWorkPlanInfo.html">Work plan</a>
+      <a href="1_LearnerReportJobChange.html" class="active">Job change</a>
+    </nav>
+    <details class="role-dropdown">
+      <summary class="role-trigger"><span class="role-label">Learner</span><span class="role-caret">&#9662;</span></summary>
+      <div class="role-menu">
+        <a class="role-option active" href="../../index.html">Learner</a>
+        <a class="role-option" href="../../1_Dashboard/CPAReviewer.html">CPA Reviewer</a>
+        <a class="role-option" href="../../1_Dashboard/MentorDashboard.html">Mentor</a>
+        <a class="role-option" href="../../1_Dashboard/PTSBStaffDashboard.html">PTSB Staff</a>
+              <a class="role-option" href="../../8_MentorOnboarding/1_MentorOnboarding.html">Mentor onboarding</a>
+      </div>
+    </details>
+  </div>
+</header>
+
+<main class="page">
+  <section class="hero" aria-labelledby="job-change-title">
+    <div>
+      <h1 id="job-change-title">Report job or role change</h1>
+      <p>Record a new employer, new role, new mentor, and any change in scope, then submit the professional experience completed before the change so it can be reviewed and retained against the closed work plan.</p>
+    </div>
+    <div class="hero-badge"><span class="dot"></span><span id="hero-summary">Job change draft in progress</span></div>
+  </section>
+
+  <div class="message-bar" id="message-bar" role="status" aria-live="polite">
+    <span class="dot"></span>
+    <span id="message-text"></span>
+  </div>
+
+  <section class="workspace">
+    <section class="panel main-panel">
+      <div class="section-label">Learner job change</div>
+      <h2>Job change and partial experience submission</h2>
+      <p class="panel-copy">Use this page to report a role change, close the current work plan, and submit partial professional experience completed before the change so the mentor can review it.</p>
+
+      <div class="stack" style="margin-top:1rem;">
+        <section class="form-section">
+          <h3>Current work plan snapshot</h3>
+          <div class="metric-grid" id="snapshot-metrics"></div>
+          <div class="notice-box warn" style="margin-top:1rem;">
+            <strong>Work plan closure</strong>
+            <span>Once the job or role change is submitted, the current work plan is marked Closed and the current mentor is notified to review and sign off any applicable partial experience.</span>
+          </div>
+        </section>
+
+        <section class="form-section">
+          <h3>Report job or role change</h3>
+          <div class="field-grid">
+            <div class="field">
+              <label for="change-date">Change date</label>
+              <input id="change-date" type="date">
+              <span class="subcopy">The system records the date of the job or role change.</span>
+            </div>
+            <div class="field">
+              <label for="new-employer">New employer</label>
+              <input id="new-employer" type="text" placeholder="Enter the new employer">
+            </div>
+            <div class="field">
+              <label for="new-role">New role</label>
+              <input id="new-role" type="text" placeholder="Enter the new role">
+            </div>
+            <div class="field">
+              <label for="new-mentor">New mentor</label>
+              <input id="new-mentor" type="text" placeholder="Enter the new mentor">
+            </div>
+            <div class="field full">
+              <label for="change-in-scope">Change in scope</label>
+              <textarea id="change-in-scope" placeholder="Describe how responsibilities, scope, reporting lines, or competencies changed."></textarea>
+            </div>
+          </div>
+        </section>
+
+        <section class="form-section">
+          <h3>Submit partial professional experience</h3>
+          <div class="field-grid three">
+            <div class="field">
+              <label for="partial-start-date">Experience period start</label>
+              <input id="partial-start-date" type="date">
+            </div>
+            <div class="field">
+              <label for="partial-end-date">Experience period end</label>
+              <input id="partial-end-date" type="date">
+            </div>
+            <div class="field">
+              <label for="partial-hours">Hours completed before change</label>
+              <input id="partial-hours" type="number" min="0" step="1">
+            </div>
+          </div>
+          <div class="field-grid" style="margin-top:1rem;">
+            <div class="field full">
+              <label for="experience-earned">Professional experience earned before role change</label>
+              <textarea id="experience-earned" placeholder="Describe the experience earned before the change and what should be retained from the closed work plan."></textarea>
+            </div>
+            <div class="field full">
+              <label for="partial-summary">Partial report summary</label>
+              <textarea id="partial-summary" placeholder="Summarize the professional experience completed before the change, including competencies or milestones already achieved."></textarea>
+            </div>
+          </div>
+          <!--
+          <div class="notice-box success" style="margin-top:1rem;">
+            <strong>Mentor routing</strong>
+            <span>After submission, the partial report is linked to the closed work plan and routed to the current mentor for approval.</span>
+          </div>
+          -->
+        </section>
+
+        <section class="form-section">
+          <h3>Supporting documents</h3>
+          <div class="button-row">
+            <button class="action-btn" id="attach-doc-btn" type="button">Attach supporting document</button>
+          </div>
+          <div class="doc-list" id="doc-list" style="margin-top:1rem;"></div>
+          <input id="job-change-upload" type="file" hidden>
+          <div class="subcopy" style="margin-top:.75rem;">Attach any supporting documents that explain the job change or support the partial experience submission.</div>
+        </section>
+
+        <section class="form-section">
+          <h3>Submission actions</h3>
+          <div class="button-row">
+            <button class="action-btn primary" id="save-draft-btn" type="button">Save draft</button>
+            <button class="action-btn success" id="submit-btn" type="button">Submit job change</button>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <aside class="panel side-panel">
+      <div class="section-label">Status and routing</div>
+      <h2>Job change</h2>
+      <div class="meta-stack">
+        <div class="meta-card">
+          <strong>Current status</strong>
+          <span id="meta-status">Draft</span>
+        </div>
+        <div class="meta-card">
+          <strong>Linked work plan</strong>
+          <span id="meta-workplan">Active work plan not linked yet.</span>
+        </div>
+        <div class="meta-card">
+          <strong>Mentor notification</strong>
+          <span id="meta-mentor-notification">Pending submission</span>
+        </div>
+        <div class="meta-card">
+          <strong>Submitted date and time</strong>
+          <span id="meta-submitted">Not submitted</span>
+        </div>
+        <!--
+        <div class="meta-card">
+          <strong>Partial report route</strong>
+          <span id="meta-route">Will route to mentor after submission.</span>
+        </div>
+        -->
+      </div>
+    </aside>
+  </section>
+</main>
+
+<script>
+const workPlanKey = 'workPlanRecord:learner-101';
+const jobChangeKey = 'learnerJobChange:learner-101';
+
+const workPlan = JSON.parse(localStorage.getItem(workPlanKey) || 'null') || {};
+const storedJobChange = JSON.parse(localStorage.getItem(jobChangeKey) || 'null');
+
+const snapshotMetrics = document.getElementById('snapshot-metrics');
+const changeDate = document.getElementById('change-date');
+const newEmployer = document.getElementById('new-employer');
+const newRole = document.getElementById('new-role');
+const newMentor = document.getElementById('new-mentor');
+const changeInScope = document.getElementById('change-in-scope');
+const partialStartDate = document.getElementById('partial-start-date');
+const partialEndDate = document.getElementById('partial-end-date');
+const partialHours = document.getElementById('partial-hours');
+const experienceEarned = document.getElementById('experience-earned');
+const partialSummary = document.getElementById('partial-summary');
+const docList = document.getElementById('doc-list');
+const uploadInput = document.getElementById('job-change-upload');
+const heroSummary = document.getElementById('hero-summary');
+const metaStatus = document.getElementById('meta-status');
+const metaWorkplan = document.getElementById('meta-workplan');
+const metaMentorNotification = document.getElementById('meta-mentor-notification');
+const metaSubmitted = document.getElementById('meta-submitted');
+const metaRoute = document.getElementById('meta-route');
+const messageBar = document.getElementById('message-bar');
+const messageText = document.getElementById('message-text');
+
+function formatDate(dateValue) {
+  if (!dateValue) return 'Not submitted';
+  const date = new Date(dateValue);
+  if (Number.isNaN(date.getTime())) return 'Not submitted';
+  return date.toLocaleString('en-CA', { year:'numeric', month:'short', day:'numeric', hour:'numeric', minute:'2-digit' });
+}
+
+function formatShortDate(dateValue) {
+  if (!dateValue) return 'Not available';
+  const source = new Date(`${dateValue}T00:00:00`);
+  if (Number.isNaN(source.getTime())) return 'Not available';
+  return source.toLocaleDateString('en-CA', { year:'numeric', month:'short', day:'numeric' });
+}
+
+function escapeHtml(value) {
+  return String(value || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function setMessage(text) {
+  messageText.textContent = text;
+  messageBar.classList.add('visible');
+}
+
+function createDefaultRecord() {
+  const today = '2026-07-22';
+  return {
+    status: 'Draft',
+    submittedAt: '',
+    changeDate: today,
+    newEmployer: '',
+    newRole: '',
+    newMentor: '',
+    changeInScope: '',
+    partialStartDate: workPlan.employerDetails && (workPlan.employerDetails.professionalStartDate || workPlan.employerDetails.positionStartDate) || '',
+    partialEndDate: today,
+    partialHours: '',
+    experienceEarned: '',
+    partialSummary: '',
+    documents: [],
+    linkedWorkPlanId: workPlan.id || 'workPlanRecord:learner-101',
+    linkedWorkPlanStatus: workPlan.workflow && workPlan.workflow.status || 'Draft',
+    mentorNotification: '',
+    route: ''
+  };
+}
+
+let jobChange = storedJobChange || createDefaultRecord();
+
+function persistJobChange() {
+  localStorage.setItem(jobChangeKey, JSON.stringify(jobChange));
+}
+
+function renderCards(values) {
+  snapshotMetrics.innerHTML = values.map((item) => `
+    <div class="metric-card">
+      <div class="value">${escapeHtml(item.value)}</div>
+      <strong>${escapeHtml(item.label)}</strong>
+      <span>${escapeHtml(item.copy)}</span>
+    </div>
+  `).join('');
+}
+
+function renderSnapshot() {
+  const employerDetails = workPlan.employerDetails || {};
+  const approvals = workPlan.approvals || {};
+  const status = workPlan.workflow && workPlan.workflow.status || 'Draft';
+  renderCards([
+    {
+      value: employerDetails.organizationName || 'None',
+      label: 'Current employer',
+      copy: employerDetails.positionTitle || 'No current position title recorded.'
+    },
+    {
+      value: approvals.mentorName || 'None',
+      label: 'Current mentor',
+      copy: status
+    },
+    {
+      value: employerDetails.expectedLeaveDays !== undefined ? String(employerDetails.expectedLeaveDays) : '0',
+      label: 'Leave days shown',
+      copy: 'Carried from the active work plan.'
+    }
+  ]);
+}
+
+function renderDocuments() {
+  if (!jobChange.documents.length) {
+    docList.innerHTML = '<div class="empty-state">No supporting documents attached yet.</div>';
+    return;
+  }
+  docList.innerHTML = jobChange.documents.map((doc, index) => `
+    <div class="doc-item">
+      <div>
+        <strong>${escapeHtml(doc.name)}</strong>
+        <span>${escapeHtml(doc.note)}</span>
+      </div>
+      <button class="action-btn" type="button" data-remove-doc="${index}">Remove</button>
+    </div>
+  `).join('');
+}
+
+function loadForm() {
+  changeDate.value = jobChange.changeDate || '2026-07-22';
+  newEmployer.value = jobChange.newEmployer || '';
+  newRole.value = jobChange.newRole || '';
+  newMentor.value = jobChange.newMentor || '';
+  changeInScope.value = jobChange.changeInScope || '';
+  partialStartDate.value = jobChange.partialStartDate || '';
+  partialEndDate.value = jobChange.partialEndDate || '';
+  partialHours.value = jobChange.partialHours || '';
+  experienceEarned.value = jobChange.experienceEarned || '';
+  partialSummary.value = jobChange.partialSummary || '';
+}
+
+function readForm() {
+  jobChange.changeDate = changeDate.value;
+  jobChange.newEmployer = newEmployer.value.trim();
+  jobChange.newRole = newRole.value.trim();
+  jobChange.newMentor = newMentor.value.trim();
+  jobChange.changeInScope = changeInScope.value.trim();
+  jobChange.partialStartDate = partialStartDate.value;
+  jobChange.partialEndDate = partialEndDate.value;
+  jobChange.partialHours = partialHours.value;
+  jobChange.experienceEarned = experienceEarned.value.trim();
+  jobChange.partialSummary = partialSummary.value.trim();
+}
+
+function validateSubmission() {
+  readForm();
+  const issues = [];
+  if (!jobChange.changeDate) issues.push('change date');
+  if (!jobChange.newEmployer) issues.push('new employer');
+  if (!jobChange.newRole) issues.push('new role');
+  if (!jobChange.newMentor) issues.push('new mentor');
+  if (!jobChange.changeInScope) issues.push('change in scope');
+  if (!jobChange.partialStartDate) issues.push('experience period start');
+  if (!jobChange.partialEndDate) issues.push('experience period end');
+  if (!jobChange.partialHours || Number(jobChange.partialHours) <= 0) issues.push('hours completed before change');
+  if (!jobChange.experienceEarned) issues.push('professional experience earned before role change');
+  if (!jobChange.partialSummary) issues.push('partial report summary');
+  if (jobChange.partialStartDate && jobChange.partialEndDate && jobChange.partialEndDate < jobChange.partialStartDate) {
+    issues.push('valid partial experience dates');
+  }
+  return issues;
+}
+
+function renderMeta() {
+  metaStatus.innerHTML = jobChange.status === 'Submitted'
+    ? '<span class="status-badge badge-routed"><span class="dot"></span>Submitted</span>'
+    : jobChange.status === 'Closed'
+      ? '<span class="status-badge badge-closed"><span class="dot"></span>Closed work plan</span>'
+      : '<span class="status-badge badge-draft"><span class="dot"></span>Draft</span>';
+  metaWorkplan.textContent = `${jobChange.linkedWorkPlanId} | ${jobChange.linkedWorkPlanStatus || 'Draft'}`;
+  metaMentorNotification.textContent = jobChange.mentorNotification || 'Pending submission';
+  metaSubmitted.textContent = formatDate(jobChange.submittedAt);
+  metaRoute.textContent = jobChange.route || 'Will route to mentor after submission.';
+  const issues = validateSubmission();
+  heroSummary.textContent = issues.length
+    ? `Job change draft | ${issues.length} item${issues.length === 1 ? '' : 's'} remaining`
+    : 'Job change and partial report ready to submit';
+}
+
+function renderAll() {
+  renderSnapshot();
+  loadForm();
+  renderDocuments();
+  renderMeta();
+  persistJobChange();
+}
+
+document.getElementById('attach-doc-btn').addEventListener('click', () => {
+  uploadInput.click();
+});
+
+uploadInput.addEventListener('change', () => {
+  if (!uploadInput.files || !uploadInput.files.length) return;
+  const file = uploadInput.files[0];
+  jobChange.documents.push({
+    name: file.name,
+    note: `Uploaded ${new Date().toLocaleString('en-CA', { year:'numeric', month:'short', day:'numeric', hour:'numeric', minute:'2-digit' })}`
+  });
+  uploadInput.value = '';
+  renderDocuments();
+  renderMeta();
+  persistJobChange();
+  setMessage('Supporting document attached to the job change draft.');
+});
+
+docList.addEventListener('click', (event) => {
+  const button = event.target.closest('[data-remove-doc]');
+  if (!button) return;
+  jobChange.documents.splice(Number(button.dataset.removeDoc), 1);
+  renderDocuments();
+  renderMeta();
+  persistJobChange();
+  setMessage('Supporting document removed from the job change draft.');
+});
+
+document.querySelectorAll('input, textarea').forEach((element) => {
+  element.addEventListener('input', () => {
+    readForm();
+    renderMeta();
+    persistJobChange();
+  });
+  element.addEventListener('change', () => {
+    readForm();
+    renderMeta();
+    persistJobChange();
+  });
+});
+
+document.getElementById('save-draft-btn').addEventListener('click', () => {
+  readForm();
+  jobChange.status = 'Draft';
+  persistJobChange();
+  renderMeta();
+  setMessage('Job change draft saved.');
+  window.location.href = '../../index.html';
+});
+
+document.getElementById('submit-btn').addEventListener('click', () => {
+  const issues = validateSubmission();
+  if (issues.length) {
+    jobChange.status = 'Draft';
+    persistJobChange();
+    renderMeta();
+    setMessage(`Before submitting, complete ${issues.length} required item${issues.length === 1 ? '' : 's'} in the job change report.`);
+    window.location.href = '../../index.html';
+    return;
+  }
+
+  const now = new Date().toISOString();
+  if (!workPlan.workflow) workPlan.workflow = {};
+  workPlan.workflow.status = 'Closed';
+  workPlan.workflow.closedAt = now;
+  workPlan.workflow.closedReason = `Job change reported on ${formatShortDate(jobChange.changeDate)}.`;
+  localStorage.setItem(workPlanKey, JSON.stringify(workPlan));
+
+  jobChange.status = 'Submitted';
+  jobChange.submittedAt = now;
+  jobChange.linkedWorkPlanStatus = 'Closed';
+  jobChange.mentorNotification = `Current mentor notified on ${formatDate(now)} to review and sign off partial experience before the work plan closure takes effect.`;
+  jobChange.route = 'Partial report linked to the closed work plan and routed to mentor approval.';
+  persistJobChange();
+  renderMeta();
+  setMessage('Job change submitted. The work plan is now closed and the partial experience report has been routed to the current mentor.');
+  window.location.href = '../../index.html';
+});
+
+renderAll();
+</script>
+</body>
+</html>

@@ -135,6 +135,7 @@
         <a class="role-option" href="../../1_Dashboard/CPAReviewer.html">CPA Reviewer</a>
         <a class="role-option active" href="../../1_Dashboard/MentorDashboard.html">Mentor</a>
         <a class="role-option" href="../../1_Dashboard/PTSBStaffDashboard.html">PTSB Staff</a>
+              <a class="role-option" href="../../8_MentorOnboarding/1_MentorOnboarding.html">Mentor onboarding</a>
       </div>
     </details>
   </div>
@@ -158,7 +159,7 @@
     <aside class="panel sidebar-panel">
       <div class="section-label">Submitted work plans</div>
       <h2>Mentor review queue</h2>
-      <p class="panel-copy">Mentor review occurs before CPA Staff review. Submitted work plans remain read-only during mentor review, and each declined plan keeps its original version for historical reference.</p>
+      <p class="panel-copy">Review submitted learner work plans, add comments, and complete mentor decisions from the current queue.</p>
       <div class="sidebar-stack" style="margin-top:1rem;">
         <div class="meta-card">
           <strong>Acting mentor</strong>
@@ -182,8 +183,6 @@
         <p class="panel-copy" id="detail-copy">All learner work plan details are shown in read-only mode during mentor review.</p>
 
         <div class="detail-stack">
-          <div class="readonly-copy">This work plan is shown read-only while mentor review is in progress. Mentor review happens before CPA Staff review, and the original submitted version is retained for historical reference even if the learner is asked to revise and resubmit.</div>
-
           <section class="info-section">
             <h3>Learner and employer details</h3>
             <div class="grid-3" id="overview-grid"></div>
@@ -262,10 +261,6 @@
             <span id="meta-mentor">No mentor recorded.</span>
           </div>
           <div class="meta-card">
-            <strong>Workflow route</strong>
-            <span id="meta-route">No workflow route recorded.</span>
-          </div>
-          <div class="meta-card">
             <strong>Reminder schedule</strong>
             <div class="reminder-list" id="reminder-list" style="margin-top:.75rem;"></div>
           </div>
@@ -302,7 +297,6 @@ const approvalDeclaration = document.getElementById('approval-declaration');
 const metaStatus = document.getElementById('meta-status');
 const metaSubmitted = document.getElementById('meta-submitted');
 const metaMentor = document.getElementById('meta-mentor');
-const metaRoute = document.getElementById('meta-route');
 const reminderList = document.getElementById('reminder-list');
 const trailList = document.getElementById('trail-list');
 const messageBar = document.getElementById('message-bar');
@@ -646,8 +640,6 @@ function renderMeta(plan) {
   metaMentor.textContent = plan.approvals.mentorName
     ? `${plan.approvals.mentorName} (${plan.approvals.mentorSelectedEmail || 'email not available'})`
     : 'No mentor recorded.';
-  metaRoute.textContent = plan.workflow.route || 'Mentor review occurs before CPA Staff review.';
-
   const pending = plan.workflow.status === 'Pending Mentor Approval';
   approveBtn.disabled = !pending;
   returnBtn.disabled = !pending;
@@ -819,7 +811,7 @@ function approveWorkPlan() {
   addAudit(plan, previousStatus, plan.workflow.status, 'Mentor approved the work plan declaration and routed it to CPA Staff review.');
   approvalDeclaration.checked = false;
   renderAll();
-  setMessage('Work plan approved. Status updated to Pending CPA Review and the file has been routed to CPA Staff triage.');
+  window.location.href = '../../1_Dashboard/MentorDashboard.html';
 }
 
 function createRevisionVersion(plan) {
@@ -863,7 +855,7 @@ function returnForRevision() {
   const draft = createRevisionVersion(plan);
   versions.push(draft);
   renderAll();
-  setMessage('Work plan returned for revision. The original remains read-only and a new prepopulated draft version has been created for the learner.');
+  window.location.href = '../../1_Dashboard/MentorDashboard.html';
 }
 
 document.getElementById('add-comment-btn').addEventListener('click', () => {

@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPA - Submit Final Experience Report</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:#0B1F3A; --blue:#1B5EA8; --accent:#2A9D8F; --amber:#E76F1A; --green:#2D7A4E; --red:#C0392B;
+    --sand:#F7F5F2; --white:#FFFFFF; --gray-100:#F2F1EF; --gray-200:#E4E2DE; --gray-300:#D2CEC8;
+    --gray-400:#A8A49E; --gray-600:#6B6760; --gray-800:#2E2C2A;
+    --shadow-sm:0 1px 3px rgba(11,31,58,0.07),0 1px 2px rgba(11,31,58,0.05);
+    --radius-sm:6px; --radius-md:10px; --radius-lg:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'DM Sans',sans-serif;background:var(--sand);color:var(--gray-800);min-height:100vh}
+  a{text-decoration:none;color:inherit}
+  button,input,select,textarea{font:inherit}
+  textarea{resize:vertical}
+  .topbar{background:var(--navy);min-height:60px;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:0 2rem}
+  .logo-group{display:flex;align-items:center;gap:10px;min-width:225px}
+  .logo-mark{width:36px;height:36px;background:var(--white);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .logo-text{display:flex;flex-direction:column;line-height:1.1}
+  .logo-text .brand{font-size:13px;font-weight:600;color:var(--white);letter-spacing:.04em}
+  .logo-text .sub{font-size:10px;color:rgba(255,255,255,.5);letter-spacing:.02em;text-transform:uppercase}
+  .topbar-right{display:flex;align-items:center;gap:12px}
+  .nav-links{display:flex;align-items:center;gap:2px}
+  .nav-links a{color:rgba(255,255,255,.55);font-size:14px;padding:8px 16px;border-radius:var(--radius-sm);white-space:nowrap}
+  .nav-links a.active,.nav-links a:hover{color:var(--white);background:rgba(255,255,255,.08)}
+  .role-dropdown{position:relative}
+  .role-trigger{list-style:none;display:flex;align-items:center;gap:10px;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);color:var(--white);font-size:13px;font-weight:600;cursor:pointer}
+  .role-trigger::-webkit-details-marker{display:none}
+  .role-label{display:inline-flex;align-items:center;justify-content:center;min-width:92px}
+  .role-caret{font-size:11px;color:rgba(255,255,255,.72)}
+  .role-menu{position:absolute;right:0;top:calc(100% + 10px);min-width:190px;padding:8px;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);box-shadow:0 12px 30px rgba(11,31,58,.14);display:flex;flex-direction:column;gap:4px;z-index:20}
+  .role-option{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:var(--radius-sm);font-size:13px;color:var(--gray-800);text-decoration:none}
+  .role-option:hover{background:var(--gray-100)}
+  .role-option.active{background:#EBF3FF;color:var(--blue);font-weight:600}
+  .page{max-width:1480px;margin:0 auto;padding:2rem 2rem 4rem}
+  .hero{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--gray-200)}
+  .hero h1{font-family:'DM Serif Display',serif;font-size:38px;font-weight:400;color:var(--navy);margin-bottom:6px}
+  .hero p{font-size:14px;color:var(--gray-600);max-width:880px;line-height:1.5}
+  .hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);padding:10px 16px;box-shadow:var(--shadow-sm);font-size:13px;color:var(--gray-600)}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--blue);flex:0 0 auto}
+  .message-bar{display:none;align-items:center;gap:10px;margin-bottom:1rem;padding:12px 14px;border-radius:var(--radius-md);background:#EBF3FF;border:1px solid rgba(27,94,168,.18);color:var(--navy);box-shadow:var(--shadow-sm)}
+  .message-bar.visible{display:flex}
+  .workspace{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:16px}
+  .panel{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm)}
+  .main-panel,.side-panel{padding:1.25rem}
+  .section-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gray-400);margin-bottom:.75rem}
+  .panel h2{font-size:17px;color:var(--navy);margin-bottom:4px}
+  .panel-copy{font-size:12px;color:var(--gray-600);line-height:1.45}
+  .stack,.meta-stack,.attachment-list{display:flex;flex-direction:column;gap:16px}
+  .form-section{padding:1rem;border:1px solid var(--gray-200);border-radius:var(--radius-md);background:var(--sand)}
+  .form-section h3{font-size:15px;color:var(--navy);margin-bottom:6px}
+  .field-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .field-grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .field{display:flex;flex-direction:column;gap:6px}
+  .field.full{grid-column:1 / -1}
+  .field label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gray-400)}
+  .field input,.field select,.field textarea{border:1px solid var(--gray-200);border-radius:var(--radius-sm);background:var(--white);padding:10px 12px;color:var(--gray-800)}
+  .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:rgba(27,94,168,.32);box-shadow:0 0 0 3px rgba(27,94,168,.08)}
+  .field textarea{min-height:110px}
+  .subcopy{font-size:11px;color:var(--gray-600);line-height:1.45}
+  .metric-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+  .metric-card,.meta-card,.attachment-item,.task-card,.dc-card,.notice-box{padding:12px;border-radius:var(--radius-md);border:1px solid var(--gray-200);background:var(--white)}
+  .metric-card strong,.meta-card strong,.attachment-item strong,.task-card strong,.dc-card strong,.notice-box strong{display:block;font-size:13px;color:var(--navy);margin-bottom:4px}
+  .metric-card span,.meta-card span,.attachment-item span,.task-card span,.dc-card span,.notice-box span{display:block;font-size:12px;color:var(--gray-600);line-height:1.45}
+  .metric-card .value{font-family:'DM Serif Display',serif;font-size:30px;line-height:1;color:var(--navy);margin-bottom:6px}
+  .notice-box{background:#F7FAFF}
+  .notice-box.warn{background:#FFF8F1;border-color:rgba(231,111,26,.22)}
+  .table-head{display:grid;grid-template-columns:minmax(0,1.1fr) 180px 180px;gap:12px;padding:0 12px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gray-400)}
+  .task-stack,.dc-list{display:flex;flex-direction:column;gap:10px}
+  .task-card,.dc-card{background:var(--white)}
+  .task-row,.dc-row{display:grid;grid-template-columns:minmax(0,1.1fr) 180px 180px;gap:12px;align-items:start}
+  .checkbox-row{display:flex;align-items:flex-start;gap:10px}
+  .checkbox-row input{margin-top:3px}
+  .button-row{display:flex;flex-wrap:wrap;gap:8px}
+  .action-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:var(--radius-sm);border:1px solid var(--gray-200);padding:9px 12px;background:var(--white);color:var(--navy);font-size:12px;font-weight:700;cursor:pointer;transition:all .15s ease}
+  .action-btn:hover{border-color:rgba(27,94,168,.28);background:#F7FAFF}
+  .action-btn.primary{background:#EBF3FF;border-color:rgba(27,94,168,.28);color:var(--blue)}
+  .action-btn.success{background:#E8F5EE;border-color:rgba(45,122,78,.22);color:var(--green)}
+  .status-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:5px 10px;border-radius:20px;white-space:nowrap}
+  .status-badge .dot{width:6px;height:6px}
+  .badge-draft{background:#EBF3FF;color:var(--blue)} .badge-draft .dot{background:var(--blue)}
+  .badge-pending{background:#FEF3E8;color:var(--amber)} .badge-pending .dot{background:var(--amber)}
+  .badge-ready{background:#E8F5EE;color:var(--green)} .badge-ready .dot{background:var(--green)}
+  .empty-state{padding:18px;border:1px dashed var(--gray-300);border-radius:var(--radius-md);background:var(--sand);text-align:center;font-size:13px;color:var(--gray-600)}
+  @media(max-width:1180px){.workspace{grid-template-columns:1fr}}
+  @media(max-width:920px){
+    .field-grid,.field-grid.three,.metric-grid,.task-row,.dc-row,.table-head{grid-template-columns:1fr}
+  }
+  @media(max-width:760px){
+    .topbar{align-items:flex-start;flex-direction:column;padding:1rem}
+    .nav-links{display:none}
+    .topbar-right{width:100%;justify-content:space-between}
+    .page{padding:1.25rem 1rem 3rem}
+    .hero{flex-direction:column;align-items:flex-start}
+    .hero h1{font-size:34px}
+  }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="logo-group">
+    <div class="logo-mark">
+      <svg width="24" height="20" viewBox="0 0 24 20" fill="none" aria-hidden="true">
+        <path d="M2 10C2 5.58 5.58 2 10 2h4c4.42 0 8 3.58 8 8s-3.58 8-8 8h-4C5.58 18 2 14.42 2 10z" fill="#0B1F3A" opacity="0.12"/>
+        <path d="M7 10.5l3 3 7-7" stroke="#0B1F3A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="logo-text"><span class="brand">CPA Canada</span><span class="sub">Chartered Professional Accountants</span></div>
+  </div>
+  <div class="topbar-right">
+    <nav class="nav-links" aria-label="Primary navigation">
+      <a href="../index.html">Dashboard</a>
+      <a href="../3_WorkPlan/1_LearnerWP/2_LearnerWorkPlanInfo.html">Competencies</a>
+      <a href="1_SubmitFinalExperienceReport.html" class="active">Final report</a>
+    </nav>
+    <details class="role-dropdown">
+      <summary class="role-trigger"><span class="role-label">Learner</span><span class="role-caret">&#9662;</span></summary>
+      <div class="role-menu">
+        <a class="role-option active" href="../index.html">Learner</a>
+        <a class="role-option" href="../1_Dashboard/CPAReviewer.html">CPA Reviewer</a>
+        <a class="role-option" href="../1_Dashboard/MentorDashboard.html">Mentor</a>
+        <a class="role-option" href="../1_Dashboard/PTSBStaffDashboard.html">PTSB Staff</a>
+              <a class="role-option" href="../8_MentorOnboarding/1_MentorOnboarding.html">Mentor onboarding</a>
+      </div>
+    </details>
+  </div>
+</header>
+
+<main class="page">
+  <section class="hero" aria-labelledby="final-report-title">
+    <div>
+      <h1 id="final-report-title">Submit final experience report</h1>
+      <p>Prepare the final experience report, confirm duration and leaves, complete the final competency assessment, and attach chargeable hours if they apply before submitting the learner's practical experience for completion review.</p>
+    </div>
+    <div class="hero-badge"><span class="dot"></span><span id="hero-summary">Final report draft in progress</span></div>
+  </section>
+
+  <div class="message-bar" id="message-bar" role="status" aria-live="polite">
+    <span class="dot"></span>
+    <span id="message-text"></span>
+  </div>
+
+  <section class="workspace">
+    <section class="panel main-panel">
+      <div class="section-label">Learner submission</div>
+      <h2>Final experience report</h2>
+      <p class="panel-copy">This final report brings together the closing learner summary, duration confirmation, leave information, optional chargeable-hour support, and the final competency assessment for completion review.</p>
+
+      <div class="stack" style="margin-top:1rem;">
+        <section class="form-section">
+          <h3>Final report summary</h3>
+          <div class="field-grid">
+            <div class="field">
+              <label for="learner-name">Learner name</label>
+              <input id="learner-name" type="text" readonly>
+            </div>
+            <div class="field">
+              <label for="learner-id">Learner ID</label>
+              <input id="learner-id" type="text" readonly>
+            </div>
+            <div class="field">
+              <label for="current-employer">Current employer</label>
+              <input id="current-employer" type="text" readonly>
+            </div>
+            <div class="field">
+              <label for="current-mentor">Current mentor</label>
+              <input id="current-mentor" type="text" readonly>
+            </div>
+            <div class="field full">
+              <label for="final-summary">Final experience summary</label>
+              <textarea id="final-summary" placeholder="Summarize the learner's final practical experience, key outcomes, and readiness for completion assessment."></textarea>
+            </div>
+            <div class="field full">
+              <label for="completion-rationale">Completion rationale</label>
+              <textarea id="completion-rationale" placeholder="Describe why the learner believes the practical experience requirements are complete."></textarea>
+            </div>
+          </div>
+        </section>
+
+        <section class="form-section">
+          <h3>Duration confirmation and leave</h3>
+          <div class="metric-grid" id="duration-metrics"></div>
+          <div class="field-grid three" style="margin-top:1rem;">
+            <div class="field">
+              <label for="start-date">Experience start date</label>
+              <input id="start-date" type="text" readonly>
+            </div>
+            <div class="field">
+              <label for="completion-date">Expected completion date</label>
+              <input id="completion-date" type="text" readonly>
+            </div>
+            <div class="field">
+              <label for="leave-days">Leave days</label>
+              <input id="leave-days" type="text" readonly>
+            </div>
+            <div class="field">
+              <label for="avg-hours">Average hours per week</label>
+              <input id="avg-hours" type="text" readonly>
+            </div>
+            <div class="field">
+              <label for="final-months">Confirmed eligible duration (months)</label>
+              <input id="final-months" type="number" min="0" step="0.01">
+            </div>
+            <div class="field">
+              <label for="final-hours">Confirmed total hours</label>
+              <input id="final-hours" type="number" min="0" step="1">
+            </div>
+          </div>
+          <div class="notice-box warn" style="margin-top:1rem;">
+            <strong>Leave display</strong>
+            <span>The saved leave value from the learner's work plan is shown here and should remain visible for final duration confirmation.</span>
+          </div>
+        </section>
+
+        <section class="form-section">
+          <h3>Chargeable hours attachment</h3>
+          <div class="field-grid">
+            <div class="field">
+              <label for="chargeable-hours-required">Chargeable hour form required</label>
+              <select id="chargeable-hours-required">
+                <option value="No">No</option>
+                <option value="Yes">Yes</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="chargeable-hours-note">Attachment note</label>
+              <input id="chargeable-hours-note" type="text" placeholder="Example: Assurance engagement time summary">
+            </div>
+          </div>
+          <div class="button-row" style="margin-top:1rem;">
+            <button class="action-btn" id="attach-chargeable-btn" type="button">Attach chargeable hour form</button>
+          </div>
+          <div class="attachment-list" id="attachment-list" style="margin-top:1rem;"></div>
+          <input id="chargeable-upload" type="file" hidden>
+          <div class="subcopy" style="margin-top:.75rem;">This attachment is optional and should only be included when the learner's pathway requires chargeable hour support.</div>
+        </section>
+
+        <section class="form-section">
+          <h3>Final competency assessment</h3>
+          <div class="subcopy" style="margin-bottom:1rem;">Complete the final assessment for Financial Reporting, Assurance & Trust, and every DC statement using the final proficiency level reached by the learner.</div>
+
+          <div class="table-head">
+            <div>Competency statement</div>
+            <div>Final level</div>
+            <div>Evidence summary</div>
+          </div>
+          <div class="task-stack" id="core-competency-list"></div>
+        </section>
+
+        <section class="form-section">
+          <h3>DC statements</h3>
+          <div class="table-head">
+            <div>DC statement</div>
+            <div>Final level</div>
+            <div>Evidence summary</div>
+          </div>
+          <div class="dc-list" id="dc-list"></div>
+        </section>
+
+        <section class="form-section">
+          <h3>Submission actions</h3>
+          <div class="button-row">
+            <button class="action-btn primary" id="save-draft-btn" type="button">Save draft</button>
+            <button class="action-btn success" id="submit-btn" type="button">Submit final experience report</button>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <aside class="panel side-panel">
+      <div class="section-label">Status and summary</div>
+      <h2>Final Report</h2>
+      <div class="meta-stack">
+        <div class="meta-card">
+          <strong>Current status</strong>
+          <span id="meta-status">Draft</span>
+        </div>
+        <div class="meta-card">
+          <strong>Current stage</strong>
+          <span>Completion report</span>
+        </div>
+        <div class="meta-card">
+          <strong>Duration confirmation</strong>
+          <span id="meta-duration">Pending confirmation</span>
+        </div>
+        <div class="meta-card">
+          <strong>Chargeable hour form</strong>
+          <span id="meta-chargeable">Not required</span>
+        </div>
+        <div class="meta-card">
+          <strong>Submitted date and time</strong>
+          <span id="meta-submitted">Not submitted</span>
+        </div>
+        <div class="meta-card">
+          <strong>Completion readiness</strong>
+          <span id="meta-readiness">Finish the final assessment and duration confirmation to submit.</span>
+        </div>
+      </div>
+    </aside>
+  </section>
+</main>
+
+<script>
+const workPlanKey = 'workPlanRecord:learner-101';
+const finalReportKey = 'finalExperienceReport:learner-101';
+const levelOptions = ['', 'Level 0 - Not yet exposed', 'Level 1 - Foundational', 'Level 2 - Emerging', 'Level 3 - Proficient'];
+
+const coreCompetencies = [
+  { id:'fr1', title:'FR1 - Assess decision makers\' needs and actively design the development/ modification of reporting requirements or financial-reporting systems required to meet external user needs, such as an MD&A or financing needs (a large, complex example, or several smaller ones).' },
+  { id:'fr2', title:'FR2 - Critically evaluate and reach a preliminary conclusion on three distinct GAAP (or equivalent) transactions based on management requests, using the CPA Canada Handbook (or equivalent) as guidance.' },
+  { id:'fr3', title:'FR3 - Prepare and critically evaluate financial statements and notes in accordance with GAAP or equivalent over two business periods (at least one of which is year-end).' },
+  { id:'fr4', title:'FR4 - Assess variances on historical, year-over-year financial statements and interpret the root causes, including insights into interconnectivity of multiple line items (over two business periods, at least one of which needs to be year-end).' },
+  { id:'at1a', title:'AT1a - Formulate the planning and risk assessment of the assurance engagement (including calculating materiality and assessing the control environment).' },
+  { id:'at1b', title:'AT1b - Design appropriate planned procedures that meet the objective of the engagement.' },
+  { id:'at1c', title:'AT1c - Critically evaluate supporting information and results of analysis to draw conclusions and communicate results.' }
+];
+
+const dcStatements = [
+  {
+    id:'dc1',
+    title:'DC1 (Professional Skepticism)',
+    description:'Critically evaluate actions and decisions by consistently demonstrating: A questioning mindset; awareness of new information and changes in facts and circumstances which could indicate possible misstatement due to error or fraud; critical thinking skills applied to the evidence; and awareness of how conscious and unconscious bias might impact how data or information is used, analyzed, or reported.'
+  },
+  {
+    id:'dc2',
+    title:'DC2 (Ethical Decision Making)',
+    description:'Critically evaluate a decision by consistently demonstrating understanding of professional accountability, adherence to the CPA Code of Professional Conduct, integrity and due care, unbiased judgment, compliance with laws and organizational policies, and identification and escalation of unethical behaviours where applicable.'
+  },
+  {
+    id:'dc3',
+    title:'DC3 (Communication)',
+    description:'Demonstrate ability to consistently communicate analyses, findings, decisions and next steps in a transparent, understandable, and professional manner, while ensuring communications reflect underlying substance without bias.'
+  }
+];
+
+const workPlan = JSON.parse(localStorage.getItem(workPlanKey) || 'null') || {};
+const storedReport = JSON.parse(localStorage.getItem(finalReportKey) || 'null');
+
+const learnerName = document.getElementById('learner-name');
+const learnerId = document.getElementById('learner-id');
+const currentEmployer = document.getElementById('current-employer');
+const currentMentor = document.getElementById('current-mentor');
+const finalSummary = document.getElementById('final-summary');
+const completionRationale = document.getElementById('completion-rationale');
+const startDate = document.getElementById('start-date');
+const completionDate = document.getElementById('completion-date');
+const leaveDays = document.getElementById('leave-days');
+const avgHours = document.getElementById('avg-hours');
+const finalMonths = document.getElementById('final-months');
+const finalHours = document.getElementById('final-hours');
+const chargeableHoursRequired = document.getElementById('chargeable-hours-required');
+const chargeableHoursNote = document.getElementById('chargeable-hours-note');
+const attachmentList = document.getElementById('attachment-list');
+const chargeableUpload = document.getElementById('chargeable-upload');
+const durationMetrics = document.getElementById('duration-metrics');
+const coreCompetencyList = document.getElementById('core-competency-list');
+const dcList = document.getElementById('dc-list');
+const heroSummary = document.getElementById('hero-summary');
+const metaStatus = document.getElementById('meta-status');
+const metaDuration = document.getElementById('meta-duration');
+const metaChargeable = document.getElementById('meta-chargeable');
+const metaSubmitted = document.getElementById('meta-submitted');
+const metaReadiness = document.getElementById('meta-readiness');
+const messageBar = document.getElementById('message-bar');
+const messageText = document.getElementById('message-text');
+
+function formatShortDate(dateValue) {
+  if (!dateValue) return 'Not available';
+  const date = new Date(`${dateValue}T00:00:00`);
+  if (Number.isNaN(date.getTime())) return 'Not available';
+  return date.toLocaleDateString('en-CA', { year:'numeric', month:'short', day:'numeric' });
+}
+
+function formatDate(dateValue) {
+  if (!dateValue) return 'Not submitted';
+  const date = new Date(dateValue);
+  if (Number.isNaN(date.getTime())) return 'Not submitted';
+  return date.toLocaleString('en-CA', { year:'numeric', month:'short', day:'numeric', hour:'numeric', minute:'2-digit' });
+}
+
+function escapeHtml(value) {
+  return String(value || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function setMessage(text) {
+  messageText.textContent = text;
+  messageBar.classList.add('visible');
+}
+
+function calculateDurationMetrics() {
+  const details = workPlan.employerDetails || {};
+  const duration = workPlan.duration || {};
+  const start = details.professionalStartDate || details.positionStartDate;
+  const end = details.expectedCompletionDate;
+  const leave = Number(details.expectedLeaveDays || 0);
+  const hours = Number(details.averageHoursPerWeek || 0);
+  if (!start || !end) {
+    return { valid:false, eligibleDays:0, months:0, totalHours:0 };
+  }
+  const startValue = new Date(`${start}T00:00:00`);
+  const endValue = new Date(`${end}T00:00:00`);
+  if (Number.isNaN(startValue.getTime()) || Number.isNaN(endValue.getTime()) || endValue < startValue) {
+    return { valid:false, eligibleDays:0, months:0, totalHours:0 };
+  }
+  const totalDays = Math.floor((endValue - startValue) / 86400000) + 1;
+  const eligibleDays = Math.max(0, totalDays - Math.max(0, Math.min(leave, totalDays)));
+  return {
+    valid:true,
+    eligibleDays,
+    months:Number(duration.potentialMonths || (eligibleDays / 30.4375)),
+    totalHours:Math.round((eligibleDays / 7) * hours)
+  };
+}
+
+function createDefaultReport() {
+  const details = workPlan.employerDetails || {};
+  const learner = workPlan.learnerInfo || {};
+  const approvals = workPlan.approvals || {};
+  const metrics = calculateDurationMetrics();
+  return {
+    status:'Draft',
+    submittedAt:'',
+    leaveDaysShown: String(details.expectedLeaveDays ?? 0),
+    learnerName: learner.legalName || 'Amelia Reyes',
+    learnerId: learner.cpaId || 'CPA-772401',
+    employer: details.organizationName || 'Northline Advisory Group',
+    mentor: approvals.mentorName || 'Marcus Chen, CPA',
+    finalSummary:'',
+    completionRationale:'',
+    confirmedMonths: metrics.valid ? Number(metrics.months.toFixed(2)) : '',
+    confirmedHours: metrics.valid ? metrics.totalHours : '',
+    chargeableHoursRequired:'No',
+    chargeableHoursNote:'',
+    attachments:[],
+    competencies:Object.fromEntries(coreCompetencies.map((item) => [item.id, { level:'', evidence:'' }])),
+    dc:Object.fromEntries(dcStatements.map((item) => [item.id, { level:'', evidence:'' }]))
+  };
+}
+
+let report = storedReport || createDefaultReport();
+
+function persistReport() {
+  localStorage.setItem(finalReportKey, JSON.stringify(report));
+}
+
+function selectOptions(selected) {
+  return levelOptions.map((option) => `<option value="${escapeHtml(option)}" ${option === selected ? 'selected' : ''}>${escapeHtml(option || 'Select final level')}</option>`).join('');
+}
+
+function loadHeaderFields() {
+  report.learnerName = report.learnerName || createDefaultReport().learnerName;
+  report.learnerId = report.learnerId || createDefaultReport().learnerId;
+  report.employer = report.employer || createDefaultReport().employer;
+  report.mentor = report.mentor || createDefaultReport().mentor;
+  learnerName.value = report.learnerName;
+  learnerId.value = report.learnerId;
+  currentEmployer.value = report.employer;
+  currentMentor.value = report.mentor;
+  finalSummary.value = report.finalSummary || '';
+  completionRationale.value = report.completionRationale || '';
+}
+
+function renderDuration() {
+  const details = workPlan.employerDetails || {};
+  const metrics = calculateDurationMetrics();
+  startDate.value = formatShortDate(details.professionalStartDate || details.positionStartDate);
+  completionDate.value = formatShortDate(details.expectedCompletionDate);
+  leaveDays.value = String(details.expectedLeaveDays ?? '0');
+  avgHours.value = String(details.averageHoursPerWeek ?? '0');
+  finalMonths.value = report.confirmedMonths ?? '';
+  finalHours.value = report.confirmedHours ?? '';
+
+  if (!metrics.valid) {
+    durationMetrics.innerHTML = '<div class="empty-state">Work plan duration details are incomplete, so the final duration confirmation must be entered manually.</div>';
+    return;
+  }
+
+  durationMetrics.innerHTML = `
+    <div class="metric-card">
+      <div class="value">${metrics.months.toFixed(2)}</div>
+      <strong>Calculated duration</strong>
+      <span>${metrics.eligibleDays} eligible day(s) after leave.</span>
+    </div>
+    <div class="metric-card">
+      <div class="value">${metrics.totalHours}</div>
+      <strong>Estimated total hours</strong>
+      <span>Calculated from saved weekly hours and expected duration.</span>
+    </div>
+    <div class="metric-card">
+      <div class="value">${details.expectedLeaveDays ?? 0}</div>
+      <strong>Leave shown</strong>
+      <span>Visible in the final report for duration confirmation.</span>
+    </div>
+  `;
+}
+
+function renderAttachments() {
+  chargeableHoursRequired.value = report.chargeableHoursRequired || 'No';
+  chargeableHoursNote.value = report.chargeableHoursNote || '';
+  if (!report.attachments || !report.attachments.length) {
+    attachmentList.innerHTML = '<div class="empty-state">No chargeable hour form attached.</div>';
+    return;
+  }
+  attachmentList.innerHTML = report.attachments.map((item, index) => `
+    <div class="attachment-item">
+      <strong>${escapeHtml(item.name)}</strong>
+      <span>${escapeHtml(item.note || 'Chargeable hour form')} | ${escapeHtml(item.uploadedAt)}</span>
+      <div class="button-row" style="margin-top:.75rem;">
+        <button class="action-btn" type="button" data-remove-attachment="${index}">Remove</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderCompetencies() {
+  coreCompetencyList.innerHTML = coreCompetencies.map((item) => {
+    const state = report.competencies[item.id] || { level:'', evidence:'' };
+    return `
+      <div class="task-card">
+        <div class="task-row">
+          <div>
+            <strong>${escapeHtml(item.title)}</strong>
+            <span>Final competency assessment for completion review.</span>
+          </div>
+          <div class="field">
+            <label for="${item.id}-level">Final level</label>
+            <select id="${item.id}-level" data-core-level="${item.id}">
+              ${selectOptions(state.level)}
+            </select>
+          </div>
+          <div class="field">
+            <label for="${item.id}-evidence">Evidence summary</label>
+            <textarea id="${item.id}-evidence" data-core-evidence="${item.id}" placeholder="Summarize the work demonstrating this competency.">${escapeHtml(state.evidence)}</textarea>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderDc() {
+  dcList.innerHTML = dcStatements.map((item) => {
+    const state = report.dc[item.id] || { level:'', evidence:'' };
+    return `
+      <div class="dc-card">
+        <div class="dc-row">
+          <div>
+            <strong>${escapeHtml(item.title)}</strong>
+            <span>${escapeHtml(item.description)}</span>
+          </div>
+          <div class="field">
+            <label for="${item.id}-level">Final level</label>
+            <select id="${item.id}-level" data-dc-level="${item.id}">
+              ${selectOptions(state.level)}
+            </select>
+          </div>
+          <div class="field">
+            <label for="${item.id}-evidence">Evidence summary</label>
+            <textarea id="${item.id}-evidence" data-dc-evidence="${item.id}" placeholder="Summarize the evidence for this DC statement.">${escapeHtml(state.evidence)}</textarea>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function readForm() {
+  report.finalSummary = finalSummary.value.trim();
+  report.completionRationale = completionRationale.value.trim();
+  report.confirmedMonths = finalMonths.value === '' ? '' : Number(finalMonths.value);
+  report.confirmedHours = finalHours.value === '' ? '' : Number(finalHours.value);
+  report.chargeableHoursRequired = chargeableHoursRequired.value;
+  report.chargeableHoursNote = chargeableHoursNote.value.trim();
+}
+
+function validateReport() {
+  readForm();
+  const issues = [];
+  if (!report.finalSummary) issues.push('final experience summary');
+  if (!report.completionRationale) issues.push('completion rationale');
+  if (report.confirmedMonths === '' || report.confirmedMonths <= 0) issues.push('confirmed eligible duration');
+  if (report.confirmedHours === '' || report.confirmedHours <= 0) issues.push('confirmed total hours');
+  if (report.chargeableHoursRequired === 'Yes' && (!report.attachments || !report.attachments.length)) issues.push('chargeable hour form attachment');
+  coreCompetencies.forEach((item) => {
+    const state = report.competencies[item.id] || {};
+    if (!state.level) issues.push(`${item.id.toUpperCase()} final level`);
+    if (!state.evidence) issues.push(`${item.id.toUpperCase()} evidence summary`);
+  });
+  dcStatements.forEach((item) => {
+    const state = report.dc[item.id] || {};
+    if (!state.level) issues.push(`${item.title} final level`);
+    if (!state.evidence) issues.push(`${item.title} evidence summary`);
+  });
+  return issues;
+}
+
+function renderMeta() {
+  const issues = validateReport();
+  const ready = issues.length === 0;
+  const statusClass = report.status === 'Submitted' ? 'badge-pending' : ready ? 'badge-ready' : 'badge-draft';
+  metaStatus.innerHTML = `<span class="status-badge ${statusClass}"><span class="dot"></span>${report.status === 'Submitted' ? 'Submitted' : 'Draft'}</span>`;
+  metaDuration.textContent = report.confirmedMonths !== '' ? `${Number(report.confirmedMonths).toFixed(2)} months | ${report.confirmedHours || 0} hours` : 'Pending confirmation';
+  metaChargeable.textContent = report.chargeableHoursRequired === 'Yes'
+    ? `${report.attachments && report.attachments.length ? 'Attached' : 'Required attachment missing'}`
+    : 'Not required';
+  metaSubmitted.textContent = formatDate(report.submittedAt);
+  metaReadiness.textContent = ready
+    ? 'All required final report items are complete and ready for submission.'
+    : `${issues.length} required item${issues.length === 1 ? '' : 's'} still need attention.`;
+  heroSummary.textContent = ready ? 'Final report ready to submit' : `Final report draft | ${issues.length} item${issues.length === 1 ? '' : 's'} remaining`;
+}
+
+function renderAll() {
+  loadHeaderFields();
+  renderDuration();
+  renderAttachments();
+  renderCompetencies();
+  renderDc();
+  renderMeta();
+  persistReport();
+}
+
+document.getElementById('attach-chargeable-btn').addEventListener('click', () => {
+  chargeableUpload.click();
+});
+
+chargeableUpload.addEventListener('change', () => {
+  if (!chargeableUpload.files || !chargeableUpload.files.length) return;
+  const file = chargeableUpload.files[0];
+  if (!report.attachments) report.attachments = [];
+  report.attachments.push({
+    name:file.name,
+    note:chargeableHoursNote.value.trim() || 'Chargeable hour form',
+    uploadedAt:new Date().toLocaleString('en-CA', { year:'numeric', month:'short', day:'numeric', hour:'numeric', minute:'2-digit' })
+  });
+  chargeableUpload.value = '';
+  renderAll();
+  setMessage('Chargeable hour form attached to the final experience report draft.');
+});
+
+attachmentList.addEventListener('click', (event) => {
+  const removeButton = event.target.closest('[data-remove-attachment]');
+  if (!removeButton) return;
+  report.attachments.splice(Number(removeButton.dataset.removeAttachment), 1);
+  renderAll();
+  setMessage('Chargeable hour attachment removed from the final experience report draft.');
+});
+
+coreCompetencyList.addEventListener('change', (event) => {
+  const levelId = event.target.dataset.coreLevel;
+  const evidenceId = event.target.dataset.coreEvidence;
+  if (levelId) report.competencies[levelId].level = event.target.value;
+  if (evidenceId) report.competencies[evidenceId].evidence = event.target.value.trim();
+  renderMeta();
+  persistReport();
+});
+
+coreCompetencyList.addEventListener('input', (event) => {
+  const evidenceId = event.target.dataset.coreEvidence;
+  if (!evidenceId) return;
+  report.competencies[evidenceId].evidence = event.target.value.trim();
+  renderMeta();
+  persistReport();
+});
+
+dcList.addEventListener('change', (event) => {
+  const levelId = event.target.dataset.dcLevel;
+  const evidenceId = event.target.dataset.dcEvidence;
+  if (levelId) report.dc[levelId].level = event.target.value;
+  if (evidenceId) report.dc[evidenceId].evidence = event.target.value.trim();
+  renderMeta();
+  persistReport();
+});
+
+dcList.addEventListener('input', (event) => {
+  const evidenceId = event.target.dataset.dcEvidence;
+  if (!evidenceId) return;
+  report.dc[evidenceId].evidence = event.target.value.trim();
+  renderMeta();
+  persistReport();
+});
+
+document.getElementById('save-draft-btn').addEventListener('click', () => {
+  report.status = 'Draft';
+  readForm();
+  persistReport();
+  renderMeta();
+  setMessage('Final experience report draft saved.');
+});
+
+document.getElementById('submit-btn').addEventListener('click', () => {
+  const issues = validateReport();
+  if (issues.length) {
+    report.status = 'Draft';
+    persistReport();
+    renderMeta();
+    setMessage(`Before submitting, complete ${issues.length} required item${issues.length === 1 ? '' : 's'} in the final experience report.`);
+    return;
+  }
+  report.status = 'Pending Mentor Approval';
+  report.mentorDecision = 'Pending mentor review';
+  report.cpaDecision = 'Pending CPA review';
+  report.submittedAt = new Date().toISOString();
+  report.notifications = report.notifications || [];
+  report.notifications.push({ type:'Final report submitted', sentAt:report.submittedAt, recipient:report.learnerName || 'Learner', comments:'Final report submitted and routed to mentor review.' });
+  persistReport();
+  renderMeta();
+  setMessage('Final experience report submitted for completion assessment.');
+  window.location.href = '../index.html';
+});
+
+renderAll();
+</script>
+</body>
+</html>
