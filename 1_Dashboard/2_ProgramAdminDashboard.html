@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPA - Program Admin Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:#0B1F3A; --blue:#1B5EA8; --accent:#2A9D8F; --amber:#E76F1A; --green:#2D7A4E; --red:#C0392B;
+    --sand:#F7F5F2; --white:#FFFFFF; --gray-100:#F2F1EF; --gray-200:#E4E2DE; --gray-300:#D2CEC8;
+    --gray-400:#A8A49E; --gray-600:#6B6760; --gray-800:#2E2C2A;
+    --shadow-sm:0 1px 3px rgba(11,31,58,0.07),0 1px 2px rgba(11,31,58,0.05);
+    --radius-sm:6px; --radius-md:10px; --radius-lg:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'DM Sans',sans-serif;background:var(--sand);color:var(--gray-800);min-height:100vh}
+  a{text-decoration:none;color:inherit}
+  button,input,select{font:inherit}
+  .topbar{background:var(--navy);min-height:60px;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:0 2rem}
+  .logo-group{display:flex;align-items:center;gap:10px;min-width:225px}
+  .logo-mark{width:36px;height:36px;background:var(--white);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .logo-text{display:flex;flex-direction:column;line-height:1.1}
+  .logo-text .brand{font-size:13px;font-weight:600;color:var(--white);letter-spacing:.04em}
+  .logo-text .sub{font-size:10px;color:rgba(255,255,255,.5);letter-spacing:.02em;text-transform:uppercase}
+  .nav-links{display:flex;align-items:center;gap:2px}
+  .nav-links a{color:rgba(255,255,255,.55);font-size:14px;padding:8px 16px;border-radius:var(--radius-sm);white-space:nowrap}
+  .nav-links a.active,.nav-links a:hover{color:var(--white);background:rgba(255,255,255,.08)}
+  .topbar-right{display:flex;align-items:center;gap:12px}
+  .role-dropdown{position:relative}
+  .role-trigger{list-style:none;display:flex;align-items:center;gap:10px;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);color:var(--white);font-size:13px;font-weight:600;cursor:pointer}
+  .role-trigger::-webkit-details-marker{display:none}
+  .role-label{display:inline-flex;align-items:center;justify-content:center;min-width:92px}
+  .role-caret{font-size:11px;color:rgba(255,255,255,.72)}
+  .role-menu{position:absolute;right:0;top:calc(100% + 10px);min-width:220px;padding:8px;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);box-shadow:0 12px 30px rgba(11,31,58,.14);display:flex;flex-direction:column;gap:4px;z-index:20}
+  .role-option{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:var(--radius-sm);font-size:13px;color:var(--gray-800)}
+  .role-option:hover{background:var(--gray-100)}
+  .role-option.active{background:#EBF3FF;color:var(--blue);font-weight:600}
+  .page{max-width:1380px;margin:0 auto;padding:2rem 2rem 4rem}
+  .hero{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--gray-200)}
+  .hero h1{font-family:'DM Serif Display',serif;font-size:38px;font-weight:400;color:var(--navy);margin-bottom:4px}
+  .hero p{font-size:14px;color:var(--gray-600);max-width:780px;line-height:1.5}
+  .hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);padding:10px 16px;box-shadow:var(--shadow-sm);font-size:13px;color:var(--gray-600)}
+  .hero-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:1rem}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--blue);flex:0 0 auto}
+  .section-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gray-400);margin-bottom:.75rem}
+  .panel{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm)}
+  .panel h2{font-size:17px;color:var(--navy);margin-bottom:4px}
+  .panel-copy{font-size:12px;color:var(--gray-600);line-height:1.45}
+  .summary-panel,.filter-panel,.positions-panel,.details-panel{padding:1.25rem}
+  .message-bar{display:none;align-items:center;gap:10px;margin-bottom:1rem;padding:12px 14px;border-radius:var(--radius-md);background:#EBF3FF;border:1px solid rgba(27,94,168,.18);color:var(--navy);box-shadow:var(--shadow-sm)}
+  .message-bar.visible{display:flex}
+  .summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:1.5rem}
+  .summary-card{background:var(--sand);border:1px solid var(--gray-200);border-radius:var(--radius-md);padding:12px;min-height:84px}
+  .summary-card span{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--gray-400);margin-bottom:8px;font-weight:700}
+  .summary-card strong{display:block;font-family:'DM Serif Display',serif;font-size:30px;font-weight:400;color:var(--navy);line-height:1}
+  .summary-card small{display:block;font-size:12px;color:var(--gray-600);margin-top:8px;line-height:1.35}
+  .filter-shell{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end}
+  .field{display:flex;flex-direction:column;gap:6px;min-width:180px;flex:1}
+  .field label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gray-400)}
+  .field input,.field select{height:42px;border-radius:var(--radius-md);border:1px solid var(--gray-200);background:var(--sand);padding:0 12px;color:var(--gray-800)}
+  .field input:focus,.field select:focus{outline:none;border-color:rgba(27,94,168,.32);box-shadow:0 0 0 3px rgba(27,94,168,.08)}
+  .action-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:var(--radius-sm);border:1px solid var(--gray-200);padding:9px 12px;background:var(--white);color:var(--navy);font-size:12px;font-weight:700;cursor:pointer;transition:all .15s ease}
+  .action-btn:hover{border-color:rgba(27,94,168,.28);background:#F7FAFF}
+  .action-btn.primary{background:#EBF3FF;border-color:rgba(27,94,168,.28);color:var(--blue)}
+  .content-grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(320px,.8fr);gap:16px}
+  .table-wrap{overflow:auto;border:1px solid var(--gray-200);border-radius:var(--radius-lg)}
+  table{width:100%;min-width:860px;border-collapse:collapse;background:var(--white)}
+  thead th{padding:11px 14px;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--gray-400);background:var(--sand);border-bottom:1px solid var(--gray-200);vertical-align:top}
+  tbody td{padding:14px;vertical-align:top;border-bottom:1px solid var(--gray-100);font-size:13px}
+  tbody tr:last-child td{border-bottom:none}
+  .position-btn{display:block;width:100%;text-align:left;border:none;background:transparent;padding:0;cursor:pointer}
+  .position-btn strong{display:block;font-size:14px;color:var(--navy);margin-bottom:4px}
+  .position-btn .subline,.list-item .subline{display:block;font-size:12px;color:var(--gray-600);line-height:1.45}
+  .position-btn:hover strong{text-decoration:underline}
+  .status-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:5px 10px;border-radius:20px;white-space:nowrap}
+  .status-badge .dot{width:6px;height:6px}
+  .badge-approved{background:#E8F5EE;color:var(--green)} .badge-approved .dot{background:var(--green)}
+  .badge-paused{background:#FEF3E8;color:var(--amber)} .badge-paused .dot{background:var(--amber)}
+  .detail-card,.list-item{padding:12px;border:1px solid var(--gray-200);border-radius:var(--radius-md);background:var(--sand)}
+  .detail-card strong,.list-item strong{display:block;font-size:13px;color:var(--navy);margin-bottom:6px}
+  .detail-grid,.learner-list{display:flex;flex-direction:column;gap:12px}
+  .empty-state{padding:20px;text-align:center;font-size:13px;color:var(--gray-600);background:var(--sand);border:1px dashed var(--gray-300);border-radius:var(--radius-md)}
+  @media(max-width:1180px){
+    .content-grid{grid-template-columns:1fr}
+    .summary-grid{grid-template-columns:repeat(2,1fr)}
+  }
+  @media(max-width:760px){
+    .topbar{align-items:flex-start;flex-direction:column;padding:1rem}
+    .nav-links{display:none}
+    .topbar-right{width:100%;justify-content:space-between}
+    .page{padding:1.25rem 1rem 3rem}
+    .hero{flex-direction:column;align-items:flex-start}
+    .hero h1{font-size:34px}
+    .summary-grid{grid-template-columns:1fr}
+    .field{min-width:100%}
+  }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="logo-group">
+    <div class="logo-mark">
+      <svg width="24" height="20" viewBox="0 0 24 20" fill="none" aria-hidden="true">
+        <path d="M2 10C2 5.58 5.58 2 10 2h4c4.42 0 8 3.58 8 8s-3.58 8-8 8h-4C5.58 18 2 14.42 2 10z" fill="#0B1F3A" opacity="0.12"/>
+        <path d="M7 10.5l3 3 7-7" stroke="#0B1F3A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="logo-text"><span class="brand">CPA Canada</span><span class="sub">Chartered Professional Accountants</span></div>
+  </div>
+  <div class="topbar-right">
+    <nav class="nav-links" aria-label="Primary navigation">
+      <a href="2_ProgramAdminDashboard.html" class="active">Dashboard</a>
+      <a href="#positions-panel">Positions</a>
+      <a href="#filter-title">Filters</a>
+      <a href="#details-panel">Details</a>
+    </nav>
+    <details class="role-dropdown">
+      <summary class="role-trigger"><span class="role-label">Program Admin</span><span class="role-caret">&#9662;</span></summary>
+      <div class="role-menu">
+        <a class="role-option" href="../index.html">Learner</a>
+        <a class="role-option" href="CPAReviewer.html">CPA Reviewer</a>
+        <a class="role-option" href="MentorDashboard.html">Mentor</a>
+        <a class="role-option" href="../8_MentorOnboarding/1_MentorOnboarding.html">Mentor onboarding</a>
+        <a class="role-option active" href="2_ProgramAdminDashboard.html">Program Admin</a>
+        <a class="role-option" href="PTSBStaffDashboard.html">PTSB Staff</a>
+      </div>
+    </details>
+  </div>
+</header>
+
+<main class="page">
+  <section class="hero" aria-labelledby="program-admin-title">
+    <div>
+      <h1 id="program-admin-title">Program administrator dashboard</h1>
+      <p>Maintain pre-approved positions for your organization, monitor learner capacity, and review position details and assigned learners without leaving the same workspace.</p>
+      <div class="hero-actions">
+        <a class="action-btn primary" href="../10_ProgramAdmin/1_ProgramAdminMgmt.html">Manage Pre-Approved Positions</a>
+      </div>
+    </div>
+    <div class="hero-badge"><span class="dot"></span><span id="hero-summary">Loading organization positions</span></div>
+  </section>
+
+  <div class="message-bar" id="message-bar" role="status" aria-live="polite">
+    <span class="dot"></span>
+    <span id="message-text"></span>
+  </div>
+
+  <section class="panel summary-panel">
+    <div class="section-label">Organization snapshot</div>
+    <div class="summary-grid" id="summary-grid"></div>
+  </section>
+
+  <section class="panel filter-panel" aria-labelledby="filter-title" style="margin-top:1.5rem;">
+    <div class="section-label">Position filters</div>
+    <h2 id="filter-title">Search and filter positions</h2>
+    <p class="panel-copy">Program administrators can only view positions associated with their organization. Use search and status filters to narrow the position list.</p>
+    <div class="filter-shell" style="margin-top:1rem;">
+      <div class="field">
+        <label for="organization-name">Organization</label>
+        <input id="organization-name" type="text" value="Summit Rail Finance" readonly>
+      </div>
+      <div class="field">
+        <label for="position-search">Search positions</label>
+        <input id="position-search" type="search" placeholder="Search position name">
+      </div>
+      <div class="field">
+        <label for="status-filter">Position status</label>
+        <select id="status-filter">
+          <option value="all">All statuses</option>
+          <option value="Approved">Approved</option>
+          <option value="Paused">Paused</option>
+        </select>
+      </div>
+      <button class="action-btn primary" id="reset-filters-btn" type="button">Reset filters</button>
+    </div>
+  </section>
+
+  <section class="content-grid" style="margin-top:1.5rem;">
+    <section class="panel positions-panel" id="positions-panel" aria-labelledby="positions-title">
+      <div class="section-label">Pre-approved positions</div>
+      <h2 id="positions-title">Position list</h2>
+      <p class="panel-copy">View all pre-approved positions for your organization, including status, number of learners, and capacity.</p>
+      <div class="table-wrap" style="margin-top:1rem;">
+        <table>
+          <thead>
+            <tr>
+              <th>Position name</th>
+              <th>Position status</th>
+              <th>Number of learners</th>
+              <th>Capacity</th>
+            </tr>
+          </thead>
+          <tbody id="positions-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <aside class="panel details-panel" id="details-panel">
+      <div class="section-label">Position details</div>
+      <h2 id="detail-title">Select a pre-approved position</h2>
+      <div class="detail-grid">
+        <div class="detail-card">
+          <strong>Status</strong>
+          <span id="detail-status">Choose a position from the list.</span>
+        </div>
+        <div class="detail-card">
+          <strong>Capacity</strong>
+          <span id="detail-capacity">Choose a position from the list.</span>
+        </div>
+        <div class="detail-card">
+          <strong>Assigned learners</strong>
+          <span id="detail-learner-count">Choose a position from the list.</span>
+        </div>
+        <div class="detail-card">
+          <strong>Position description</strong>
+          <span id="detail-description">Position details will appear here once selected.</span>
+        </div>
+        <div>
+          <div class="section-label">Learners assigned to position</div>
+          <div class="learner-list" id="assigned-learners-list">
+            <div class="empty-state">No position selected.</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </section>
+</main>
+
+<script>
+const organization = {
+  name: 'Summit Rail Finance',
+  positions: [
+    {
+      id: 'POS-101',
+      name: 'Advisory Analyst',
+      status: 'Approved',
+      capacity: 4,
+      description: 'Supports reporting, planning, and stakeholder analysis within the advisory finance stream.',
+      learners: [
+        { name: 'Mina Hassan', learnerId: 'LRN-251887', stage: 'Professional stage' },
+        { name: 'Sofia Morales', learnerId: 'LRN-254210', stage: 'Professional stage' },
+        { name: 'Amelia Reyes', learnerId: 'LRN-248109', stage: 'Submit work plan' }
+      ]
+    },
+    {
+      id: 'POS-102',
+      name: 'Senior Reporting Analyst',
+      status: 'Approved',
+      capacity: 2,
+      description: 'Focuses on multi-period reporting, year-end reporting packages, and complex variance interpretation.',
+      learners: [
+        { name: 'Ethan Cole', learnerId: 'LRN-253102', stage: 'Eligible PE complete' }
+      ]
+    },
+    {
+      id: 'POS-103',
+      name: 'Treasury Rotation Associate',
+      status: 'Paused',
+      capacity: 1,
+      description: 'Reserved treasury role pending refreshed internal scope validation before new learner intake.',
+      learners: []
+    }
+  ]
+};
+
+let selectedPositionId = organization.positions[0].id;
+
+const summaryGrid = document.getElementById('summary-grid');
+const positionsBody = document.getElementById('positions-body');
+const positionSearch = document.getElementById('position-search');
+const statusFilter = document.getElementById('status-filter');
+const messageBar = document.getElementById('message-bar');
+const messageText = document.getElementById('message-text');
+
+function setMessage(text) {
+  messageText.textContent = text;
+  messageBar.classList.add('visible');
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function getVisiblePositions() {
+  const query = positionSearch.value.trim().toLowerCase();
+  const status = statusFilter.value;
+  return organization.positions.filter((position) => {
+    if (status !== 'all' && position.status !== status) return false;
+    if (query && !position.name.toLowerCase().includes(query)) return false;
+    return true;
+  });
+}
+
+function renderSummary() {
+  const totalPositions = organization.positions.length;
+  const approvedPositions = organization.positions.filter((position) => position.status === 'Approved').length;
+  const totalLearners = organization.positions.reduce((count, position) => count + position.learners.length, 0);
+  const totalCapacity = organization.positions.reduce((count, position) => count + position.capacity, 0);
+
+  summaryGrid.innerHTML = [
+    { label: 'Organization', value: organization.name, detail: 'Program admin scope is limited to this organization' },
+    { label: 'Pre-approved positions', value: totalPositions, detail: 'Positions visible within this organization' },
+    { label: 'Learners assigned', value: totalLearners, detail: 'Learners currently attached to visible positions' },
+    { label: 'Total capacity', value: totalCapacity, detail: `${approvedPositions} approved position${approvedPositions === 1 ? '' : 's'} available` }
+  ].map((card) => `
+    <div class="summary-card">
+      <span>${escapeHtml(card.label)}</span>
+      <strong>${escapeHtml(card.value)}</strong>
+      <small>${escapeHtml(card.detail)}</small>
+    </div>
+  `).join('');
+
+  document.getElementById('hero-summary').textContent = `${totalPositions} positions | ${totalLearners} learners | ${totalCapacity} total capacity`;
+}
+
+function renderPositions() {
+  const positions = getVisiblePositions();
+  if (!positions.length) {
+    positionsBody.innerHTML = '<tr><td colspan="4" class="empty-state">No pre-approved positions match the current filters.</td></tr>';
+    return;
+  }
+
+  positionsBody.innerHTML = positions.map((position) => `
+    <tr>
+      <td>
+        <button class="position-btn" type="button" data-position-id="${escapeHtml(position.id)}">
+          <strong>${escapeHtml(position.name)}</strong>
+          <span class="subline">${escapeHtml(organization.name)}</span>
+        </button>
+      </td>
+      <td><span class="status-badge ${position.status === 'Approved' ? 'badge-approved' : 'badge-paused'}"><span class="dot"></span>${escapeHtml(position.status)}</span></td>
+      <td>${escapeHtml(position.learners.length)}</td>
+      <td>${escapeHtml(position.capacity)}</td>
+    </tr>
+  `).join('');
+}
+
+function renderDetails() {
+  const position = organization.positions.find((item) => item.id === selectedPositionId) || null;
+  if (!position) {
+    document.getElementById('detail-title').textContent = 'Select a pre-approved position';
+    document.getElementById('detail-status').textContent = 'Choose a position from the list.';
+    document.getElementById('detail-capacity').textContent = 'Choose a position from the list.';
+    document.getElementById('detail-learner-count').textContent = 'Choose a position from the list.';
+    document.getElementById('detail-description').textContent = 'Position details will appear here once selected.';
+    document.getElementById('assigned-learners-list').innerHTML = '<div class="empty-state">No position selected.</div>';
+    return;
+  }
+
+  document.getElementById('detail-title').textContent = position.name;
+  document.getElementById('detail-status').textContent = `${position.status} for ${organization.name}`;
+  document.getElementById('detail-capacity').textContent = `${position.learners.length} of ${position.capacity} learner spaces used`;
+  document.getElementById('detail-learner-count').textContent = `${position.learners.length} learner${position.learners.length === 1 ? '' : 's'} currently assigned`;
+  document.getElementById('detail-description').textContent = position.description;
+
+  if (!position.learners.length) {
+    document.getElementById('assigned-learners-list').innerHTML = '<div class="empty-state">No learners are currently assigned to this position.</div>';
+    return;
+  }
+
+  document.getElementById('assigned-learners-list').innerHTML = position.learners.map((learner) => `
+    <div class="list-item">
+      <strong>${escapeHtml(learner.name)}</strong>
+      <span class="subline">Learner ID: ${escapeHtml(learner.learnerId)}</span>
+      <span class="subline">${escapeHtml(learner.stage)}</span>
+    </div>
+  `).join('');
+}
+
+function resetFilters() {
+  positionSearch.value = '';
+  statusFilter.value = 'all';
+  setMessage('Program Admin filters reset.');
+  renderPositions();
+}
+
+positionsBody.addEventListener('click', (event) => {
+  const button = event.target.closest('button[data-position-id]');
+  if (!button) return;
+  selectedPositionId = button.dataset.positionId;
+  renderDetails();
+});
+
+positionSearch.addEventListener('input', renderPositions);
+statusFilter.addEventListener('change', renderPositions);
+document.getElementById('reset-filters-btn').addEventListener('click', resetFilters);
+
+renderSummary();
+renderPositions();
+renderDetails();
+</script>
+</body>
+</html>

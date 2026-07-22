@@ -49,6 +49,13 @@
   .panel-copy{font-size:12px;color:var(--gray-600);line-height:1.45}
   .message-bar{display:none;align-items:center;gap:10px;margin-bottom:1rem;padding:12px 14px;border-radius:var(--radius-md);background:#EBF3FF;border:1px solid rgba(27,94,168,.18);color:var(--navy);box-shadow:var(--shadow-sm)}
   .message-bar.visible{display:flex}
+  .modal-backdrop{position:fixed;inset:0;background:rgba(11,31,58,.48);display:none;align-items:center;justify-content:center;padding:1.25rem;z-index:40}
+  .modal-backdrop.visible{display:flex}
+  .modal-card{width:min(100%,460px);background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);box-shadow:var(--shadow-md);padding:1.25rem;position:relative}
+  .modal-close{position:absolute;top:12px;right:12px;width:32px;height:32px;border:1px solid var(--gray-200);border-radius:999px;background:var(--white);color:var(--navy);font-size:18px;line-height:1;cursor:pointer}
+  .modal-close:hover{background:var(--gray-100)}
+  .modal-card h3{font-size:20px;color:var(--navy);margin-bottom:8px;padding-right:2rem}
+  .modal-card p{font-size:13px;color:var(--gray-600);line-height:1.5}
   .overview-grid{display:grid;grid-template-columns:1fr;gap:16px;margin-bottom:1.5rem}
   .summary-panel,.filter-panel,.queue-panel{padding:1.25rem}
   .summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
@@ -142,6 +149,7 @@
         <a class="role-option" href="MentorDashboard.html">Mentor</a>
         <a class="role-option" href="PTSBStaffDashboard.html">PTSB Staff</a>
               <a class="role-option" href="../8_MentorOnboarding/1_MentorOnboarding.html">Mentor onboarding</a>
+        <a class="role-option" href="../10_ProgramAdmin/1_ProgramAdminMgmt.html">Program Admin</a>
       </div>
     </details>
   </div>
@@ -275,6 +283,14 @@
     <div class="hint">Assigned CPA staff reviewers can review submissions that are assigned to them. Unassigned items remain available for triage.</div>
   </section>
 </main>
+
+<div class="modal-backdrop" id="prr-modal" aria-hidden="true">
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="prr-modal-title">
+    <button class="modal-close" id="prr-modal-close" type="button" aria-label="Close modal">X</button>
+    <h3 id="prr-modal-title">Not eligible for Professional Readiness</h3>
+    <p id="prr-modal-copy">This learner is not currently eligible for Professional Readiness.</p>
+  </div>
+</div>
 
 <script>
 const reviewers = [
@@ -420,10 +436,23 @@ const selectAll = document.getElementById('select-all');
 const queueBody = document.getElementById('queue-body');
 const messageBar = document.getElementById('message-bar');
 const messageText = document.getElementById('message-text');
+const prrModal = document.getElementById('prr-modal');
 
 function setMessage(text) {
   messageText.textContent = text;
   messageBar.classList.add('visible');
+}
+
+function showProfessionalReadinessModal(learnerName) {
+  document.getElementById('prr-modal-title').textContent = 'Learner is not eligible for Professional Readiness';
+  document.getElementById('prr-modal-copy').textContent = `${learnerName} is not yet eligible for Professional Readiness. Completion review or additional program requirements are still outstanding.`;
+  prrModal.classList.add('visible');
+  prrModal.setAttribute('aria-hidden', 'false');
+}
+
+function closeProfessionalReadinessModal() {
+  prrModal.classList.remove('visible');
+  prrModal.setAttribute('aria-hidden', 'true');
 }
 
 function formatDate(dateValue) {
@@ -551,6 +580,7 @@ function renderQueue() {
           <div class="assign-shell">
             <button class="table-btn" type="button" data-action="open" data-id="${escapeHtml(item.id)}">Open</button>
             <button class="table-btn primary" type="button" data-action="review" data-id="${escapeHtml(item.id)}" ${reviewEnabled ? '' : 'disabled'}>Review</button>
+            <button class="table-btn danger" type="button" data-action="prr" data-id="${escapeHtml(item.id)}">Eligible for Professional Readiness</button>
           </div>
           <div class="hint">${reviewEnabled ? 'Assigned reviewer can review this submission.' : 'Assign to current user to enable review.'}</div>
         </td>
@@ -645,6 +675,12 @@ function reviewSubmission(id) {
   setMessage(`${currentReviewer} is now reviewing ${submission.learnerName}'s ${submission.type.toLowerCase()}.`);
 }
 
+function checkProfessionalReadiness(id) {
+  const submission = getSubmissionById(id);
+  if (!submission) return;
+  showProfessionalReadinessModal(submission.learnerName);
+}
+
 function resetFilters() {
   filterType.value = 'all';
   filterStatus.value = 'all';
@@ -708,6 +744,7 @@ queueBody.addEventListener('click', (event) => {
   }
   if (action === 'open') openSubmission(id);
   if (action === 'review') reviewSubmission(id);
+  if (action === 'prr') checkProfessionalReadiness(id);
 });
 
 selectAll.addEventListener('change', () => {
@@ -719,8 +756,15 @@ selectAll.addEventListener('change', () => {
   renderQueue();
 });
 
+document.getElementById('prr-modal-close').addEventListener('click', closeProfessionalReadinessModal);
+prrModal.addEventListener('click', (event) => {
+  if (event.target === prrModal) closeProfessionalReadinessModal();
+});
+
 populateReviewerControls();
 renderAll();
 </script>
 </body>
 </html>
+
+

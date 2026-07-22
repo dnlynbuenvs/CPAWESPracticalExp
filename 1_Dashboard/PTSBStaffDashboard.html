@@ -142,6 +142,7 @@
         <a class="role-option" href="MentorDashboard.html">Mentor</a>
         <a class="role-option active" href="PTSBStaffDashboard.html">PTSB Staff</a>
               <a class="role-option" href="../8_MentorOnboarding/1_MentorOnboarding.html">Mentor onboarding</a>
+        <a class="role-option" href="../10_ProgramAdmin/1_ProgramAdminMgmt.html">Program Admin</a>
       </div>
     </details>
   </div>
@@ -241,6 +242,34 @@
       <div class="hint">PTB staff can view mentor applications directly from this queue.</div>
     </section>
 
+    <section class="panel mentor-panel" id="job-change-requests">
+      <div class="queue-head">
+        <div>
+          <div class="section-label">Learner and mentor job change request queue</div>
+          <h2>Job change requests</h2>
+          <p class="panel-copy">Monitor active learner and mentor change requests that require PTB review, reassignment follow-up, or relationship management decisions.</p>
+        </div>
+        <div class="hero-badge"><span class="dot"></span><span id="job-change-count">0 active requests</span></div>
+      </div>
+      <div class="table-wrap">
+        <table class="compact-table">
+          <thead>
+            <tr>
+              <th>Request type</th>
+              <th>Person</th>
+              <th>Current mentor</th>
+              <th>Requested change</th>
+              <th>Status</th>
+              <th>Submitted</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="job-change-body"></tbody>
+        </table>
+      </div>
+      <div class="hint">Use the review page to confirm details, approve the mentor change, reject the request, or request additional information.</div>
+    </section>
+
     <section class="panel prr-panel" id="prr-positions">
       <div class="queue-head">
         <div>
@@ -253,7 +282,7 @@
       <div class="table-wrap">
         <table class="compact-table">
           <thead>
-            <tr><th>Employer</th><th>Pre-reviewed positions</th><th>Learners assigned</th><th>PTB note</th></tr>
+            <tr><th>Employer</th><th>Pre-reviewed positions</th><th>Learners assigned</th><th>PTB note</th><th>Action</th></tr>
           </thead>
           <tbody id="employer-body"></tbody>
         </table>
@@ -483,6 +512,36 @@ const mentors = [
   }
 ];
 
+const jobChangeRequests = [
+  {
+    type: 'Learner mentor change',
+    person: 'Daniel Brooks',
+    personId: 'LRN-251004',
+    currentMentor: 'Marcus Chen, CPA',
+    requestedChange: 'Move to replacement mentor because current mentor is unavailable.',
+    status: 'Pending PTB review',
+    submittedDate: '2026-07-22'
+  },
+  {
+    type: 'Mentor termination request',
+    person: 'Sofia Chen, CPA',
+    personId: 'MTR-4021',
+    currentMentor: 'Sofia Chen, CPA',
+    requestedChange: 'End mentorship and assign a replacement mentor for Daniel Brooks.',
+    status: 'Mentor change requested',
+    submittedDate: '2026-07-22'
+  },
+  {
+    type: 'Learner job change',
+    person: 'Lucas Bennett',
+    personId: 'LRN-245664',
+    currentMentor: 'Priya Das, CPA',
+    requestedChange: 'Review partial experience and update mentor relationship after employer transfer.',
+    status: 'Pending follow-up',
+    submittedDate: '2026-07-21'
+  }
+];
+
 const preReviewedEmployers = [
   { employer: 'Summit Rail Finance', positions: 2, learnersAssigned: 3, note: 'Stable cohort with one check-in priority item.' },
   { employer: 'Grant Mercer Tax', positions: 1, learnersAssigned: 2, note: 'Validation follow-up needed for Nina Patel.' },
@@ -506,6 +565,7 @@ const summaryGrid = document.getElementById('summary-grid');
 const learnerBody = document.getElementById('learner-body');
 const highRiskBody = document.getElementById('high-risk-body');
 const mentorBody = document.getElementById('mentor-body');
+const jobChangeBody = document.getElementById('job-change-body');
 const employerBody = document.getElementById('employer-body');
 const messageBar = document.getElementById('message-bar');
 const messageText = document.getElementById('message-text');
@@ -690,9 +750,27 @@ function renderMentorQueue() {
   `).join('');
 }
 
+function renderJobChangeQueue() {
+  document.getElementById('job-change-count').textContent = `${jobChangeRequests.length} active request${jobChangeRequests.length === 1 ? '' : 's'}`;
+  jobChangeBody.innerHTML = jobChangeRequests.map((request, index) => `
+    <tr>
+      <td>${escapeHtml(request.type)}</td>
+      <td class="learner-cell">
+        <strong>${escapeHtml(request.person)}</strong>
+        <span class="subline">${escapeHtml(request.personId)}</span>
+      </td>
+      <td>${escapeHtml(request.currentMentor)}</td>
+      <td>${escapeHtml(request.requestedChange)}</td>
+      <td><span class="status-badge ${statusClass(request.status)}"><span class="dot"></span>${escapeHtml(request.status)}</span></td>
+      <td>${escapeHtml(formatDate(request.submittedDate))}</td>
+      <td><button class="action-btn primary" type="button" data-job-change-index="${index}">View</button></td>
+    </tr>
+  `).join('');
+}
+
 function renderEmployerQueue() {
   document.getElementById('employer-count').textContent = `${preReviewedEmployers.length} employers tracked`;
-  employerBody.innerHTML = preReviewedEmployers.map((entry) => `
+  employerBody.innerHTML = preReviewedEmployers.map((entry, index) => `
     <tr>
       <td class="employer-cell">
         <strong>${escapeHtml(entry.employer)}</strong>
@@ -700,6 +778,7 @@ function renderEmployerQueue() {
       <td>${escapeHtml(entry.positions)}</td>
       <td>${escapeHtml(entry.learnersAssigned)}</td>
       <td>${escapeHtml(entry.note)}</td>
+      <td><button class="action-btn primary" type="button" data-employer-index="${index}">View</button></td>
     </tr>
   `).join('');
 }
@@ -707,13 +786,25 @@ function renderEmployerQueue() {
 mentorBody.addEventListener('click', (event) => {
   const button = event.target.closest('button[data-mentor-index]');
   if (!button) return;
-  window.location.href = '../7_ReportJobChange/2_MentorJobChange/3_PTBReviewMentorChangeRequest.html';
+  window.location.href = '../8_MentorOnboarding/2_PTBMentorApproval.html';
 });
 
 learnerBody.addEventListener('click', (event) => {
   const button = event.target.closest('button[data-reduce-duration]');
   if (!button) return;
   openDurationModal(button.dataset.reduceDuration);
+});
+
+jobChangeBody.addEventListener('click', (event) => {
+  const button = event.target.closest('button[data-job-change-index]');
+  if (!button) return;
+  window.location.href = '../7_ReportJobChange/2_MentorJobChange/3_PTBReviewMentorChangeRequest.html';
+});
+
+employerBody.addEventListener('click', (event) => {
+  const button = event.target.closest('button[data-employer-index]');
+  if (!button) return;
+  window.location.href = '../9_PreReviewedRoles/1_PreReviewedRoles.html';
 });
 
 document.getElementById('cancel-duration-btn').addEventListener('click', closeDurationModal);
@@ -728,6 +819,7 @@ function renderAll() {
   renderLearnerQueue();
   renderHighRiskQueue();
   renderMentorQueue();
+  renderJobChangeQueue();
   renderEmployerQueue();
   document.getElementById('hero-summary').textContent = `${summaryValues.activeLearners} learners | ${summaryValues.activeMentors} active mentors | ${summaryValues.highRisk} high-risk cases`;
 }
@@ -736,6 +828,8 @@ renderAll();
 </script>
 </body>
 </html>
+
+
 
 
 

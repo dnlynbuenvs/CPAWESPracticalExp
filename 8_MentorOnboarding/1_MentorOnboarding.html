@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPA - Mentor Onboarding</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:#0B1F3A; --blue:#1B5EA8; --accent:#2A9D8F; --amber:#E76F1A; --green:#2D7A4E; --red:#C0392B;
+    --sand:#F7F5F2; --white:#FFFFFF; --gray-100:#F2F1EF; --gray-200:#E4E2DE; --gray-300:#D2CEC8;
+    --gray-400:#A8A49E; --gray-600:#6B6760; --gray-800:#2E2C2A;
+    --shadow-sm:0 1px 3px rgba(11,31,58,0.07),0 1px 2px rgba(11,31,58,0.05);
+    --radius-sm:6px; --radius-md:10px; --radius-lg:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'DM Sans',sans-serif;background:var(--sand);color:var(--gray-800);min-height:100vh}
+  a{text-decoration:none;color:inherit}
+  button,input,textarea{font:inherit}
+  textarea{resize:vertical}
+  .topbar{background:var(--navy);min-height:60px;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:0 2rem}
+  .logo-group{display:flex;align-items:center;gap:10px;min-width:225px}
+  .logo-mark{width:36px;height:36px;background:var(--white);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .logo-text{display:flex;flex-direction:column;line-height:1.1}
+  .logo-text .brand{font-size:13px;font-weight:600;color:var(--white);letter-spacing:.04em}
+  .logo-text .sub{font-size:10px;color:rgba(255,255,255,.5);letter-spacing:.02em;text-transform:uppercase}
+  .topbar-right{display:flex;align-items:center;gap:12px}
+  .nav-links{display:flex;align-items:center;gap:2px}
+  .nav-links a{color:rgba(255,255,255,.55);font-size:14px;padding:8px 16px;border-radius:var(--radius-sm);white-space:nowrap}
+  .nav-links a.active,.nav-links a:hover{color:var(--white);background:rgba(255,255,255,.08)}
+  .role-dropdown{position:relative}
+  .role-trigger{list-style:none;display:flex;align-items:center;gap:10px;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);color:var(--white);font-size:13px;font-weight:600;cursor:pointer}
+  .role-trigger::-webkit-details-marker{display:none}
+  .role-label{display:inline-flex;align-items:center;justify-content:center;min-width:92px}
+  .role-caret{font-size:11px;color:rgba(255,255,255,.72)}
+  .role-menu{position:absolute;right:0;top:calc(100% + 10px);min-width:220px;padding:8px;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);box-shadow:0 12px 30px rgba(11,31,58,.14);display:flex;flex-direction:column;gap:4px;z-index:20}
+  .role-option{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:var(--radius-sm);font-size:13px;color:var(--gray-800)}
+  .role-option:hover{background:var(--gray-100)}
+  .role-option.active{background:#EBF3FF;color:var(--blue);font-weight:600}
+  .page{max-width:1440px;margin:0 auto;padding:2rem 2rem 4rem}
+  .hero{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--gray-200)}
+  .hero h1{font-family:'DM Serif Display',serif;font-size:38px;font-weight:400;color:var(--navy);margin-bottom:6px}
+  .hero p{font-size:14px;color:var(--gray-600);max-width:860px;line-height:1.5}
+  .hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);padding:10px 16px;box-shadow:var(--shadow-sm);font-size:13px;color:var(--gray-600)}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--blue);flex:0 0 auto}
+  .message-bar{display:none;align-items:center;gap:10px;margin-bottom:1rem;padding:12px 14px;border-radius:var(--radius-md);background:#EBF3FF;border:1px solid rgba(27,94,168,.18);color:var(--navy);box-shadow:var(--shadow-sm)}
+  .message-bar.visible{display:flex}
+  .modal-backdrop{position:fixed;inset:0;background:rgba(11,31,58,.48);display:none;align-items:center;justify-content:center;padding:1.25rem;z-index:40}
+  .modal-backdrop.visible{display:flex}
+  .modal-card{width:min(100%,460px);background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);box-shadow:0 14px 36px rgba(11,31,58,.18);padding:1.25rem;position:relative}
+  .modal-close{position:absolute;top:12px;right:12px;width:32px;height:32px;border:1px solid var(--gray-200);border-radius:999px;background:var(--white);color:var(--navy);font-size:18px;line-height:1;cursor:pointer}
+  .modal-close:hover{background:var(--gray-100)}
+  .modal-card h3{font-size:20px;color:var(--navy);margin-bottom:8px;padding-right:2rem}
+  .modal-card p{font-size:13px;color:var(--gray-600);line-height:1.5}
+  .workspace{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:16px}
+  .panel{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm)}
+  .main-panel,.side-panel{padding:1.25rem}
+  .section-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gray-400);margin-bottom:.75rem}
+  .panel h2{font-size:17px;color:var(--navy);margin-bottom:4px}
+  .panel-copy{font-size:12px;color:var(--gray-600);line-height:1.45}
+  .stack,.meta-stack{display:flex;flex-direction:column;gap:16px}
+  .form-section{padding:1rem;border:1px solid var(--gray-200);border-radius:var(--radius-md);background:var(--sand)}
+  .form-section h3{font-size:15px;color:var(--navy);margin-bottom:6px}
+  .field-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .field{display:flex;flex-direction:column;gap:6px}
+  .field.full{grid-column:1 / -1}
+  .field label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gray-400)}
+  .field input,.field textarea{border:1px solid var(--gray-200);border-radius:var(--radius-sm);background:var(--white);padding:10px 12px;color:var(--gray-800)}
+  .field input:focus,.field textarea:focus{outline:none;border-color:rgba(27,94,168,.32);box-shadow:0 0 0 3px rgba(27,94,168,.08)}
+  .field textarea{min-height:110px}
+  .subcopy{font-size:11px;color:var(--gray-600);line-height:1.45}
+  .metric-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+  .metric-card,.meta-card,.notice-box,.check-card{padding:12px;border-radius:var(--radius-md);border:1px solid var(--gray-200);background:var(--white)}
+  .metric-card strong,.meta-card strong,.notice-box strong,.check-card strong{display:block;font-size:13px;color:var(--navy);margin-bottom:4px}
+  .metric-card span,.meta-card span,.notice-box span,.check-card span{display:block;font-size:12px;color:var(--gray-600);line-height:1.45}
+  .metric-card .value{font-family:'DM Serif Display',serif;font-size:30px;line-height:1;color:var(--navy);margin-bottom:6px}
+  .notice-box{background:#F7FAFF}
+  .notice-box.warn{background:#FFF8F1;border-color:rgba(231,111,26,.22)}
+  .notice-box.success{background:#F2FBF6;border-color:rgba(45,122,78,.22)}
+  .check-row{display:flex;align-items:flex-start;gap:10px}
+  .check-row input[type="checkbox"]{margin-top:2px;width:16px;height:16px}
+  .button-row{display:flex;flex-wrap:wrap;gap:8px}
+  .action-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:var(--radius-sm);border:1px solid var(--gray-200);padding:9px 12px;background:var(--white);color:var(--navy);font-size:12px;font-weight:700;cursor:pointer;transition:all .15s ease}
+  .action-btn:hover{border-color:rgba(27,94,168,.28);background:#F7FAFF}
+  .action-btn.primary{background:#EBF3FF;border-color:rgba(27,94,168,.28);color:var(--blue)}
+  .action-btn.success{background:#E8F5EE;border-color:rgba(45,122,78,.22);color:var(--green)}
+  .status-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:5px 10px;border-radius:20px;white-space:nowrap}
+  .status-badge .dot{width:6px;height:6px}
+  .badge-draft{background:#EBF3FF;color:var(--blue)} .badge-draft .dot{background:var(--blue)}
+  .badge-pending{background:#FEF3E8;color:var(--amber)} .badge-pending .dot{background:var(--amber)}
+  .badge-approved{background:#E8F5EE;color:var(--green)} .badge-approved .dot{background:var(--green)}
+  @media(max-width:1180px){.workspace{grid-template-columns:1fr}}
+  @media(max-width:920px){.field-grid,.metric-grid{grid-template-columns:1fr}}
+  @media(max-width:760px){
+    .topbar{align-items:flex-start;flex-direction:column;padding:1rem}
+    .nav-links{display:none}
+    .topbar-right{width:100%;justify-content:space-between}
+    .page{padding:1.25rem 1rem 3rem}
+    .hero{flex-direction:column;align-items:flex-start}
+    .hero h1{font-size:34px}
+  }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="logo-group">
+    <div class="logo-mark">
+      <svg width="24" height="20" viewBox="0 0 24 20" fill="none" aria-hidden="true">
+        <path d="M2 10C2 5.58 5.58 2 10 2h4c4.42 0 8 3.58 8 8s-3.58 8-8 8h-4C5.58 18 2 14.42 2 10z" fill="#0B1F3A" opacity="0.12"/>
+        <path d="M7 10.5l3 3 7-7" stroke="#0B1F3A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="logo-text"><span class="brand">CPA Canada</span><span class="sub">Chartered Professional Accountants</span></div>
+  </div>
+  <div class="topbar-right">
+    <nav class="nav-links" aria-label="Primary navigation">
+      <a href="../1_Dashboard/MentorDashboard.html">Dashboard</a>
+      <a href="1_MentorOnboarding.html" class="active">Mentor onboarding</a>
+      <a href="../1_Dashboard/PTSBStaffDashboard.html">PTSB Staff</a>
+    </nav>
+    <details class="role-dropdown">
+      <summary class="role-trigger"><span class="role-label">Mentor</span><span class="role-caret">&#9662;</span></summary>
+      <div class="role-menu">
+        <a class="role-option" href="../index.html">Learner</a>
+        <a class="role-option" href="../1_Dashboard/CPAReviewer.html">CPA Reviewer</a>
+        <a class="role-option" href="../1_Dashboard/MentorDashboard.html">Mentor</a>
+        <a class="role-option active" href="1_MentorOnboarding.html">Mentor onboarding</a>
+        <a class="role-option" href="../10_ProgramAdmin/1_ProgramAdminMgmt.html">Program Admin</a>
+        <a class="role-option" href="../1_Dashboard/PTSBStaffDashboard.html">PTSB Staff</a>
+      </div>
+    </details>
+  </div>
+</header>
+
+<main class="page">
+  <section class="hero" aria-labelledby="mentor-onboarding-title">
+    <div>
+      <h1 id="mentor-onboarding-title">Mentor onboarding</h1>
+      <p>Apply to become a mentor, confirm your readiness, and complete the orientation acknowledgment before the mentor application moves into review.</p>
+    </div>
+    <div class="hero-badge"><span class="dot"></span><span id="hero-summary">Mentor onboarding draft in progress</span></div>
+  </section>
+
+  <div class="message-bar" id="message-bar" role="status" aria-live="polite">
+    <span class="dot"></span>
+    <span id="message-text"></span>
+  </div>
+
+  <section class="workspace">
+    <section class="panel main-panel">
+      <div class="section-label">Mentor application</div>
+      <h2>Apply to become a mentor</h2>
+      <p class="panel-copy">Complete the mentor application form, review the know before you go acknowledgment, and confirm that the orientation video has been completed before submitting.</p>
+
+      <div class="stack" style="margin-top:1rem;">
+        <section class="form-section">
+          <h3>Application snapshot</h3>
+          <div class="metric-grid" id="snapshot-grid"></div>
+        </section>
+
+        <section class="form-section">
+          <h3>Mentor application form</h3>
+          <div class="field-grid">
+            <div class="field">
+              <label for="mentor-full-name">Full name</label>
+              <input id="mentor-full-name" type="text" placeholder="Enter full name">
+            </div>
+            <div class="field">
+              <label for="mentor-cpa-id">CPA ID</label>
+              <input id="mentor-cpa-id" type="text" placeholder="Enter CPA ID">
+            </div>
+            <div class="field">
+              <label for="mentor-email">Email</label>
+              <input id="mentor-email" type="email" placeholder="Enter email address">
+            </div>
+            <div class="field">
+              <label for="mentor-company">Employment / company</label>
+              <input id="mentor-company" type="text" placeholder="Enter employer or company name">
+            </div>
+            <div class="field full">
+              <label for="mentor-role">Current role</label>
+              <input id="mentor-role" type="text" placeholder="Enter current role or title">
+            </div>
+          </div>
+        </section>
+
+        <section class="form-section">
+          <h3>Know before you go</h3>
+          <div class="notice-box">
+            <strong>Mentor responsibilities acknowledgment</strong>
+            <span>Mentors support learners throughout the practical experience process, provide timely guidance, review submissions responsibly, and participate with professional judgment and care.</span>
+          </div>
+          <div class="check-card" style="margin-top:1rem;">
+            <label class="check-row" for="know-before-checkbox">
+              <input id="know-before-checkbox" type="checkbox">
+              <span>
+                <strong>I acknowledge the mentor responsibilities</strong>
+                <span>I understand what is expected of me before becoming an active mentor in the practical experience process.</span>
+              </span>
+            </label>
+          </div>
+        </section>
+
+        <section class="form-section">
+          <h3>Orientation video completion</h3>
+          <div class="notice-box warn">
+            <strong>Orientation is required</strong>
+            <span>Mentor Inserted Video Here</span>
+          </div>
+          <div class="check-card" style="margin-top:1rem;">
+            <label class="check-row" for="orientation-checkbox">
+              <input id="orientation-checkbox" type="checkbox">
+              <span>
+                <strong>I completed the onboarding orientation video</strong>
+                <span>I have reviewed the mentor onboarding orientation and understand my responsibilities as a mentor.</span>
+              </span>
+            </label>
+          </div>
+        </section>
+
+        <section class="form-section">
+          <h3>Submission actions</h3>
+          <div class="button-row">
+            <button class="action-btn primary" id="save-draft-btn" type="button">Save draft</button>
+            <button class="action-btn success" id="submit-btn" type="button">Submit mentor application</button>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <aside class="panel side-panel">
+      <div class="section-label">Application status</div>
+      <h2>Mentor onboarding</h2>
+      <div class="meta-stack">
+        <div class="meta-card">
+          <strong>Current status</strong>
+          <span id="meta-status">Draft</span>
+        </div>
+        <div class="meta-card">
+          <strong>Know before you go</strong>
+          <span id="meta-know-before">Pending acknowledgment</span>
+        </div>
+        <div class="meta-card">
+          <strong>Orientation completion</strong>
+          <span id="meta-orientation">Not completed</span>
+        </div>
+        <div class="meta-card">
+          <strong>Submitted</strong>
+          <span id="meta-submitted">Not submitted</span>
+        </div>
+      </div>
+    </aside>
+  </section>
+</main>
+
+<div class="modal-backdrop" id="status-modal" aria-hidden="true">
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="status-modal-title">
+    <button class="modal-close" id="status-modal-close" type="button" aria-label="Close modal">X</button>
+    <h3 id="status-modal-title">Saved</h3>
+    <p id="status-modal-copy">Your draft has been saved.</p>
+  </div>
+</div>
+
+<script>
+const mentorOnboardingKey = 'mentorOnboardingApplication:cpa-mentor-001';
+const storedRecord = JSON.parse(localStorage.getItem(mentorOnboardingKey) || 'null');
+
+const defaultRecord = {
+  fullName: 'Sofia Chen',
+  cpaId: '',
+  email: '',
+  company: '',
+  role: '',
+  knowBefore: false,
+  orientationComplete: false,
+  status: 'Draft',
+  submittedAt: ''
+};
+
+const applicationRecord = storedRecord ? { ...defaultRecord, ...storedRecord } : { ...defaultRecord };
+
+const snapshotGrid = document.getElementById('snapshot-grid');
+const heroSummary = document.getElementById('hero-summary');
+const messageBar = document.getElementById('message-bar');
+const messageText = document.getElementById('message-text');
+const statusModal = document.getElementById('status-modal');
+const statusModalTitle = document.getElementById('status-modal-title');
+const statusModalCopy = document.getElementById('status-modal-copy');
+const metaStatus = document.getElementById('meta-status');
+const metaKnowBefore = document.getElementById('meta-know-before');
+const metaOrientation = document.getElementById('meta-orientation');
+const metaSubmitted = document.getElementById('meta-submitted');
+
+const fullNameInput = document.getElementById('mentor-full-name');
+const cpaIdInput = document.getElementById('mentor-cpa-id');
+const emailInput = document.getElementById('mentor-email');
+const companyInput = document.getElementById('mentor-company');
+const roleInput = document.getElementById('mentor-role');
+const knowBeforeCheckbox = document.getElementById('know-before-checkbox');
+const orientationCheckbox = document.getElementById('orientation-checkbox');
+
+function setMessage(text) {
+  messageText.textContent = text;
+  messageBar.classList.add('visible');
+}
+
+function showStatusModal(title, copy) {
+  statusModalTitle.textContent = title;
+  statusModalCopy.textContent = copy;
+  statusModal.classList.add('visible');
+  statusModal.setAttribute('aria-hidden', 'false');
+}
+
+function closeStatusModal() {
+  statusModal.classList.remove('visible');
+  statusModal.setAttribute('aria-hidden', 'true');
+}
+
+function saveRecord() {
+  localStorage.setItem(mentorOnboardingKey, JSON.stringify(applicationRecord));
+}
+
+function syncRecordFromForm() {
+  applicationRecord.fullName = fullNameInput.value.trim();
+  applicationRecord.cpaId = cpaIdInput.value.trim();
+  applicationRecord.email = emailInput.value.trim();
+  applicationRecord.company = companyInput.value.trim();
+  applicationRecord.role = roleInput.value.trim();
+  applicationRecord.knowBefore = knowBeforeCheckbox.checked;
+  applicationRecord.orientationComplete = orientationCheckbox.checked;
+}
+
+function renderSnapshot() {
+  const metrics = [
+    { value: applicationRecord.fullName || 'Pending', label: 'Applicant', detail: applicationRecord.role || 'Role not entered' },
+    { value: applicationRecord.company || 'Pending', label: 'Company', detail: applicationRecord.email || 'Email not entered' },
+    { value: applicationRecord.status, label: 'Status', detail: applicationRecord.orientationComplete ? 'Orientation completed' : 'Orientation required' }
+  ];
+
+  snapshotGrid.innerHTML = metrics.map((metric) => `
+    <div class="metric-card">
+      <div class="value">${metric.value}</div>
+      <strong>${metric.label}</strong>
+      <span>${metric.detail}</span>
+    </div>
+  `).join('');
+}
+
+function renderMeta() {
+  metaStatus.textContent = applicationRecord.status;
+  metaKnowBefore.textContent = applicationRecord.knowBefore ? 'Acknowledged' : 'Pending acknowledgment';
+  metaOrientation.textContent = applicationRecord.orientationComplete ? 'Completed' : 'Not completed';
+  metaSubmitted.textContent = applicationRecord.submittedAt || 'Not submitted';
+  heroSummary.textContent = applicationRecord.status === 'Pending mentor application'
+    ? 'Mentor application submitted'
+    : 'Mentor onboarding draft in progress';
+}
+
+function hydrateForm() {
+  fullNameInput.value = applicationRecord.fullName;
+  cpaIdInput.value = applicationRecord.cpaId;
+  emailInput.value = applicationRecord.email;
+  companyInput.value = applicationRecord.company;
+  roleInput.value = applicationRecord.role;
+  knowBeforeCheckbox.checked = applicationRecord.knowBefore;
+  orientationCheckbox.checked = applicationRecord.orientationComplete;
+  renderSnapshot();
+  renderMeta();
+}
+
+function validateSubmission() {
+  syncRecordFromForm();
+
+  if (!applicationRecord.fullName) return 'Full name is required.';
+  if (!applicationRecord.cpaId) return 'CPA ID is required.';
+  if (!applicationRecord.email) return 'Email is required.';
+  if (!applicationRecord.company) return 'Employment or company information is required.';
+  if (!applicationRecord.knowBefore) return 'Please acknowledge the know before you go statement.';
+  if (!applicationRecord.orientationComplete) return 'Orientation video completion is required before you can proceed.';
+  return '';
+}
+
+document.getElementById('save-draft-btn').addEventListener('click', () => {
+  syncRecordFromForm();
+  applicationRecord.status = 'Draft';
+  saveRecord();
+  renderSnapshot();
+  renderMeta();
+  showStatusModal('Draft saved', 'Your draft has been saved.');
+});
+
+document.getElementById('submit-btn').addEventListener('click', () => {
+  const error = validateSubmission();
+  if (error) {
+    applicationRecord.status = 'Pending mentor application';
+    applicationRecord.submittedAt = new Date().toLocaleString();
+    saveRecord();
+    renderSnapshot();
+    renderMeta();
+    showStatusModal('Application submitted', 'Your application has been submitted.');
+    return;
+  }
+
+  applicationRecord.status = 'Pending mentor application';
+  applicationRecord.submittedAt = new Date().toLocaleString();
+  saveRecord();
+  renderSnapshot();
+  renderMeta();
+  showStatusModal('Application submitted', 'Your application has been submitted.');
+});
+
+knowBeforeCheckbox.addEventListener('change', () => {
+  syncRecordFromForm();
+  saveRecord();
+  renderMeta();
+});
+
+orientationCheckbox.addEventListener('change', () => {
+  syncRecordFromForm();
+  saveRecord();
+  renderSnapshot();
+  renderMeta();
+});
+
+document.getElementById('status-modal-close').addEventListener('click', closeStatusModal);
+statusModal.addEventListener('click', (event) => {
+  if (event.target === statusModal) closeStatusModal();
+});
+
+hydrateForm();
+</script>
+</body>
+</html>
