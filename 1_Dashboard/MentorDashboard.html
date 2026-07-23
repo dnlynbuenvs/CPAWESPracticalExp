@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CPA - Mentor Dashboard</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --navy:#0B1F3A; --blue:#1B5EA8; --accent:#2A9D8F; --amber:#E76F1A; --green:#2D7A4E; --red:#C0392B;
@@ -13,6 +13,12 @@
     --shadow-sm:0 1px 3px rgba(11,31,58,0.07),0 1px 2px rgba(11,31,58,0.05);
     --shadow-md:0 10px 28px rgba(11,31,58,0.10);
     --radius-sm:6px; --radius-md:10px; --radius-lg:16px;
+    --imis-blue:#1B5EA8; --imis-header-blue:#1B5EA8;
+    --badge-green-bg:#E3F3E6; --badge-green-text:#2D7A4E;
+    --badge-yellow-bg:#FCF3D9; --badge-yellow-text:#8A6D1D;
+    --badge-blue-bg:#E8ECF7; --badge-blue-text:#3B4A7A;
+    --badge-red-bg:#FBE7E5; --badge-red-text:#9B3226;
+    --badge-gray-bg:#F2F1EF; --badge-gray-text:#6B6760;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:'DM Sans',sans-serif;background:var(--sand);color:var(--gray-800);min-height:100vh}
@@ -39,11 +45,11 @@
   .role-option.active{background:#EBF3FF;color:var(--blue);font-weight:600}
   .page{max-width:1240px;margin:0 auto;padding:2rem 2rem 4rem}
   .hero{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--gray-200)}
-  .hero h1{font-family:'DM Serif Display',serif;font-size:38px;font-weight:400;color:var(--navy);margin-bottom:4px}
+  .hero h1{font-family:'DM Sans',sans-serif;font-size:26px;font-weight:700;color:#1a1a1a;margin-bottom:4px}
   .hero p{font-size:14px;color:var(--gray-600);max-width:680px}
   .hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);padding:10px 16px;box-shadow:var(--shadow-sm);font-size:13px;color:var(--gray-600);white-space:nowrap}
   .dot{width:8px;height:8px;border-radius:50%;background:var(--blue);flex:0 0 auto}
-  .section-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gray-400);margin-bottom:.75rem}
+  .section-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#2E2C2A;margin-bottom:.75rem}
   .panel{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);animation:rise .35s ease}
   .panel h2{font-size:17px;color:var(--navy);margin-bottom:4px}
   .panel-copy{font-size:12px;color:var(--gray-600);line-height:1.45}
@@ -56,9 +62,9 @@
   .mentor-title p{font-size:12px;color:var(--gray-600)}
   .mentor-pill{display:inline-flex;align-items:center;gap:7px;background:#E8F5EE;color:var(--green);border:1px solid rgba(45,122,78,.18);border-radius:999px;padding:7px 11px;font-size:12px;font-weight:700}
   .metric-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-  .metric-card{background:var(--sand);border:1px solid var(--gray-200);border-radius:var(--radius-md);padding:12px;min-height:82px}
-  .metric-card span{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--gray-400);margin-bottom:8px;font-weight:700}
-  .metric-card strong{display:block;font-family:'DM Serif Display',serif;font-size:30px;font-weight:400;color:var(--navy);line-height:1}
+  .metric-card{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-sm);padding:12px;min-height:82px}
+  .metric-card span{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:#2E2C2A;margin-bottom:8px;font-weight:700}
+  .metric-card strong{display:block;font-family:'DM Sans',sans-serif;font-size:26px;font-weight:700;color:#1a1a1a;line-height:1}
   .metric-card small{display:block;font-size:12px;color:var(--gray-600);margin-top:8px;line-height:1.35}
   .message-bar{display:none;align-items:center;gap:10px;margin-bottom:1rem;padding:12px 14px;border-radius:var(--radius-md);background:#EBF3FF;border:1px solid rgba(27,94,168,.18);color:var(--navy);box-shadow:var(--shadow-sm)}
   .message-bar.visible{display:flex}
@@ -79,19 +85,20 @@
   .meta-box{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-sm);padding:10px}
   .meta-box span{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--gray-400);font-weight:700;margin-bottom:4px}
   .meta-box strong{display:block;font-size:12px;color:var(--gray-800)}
-  .status-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:5px 10px;border-radius:20px;white-space:nowrap}
-  .status-badge .dot{width:6px;height:6px}
-  .badge-approved{background:#E8F5EE;color:var(--green)} .badge-approved .dot{background:var(--green)}
-  .badge-pending{background:#FEF3E8;color:var(--amber)} .badge-pending .dot{background:var(--amber)}
-  .badge-progress{background:#EBF3FF;color:var(--blue)} .badge-progress .dot{background:var(--blue)}
-  .badge-declined{background:#FDECEA;color:var(--red)} .badge-declined .dot{background:var(--red)}
-  .badge-neutral{background:var(--gray-100);color:var(--gray-600)} .badge-neutral .dot{background:var(--gray-400)}
+  .status-badge{display:inline-block;padding:4px 10px;border-radius:3px;font-size:12px;font-weight:600;white-space:nowrap}
+  .badge-approved{background:var(--badge-green-bg);color:var(--badge-green-text)}
+  .badge-pending{background:var(--badge-yellow-bg);color:var(--badge-yellow-text)}
+  .badge-progress{background:var(--badge-blue-bg);color:var(--badge-blue-text)}
+  .badge-declined{background:var(--badge-red-bg);color:var(--badge-red-text)}
+  .badge-neutral{background:var(--badge-gray-bg);color:var(--badge-gray-text)}
   .review-actions,.row-actions{display:flex;flex-wrap:wrap;gap:8px}
-  .action-btn,.table-btn,.toolbar-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:var(--radius-sm);border:1px solid var(--gray-200);padding:8px 12px;background:var(--white);color:var(--navy);font-size:12px;font-weight:700;cursor:pointer;transition:all .15s ease}
-  .action-btn:hover,.table-btn:hover,.toolbar-btn:hover{border-color:rgba(27,94,168,.28);background:#F7FAFF}
-  .action-btn.primary,.table-btn.primary,.toolbar-btn.primary{background:#EBF3FF;border-color:rgba(27,94,168,.28);color:var(--blue)}
-  .action-btn.danger,.table-btn.danger,.toolbar-btn.danger{background:#FFF4F1;border-color:rgba(192,57,43,.22);color:var(--red)}
-  .action-btn[disabled],.table-btn[disabled],.toolbar-btn[disabled]{opacity:.5;cursor:not-allowed;background:var(--gray-100);color:var(--gray-600)}
+  .action-btn,.table-btn,.toolbar-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:var(--radius-sm);border:1px solid var(--imis-blue);padding:8px 14px;background:var(--white);color:var(--imis-blue);font-size:12px;font-weight:700;cursor:pointer;transition:all .15s ease}
+  .action-btn:hover,.table-btn:hover,.toolbar-btn:hover{background:#EBF3FF}
+  .action-btn.primary,.table-btn.primary,.toolbar-btn.primary{background:var(--imis-blue);border-color:var(--imis-blue);color:var(--white)}
+  .action-btn.primary:hover,.table-btn.primary:hover,.toolbar-btn.primary:hover{background:#164e8f}
+  .action-btn.danger,.table-btn.danger,.toolbar-btn.danger{background:var(--white);border-color:var(--red);color:var(--red)}
+  .action-btn.danger:hover,.table-btn.danger:hover,.toolbar-btn.danger:hover{background:#FFF4F1}
+  .action-btn[disabled],.table-btn[disabled],.toolbar-btn[disabled]{opacity:.5;cursor:not-allowed;background:var(--gray-100);border-color:var(--gray-300);color:var(--gray-600)}
   .competency-box{margin-top:12px;padding:12px;border-radius:var(--radius-sm);background:var(--white);border:1px solid var(--gray-200)}
   .competency-box strong{display:block;font-size:12px;color:var(--navy);margin-bottom:8px}
   .competency-box ul{padding-left:18px}
@@ -99,15 +106,18 @@
   .assist-note{margin-top:10px;font-size:11px;color:var(--gray-600);line-height:1.4}
   .controls-shell{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end}
   .field{display:flex;flex-direction:column;gap:6px;min-width:180px;flex:1}
-  .field label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gray-400)}
-  .field input,.field select{height:42px;border-radius:var(--radius-md);border:1px solid var(--gray-200);background:var(--sand);padding:0 12px;color:var(--gray-800)}
-  .field input:focus,.field select:focus{outline:none;border-color:rgba(27,94,168,.32);box-shadow:0 0 0 3px rgba(27,94,168,.08)}
-  .table-wrap{overflow:auto;border:1px solid var(--gray-200);border-radius:var(--radius-lg)}
+  .field label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#2E2C2A}
+  .field input,.field select{height:38px;border-radius:var(--radius-sm);border:1px solid var(--gray-300);background:var(--white);padding:0 12px;color:var(--gray-800)}
+  .field input:focus,.field select:focus{outline:none;border-color:var(--imis-blue);box-shadow:0 0 0 3px rgba(27,94,168,.12)}
+  .imis-table-panel{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-sm)}
+  .imis-table-header{background:var(--imis-header-blue);color:var(--white);display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 18px}
+  .imis-table-header h2{font-size:14px;font-weight:700;color:var(--white);letter-spacing:.02em;margin:0}
+  .table-wrap{overflow:auto}
   table{width:100%;min-width:1180px;border-collapse:collapse;background:var(--white)}
-  thead th{padding:11px 14px;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--gray-400);background:var(--sand);border-bottom:1px solid var(--gray-200);vertical-align:top}
-  tbody td{padding:14px;vertical-align:top;border-bottom:1px solid var(--gray-100);font-size:13px}
+  thead th{padding:10px 16px;text-align:left;font-size:12px;font-weight:700;text-transform:none;letter-spacing:0;color:#2E2C2A;background:var(--gray-100);border-bottom:1px solid var(--gray-300);vertical-align:top}
+  tbody td{padding:11px 16px;vertical-align:top;border-bottom:1px solid var(--gray-200);font-size:13px;color:#2E2C2A}
   tbody tr:last-child td{border-bottom:none}
-  .learner-cell strong{display:block;font-size:14px;color:var(--navy);margin-bottom:4px}
+  .learner-cell strong{display:block;font-size:14px;color:var(--imis-blue);margin-bottom:4px}
   .subline{display:block;font-size:12px;color:var(--gray-600);line-height:1.45}
   .tiny-note{display:inline-flex;align-items:center;gap:6px;margin-top:8px;padding:4px 8px;border-radius:999px;background:#EBF3FF;color:var(--blue);font-size:11px;font-weight:700}
   .stage-copy{font-size:13px;color:var(--gray-800);font-weight:600;margin-bottom:4px}
@@ -182,7 +192,6 @@
       <h1 id="mentor-dashboard-title">Mentor dashboard</h1>
       <p>Review assigned learners, manage approvals, and keep pre-reviewed position oversight visible in one place.</p>
     </div>
-    <div class="hero-badge"><span class="dot"></span><span id="hero-summary">Loading mentor summary</span></div>
   </section>
 
   <div class="message-bar" id="message-bar" role="status" aria-live="polite">
@@ -200,7 +209,6 @@
             <p>Mentor ID: MTR-4021</p>
           </div>
         </div>
-        <div class="mentor-pill"><span class="dot"></span><span>Quarterly mentor review cycle active</span></div>
       </div>
     <div class="metric-grid">
       <div class="metric-card"><span>Assigned learners</span><strong id="metric-learners">0</strong><small>Active mentorship relationships</small></div>
@@ -251,36 +259,36 @@
     </div>
   </section>
 
-  <section class="panel roster-panel" id="assigned-learners" aria-labelledby="assigned-learners-title" style="margin-top:1.5rem;">
-    <div class="roster-head">
-      <div>
-        <div class="section-label">Assigned learners</div>
-        <h2 id="assigned-learners-title">Learner roster</h2>
-        <p class="panel-copy">Open submissions, manage review decisions, or end a learner relationship directly from the row actions.</p>
-      </div>
-      <div class="hero-badge"><span class="dot"></span><span id="visible-count">0 learners shown</span></div>
-    </div>
+  <div id="assigned-learners" style="margin-top:1.5rem;">
+    <div class="section-label">Assigned learners</div>
+    <h2 id="assigned-learners-title" style="font-size:17px;color:#1a1a1a;margin-bottom:4px;">Learner roster</h2>
+    <p class="panel-copy" style="margin-bottom:1rem;">Open submissions, manage review decisions, or end a learner relationship directly from the row actions.</p>
 
-    <div class="table-wrap">
-      <table aria-describedby="assigned-learners-title">
-        <thead>
-          <tr>
-            <th>Learner</th>
-            <th>Employer</th>
-            <th>Current stage</th>
-            <th>FE status</th>
-            <th>WP status</th>
-            <th>Check-in status</th>
-            <th>Pending reviews</th>
-            <th>Pre-reviewed role</th>
-            <th>Review actions</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody id="learner-table-body"></tbody>
-      </table>
-    </div>
-  </section>
+    <section class="imis-table-panel" aria-label="Learner roster">
+      <div class="imis-table-header">
+        <h2>Learner Roster</h2>
+      </div>
+      <div class="table-wrap">
+        <table aria-describedby="assigned-learners-title">
+          <thead>
+            <tr>
+              <th>Learner</th>
+              <th>Employer</th>
+              <th>Current stage</th>
+              <th>FE status</th>
+              <th>WP status</th>
+              <th>Check-in status</th>
+              <th>Pending reviews</th>
+              <th>Pre-reviewed role</th>
+              <th>Review actions</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="learner-table-body"></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
 </main>
 
 <div class="modal-backdrop" id="relationship-modal" aria-hidden="true">
@@ -510,7 +518,6 @@ function renderMetrics() {
   document.getElementById('metric-reviews').textContent = pendingReviews.length;
   document.getElementById('metric-pre-reviewed').textContent = preReviewedCount;
   document.getElementById('metric-prior-mentor').textContent = priorMentorCount;
-  document.getElementById('hero-summary').textContent = `${pendingReviews.length} pending reviews across ${activeLearners.length} learners`;
 }
 
 function learnerMatchesStatus(learner, status) {
@@ -570,7 +577,6 @@ function getSortStatusValue(learner) {
 
 function renderLearners() {
   const visibleLearners = getVisibleLearners();
-  document.getElementById('visible-count').textContent = `${visibleLearners.length} learner${visibleLearners.length === 1 ? '' : 's'} shown`;
 
   if (!visibleLearners.length) {
     learnerTableBody.innerHTML = '<tr><td colspan="10" class="empty-state">No assigned learners match the current filter.</td></tr>';
@@ -578,9 +584,7 @@ function renderLearners() {
   }
 
   learnerTableBody.innerHTML = visibleLearners.map((learner) => {
-    const pendingReview = getFirstPendingReview(learner.id);
     const learnerPendingReviews = getPendingReviews().filter((review) => review.learnerId === learner.id);
-    const disableApproval = learner.priorMentor || !pendingReview;
     const preReviewed = learner.preReviewedRole;
 
     return `
@@ -599,9 +603,9 @@ function renderLearners() {
           <div class="stage-copy">${escapeHtml(learner.currentStage)}</div>
           <div class="stage-note">${escapeHtml(learner.competenciesNote)}</div>
         </td>
-        <td><span class="status-badge ${getStatusBadgeClass(learner.feStatus)}"><span class="dot"></span>${escapeHtml(learner.feStatus)}</span></td>
-        <td><span class="status-badge ${getStatusBadgeClass(learner.wpStatus)}"><span class="dot"></span>${escapeHtml(learner.wpStatus)}</span></td>
-        <td><span class="status-badge ${getStatusBadgeClass(learner.checkinStatus)}"><span class="dot"></span>${escapeHtml(learner.checkinStatus)}</span></td>
+        <td><span class="status-badge ${getStatusBadgeClass(learner.feStatus)}">${escapeHtml(learner.feStatus)}</span></td>
+        <td><span class="status-badge ${getStatusBadgeClass(learner.wpStatus)}">${escapeHtml(learner.wpStatus)}</span></td>
+        <td><span class="status-badge ${getStatusBadgeClass(learner.checkinStatus)}">${escapeHtml(learner.checkinStatus)}</span></td>
         <td>
           ${learnerPendingReviews.length ? `
             <div class="pending-stack">
@@ -627,8 +631,6 @@ function renderLearners() {
         <td>
           <div class="row-actions">
             <button class="table-btn" type="button" data-action="open-learner" data-learner-id="${escapeHtml(learner.id)}">Open submission</button>
-            <button class="table-btn primary" type="button" data-action="approve-learner" data-learner-id="${escapeHtml(learner.id)}" ${disableApproval ? 'disabled' : ''}>Approve</button>
-            <button class="table-btn danger" type="button" data-action="reject-learner" data-learner-id="${escapeHtml(learner.id)}" ${disableApproval ? 'disabled' : ''}>Reject</button>
           </div>
           ${learner.priorMentor ? '<div class="assist-note">Limited access applies because this mentor relationship is historical.</div>' : ''}
         </td>
@@ -779,8 +781,6 @@ learnerTableBody.addEventListener('click', (event) => {
   const action = button.dataset.action;
 
   if (action === 'open-learner') openLearnerSubmission(learnerId);
-  if (action === 'approve-learner') handleRosterDecision(learnerId, 'approve');
-  if (action === 'reject-learner') handleRosterDecision(learnerId, 'reject');
   if (action === 'competencies-learner') showLearnerCompetencies(learnerId);
   if (action === 'end-relationship') endLearnerRelationship(learnerId);
 });

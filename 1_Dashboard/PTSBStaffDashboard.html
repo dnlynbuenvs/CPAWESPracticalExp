@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CPA - PTB Staff Dashboard</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --navy:#0B1F3A; --blue:#1B5EA8; --accent:#2A9D8F; --amber:#E76F1A; --green:#2D7A4E; --red:#C0392B;
@@ -13,6 +13,12 @@
     --shadow-sm:0 1px 3px rgba(11,31,58,0.07),0 1px 2px rgba(11,31,58,0.05);
     --shadow-md:0 10px 28px rgba(11,31,58,0.10);
     --radius-sm:6px; --radius-md:10px; --radius-lg:16px;
+    --imis-blue:#1B5EA8; --imis-header-blue:#1B5EA8;
+    --badge-green-bg:#E3F3E6; --badge-green-text:#2D7A4E;
+    --badge-yellow-bg:#FCF3D9; --badge-yellow-text:#8A6D1D;
+    --badge-blue-bg:#E8ECF7; --badge-blue-text:#3B4A7A;
+    --badge-red-bg:#FBE7E5; --badge-red-text:#9B3226;
+    --badge-gray-bg:#F2F1EF; --badge-gray-text:#6B6760;
   }
 
   *{box-sizing:border-box;margin:0;padding:0}
@@ -41,11 +47,11 @@
   .role-option.active{background:#EBF3FF;color:var(--blue);font-weight:600}
   .page{max-width:1300px;margin:0 auto;padding:2rem 2rem 4rem}
   .hero{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--gray-200)}
-  .hero h1{font-family:'DM Serif Display',serif;font-size:38px;font-weight:400;color:var(--navy);margin-bottom:4px}
+  .hero h1{font-family:'DM Sans',sans-serif;font-size:26px;font-weight:700;color:#1a1a1a;margin-bottom:4px}
   .hero p{font-size:14px;color:var(--gray-600);max-width:760px}
   .hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);padding:10px 16px;box-shadow:var(--shadow-sm);font-size:13px;color:var(--gray-600);white-space:nowrap}
   .dot{width:8px;height:8px;border-radius:50%;background:var(--blue);flex:0 0 auto}
-  .section-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gray-400);margin-bottom:.75rem}
+  .section-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#2E2C2A;margin-bottom:.75rem}
   .panel{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);animation:rise .35s ease}
   .panel h2{font-size:17px;color:var(--navy);margin-bottom:4px}
   .panel-copy{font-size:12px;color:var(--gray-600);line-height:1.45}
@@ -53,40 +59,44 @@
   .message-bar.visible{display:flex}
   .summary-panel,.learner-panel,.risk-panel,.mentor-panel,.prr-panel{padding:1.25rem}
   .summary-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:1.5rem}
-  .summary-card{background:var(--sand);border:1px solid var(--gray-200);border-radius:var(--radius-md);padding:12px;min-height:90px}
-  .summary-card span{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--gray-400);margin-bottom:8px;font-weight:700}
-  .summary-card strong{display:block;font-family:'DM Serif Display',serif;font-size:30px;font-weight:400;color:var(--navy);line-height:1}
+  .summary-card{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-sm);padding:12px;min-height:90px}
+  .summary-card span{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:#2E2C2A;margin-bottom:8px;font-weight:700}
+  .summary-card strong{display:block;font-family:'DM Sans',sans-serif;font-size:26px;font-weight:700;color:#1a1a1a;line-height:1}
   .summary-card small{display:block;font-size:12px;color:var(--gray-600);margin-top:8px;line-height:1.35}
-  .stacked-panels{display:flex;flex-direction:column;gap:16px;margin-bottom:1.5rem}
-  .queue-head{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:1rem}
-  .table-wrap{overflow:auto;border:1px solid var(--gray-200);border-radius:var(--radius-lg)}
+  .stacked-panels{display:flex;flex-direction:column;gap:1.75rem;margin-bottom:1.5rem}
+  .queue-head{margin-bottom:1rem}
+  .imis-table-panel{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-sm)}
+  .imis-table-header{background:var(--imis-header-blue);color:var(--white);display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 18px}
+  .imis-table-header h2{font-size:14px;font-weight:700;color:var(--white);letter-spacing:.02em;margin:0}
+  .imis-table-count{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:700;color:var(--white)}
+  .table-wrap{overflow:auto}
   table{width:100%;min-width:980px;border-collapse:collapse;background:var(--white)}
   .compact-table{min-width:720px}
-  thead th{padding:11px 14px;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--gray-400);background:var(--sand);border-bottom:1px solid var(--gray-200);vertical-align:top}
-  tbody td{padding:14px;vertical-align:top;border-bottom:1px solid var(--gray-100);font-size:13px}
+  thead th{padding:10px 16px;text-align:left;font-size:12px;font-weight:700;text-transform:none;letter-spacing:0;color:#2E2C2A;background:var(--gray-100);border-bottom:1px solid var(--gray-300);vertical-align:top}
+  tbody td{padding:11px 16px;vertical-align:top;border-bottom:1px solid var(--gray-200);font-size:13px;color:#2E2C2A}
   tbody tr:last-child td{border-bottom:none}
   .clickable-row{cursor:pointer;transition:background .15s ease}
   .clickable-row:hover{background:#F7FAFF}
-  .learner-cell strong,.mentor-cell strong,.employer-cell strong{display:block;font-size:14px;color:var(--navy);margin-bottom:4px}
+  .learner-cell strong,.mentor-cell strong,.employer-cell strong{display:block;font-size:14px;color:var(--imis-blue);margin-bottom:4px}
   .subline{display:block;font-size:12px;color:var(--gray-600);line-height:1.45}
-  .status-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:5px 10px;border-radius:20px;white-space:nowrap}
-  .status-badge .dot{width:6px;height:6px}
-  .badge-approved{background:#E8F5EE;color:var(--green)} .badge-approved .dot{background:var(--green)}
-  .badge-pending{background:#FEF3E8;color:var(--amber)} .badge-pending .dot{background:var(--amber)}
-  .badge-progress{background:#EBF3FF;color:var(--blue)} .badge-progress .dot{background:var(--blue)}
-  .badge-declined{background:#FDECEA;color:var(--red)} .badge-declined .dot{background:var(--red)}
-  .badge-neutral{background:var(--gray-100);color:var(--gray-600)} .badge-neutral .dot{background:var(--gray-400)}
-  .risk-chip{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:5px 10px;font-size:11px;font-weight:700}
-  .risk-high{background:#FDECEA;color:var(--red)}
-  .risk-medium{background:#FEF3E8;color:var(--amber)}
-  .risk-low{background:#E8F5EE;color:var(--green)}
-  .action-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:var(--radius-sm);border:1px solid var(--gray-200);padding:8px 12px;background:var(--white);color:var(--navy);font-size:12px;font-weight:700;cursor:pointer;transition:all .15s ease}
-  .action-btn:hover{border-color:rgba(27,94,168,.28);background:#F7FAFF}
-  .action-btn.primary{background:#EBF3FF;border-color:rgba(27,94,168,.28);color:var(--blue)}
+  .status-badge{display:inline-block;padding:4px 10px;border-radius:3px;font-size:12px;font-weight:600;white-space:nowrap}
+  .badge-approved{background:var(--badge-green-bg);color:var(--badge-green-text)}
+  .badge-pending{background:var(--badge-yellow-bg);color:var(--badge-yellow-text)}
+  .badge-progress{background:var(--badge-blue-bg);color:var(--badge-blue-text)}
+  .badge-declined{background:var(--badge-red-bg);color:var(--badge-red-text)}
+  .badge-neutral{background:var(--badge-gray-bg);color:var(--badge-gray-text)}
+  .risk-chip{display:inline-block;padding:4px 10px;border-radius:3px;font-size:12px;font-weight:600;white-space:nowrap}
+  .risk-high{background:var(--badge-red-bg);color:var(--badge-red-text)}
+  .risk-medium{background:var(--badge-yellow-bg);color:var(--badge-yellow-text)}
+  .risk-low{background:var(--badge-green-bg);color:var(--badge-green-text)}
+  .action-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:var(--radius-sm);border:1px solid var(--imis-blue);padding:8px 14px;background:var(--white);color:var(--imis-blue);font-size:12px;font-weight:700;cursor:pointer;transition:all .15s ease}
+  .action-btn:hover{background:#EBF3FF}
+  .action-btn.primary{background:var(--imis-blue);border-color:var(--imis-blue);color:var(--white)}
+  .action-btn.primary:hover{background:#164e8f}
   .pill{display:inline-flex;align-items:center;gap:6px;background:#EBF3FF;color:var(--blue);border:1px solid rgba(27,94,168,.18);border-radius:999px;padding:5px 9px;font-size:11px;font-weight:700}
   .stack span{display:block;font-size:12px;color:var(--gray-600);line-height:1.45}
   .hint{font-size:11px;color:var(--gray-600);line-height:1.4;margin-top:8px}
-  .empty-state{padding:20px;text-align:center;font-size:13px;color:var(--gray-600);background:var(--sand)}
+  .empty-state{padding:20px;text-align:center;font-size:13px;color:var(--gray-600);background:var(--white)}
   .modal-backdrop{position:fixed;inset:0;background:rgba(11,31,58,.48);display:none;align-items:center;justify-content:center;padding:1.25rem;z-index:40}
   .modal-backdrop.visible{display:flex}
   .modal-card{width:min(100%,560px);background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);box-shadow:var(--shadow-md);padding:1.25rem}
@@ -95,9 +105,9 @@
   .modal-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:1rem}
   .field{display:flex;flex-direction:column;gap:6px}
   .field.full{grid-column:1 / -1}
-  .field label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gray-400)}
-  .field input,.field textarea{border:1px solid var(--gray-200);border-radius:var(--radius-sm);background:var(--sand);padding:10px 12px;color:var(--gray-800)}
-  .field input:focus,.field textarea:focus{outline:none;border-color:rgba(27,94,168,.32);box-shadow:0 0 0 3px rgba(27,94,168,.08)}
+  .field label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#2E2C2A}
+  .field input,.field textarea{border:1px solid var(--gray-300);border-radius:var(--radius-sm);background:var(--white);padding:10px 12px;color:var(--gray-800)}
+  .field input:focus,.field textarea:focus{outline:none;border-color:var(--imis-blue);box-shadow:0 0 0 3px rgba(27,94,168,.12)}
   .modal-actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px}
   @keyframes rise {
     from {opacity:0; transform:translateY(8px)}
@@ -172,126 +182,141 @@
   </section>
 
   <div class="stacked-panels">
-    <section class="panel risk-panel">
+    <div class="risk-panel">
       <div class="queue-head">
-        <div>
-          <div class="section-label">High-risk learner queue</div>
-          <h2>Priority exceptions</h2>
-          <p class="panel-copy">Learners with elevated operational or progression risk.</p>
+        <div class="section-label">High-risk learner queue</div>
+        <h2 style="font-size:17px;color:#1a1a1a;margin-bottom:4px;">Priority exceptions</h2>
+        <p class="panel-copy" style="margin-bottom:1rem;">Learners with elevated operational or progression risk.</p>
+      </div>
+      <section class="imis-table-panel" aria-label="Priority exceptions">
+        <div class="imis-table-header">
+          <h2>Priority Exceptions</h2>
+          <div class="imis-table-count"><span id="high-risk-count">0 high-risk learners</span></div>
         </div>
-        <div class="hero-badge"><span class="dot"></span><span id="high-risk-count">0 high-risk learners</span></div>
-      </div>
-      <div class="table-wrap">
-        <table class="compact-table">
-          <thead>
-            <tr><th>Learner</th><th>Risk level</th><th>Risk reason</th><th>Reviewer assigned</th><th>Check-in due</th></tr>
-          </thead>
-          <tbody id="high-risk-body"></tbody>
-        </table>
-      </div>
-    </section>
+        <div class="table-wrap">
+          <table class="compact-table">
+            <thead>
+              <tr><th>Learner</th><th>Risk level</th><th>Risk reason</th><th>Reviewer assigned</th><th>Check-in due</th></tr>
+            </thead>
+            <tbody id="high-risk-body"></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
 
-    <section class="panel learner-panel" id="learner-monitoring">
+    <div id="learner-monitoring">
       <div class="queue-head">
-        <div>
-          <div class="section-label">Learner monitoring queue</div>
-          <h2>Learner monitoring</h2>
-          <p class="panel-copy">Track learner stage, employer, mentor coverage, current status, reviewer assignment, and mentor application progress.</p>
+        <div class="section-label">Learner monitoring queue</div>
+        <h2 style="font-size:17px;color:#1a1a1a;margin-bottom:4px;">Learner monitoring</h2>
+        <p class="panel-copy" style="margin-bottom:1rem;">Track learner stage, employer, mentor coverage, current status, reviewer assignment, and mentor application progress.</p>
+      </div>
+      <section class="imis-table-panel" aria-label="Learner monitoring">
+        <div class="imis-table-header">
+          <h2>Learner Monitoring</h2>
+          <div class="imis-table-count"><span id="learner-count">0 active learners</span></div>
         </div>
-        <div class="hero-badge"><span class="dot"></span><span id="learner-count">0 active learners</span></div>
-      </div>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Learner</th>
-              <th>Current stage</th>
-              <th>Employer</th>
-              <th>Mentor</th>
-              <th>Current status</th>
-              <th>Assigned staff reviewer</th>
-              <th>Mentor application status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody id="learner-body"></tbody>
-        </table>
-      </div>
-    </section>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Learner</th>
+                <th>Current stage</th>
+                <th>Employer</th>
+                <th>Mentor</th>
+                <th>Current status</th>
+                <th>Assigned staff reviewer</th>
+                <th>Mentor application status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="learner-body"></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
 
-    <section class="panel mentor-panel" id="mentor-monitoring">
+    <div id="mentor-monitoring">
       <div class="queue-head">
-        <div>
-          <div class="section-label">Mentor monitoring queue</div>
-          <h2>Mentor monitoring</h2>
-          <p class="panel-copy">Active learner load, missing mentor validation, learners needing a new mentor, and mentor application intake.</p>
+        <div class="section-label">Mentor monitoring queue</div>
+        <h2 style="font-size:17px;color:#1a1a1a;margin-bottom:4px;">Mentor monitoring</h2>
+        <p class="panel-copy" style="margin-bottom:1rem;">Active learner load, missing mentor validation, learners needing a new mentor, and mentor application intake.</p>
+      </div>
+      <section class="imis-table-panel" aria-label="Mentor monitoring">
+        <div class="imis-table-header">
+          <h2>Mentor Monitoring</h2>
+          <div class="imis-table-count"><span id="mentor-count">0 active mentors</span></div>
         </div>
-        <div class="hero-badge"><span class="dot"></span><span id="mentor-count">0 active mentors</span></div>
-      </div>
-      <div class="table-wrap">
-        <table class="compact-table">
-          <thead>
-            <tr>
-              <th>Mentor</th>
-              <th>Active learners</th>
-              <th>Without validation</th>
-              <th>Requiring new mentor</th>
-              <th>New mentor application</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody id="mentor-body"></tbody>
-        </table>
-      </div>
+        <div class="table-wrap">
+          <table class="compact-table">
+            <thead>
+              <tr>
+                <th>Mentor</th>
+                <th>Active learners</th>
+                <th>Without validation</th>
+                <th>Requiring new mentor</th>
+                <th>New mentor application</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="mentor-body"></tbody>
+          </table>
+        </div>
+      </section>
       <div class="hint">PTB staff can view mentor applications directly from this queue.</div>
-    </section>
+    </div>
 
-    <section class="panel mentor-panel" id="job-change-requests">
+    <div id="job-change-requests">
       <div class="queue-head">
-        <div>
-          <div class="section-label">Learner and mentor job change request queue</div>
-          <h2>Job change requests</h2>
-          <p class="panel-copy">Monitor active learner and mentor change requests that require PTB review, reassignment follow-up, or relationship management decisions.</p>
+        <div class="section-label">Learner and mentor job change request queue</div>
+        <h2 style="font-size:17px;color:#1a1a1a;margin-bottom:4px;">Job change requests</h2>
+        <p class="panel-copy" style="margin-bottom:1rem;">Monitor active learner and mentor change requests that require PTB review, reassignment follow-up, or relationship management decisions.</p>
+      </div>
+      <section class="imis-table-panel" aria-label="Job change requests">
+        <div class="imis-table-header">
+          <h2>Job Change Requests</h2>
+          <div class="imis-table-count"><span id="job-change-count">0 active requests</span></div>
         </div>
-        <div class="hero-badge"><span class="dot"></span><span id="job-change-count">0 active requests</span></div>
-      </div>
-      <div class="table-wrap">
-        <table class="compact-table">
-          <thead>
-            <tr>
-              <th>Request type</th>
-              <th>Person</th>
-              <th>Current mentor</th>
-              <th>Requested change</th>
-              <th>Status</th>
-              <th>Submitted</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody id="job-change-body"></tbody>
-        </table>
-      </div>
+        <div class="table-wrap">
+          <table class="compact-table">
+            <thead>
+              <tr>
+                <th>Request type</th>
+                <th>Person</th>
+                <th>Current mentor</th>
+                <th>Requested change</th>
+                <th>Status</th>
+                <th>Submitted</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="job-change-body"></tbody>
+          </table>
+        </div>
+      </section>
       <div class="hint">Use the review page to confirm details, approve the mentor change, reject the request, or request additional information.</div>
-    </section>
+    </div>
 
-    <section class="panel prr-panel" id="prr-positions">
+    <div id="prr-positions">
       <div class="queue-head">
-        <div>
-          <div class="section-label">Pre-reviewed positions by employer</div>
-          <h2>Employer rollup</h2>
-          <p class="panel-copy">A quick count of employers with pre-reviewed positions and the learners currently assigned to them.</p>
+        <div class="section-label">Pre-reviewed positions by employer</div>
+        <h2 style="font-size:17px;color:#1a1a1a;margin-bottom:4px;">Employer rollup</h2>
+        <p class="panel-copy" style="margin-bottom:1rem;">A quick count of employers with pre-reviewed positions and the learners currently assigned to them.</p>
+      </div>
+      <section class="imis-table-panel" aria-label="Employer rollup">
+        <div class="imis-table-header">
+          <h2>Employer Rollup</h2>
+          <div class="imis-table-count"><span id="employer-count">0 employers tracked</span></div>
         </div>
-        <div class="hero-badge"><span class="dot"></span><span id="employer-count">0 employers tracked</span></div>
-      </div>
-      <div class="table-wrap">
-        <table class="compact-table">
-          <thead>
-            <tr><th>Employer</th><th>Pre-reviewed positions</th><th>Learners assigned</th><th>PTB note</th></tr>
-          </thead>
-          <tbody id="employer-body"></tbody>
-        </table>
-      </div>
-    </section>
+        <div class="table-wrap">
+          <table class="compact-table">
+            <thead>
+              <tr><th>Employer</th><th>Pre-reviewed positions</th><th>Learners assigned</th><th>PTB note</th></tr>
+            </thead>
+            <tbody id="employer-body"></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
   </div>
 </main>
 
@@ -651,9 +676,9 @@ function renderLearnerQueue() {
       <td>${escapeHtml(learner.currentStage)}</td>
       <td>${escapeHtml(learner.employer || 'No employer on file')}</td>
       <td>${escapeHtml(learner.mentor)}</td>
-      <td><span class="status-badge ${statusClass(learner.currentStatus)}"><span class="dot"></span>${escapeHtml(learner.currentStatus)}</span></td>
+      <td><span class="status-badge ${statusClass(learner.currentStatus)}">${escapeHtml(learner.currentStatus)}</span></td>
       <td>${escapeHtml(learner.assignedReviewer)}</td>
-      <td><span class="status-badge ${statusClass(learner.mentorApplicationStatus)}"><span class="dot"></span>${escapeHtml(learner.mentorApplicationStatus)}</span></td>
+      <td><span class="status-badge ${statusClass(learner.mentorApplicationStatus)}">${escapeHtml(learner.mentorApplicationStatus)}</span></td>
       <td>
         <button class="action-btn primary" type="button" data-reduce-duration="${escapeHtml(learner.learnerId)}">Reduce Credited Duration</button>
       </td>
@@ -748,7 +773,7 @@ function renderMentorQueue() {
       <td>${escapeHtml(mentor.activeLearners)}</td>
       <td>${escapeHtml(mentor.withoutValidation)}</td>
       <td>${escapeHtml(mentor.requiringNewMentor)}</td>
-      <td><span class="status-badge ${statusClass(mentor.newMentorApplication)}"><span class="dot"></span>${escapeHtml(mentor.newMentorApplication)}</span></td>
+      <td><span class="status-badge ${statusClass(mentor.newMentorApplication)}">${escapeHtml(mentor.newMentorApplication)}</span></td>
       <td><button class="action-btn primary" type="button" data-mentor-index="${index}">View application</button></td>
     </tr>
   `).join('');
@@ -765,7 +790,7 @@ function renderJobChangeQueue() {
       </td>
       <td>${escapeHtml(request.currentMentor)}</td>
       <td>${escapeHtml(request.requestedChange)}</td>
-      <td><span class="status-badge ${statusClass(request.status)}"><span class="dot"></span>${escapeHtml(request.status)}</span></td>
+      <td><span class="status-badge ${statusClass(request.status)}">${escapeHtml(request.status)}</span></td>
       <td>${escapeHtml(formatDate(request.submittedDate))}</td>
       <td><button class="action-btn primary" type="button" data-job-change-index="${index}">View</button></td>
     </tr>
