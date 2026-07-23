@@ -198,6 +198,22 @@
       <div class="section-label">Status and history</div>
       <h2>Report metadata</h2>
       <div class="meta-stack">
+        <div class="meta-card">
+          <strong>Assigned reviewer</strong>
+          <span>Assign the CPA reviewer responsible for this check-in report.</span>
+          <div class="form-field" style="margin-top:.75rem;">
+            <select id="assigned-reviewer-select">
+              <option value="Avery Patel, CPA">Avery Patel, CPA</option>
+              <option value="Noah Ramirez, CPA">Noah Ramirez, CPA</option>
+              <option value="Harper Singh, CPA">Harper Singh, CPA</option>
+              <option value="Lena Ortiz, CPA">Lena Ortiz, CPA</option>
+            </select>
+          </div>
+          <div class="button-row" style="margin-top:.75rem;">
+            <button class="action-btn primary" id="assign-reviewer-btn" type="button">Save assignment</button>
+          </div>
+          <span id="assigned-reviewer-status" style="margin-top:.75rem;">No reviewer assigned.</span>
+        </div>
         <div class="meta-card"><strong>Current status</strong><span id="meta-status">Not started</span></div>
         <div class="meta-card"><strong>Review route</strong><span id="meta-route">No review route recorded.</span></div>
         <div class="meta-card"><strong>Next check-in due</strong><span id="meta-due-date">No next check-in date recorded.</span></div>
@@ -217,6 +233,7 @@ const workPlanKey = 'workPlanRecord:learner-101';
 const versionsKey = 'workPlanVersions:learner-101';
 const activeApprovedKey = 'activeApprovedWorkPlan:learner-101';
 const checkInKey = 'workPlanCheckInReport:learner-101';
+const availableReviewers = ['Avery Patel, CPA', 'Noah Ramirez, CPA', 'Harper Singh, CPA', 'Lena Ortiz, CPA'];
 
 const heroSummary = document.getElementById('hero-summary');
 const detailCopy = document.getElementById('detail-copy');
@@ -388,7 +405,25 @@ function renderMeta() {
   metaDueDate.textContent = checkInReport.nextCheckInDate ? formatShortDate(checkInReport.nextCheckInDate) : 'No next check-in date recorded.';
   metaSubmitted.textContent = checkInReport.submittedAt ? formatDate(checkInReport.submittedAt) : 'Not submitted';
   metaRisk.textContent = checkInReport.riskRating || 'Not set';
+  const assignedReviewer = checkInReport.assignedReviewer || '';
+  document.getElementById('assigned-reviewer-select').value = availableReviewers.includes(assignedReviewer) ? assignedReviewer : availableReviewers[0];
+  document.getElementById('assigned-reviewer-status').textContent = assignedReviewer ? `Currently assigned to ${assignedReviewer}.` : 'No reviewer assigned.';
   renderTrail();
+}
+
+function assignReviewer() {
+  const reviewer = document.getElementById('assigned-reviewer-select').value;
+  const previousReviewer = checkInReport.assignedReviewer || '';
+  checkInReport.assignedReviewer = reviewer;
+  addAudit(
+    checkInReport.status || 'Pending CPA Review',
+    checkInReport.status || 'Pending CPA Review',
+    previousReviewer && previousReviewer !== reviewer
+      ? `Assigned reviewer changed from ${previousReviewer} to ${reviewer}.`
+      : `Assigned reviewer set to ${reviewer}.`
+  );
+  renderAll();
+  setMessage(`Check-in report assigned to ${reviewer}.`);
 }
 
 function addAudit(previousStatus, newStatus, comments, actor = 'Avery Patel, CPA', role = 'CPA Reviewer') {
@@ -463,6 +498,7 @@ document.getElementById('decline-btn').addEventListener('click', () => {
 document.getElementById('more-info-btn').addEventListener('click', () => {
   setDecision('More information needed', 'More information requested by CPA Reviewer.', 'CPA Reviewer requested more information on the learner check-in report.');
 });
+document.getElementById('assign-reviewer-btn').addEventListener('click', assignReviewer);
 
 loadApprovedPlan();
 loadCheckInReport();

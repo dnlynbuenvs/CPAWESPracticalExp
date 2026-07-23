@@ -62,6 +62,13 @@
   .metric-card small{display:block;font-size:12px;color:var(--gray-600);margin-top:8px;line-height:1.35}
   .message-bar{display:none;align-items:center;gap:10px;margin-bottom:1rem;padding:12px 14px;border-radius:var(--radius-md);background:#EBF3FF;border:1px solid rgba(27,94,168,.18);color:var(--navy);box-shadow:var(--shadow-sm)}
   .message-bar.visible{display:flex}
+  .modal-backdrop{position:fixed;inset:0;background:rgba(11,31,58,.48);display:none;align-items:center;justify-content:center;padding:1.25rem;z-index:40}
+  .modal-backdrop.visible{display:flex}
+  .modal-card{width:min(100%,420px);background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);box-shadow:var(--shadow-md);padding:1.25rem;position:relative}
+  .modal-close{position:absolute;top:12px;right:12px;width:32px;height:32px;border:1px solid var(--gray-200);border-radius:999px;background:var(--white);color:var(--navy);font-size:18px;line-height:1;cursor:pointer}
+  .modal-close:hover{background:var(--gray-100)}
+  .modal-card h3{font-size:20px;color:var(--navy);margin-bottom:8px;padding-right:2rem}
+  .modal-card p{font-size:13px;color:var(--gray-600);line-height:1.5}
   .controls-head,.roster-head{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:1rem}
   .review-type{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--gray-400)}
   .review-type .type-dot{width:8px;height:8px;border-radius:50%;background:var(--blue)}
@@ -95,15 +102,11 @@
   .field label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gray-400)}
   .field input,.field select{height:42px;border-radius:var(--radius-md);border:1px solid var(--gray-200);background:var(--sand);padding:0 12px;color:var(--gray-800)}
   .field input:focus,.field select:focus{outline:none;border-color:rgba(27,94,168,.32);box-shadow:0 0 0 3px rgba(27,94,168,.08)}
-  .bulk-bar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-bottom:1rem;padding:12px 14px;border-radius:var(--radius-md);background:var(--sand);border:1px solid var(--gray-200)}
-  .bulk-bar strong{font-size:13px;color:var(--navy)}
-  .bulk-copy{font-size:12px;color:var(--gray-600)}
   .table-wrap{overflow:auto;border:1px solid var(--gray-200);border-radius:var(--radius-lg)}
   table{width:100%;min-width:1180px;border-collapse:collapse;background:var(--white)}
   thead th{padding:11px 14px;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--gray-400);background:var(--sand);border-bottom:1px solid var(--gray-200);vertical-align:top}
   tbody td{padding:14px;vertical-align:top;border-bottom:1px solid var(--gray-100);font-size:13px}
   tbody tr:last-child td{border-bottom:none}
-  .select-col{width:42px}
   .learner-cell strong{display:block;font-size:14px;color:var(--navy);margin-bottom:4px}
   .subline{display:block;font-size:12px;color:var(--gray-600);line-height:1.45}
   .tiny-note{display:inline-flex;align-items:center;gap:6px;margin-top:8px;padding:4px 8px;border-radius:999px;background:#EBF3FF;color:var(--blue);font-size:11px;font-weight:700}
@@ -133,7 +136,7 @@
     .nav-links{display:none}
     .topbar-right{width:100%;justify-content:space-between}
     .page{padding:1.25rem 1rem 3rem}
-    .hero,.mentor-head,.controls-head,.roster-head,.bulk-bar{flex-direction:column;align-items:flex-start}
+    .hero,.mentor-head,.controls-head,.roster-head{flex-direction:column;align-items:flex-start}
     .hero h1{font-size:34px}
     .metric-grid{grid-template-columns:1fr}
     .controls-shell{width:100%}
@@ -253,24 +256,15 @@
       <div>
         <div class="section-label">Assigned learners</div>
         <h2 id="assigned-learners-title">Learner roster</h2>
-        <p class="panel-copy">Select one or more learners to end the relationship, or open an individual submission from the row actions.</p>
+        <p class="panel-copy">Open submissions, manage review decisions, or end a learner relationship directly from the row actions.</p>
       </div>
       <div class="hero-badge"><span class="dot"></span><span id="visible-count">0 learners shown</span></div>
-    </div>
-
-    <div class="bulk-bar">
-      <div>
-        <strong id="selected-count">0 learners selected</strong>
-        <div class="bulk-copy">Bulk relationship changes apply only to the currently selected learners.</div>
-      </div>
-      <button class="toolbar-btn danger" id="end-relationship-btn" type="button" disabled>End relationship with selected</button>
     </div>
 
     <div class="table-wrap">
       <table aria-describedby="assigned-learners-title">
         <thead>
           <tr>
-            <th class="select-col"><input id="select-all" type="checkbox" aria-label="Select all visible learners"></th>
             <th>Learner</th>
             <th>Employer</th>
             <th>Current stage</th>
@@ -279,7 +273,8 @@
             <th>Check-in status</th>
             <th>Pending reviews</th>
             <th>Pre-reviewed role</th>
-            <th>Actions</th>
+            <th>Review actions</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody id="learner-table-body"></tbody>
@@ -287,6 +282,14 @@
     </div>
   </section>
 </main>
+
+<div class="modal-backdrop" id="relationship-modal" aria-hidden="true">
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="relationship-modal-title">
+    <button class="modal-close" id="relationship-modal-close" type="button" aria-label="Close modal">X</button>
+    <h3 id="relationship-modal-title">Mentor relationship ended</h3>
+    <p id="relationship-modal-copy">This learner has been removed from your active mentor roster.</p>
+  </div>
+</div>
 
 <script>
 const learners = [
@@ -429,19 +432,28 @@ let reviews = [
   }
 ];
 
-const selectedLearners = new Set();
 const messageBar = document.getElementById('message-bar');
 const messageText = document.getElementById('message-text');
 const learnerTableBody = document.getElementById('learner-table-body');
 const nameFilter = document.getElementById('name-filter');
 const statusFilter = document.getElementById('status-filter');
 const sortFilter = document.getElementById('sort-filter');
-const selectAll = document.getElementById('select-all');
-const endRelationshipBtn = document.getElementById('end-relationship-btn');
+const relationshipModal = document.getElementById('relationship-modal');
 
 function setMessage(text) {
   messageText.textContent = text;
   messageBar.classList.add('visible');
+}
+
+function showRelationshipModal(learnerName) {
+  document.getElementById('relationship-modal-copy').textContent = `${learnerName}'s mentor relationship has been ended and the learner has been removed from your active roster.`;
+  relationshipModal.classList.add('visible');
+  relationshipModal.setAttribute('aria-hidden', 'false');
+}
+
+function closeRelationshipModal() {
+  relationshipModal.classList.remove('visible');
+  relationshipModal.setAttribute('aria-hidden', 'true');
 }
 
 function getActiveLearners() {
@@ -562,7 +574,6 @@ function renderLearners() {
 
   if (!visibleLearners.length) {
     learnerTableBody.innerHTML = '<tr><td colspan="10" class="empty-state">No assigned learners match the current filter.</td></tr>';
-    updateSelectionState();
     return;
   }
 
@@ -574,9 +585,6 @@ function renderLearners() {
 
     return `
       <tr id="learner-${escapeHtml(learner.id)}">
-        <td class="select-col">
-          <input class="learner-select" type="checkbox" data-learner-id="${escapeHtml(learner.id)}" ${selectedLearners.has(learner.id) ? 'checked' : ''} aria-label="Select ${escapeHtml(learner.name)}">
-        </td>
         <td class="learner-cell">
           <strong>${escapeHtml(learner.name)}</strong>
           <span class="subline">${escapeHtml(learner.id)}</span>
@@ -621,27 +629,17 @@ function renderLearners() {
             <button class="table-btn" type="button" data-action="open-learner" data-learner-id="${escapeHtml(learner.id)}">Open submission</button>
             <button class="table-btn primary" type="button" data-action="approve-learner" data-learner-id="${escapeHtml(learner.id)}" ${disableApproval ? 'disabled' : ''}>Approve</button>
             <button class="table-btn danger" type="button" data-action="reject-learner" data-learner-id="${escapeHtml(learner.id)}" ${disableApproval ? 'disabled' : ''}>Reject</button>
-            <button class="table-btn" type="button" data-action="competencies-learner" data-learner-id="${escapeHtml(learner.id)}">View competencies</button>
           </div>
           ${learner.priorMentor ? '<div class="assist-note">Limited access applies because this mentor relationship is historical.</div>' : ''}
+        </td>
+        <td>
+          <button class="table-btn danger" type="button" data-action="end-relationship" data-learner-id="${escapeHtml(learner.id)}">End relationship</button>
         </td>
       </tr>
     `;
   }).join('');
-
-  updateSelectionState();
 }
 
-function updateSelectionState() {
-  const visibleLearners = getVisibleLearners();
-  const visibleIds = visibleLearners.map((learner) => learner.id);
-  const selectedVisibleCount = visibleIds.filter((id) => selectedLearners.has(id)).length;
-
-  document.getElementById('selected-count').textContent = `${selectedLearners.size} learner${selectedLearners.size === 1 ? '' : 's'} selected`;
-  endRelationshipBtn.disabled = !selectedLearners.size;
-  selectAll.checked = visibleIds.length > 0 && selectedVisibleCount === visibleIds.length;
-  selectAll.indeterminate = selectedVisibleCount > 0 && selectedVisibleCount < visibleIds.length;
-}
 
 function updateLearnerFromReview(review, decision) {
   const learner = getLearnerById(review.learnerId);
@@ -758,9 +756,14 @@ function handleRosterDecision(learnerId, decision) {
   handleReviewDecision(review.id, decision);
 }
 
-function endSelectedRelationships() {
-  if (!selectedLearners.size) return;
-  window.location.href = '../7_ReportJobChange/2_MentorJobChange/2_MentorEndRelationshipWithLearner.html';
+function endLearnerRelationship(learnerId) {
+  const learner = getLearnerById(learnerId);
+  if (!learner) return;
+  learner.relationshipEnded = true;
+  reviews = reviews.filter((review) => review.learnerId !== learnerId);
+  setMessage(`${learner.name} was removed from the mentor roster.`);
+  renderAll();
+  showRelationshipModal(learner.name);
 }
 
 function renderAll() {
@@ -779,30 +782,16 @@ learnerTableBody.addEventListener('click', (event) => {
   if (action === 'approve-learner') handleRosterDecision(learnerId, 'approve');
   if (action === 'reject-learner') handleRosterDecision(learnerId, 'reject');
   if (action === 'competencies-learner') showLearnerCompetencies(learnerId);
-});
-
-learnerTableBody.addEventListener('change', (event) => {
-  const checkbox = event.target.closest('.learner-select');
-  if (!checkbox) return;
-
-  if (checkbox.checked) selectedLearners.add(checkbox.dataset.learnerId);
-  else selectedLearners.delete(checkbox.dataset.learnerId);
-  updateSelectionState();
-});
-
-selectAll.addEventListener('change', () => {
-  const visibleLearners = getVisibleLearners();
-  visibleLearners.forEach((learner) => {
-    if (selectAll.checked) selectedLearners.add(learner.id);
-    else selectedLearners.delete(learner.id);
-  });
-  renderLearners();
+  if (action === 'end-relationship') endLearnerRelationship(learnerId);
 });
 
 nameFilter.addEventListener('input', renderLearners);
 statusFilter.addEventListener('change', renderLearners);
 sortFilter.addEventListener('change', renderLearners);
-endRelationshipBtn.addEventListener('click', endSelectedRelationships);
+document.getElementById('relationship-modal-close').addEventListener('click', closeRelationshipModal);
+relationshipModal.addEventListener('click', (event) => {
+  if (event.target === relationshipModal) closeRelationshipModal();
+});
 
 renderAll();
 </script>

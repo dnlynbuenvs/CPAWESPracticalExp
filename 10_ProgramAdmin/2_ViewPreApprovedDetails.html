@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPA - View Pre-Approved Position Details</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:#0B1F3A; --blue:#1B5EA8; --green:#2D7A4E; --amber:#E76F1A;
+    --sand:#F7F5F2; --white:#FFFFFF; --gray-100:#F2F1EF; --gray-200:#E4E2DE;
+    --gray-300:#D2CEC8; --gray-400:#A8A49E; --gray-600:#6B6760; --gray-800:#2E2C2A;
+    --shadow-sm:0 1px 3px rgba(11,31,58,.07),0 1px 2px rgba(11,31,58,.05);
+    --radius-sm:6px; --radius-md:10px; --radius-lg:16px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'DM Sans',sans-serif;background:var(--sand);color:var(--gray-800);min-height:100vh}
+  a{text-decoration:none;color:inherit}
+  button,input,select{font:inherit}
+  .topbar{background:var(--navy);min-height:60px;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:0 2rem}
+  .logo-group{display:flex;align-items:center;gap:10px;min-width:225px}
+  .logo-mark{width:36px;height:36px;background:var(--white);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center}
+  .logo-text{display:flex;flex-direction:column;line-height:1.1}
+  .logo-text .brand{font-size:13px;font-weight:600;color:var(--white);letter-spacing:.04em}
+  .logo-text .sub{font-size:10px;color:rgba(255,255,255,.5);letter-spacing:.02em;text-transform:uppercase}
+  .nav-links{display:flex;align-items:center;gap:2px}
+  .nav-links a{color:rgba(255,255,255,.55);font-size:14px;padding:8px 16px;border-radius:var(--radius-sm);white-space:nowrap}
+  .nav-links a.active,.nav-links a:hover{color:var(--white);background:rgba(255,255,255,.08)}
+  .topbar-right{display:flex;align-items:center;gap:12px}
+  .role-dropdown{position:relative}
+  .role-trigger{list-style:none;display:flex;align-items:center;gap:10px;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);color:var(--white);font-size:13px;font-weight:600;cursor:pointer}
+  .role-trigger::-webkit-details-marker{display:none}
+  .role-label{display:inline-flex;align-items:center;justify-content:center;min-width:92px}
+  .role-caret{font-size:11px;color:rgba(255,255,255,.72)}
+  .role-menu{position:absolute;right:0;top:calc(100% + 10px);min-width:220px;padding:8px;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);box-shadow:0 12px 30px rgba(11,31,58,.14);display:flex;flex-direction:column;gap:4px;z-index:20}
+  .role-option{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:var(--radius-sm);font-size:13px;color:var(--gray-800)}
+  .role-option:hover{background:var(--gray-100)}
+  .role-option.active{background:#EBF3FF;color:var(--blue);font-weight:600}
+  .page{max-width:1240px;margin:0 auto;padding:2rem 2rem 4rem}
+  .hero{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--gray-200)}
+  .hero h1{font-family:'DM Serif Display',serif;font-size:38px;font-weight:400;color:var(--navy);margin-bottom:4px}
+  .hero p{font-size:14px;color:var(--gray-600);max-width:760px;line-height:1.5}
+  .hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);padding:10px 16px;box-shadow:var(--shadow-sm);font-size:13px;color:var(--gray-600)}
+  .dot{width:8px;height:8px;border-radius:50%;background:var(--blue);flex:0 0 auto}
+  .panel{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm)}
+  .main-panel,.side-panel{padding:1.25rem}
+  .workspace{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:16px}
+  .section-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gray-400);margin-bottom:.75rem}
+  .panel h2{font-size:17px;color:var(--navy);margin-bottom:4px}
+  .panel-copy{font-size:12px;color:var(--gray-600);line-height:1.45}
+  .stack,.meta-stack,.learner-list{display:flex;flex-direction:column;gap:16px}
+  .info-section{padding:1rem;border:1px solid var(--gray-200);border-radius:var(--radius-md);background:var(--sand)}
+  .info-section h3{font-size:15px;color:var(--navy);margin-bottom:6px}
+  .grid-2,.grid-3{display:grid;gap:12px}
+  .grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .value-card,.meta-card,.list-item{padding:12px;border:1px solid var(--gray-200);border-radius:var(--radius-md);background:var(--white)}
+  .value-card span,.meta-card span,.list-item span{display:block;font-size:12px;color:var(--gray-600);line-height:1.45}
+  .value-card strong,.meta-card strong,.list-item strong{display:block;font-size:13px;color:var(--navy);margin-bottom:4px}
+  .status-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:5px 10px;border-radius:20px;white-space:nowrap}
+  .status-badge .dot{width:6px;height:6px}
+  .badge-approved{background:#E8F5EE;color:var(--green)} .badge-approved .dot{background:var(--green)}
+  .badge-paused{background:#FEF3E8;color:var(--amber)} .badge-paused .dot{background:var(--amber)}
+  .field{display:flex;flex-direction:column;gap:6px}
+  .field label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gray-400)}
+  .field select{height:42px;border-radius:var(--radius-md);border:1px solid var(--gray-200);background:var(--white);padding:0 12px;color:var(--gray-800)}
+  .action-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:var(--radius-sm);border:1px solid var(--gray-200);padding:9px 12px;background:var(--white);color:var(--navy);font-size:12px;font-weight:700;cursor:pointer;transition:all .15s ease}
+  .action-btn:hover{border-color:rgba(27,94,168,.28);background:#F7FAFF}
+  .action-btn.primary{background:#EBF3FF;border-color:rgba(27,94,168,.28);color:var(--blue)}
+  .message-bar{display:none;align-items:center;gap:10px;margin-bottom:1rem;padding:12px 14px;border-radius:var(--radius-md);background:#EBF3FF;border:1px solid rgba(27,94,168,.18);color:var(--navy);box-shadow:var(--shadow-sm)}
+  .message-bar.visible{display:flex}
+  .empty-state{padding:20px;text-align:center;font-size:13px;color:var(--gray-600);background:var(--sand);border:1px dashed var(--gray-300);border-radius:var(--radius-md)}
+  @media(max-width:1080px){.workspace{grid-template-columns:1fr}}
+  @media(max-width:760px){
+    .topbar{align-items:flex-start;flex-direction:column;padding:1rem}
+    .nav-links{display:none}
+    .topbar-right{width:100%;justify-content:space-between}
+    .page{padding:1.25rem 1rem 3rem}
+    .hero{flex-direction:column;align-items:flex-start}
+    .hero h1{font-size:34px}
+    .grid-2,.grid-3{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="logo-group">
+    <div class="logo-mark">
+      <svg width="24" height="20" viewBox="0 0 24 20" fill="none" aria-hidden="true">
+        <path d="M2 10C2 5.58 5.58 2 10 2h4c4.42 0 8 3.58 8 8s-3.58 8-8 8h-4C5.58 18 2 14.42 2 10z" fill="#0B1F3A" opacity="0.12"/>
+        <path d="M7 10.5l3 3 7-7" stroke="#0B1F3A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="logo-text"><span class="brand">CPA Canada</span><span class="sub">Chartered Professional Accountants</span></div>
+  </div>
+  <div class="topbar-right">
+    <nav class="nav-links" aria-label="Primary navigation">
+      <a href="1_ProgramAdminMgmt.html">Dashboard</a>
+      <a href="2_ViewPreApprovedDetails.html" class="active">Position details</a>
+    </nav>
+    <details class="role-dropdown">
+      <summary class="role-trigger"><span class="role-label">Program Admin</span><span class="role-caret">&#9662;</span></summary>
+      <div class="role-menu">
+        <a class="role-option" href="../index.html">Learner</a>
+        <a class="role-option" href="../1_Dashboard/CPAReviewer.html">CPA Reviewer</a>
+        <a class="role-option" href="../1_Dashboard/MentorDashboard.html">Mentor</a>
+        <a class="role-option" href="../8_MentorOnboarding/1_MentorOnboarding.html">Mentor onboarding</a>
+        <a class="role-option active" href="../1_Dashboard/2_ProgramAdminDashboard.html">Program Admin</a>
+        <a class="role-option" href="../1_Dashboard/PTSBStaffDashboard.html">PTSB Staff</a>
+      </div>
+    </details>
+  </div>
+</header>
+
+<main class="page">
+  <section class="hero" aria-labelledby="position-detail-title">
+    <div>
+      <h1 id="position-detail-title">View pre-approved position details</h1>
+      <p>Review the selected pre-approved position in read-only mode. Senior leader assignment can still be updated from this page.</p>
+    </div>
+    <div class="hero-badge"><span class="dot"></span><span id="hero-summary">Loading position details</span></div>
+  </section>
+
+  <div class="message-bar" id="message-bar" role="status" aria-live="polite">
+    <span class="dot"></span>
+    <span id="message-text"></span>
+  </div>
+
+  <section class="workspace">
+    <section class="panel main-panel">
+      <div class="section-label">Read-only position details</div>
+      <h2 id="position-name">Pre-approved position</h2>
+      <p class="panel-copy">Position, mentor, capacity, and learner details are shown below as read-only information.</p>
+
+      <div class="stack" style="margin-top:1rem;">
+        <section class="info-section">
+          <h3>Position overview</h3>
+          <div class="grid-2" id="overview-grid"></div>
+        </section>
+
+        <section class="info-section">
+          <h3>Assignment details</h3>
+          <div class="grid-3" id="assignment-grid"></div>
+        </section>
+
+        <section class="info-section">
+          <h3>Position description</h3>
+          <div class="value-card">
+            <strong>Role summary</strong>
+            <span id="position-description">Not available.</span>
+          </div>
+        </section>
+
+        <section class="info-section">
+          <h3>Learners assigned to this position</h3>
+          <div class="learner-list" id="learner-list"></div>
+        </section>
+      </div>
+    </section>
+
+    <aside class="panel side-panel">
+      <div class="section-label">Senior leader assignment</div>
+      <h2>Update senior leader</h2>
+      <div class="meta-stack" style="margin-top:1rem;">
+        <div class="meta-card">
+          <strong>Current senior leader</strong>
+          <span id="current-senior-leader">Not assigned</span>
+        </div>
+        <div class="field">
+          <label for="senior-leader-select">Senior leader</label>
+          <select id="senior-leader-select">
+            <option value="">Select senior leader</option>
+            <option value="Harper Singh">Harper Singh</option>
+            <option value="Lena Ortiz">Lena Ortiz</option>
+            <option value="Noah Ramirez">Noah Ramirez</option>
+            <option value="Devon Clarke">Devon Clarke</option>
+          </select>
+        </div>
+        <button class="action-btn primary" id="save-senior-leader-btn" type="button">Save senior leader</button>
+      </div>
+    </aside>
+  </section>
+</main>
+
+<script>
+const programAdminState = {
+  organizationName: 'Summit Rail Finance',
+  assignedBy: 'Avery Patel, Program Admin',
+  positions: [
+    {
+      id: 'POS-101',
+      name: 'Advisory Analyst',
+      status: 'Approved',
+      capacity: 4,
+      description: 'Supports reporting, planning, and stakeholder analysis within the advisory finance stream.',
+      mentor: 'Sofia Chen, CPA',
+      seniorLeader: 'Harper Singh',
+      assignmentDate: '2026-07-14',
+      assignedBy: 'Avery Patel, Program Admin',
+      learners: [
+        { name: 'Mina Hassan', learnerId: 'LRN-251887', status: 'Check-in under review' },
+        { name: 'Sofia Morales', learnerId: 'LRN-254210', status: 'On track' },
+        { name: 'Amelia Reyes', learnerId: 'LRN-248109', status: 'On track' }
+      ]
+    },
+    {
+      id: 'POS-102',
+      name: 'Senior Reporting Analyst',
+      status: 'Approved',
+      capacity: 2,
+      description: 'Focuses on multi-period reporting, year-end reporting packages, and complex variance interpretation.',
+      mentor: 'Marcus Chen, CPA',
+      seniorLeader: 'Lena Ortiz',
+      assignmentDate: '2026-07-09',
+      assignedBy: 'Avery Patel, Program Admin',
+      learners: [
+        { name: 'Ethan Cole', learnerId: 'LRN-253102', status: 'On track' }
+      ]
+    },
+    {
+      id: 'POS-103',
+      name: 'Treasury Rotation Associate',
+      status: 'Paused',
+      capacity: 1,
+      description: 'Reserved treasury role pending refreshed internal scope validation before new learner intake.',
+      mentor: 'Unassigned',
+      seniorLeader: '',
+      assignmentDate: '',
+      assignedBy: '',
+      learners: [
+        { name: 'Daniel Brooks', learnerId: 'LRN-251004', status: 'Awaiting mentor match' }
+      ]
+    }
+  ]
+};
+
+const selectedPositionId = localStorage.getItem('programAdmin:selectedPositionId') || 'POS-101';
+const position = programAdminState.positions.find((item) => item.id === selectedPositionId) || programAdminState.positions[0];
+const messageBar = document.getElementById('message-bar');
+const messageText = document.getElementById('message-text');
+const seniorLeaderSelect = document.getElementById('senior-leader-select');
+
+function escapeHtml(value) {
+  return String(value || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function setMessage(text) {
+  messageText.textContent = text;
+  messageBar.classList.add('visible');
+}
+
+function renderCards(containerId, values) {
+  document.getElementById(containerId).innerHTML = values.map((item) => `
+    <div class="value-card">
+      <strong>${escapeHtml(item.label)}</strong>
+      <span>${escapeHtml(item.value)}</span>
+    </div>
+  `).join('');
+}
+
+function renderPage() {
+  document.getElementById('position-name').textContent = position.name;
+  document.getElementById('hero-summary').textContent = `${position.status} | ${position.learners.length} learner${position.learners.length === 1 ? '' : 's'} assigned`;
+  document.getElementById('position-description').textContent = position.description;
+  document.getElementById('current-senior-leader').textContent = position.seniorLeader || 'Not assigned';
+  seniorLeaderSelect.value = position.seniorLeader || '';
+
+  renderCards('overview-grid', [
+    { label:'Organization', value: programAdminState.organizationName },
+    { label:'Position status', value: position.status },
+    { label:'Capacity', value: `${position.learners.length} of ${position.capacity} learner spaces used` },
+    { label:'Assigned mentor', value: position.mentor }
+  ]);
+
+  renderCards('assignment-grid', [
+    { label:'Senior leader', value: position.seniorLeader || 'Not assigned' },
+    { label:'Assignment date', value: position.assignmentDate || 'No assignment recorded' },
+    { label:'Assigned by', value: position.assignedBy || 'No assignment recorded' }
+  ]);
+
+  if (!position.learners.length) {
+    document.getElementById('learner-list').innerHTML = '<div class="empty-state">No learners are currently assigned to this position.</div>';
+    return;
+  }
+
+  document.getElementById('learner-list').innerHTML = position.learners.map((learner) => `
+    <div class="list-item">
+      <strong>${escapeHtml(learner.name)}</strong>
+      <span>Learner ID: ${escapeHtml(learner.learnerId)}</span>
+      <span>Status: ${escapeHtml(learner.status)}</span>
+    </div>
+  `).join('');
+}
+
+document.getElementById('save-senior-leader-btn').addEventListener('click', () => {
+  position.seniorLeader = seniorLeaderSelect.value;
+  position.assignmentDate = '2026-07-23';
+  position.assignedBy = programAdminState.assignedBy;
+  renderPage();
+  setMessage(position.seniorLeader ? `Senior leader saved for ${position.name}.` : `Senior leader removed from ${position.name}.`);
+});
+
+renderPage();
+</script>
+</body>
+</html>

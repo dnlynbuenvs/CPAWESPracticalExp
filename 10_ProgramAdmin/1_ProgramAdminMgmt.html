@@ -7,10 +7,10 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
 <style>
   :root {
-    --navy:#0B1F3A; --blue:#1B5EA8; --accent:#2A9D8F; --amber:#E76F1A; --green:#2D7A4E; --red:#C0392B;
-    --sand:#F7F5F2; --white:#FFFFFF; --gray-100:#F2F1EF; --gray-200:#E4E2DE; --gray-300:#D2CEC8;
-    --gray-400:#A8A49E; --gray-600:#6B6760; --gray-800:#2E2C2A;
-    --shadow-sm:0 1px 3px rgba(11,31,58,0.07),0 1px 2px rgba(11,31,58,0.05);
+    --navy:#0B1F3A; --blue:#1B5EA8; --green:#2D7A4E; --amber:#E76F1A;
+    --sand:#F7F5F2; --white:#FFFFFF; --gray-100:#F2F1EF; --gray-200:#E4E2DE;
+    --gray-300:#D2CEC8; --gray-400:#A8A49E; --gray-600:#6B6760; --gray-800:#2E2C2A;
+    --shadow-sm:0 1px 3px rgba(11,31,58,.07),0 1px 2px rgba(11,31,58,.05);
     --radius-sm:6px; --radius-md:10px; --radius-lg:16px;
   }
   *{box-sizing:border-box;margin:0;padding:0}
@@ -19,7 +19,7 @@
   button,input,select{font:inherit}
   .topbar{background:var(--navy);min-height:60px;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:0 2rem}
   .logo-group{display:flex;align-items:center;gap:10px;min-width:225px}
-  .logo-mark{width:36px;height:36px;background:var(--white);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .logo-mark{width:36px;height:36px;background:var(--white);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center}
   .logo-text{display:flex;flex-direction:column;line-height:1.1}
   .logo-text .brand{font-size:13px;font-weight:600;color:var(--white);letter-spacing:.04em}
   .logo-text .sub{font-size:10px;color:rgba(255,255,255,.5);letter-spacing:.02em;text-transform:uppercase}
@@ -36,20 +36,18 @@
   .role-option{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:var(--radius-sm);font-size:13px;color:var(--gray-800)}
   .role-option:hover{background:var(--gray-100)}
   .role-option.active{background:#EBF3FF;color:var(--blue);font-weight:600}
-  .page{max-width:1420px;margin:0 auto;padding:2rem 2rem 4rem}
+  .page{max-width:1180px;margin:0 auto;padding:2rem 2rem 4rem}
   .hero{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--gray-200)}
   .hero h1{font-family:'DM Serif Display',serif;font-size:38px;font-weight:400;color:var(--navy);margin-bottom:4px}
-  .hero p{font-size:14px;color:var(--gray-600);max-width:820px;line-height:1.5}
+  .hero p{font-size:14px;color:var(--gray-600);max-width:760px;line-height:1.5}
   .hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);padding:10px 16px;box-shadow:var(--shadow-sm);font-size:13px;color:var(--gray-600)}
   .dot{width:8px;height:8px;border-radius:50%;background:var(--blue);flex:0 0 auto}
-  .message-bar{display:none;align-items:center;gap:10px;margin-bottom:1rem;padding:12px 14px;border-radius:var(--radius-md);background:#EBF3FF;border:1px solid rgba(27,94,168,.18);color:var(--navy);box-shadow:var(--shadow-sm)}
-  .message-bar.visible{display:flex}
-  .summary-panel,.filter-panel,.positions-panel,.mentors-panel,.learners-panel{padding:1.25rem}
   .panel{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm)}
+  .summary-panel,.filter-panel,.positions-panel{padding:1.25rem}
+  .section-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gray-400);margin-bottom:.75rem}
   .panel h2{font-size:17px;color:var(--navy);margin-bottom:4px}
   .panel-copy{font-size:12px;color:var(--gray-600);line-height:1.45}
-  .section-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gray-400);margin-bottom:.75rem}
-  .summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:1.5rem}
+  .summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
   .summary-card{background:var(--sand);border:1px solid var(--gray-200);border-radius:var(--radius-md);padding:12px;min-height:84px}
   .summary-card span{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--gray-400);margin-bottom:8px;font-weight:700}
   .summary-card strong{display:block;font-family:'DM Serif Display',serif;font-size:30px;font-weight:400;color:var(--navy);line-height:1}
@@ -59,37 +57,24 @@
   .field label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gray-400)}
   .field input,.field select{height:42px;border-radius:var(--radius-md);border:1px solid var(--gray-200);background:var(--sand);padding:0 12px;color:var(--gray-800)}
   .field input:focus,.field select:focus{outline:none;border-color:rgba(27,94,168,.32);box-shadow:0 0 0 3px rgba(27,94,168,.08)}
-  .content-stack{display:flex;flex-direction:column;gap:16px}
-  .content-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:16px}
-  .detail-grid{display:flex;flex-direction:column;gap:12px}
-  .detail-card,.assignment-card,.list-item{padding:12px;border:1px solid var(--gray-200);border-radius:var(--radius-md);background:var(--sand)}
-  .detail-card strong,.assignment-card strong,.list-item strong{display:block;font-size:13px;color:var(--navy);margin-bottom:6px}
-  .detail-card span,.assignment-card span,.list-item span{display:block;font-size:12px;color:var(--gray-600);line-height:1.45}
-  .action-row{display:flex;flex-wrap:wrap;gap:8px}
   .action-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:var(--radius-sm);border:1px solid var(--gray-200);padding:9px 12px;background:var(--white);color:var(--navy);font-size:12px;font-weight:700;cursor:pointer;transition:all .15s ease}
   .action-btn:hover{border-color:rgba(27,94,168,.28);background:#F7FAFF}
   .action-btn.primary{background:#EBF3FF;border-color:rgba(27,94,168,.28);color:var(--blue)}
-  .action-btn.success{background:#E8F5EE;border-color:rgba(45,122,78,.22);color:var(--green)}
-  .action-btn.danger{background:#FFF4F1;border-color:rgba(192,57,43,.22);color:var(--red)}
   .table-wrap{overflow:auto;border:1px solid var(--gray-200);border-radius:var(--radius-lg)}
-  table{width:100%;min-width:960px;border-collapse:collapse;background:var(--white)}
-  thead th{padding:11px 14px;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--gray-400);background:var(--sand);border-bottom:1px solid var(--gray-200);vertical-align:top}
+  table{width:100%;min-width:860px;border-collapse:collapse;background:var(--white)}
+  thead th{padding:11px 14px;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--gray-400);background:var(--sand);border-bottom:1px solid var(--gray-200)}
   tbody td{padding:14px;vertical-align:top;border-bottom:1px solid var(--gray-100);font-size:13px}
   tbody tr:last-child td{border-bottom:none}
-  .position-btn{display:block;width:100%;text-align:left;border:none;background:transparent;padding:0;cursor:pointer}
-  .position-btn strong{display:block;font-size:14px;color:var(--navy);margin-bottom:4px}
+  .position-row{cursor:pointer;transition:background .15s ease}
+  .position-row:hover{background:#F7FAFF}
+  .position-name strong{display:block;font-size:14px;color:var(--navy);margin-bottom:4px}
   .subline{display:block;font-size:12px;color:var(--gray-600);line-height:1.45}
-  .position-btn:hover strong{text-decoration:underline}
   .status-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:5px 10px;border-radius:20px;white-space:nowrap}
   .status-badge .dot{width:6px;height:6px}
   .badge-approved{background:#E8F5EE;color:var(--green)} .badge-approved .dot{background:var(--green)}
   .badge-paused{background:#FEF3E8;color:var(--amber)} .badge-paused .dot{background:var(--amber)}
-  .badge-active{background:#EBF3FF;color:var(--blue)} .badge-active .dot{background:var(--blue)}
   .empty-state{padding:20px;text-align:center;font-size:13px;color:var(--gray-600);background:var(--sand);border:1px dashed var(--gray-300);border-radius:var(--radius-md)}
-  @media(max-width:1180px){
-    .content-grid{grid-template-columns:1fr}
-    .summary-grid{grid-template-columns:repeat(2,1fr)}
-  }
+  @media(max-width:980px){.summary-grid{grid-template-columns:repeat(2,1fr)}}
   @media(max-width:760px){
     .topbar{align-items:flex-start;flex-direction:column;padding:1rem}
     .nav-links{display:none}
@@ -117,8 +102,7 @@
     <nav class="nav-links" aria-label="Primary navigation">
       <a href="1_ProgramAdminMgmt.html" class="active">Dashboard</a>
       <a href="#positions-panel">Positions</a>
-      <a href="#mentors-panel">Assignments</a>
-      <a href="#learners-panel">Learners</a>
+      <a href="2_ViewPreApprovedDetails.html">Details</a>
     </nav>
     <details class="role-dropdown">
       <summary class="role-trigger"><span class="role-label">Program Admin</span><span class="role-caret">&#9662;</span></summary>
@@ -138,15 +122,10 @@
   <section class="hero" aria-labelledby="program-admin-mgmt-title">
     <div>
       <h1 id="program-admin-mgmt-title">Program administrator management</h1>
-      <p>View and monitor pre-approved positions, manage senior leader assignments, and review learner participation for your organization from one shared admin workspace.</p>
+      <p>View the organization pre-approved position roster and open a read-only detail view for each position.</p>
     </div>
     <div class="hero-badge"><span class="dot"></span><span id="hero-summary">Loading program admin workspace</span></div>
   </section>
-
-  <div class="message-bar" id="message-bar" role="status" aria-live="polite">
-    <span class="dot"></span>
-    <span id="message-text"></span>
-  </div>
 
   <section class="panel summary-panel">
     <div class="section-label">Organization snapshot</div>
@@ -155,8 +134,8 @@
 
   <section class="panel filter-panel" aria-labelledby="filter-title" style="margin-top:1.5rem;">
     <div class="section-label">Search and filters</div>
-    <h2 id="filter-title">Filter positions and learners</h2>
-    <p class="panel-copy">Program Admin can only view information within their organization. Use these filters to narrow positions and learners by position, mentor, and status.</p>
+    <h2 id="filter-title">Filter pre-approved positions</h2>
+    <p class="panel-copy">Select a position from the list below to open its read-only detail view.</p>
     <div class="filter-shell" style="margin-top:1rem;">
       <div class="field">
         <label for="organization-name">Organization</label>
@@ -174,142 +153,33 @@
           <option value="Paused">Paused</option>
         </select>
       </div>
-      <div class="field">
-        <label for="learner-position-filter">Learner position</label>
-        <select id="learner-position-filter">
-          <option value="all">All positions</option>
-        </select>
-      </div>
-      <div class="field">
-        <label for="learner-mentor-filter">Learner mentor</label>
-        <select id="learner-mentor-filter">
-          <option value="all">All mentors</option>
-        </select>
-      </div>
-      <div class="field">
-        <label for="learner-status-filter">Learner status</label>
-        <select id="learner-status-filter">
-          <option value="all">All statuses</option>
-          <option value="On track">On track</option>
-          <option value="Check-in under review">Check-in under review</option>
-          <option value="Awaiting mentor match">Awaiting mentor match</option>
-        </select>
-      </div>
       <button class="action-btn primary" id="reset-filters-btn" type="button">Reset filters</button>
     </div>
   </section>
 
-  <section class="content-stack" style="margin-top:1.5rem;">
-    <section class="content-grid">
-      <section class="panel positions-panel" id="positions-panel" aria-labelledby="positions-title">
-        <div class="section-label">Pre-approved position management</div>
-        <h2 id="positions-title">Pre-approved positions</h2>
-        <p class="panel-copy">View positions associated with this organization, including position status, number of learners, and capacity.</p>
-        <div class="table-wrap" style="margin-top:1rem;">
-          <table>
-            <thead>
-              <tr>
-                <th>Position name</th>
-                <th>Position status</th>
-                <th>Number of learners</th>
-                <th>Capacity</th>
-              </tr>
-            </thead>
-            <tbody id="positions-body"></tbody>
-          </table>
-        </div>
-      </section>
-
-      <aside class="panel positions-panel">
-        <div class="section-label">Position details</div>
-        <h2 id="detail-title">Select a position</h2>
-        <div class="detail-grid">
-          <div class="detail-card">
-            <strong>Position status</strong>
-            <span id="detail-status">Choose a position from the list.</span>
-          </div>
-          <div class="detail-card">
-            <strong>Capacity</strong>
-            <span id="detail-capacity">Choose a position from the list.</span>
-          </div>
-          <div class="detail-card">
-            <strong>Position detail</strong>
-            <span id="detail-description">Position details will appear here once selected.</span>
-          </div>
-          <div class="detail-card">
-            <strong>Assigned mentor</strong>
-            <span id="detail-mentor">Choose a position from the list.</span>
-          </div>
-        </div>
-      </aside>
-    </section>
-
-    <section class="content-grid">
-      <section class="panel mentors-panel" id="mentors-panel" aria-labelledby="mentors-title">
-        <div class="section-label">Mentor and senior leader assignments</div>
-        <h2 id="mentors-title">Senior leader assignment management</h2>
-        <p class="panel-copy">View mentor and senior leader assignments, then assign, update, or remove the senior leader for the selected pre-approved position.</p>
-        <div class="detail-grid" style="margin-top:1rem;">
-          <div class="assignment-card">
-            <strong>Senior Leader</strong>
-            <span id="assignment-senior-leader">Choose a position from the list.</span>
-          </div>
-          <div class="assignment-card">
-            <strong>Position</strong>
-            <span id="assignment-position">Choose a position from the list.</span>
-          </div>
-          <div class="assignment-card">
-            <strong>Assignment Date</strong>
-            <span id="assignment-date">Choose a position from the list.</span>
-          </div>
-          <div class="assignment-card">
-            <strong>Assigned By</strong>
-            <span id="assignment-by">Choose a position from the list.</span>
-          </div>
-          <div class="field">
-            <label for="senior-leader-select">Senior leader</label>
-            <select id="senior-leader-select">
-              <option value="">Select senior leader</option>
-              <option value="Harper Singh">Harper Singh</option>
-              <option value="Lena Ortiz">Lena Ortiz</option>
-              <option value="Noah Ramirez">Noah Ramirez</option>
-              <option value="Devon Clarke">Devon Clarke</option>
-            </select>
-          </div>
-          <div class="action-row">
-            <button class="action-btn success" id="assign-senior-leader-btn" type="button">Assign senior leader</button>
-            <button class="action-btn primary" id="update-senior-leader-btn" type="button">Update senior leader</button>
-            <button class="action-btn danger" id="remove-senior-leader-btn" type="button">Remove senior leader</button>
-          </div>
-        </div>
-      </section>
-
-      <section class="panel learners-panel" id="learners-panel" aria-labelledby="learners-title">
-        <div class="section-label">Learner management</div>
-        <h2 id="learners-title">Organization learners</h2>
-        <p class="panel-copy">Learner information is read-only. View learners associated with this organization and filter them by position, mentor, or status.</p>
-        <div class="table-wrap" style="margin-top:1rem;">
-          <table>
-            <thead>
-              <tr>
-                <th>Learner Name</th>
-                <th>Position</th>
-                <th>Assigned Mentor and Senior Leader</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody id="learners-body"></tbody>
-          </table>
-        </div>
-      </section>
-    </section>
+  <section class="panel positions-panel" id="positions-panel" aria-labelledby="positions-title" style="margin-top:1.5rem;">
+    <div class="section-label">Pre-approved position management</div>
+    <h2 id="positions-title">Pre-approved positions</h2>
+    <p class="panel-copy">Every row opens the read-only position detail view.</p>
+    <div class="table-wrap" style="margin-top:1rem;">
+      <table>
+        <thead>
+          <tr>
+            <th>Position name</th>
+            <th>Position status</th>
+            <th>Number of learners</th>
+            <th>Capacity</th>
+          </tr>
+        </thead>
+        <tbody id="positions-body"></tbody>
+      </table>
+    </div>
   </section>
 </main>
 
 <script>
 const programAdminState = {
   organizationName: 'Summit Rail Finance',
-  assignedBy: 'Avery Patel, Program Admin',
   positions: [
     {
       id: 'POS-101',
@@ -358,24 +228,10 @@ const programAdminState = {
   ]
 };
 
-let selectedPositionId = programAdminState.positions[0].id;
-
 const summaryGrid = document.getElementById('summary-grid');
 const positionsBody = document.getElementById('positions-body');
-const learnersBody = document.getElementById('learners-body');
 const positionSearch = document.getElementById('position-search');
 const positionStatusFilter = document.getElementById('position-status-filter');
-const learnerPositionFilter = document.getElementById('learner-position-filter');
-const learnerMentorFilter = document.getElementById('learner-mentor-filter');
-const learnerStatusFilter = document.getElementById('learner-status-filter');
-const seniorLeaderSelect = document.getElementById('senior-leader-select');
-const messageBar = document.getElementById('message-bar');
-const messageText = document.getElementById('message-text');
-
-function setMessage(text) {
-  messageText.textContent = text;
-  messageBar.classList.add('visible');
-}
 
 function escapeHtml(value) {
   return String(value || '')
@@ -386,10 +242,6 @@ function escapeHtml(value) {
     .replace(/'/g, '&#39;');
 }
 
-function getSelectedPosition() {
-  return programAdminState.positions.find((position) => position.id === selectedPositionId) || null;
-}
-
 function getVisiblePositions() {
   const query = positionSearch.value.trim().toLowerCase();
   const status = positionStatusFilter.value;
@@ -398,37 +250,6 @@ function getVisiblePositions() {
     if (query && !position.name.toLowerCase().includes(query)) return false;
     return true;
   });
-}
-
-function getVisibleLearners() {
-  const positionFilter = learnerPositionFilter.value;
-  const mentorFilter = learnerMentorFilter.value;
-  const statusFilter = learnerStatusFilter.value;
-  const rows = [];
-
-  programAdminState.positions.forEach((position) => {
-    position.learners.forEach((learner) => {
-      if (positionFilter !== 'all' && position.name !== positionFilter) return;
-      if (mentorFilter !== 'all' && position.mentor !== mentorFilter) return;
-      if (statusFilter !== 'all' && learner.status !== statusFilter) return;
-      rows.push({
-        learnerName: learner.name,
-        positionName: position.name,
-        mentor: position.mentor,
-        seniorLeader: position.seniorLeader || 'Unassigned',
-        status: learner.status
-      });
-    });
-  });
-
-  return rows;
-}
-
-function populateLearnerFilters() {
-  learnerPositionFilter.innerHTML = '<option value="all">All positions</option>' + programAdminState.positions.map((position) => `<option value="${escapeHtml(position.name)}">${escapeHtml(position.name)}</option>`).join('');
-
-  const mentors = Array.from(new Set(programAdminState.positions.map((position) => position.mentor)));
-  learnerMentorFilter.innerHTML = '<option value="all">All mentors</option>' + mentors.map((mentor) => `<option value="${escapeHtml(mentor)}">${escapeHtml(mentor)}</option>`).join('');
 }
 
 function renderSummary() {
@@ -461,12 +282,10 @@ function renderPositions() {
   }
 
   positionsBody.innerHTML = positions.map((position) => `
-    <tr>
-      <td>
-        <button class="position-btn" type="button" data-position-id="${escapeHtml(position.id)}">
-          <strong>${escapeHtml(position.name)}</strong>
-          <span class="subline">${escapeHtml(programAdminState.organizationName)}</span>
-        </button>
+    <tr class="position-row" data-position-id="${escapeHtml(position.id)}">
+      <td class="position-name">
+        <strong>${escapeHtml(position.name)}</strong>
+        <span class="subline">${escapeHtml(programAdminState.organizationName)}</span>
       </td>
       <td><span class="status-badge ${position.status === 'Approved' ? 'badge-approved' : 'badge-paused'}"><span class="dot"></span>${escapeHtml(position.status)}</span></td>
       <td>${escapeHtml(position.learners.length)}</td>
@@ -475,119 +294,25 @@ function renderPositions() {
   `).join('');
 }
 
-function renderPositionDetails() {
-  const position = getSelectedPosition();
-  if (!position) return;
-
-  document.getElementById('detail-title').textContent = position.name;
-  document.getElementById('detail-status').textContent = `${position.status} for ${programAdminState.organizationName}`;
-  document.getElementById('detail-capacity').textContent = `${position.learners.length} of ${position.capacity} learner spaces used`;
-  document.getElementById('detail-description').textContent = position.description;
-  document.getElementById('detail-mentor').textContent = position.mentor;
-
-  document.getElementById('assignment-senior-leader').textContent = position.seniorLeader || 'Unassigned';
-  document.getElementById('assignment-position').textContent = position.name;
-  document.getElementById('assignment-date').textContent = position.assignmentDate || 'No assignment recorded';
-  document.getElementById('assignment-by').textContent = position.assignedBy || 'No assignment recorded';
-  seniorLeaderSelect.value = position.seniorLeader || '';
-}
-
-function renderLearners() {
-  const learners = getVisibleLearners();
-  if (!learners.length) {
-    learnersBody.innerHTML = '<tr><td colspan="4" class="empty-state">No learners match the current filters.</td></tr>';
-    return;
-  }
-
-  learnersBody.innerHTML = learners.map((learner) => `
-    <tr>
-      <td>
-        <strong>${escapeHtml(learner.learnerName)}</strong>
-      </td>
-      <td>${escapeHtml(learner.positionName)}</td>
-      <td>${escapeHtml(learner.mentor)} / ${escapeHtml(learner.seniorLeader)}</td>
-      <td><span class="status-badge badge-active"><span class="dot"></span>${escapeHtml(learner.status)}</span></td>
-    </tr>
-  `).join('');
-}
-
 function resetFilters() {
   positionSearch.value = '';
   positionStatusFilter.value = 'all';
-  learnerPositionFilter.value = 'all';
-  learnerMentorFilter.value = 'all';
-  learnerStatusFilter.value = 'all';
   renderPositions();
-  renderLearners();
-  setMessage('Program Admin filters reset.');
-}
-
-function assignSeniorLeader() {
-  const position = getSelectedPosition();
-  if (!position) return;
-  if (!seniorLeaderSelect.value) {
-    setMessage('Select a senior leader before assigning.');
-    return;
-  }
-  position.seniorLeader = seniorLeaderSelect.value;
-  position.assignmentDate = '2026-07-22';
-  position.assignedBy = programAdminState.assignedBy;
-  renderPositionDetails();
-  renderLearners();
-  renderSummary();
-  setMessage(`Senior leader assigned to ${position.name}.`);
-}
-
-function updateSeniorLeader() {
-  const position = getSelectedPosition();
-  if (!position) return;
-  if (!seniorLeaderSelect.value) {
-    setMessage('Select a senior leader before updating.');
-    return;
-  }
-  position.seniorLeader = seniorLeaderSelect.value;
-  position.assignmentDate = '2026-07-22';
-  position.assignedBy = programAdminState.assignedBy;
-  renderPositionDetails();
-  renderLearners();
-  setMessage(`Senior leader assignment updated for ${position.name}.`);
-}
-
-function removeSeniorLeader() {
-  const position = getSelectedPosition();
-  if (!position) return;
-  position.seniorLeader = '';
-  position.assignmentDate = '';
-  position.assignedBy = '';
-  seniorLeaderSelect.value = '';
-  renderPositionDetails();
-  renderLearners();
-  renderSummary();
-  setMessage(`Senior leader assignment removed from ${position.name}.`);
 }
 
 positionsBody.addEventListener('click', (event) => {
-  const button = event.target.closest('button[data-position-id]');
-  if (!button) return;
-  selectedPositionId = button.dataset.positionId;
-  renderPositionDetails();
+  const row = event.target.closest('tr[data-position-id]');
+  if (!row) return;
+  localStorage.setItem('programAdmin:selectedPositionId', row.dataset.positionId);
+  window.location.href = '2_ViewPreApprovedDetails.html';
 });
 
 positionSearch.addEventListener('input', renderPositions);
 positionStatusFilter.addEventListener('change', renderPositions);
-learnerPositionFilter.addEventListener('change', renderLearners);
-learnerMentorFilter.addEventListener('change', renderLearners);
-learnerStatusFilter.addEventListener('change', renderLearners);
 document.getElementById('reset-filters-btn').addEventListener('click', resetFilters);
-document.getElementById('assign-senior-leader-btn').addEventListener('click', assignSeniorLeader);
-document.getElementById('update-senior-leader-btn').addEventListener('click', updateSeniorLeader);
-document.getElementById('remove-senior-leader-btn').addEventListener('click', removeSeniorLeader);
 
-populateLearnerFilters();
 renderSummary();
 renderPositions();
-renderPositionDetails();
-renderLearners();
 </script>
 </body>
 </html>

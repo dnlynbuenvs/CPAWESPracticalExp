@@ -161,6 +161,19 @@
       <p class="panel-copy">Review submitted work plans, record CPA Staff comments, and complete approval or revision decisions from the current queue.</p>
       <div class="sidebar-stack" style="margin-top:1rem;">
         <div class="meta-card">
+          <strong>Assigned reviewer</strong>
+          <span>Assign the CPA Staff reviewer responsible for this work plan submission.</span>
+          <div class="comment-form" style="margin-top:.75rem;">
+            <select id="assigned-reviewer-select">
+              <option value="Jordan Patel, CPA">Jordan Patel, CPA</option>
+              <option value="Maya Robertson, CPA">Maya Robertson, CPA</option>
+              <option value="Ethan Yu, CPA">Ethan Yu, CPA</option>
+            </select>
+            <button class="action-btn primary" id="assign-reviewer-btn" type="button">Save assignment</button>
+          </div>
+          <span id="assigned-reviewer-status" class="field-hint">No reviewer assigned.</span>
+        </div>
+        <div class="meta-card">
           <strong>Acting reviewer</strong>
           <span>Choose the CPA Staff identity used for comments, approvals, revision requests, and audit trail entries.</span>
           <div class="comment-form" style="margin-top:.75rem;">
@@ -596,6 +609,23 @@ function getActor() {
   return reviewerActor.value || 'CPA Staff Reviewer';
 }
 
+function saveReviewerAssignment() {
+  const plan = getActiveVersion();
+  const reviewer = document.getElementById('assigned-reviewer-select').value;
+  const previousReviewer = plan.workflow.assignedReviewer || '';
+  plan.workflow.assignedReviewer = reviewer;
+  addAudit(
+    plan,
+    plan.workflow.status,
+    plan.workflow.status,
+    previousReviewer && previousReviewer !== reviewer
+      ? `Assigned reviewer changed from ${previousReviewer} to ${reviewer}.`
+      : `Assigned reviewer set to ${reviewer}.`
+  );
+  renderAll();
+  setMessage(`Work plan assigned to ${reviewer}.`);
+}
+
 function renderQueue() {
   queueList.innerHTML = versions.map((plan) => `
     <article class="queue-card ${plan.id === activeVersionId ? 'active' : ''}" data-version-id="${plan.id}">
@@ -728,6 +758,9 @@ function renderCompetencies(plan) {
 }
 
 function renderMeta(plan) {
+  const assignedReviewer = plan.workflow.assignedReviewer || '';
+  document.getElementById('assigned-reviewer-select').value = assignedReviewer || 'Jordan Patel, CPA';
+  document.getElementById('assigned-reviewer-status').textContent = assignedReviewer ? `Currently assigned to ${assignedReviewer}.` : 'No reviewer assigned.';
   metaStatus.innerHTML = `<span class="status-badge ${statusClass(plan.workflow.status)}"><span class="dot"></span>${escapeHtml(plan.workflow.status)}</span>`;
   metaSubmitted.textContent = formatDate(plan.workflow.submittedAt);
   metaAssignees.textContent = `${plan.approvals.mentorName || 'Mentor not set'} | ${plan.approvals.cpaReviewerName || getActor()}`;
@@ -1106,6 +1139,7 @@ saveRiskBtn.addEventListener('click', () => {
 approveBtn.addEventListener('click', approveWorkPlan);
 returnBtn.addEventListener('click', returnForRevision);
 reminderBtn.addEventListener('click', runReminderCheck);
+document.getElementById('assign-reviewer-btn').addEventListener('click', saveReviewerAssignment);
 
 queueList.addEventListener('click', (event) => {
   const card = event.target.closest('[data-version-id]');

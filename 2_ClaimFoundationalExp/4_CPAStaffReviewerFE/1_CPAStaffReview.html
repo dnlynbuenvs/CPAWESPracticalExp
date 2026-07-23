@@ -161,6 +161,20 @@
       <h2>Supervisor or mentor review</h2>
       <div class="sidebar-stack" style="margin-top:1rem;">
         <div class="meta-card">
+          <strong>Assigned reviewer</strong>
+          <span>Assign the reviewer responsible for this Foundational Experience submission.</span>
+          <div class="comment-form" style="margin-top:.75rem;">
+            <select id="assigned-reviewer-select">
+              <option value="Avery Patel, CPA">Avery Patel, CPA</option>
+              <option value="Noah Ramirez, CPA">Noah Ramirez, CPA</option>
+              <option value="Harper Singh, CPA">Harper Singh, CPA</option>
+              <option value="Lena Ortiz, CPA">Lena Ortiz, CPA</option>
+            </select>
+            <button class="action-btn primary" id="assign-reviewer-btn" type="button">Save assignment</button>
+          </div>
+          <span id="assigned-reviewer-status">No reviewer assigned.</span>
+        </div>
+        <div class="meta-card">
           <strong>Acting reviewer</strong>
           <span>Choose the current reviewer identity used for comments, approvals, rejections, and audit trail entries.</span>
           <div class="comment-form" style="margin-top:.75rem;">
@@ -503,6 +517,23 @@ function getActor() {
   };
 }
 
+function saveReviewerAssignment() {
+  const report = getActiveReport();
+  const reviewer = document.getElementById('assigned-reviewer-select').value;
+  const previousReviewer = report.review.assignedReviewer || '';
+  report.review.assignedReviewer = reviewer;
+  addAudit(
+    report.status,
+    report.status,
+    previousReviewer && previousReviewer !== reviewer
+      ? `Assigned reviewer changed from ${previousReviewer} to ${reviewer}.`
+      : `Assigned reviewer set to ${reviewer}.`,
+    getActor()
+  );
+  setMessage(`Foundational Experience submission assigned to ${reviewer}.`);
+  renderAll();
+}
+
 function renderQueue() {
   queueList.innerHTML = reports.map((report) => `
     <article class="queue-card ${report.id === activeReportId ? 'active' : ''}" data-report-id="${report.id}">
@@ -617,6 +648,8 @@ function renderActiveReport() {
   if (!report) return;
   detailTitle.textContent = report.roleInfo.reportTitle || 'Foundational Experience submission';
   detailCopy.textContent = `Current status: ${report.status}. Submitted Foundational Experience details are shown read-only before CPA reviewer approval occurs.`;
+  document.getElementById('assigned-reviewer-select').value = report.review.assignedReviewer || 'Avery Patel, CPA';
+  document.getElementById('assigned-reviewer-status').textContent = report.review.assignedReviewer ? `Currently assigned to ${report.review.assignedReviewer}.` : 'No reviewer assigned.';
 
   renderValueCards(learnerGrid, [
     { label: 'Given legal name', value: report.learnerInfo.legalName || 'Not provided' },
@@ -827,6 +860,7 @@ queueList.addEventListener('click', (event) => {
 });
 
 actorRole.addEventListener('change', renderAll);
+document.getElementById('assign-reviewer-btn').addEventListener('click', saveReviewerAssignment);
 
 loadReports();
 renderAll();

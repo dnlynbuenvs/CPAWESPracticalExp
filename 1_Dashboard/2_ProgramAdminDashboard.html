@@ -47,7 +47,7 @@
   .panel{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm)}
   .panel h2{font-size:17px;color:var(--navy);margin-bottom:4px}
   .panel-copy{font-size:12px;color:var(--gray-600);line-height:1.45}
-  .summary-panel,.filter-panel,.positions-panel,.details-panel{padding:1.25rem}
+  .summary-panel,.filter-panel,.positions-panel{padding:1.25rem}
   .message-bar{display:none;align-items:center;gap:10px;margin-bottom:1rem;padding:12px 14px;border-radius:var(--radius-md);background:#EBF3FF;border:1px solid rgba(27,94,168,.18);color:var(--navy);box-shadow:var(--shadow-sm)}
   .message-bar.visible{display:flex}
   .summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:1.5rem}
@@ -63,7 +63,7 @@
   .action-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:var(--radius-sm);border:1px solid var(--gray-200);padding:9px 12px;background:var(--white);color:var(--navy);font-size:12px;font-weight:700;cursor:pointer;transition:all .15s ease}
   .action-btn:hover{border-color:rgba(27,94,168,.28);background:#F7FAFF}
   .action-btn.primary{background:#EBF3FF;border-color:rgba(27,94,168,.28);color:var(--blue)}
-  .content-grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(320px,.8fr);gap:16px}
+  .content-grid{display:grid;grid-template-columns:1fr;gap:16px}
   .table-wrap{overflow:auto;border:1px solid var(--gray-200);border-radius:var(--radius-lg)}
   table{width:100%;min-width:860px;border-collapse:collapse;background:var(--white)}
   thead th{padding:11px 14px;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--gray-400);background:var(--sand);border-bottom:1px solid var(--gray-200);vertical-align:top}
@@ -82,7 +82,6 @@
   .detail-grid,.learner-list{display:flex;flex-direction:column;gap:12px}
   .empty-state{padding:20px;text-align:center;font-size:13px;color:var(--gray-600);background:var(--sand);border:1px dashed var(--gray-300);border-radius:var(--radius-md)}
   @media(max-width:1180px){
-    .content-grid{grid-template-columns:1fr}
     .summary-grid{grid-template-columns:repeat(2,1fr)}
   }
   @media(max-width:760px){
@@ -113,7 +112,7 @@
       <a href="2_ProgramAdminDashboard.html" class="active">Dashboard</a>
       <a href="#positions-panel">Positions</a>
       <a href="#filter-title">Filters</a>
-      <a href="#details-panel">Details</a>
+      <a href="../10_ProgramAdmin/1_ProgramAdminMgmt.html">Details</a>
     </nav>
     <details class="role-dropdown">
       <summary class="role-trigger"><span class="role-label">Program Admin</span><span class="role-caret">&#9662;</span></summary>
@@ -195,35 +194,6 @@
         </table>
       </div>
     </section>
-
-    <aside class="panel details-panel" id="details-panel">
-      <div class="section-label">Position details</div>
-      <h2 id="detail-title">Select a pre-approved position</h2>
-      <div class="detail-grid">
-        <div class="detail-card">
-          <strong>Status</strong>
-          <span id="detail-status">Choose a position from the list.</span>
-        </div>
-        <div class="detail-card">
-          <strong>Capacity</strong>
-          <span id="detail-capacity">Choose a position from the list.</span>
-        </div>
-        <div class="detail-card">
-          <strong>Assigned learners</strong>
-          <span id="detail-learner-count">Choose a position from the list.</span>
-        </div>
-        <div class="detail-card">
-          <strong>Position description</strong>
-          <span id="detail-description">Position details will appear here once selected.</span>
-        </div>
-        <div>
-          <div class="section-label">Learners assigned to position</div>
-          <div class="learner-list" id="assigned-learners-list">
-            <div class="empty-state">No position selected.</div>
-          </div>
-        </div>
-      </div>
-    </aside>
   </section>
 </main>
 
@@ -263,8 +233,6 @@ const organization = {
     }
   ]
 };
-
-let selectedPositionId = organization.positions[0].id;
 
 const summaryGrid = document.getElementById('summary-grid');
 const positionsBody = document.getElementById('positions-body');
@@ -341,38 +309,6 @@ function renderPositions() {
   `).join('');
 }
 
-function renderDetails() {
-  const position = organization.positions.find((item) => item.id === selectedPositionId) || null;
-  if (!position) {
-    document.getElementById('detail-title').textContent = 'Select a pre-approved position';
-    document.getElementById('detail-status').textContent = 'Choose a position from the list.';
-    document.getElementById('detail-capacity').textContent = 'Choose a position from the list.';
-    document.getElementById('detail-learner-count').textContent = 'Choose a position from the list.';
-    document.getElementById('detail-description').textContent = 'Position details will appear here once selected.';
-    document.getElementById('assigned-learners-list').innerHTML = '<div class="empty-state">No position selected.</div>';
-    return;
-  }
-
-  document.getElementById('detail-title').textContent = position.name;
-  document.getElementById('detail-status').textContent = `${position.status} for ${organization.name}`;
-  document.getElementById('detail-capacity').textContent = `${position.learners.length} of ${position.capacity} learner spaces used`;
-  document.getElementById('detail-learner-count').textContent = `${position.learners.length} learner${position.learners.length === 1 ? '' : 's'} currently assigned`;
-  document.getElementById('detail-description').textContent = position.description;
-
-  if (!position.learners.length) {
-    document.getElementById('assigned-learners-list').innerHTML = '<div class="empty-state">No learners are currently assigned to this position.</div>';
-    return;
-  }
-
-  document.getElementById('assigned-learners-list').innerHTML = position.learners.map((learner) => `
-    <div class="list-item">
-      <strong>${escapeHtml(learner.name)}</strong>
-      <span class="subline">Learner ID: ${escapeHtml(learner.learnerId)}</span>
-      <span class="subline">${escapeHtml(learner.stage)}</span>
-    </div>
-  `).join('');
-}
-
 function resetFilters() {
   positionSearch.value = '';
   statusFilter.value = 'all';
@@ -383,8 +319,7 @@ function resetFilters() {
 positionsBody.addEventListener('click', (event) => {
   const button = event.target.closest('button[data-position-id]');
   if (!button) return;
-  selectedPositionId = button.dataset.positionId;
-  renderDetails();
+  window.location.href = '../10_ProgramAdmin/1_ProgramAdminMgmt.html';
 });
 
 positionSearch.addEventListener('input', renderPositions);
@@ -393,7 +328,6 @@ document.getElementById('reset-filters-btn').addEventListener('click', resetFilt
 
 renderSummary();
 renderPositions();
-renderDetails();
 </script>
 </body>
 </html>

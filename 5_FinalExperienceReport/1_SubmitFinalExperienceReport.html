@@ -266,8 +266,13 @@
         <section class="form-section">
           <h3>Submission actions</h3>
           <div class="button-row">
-            <button class="action-btn primary" id="save-draft-btn" type="button">Save draft</button>
-            <button class="action-btn success" id="submit-btn" type="button">Submit final experience report</button>
+          <button class="action-btn primary" type="button" onclick="location.href='../../index.html'">
+              Save draft
+          </button>
+
+          <button class="action-btn success" type="button" onclick="location.href='../../index.html'">
+              Submit final experience report
+          </button>
           </div>
         </section>
       </div>
@@ -487,21 +492,25 @@ function renderDuration() {
   }
 
   durationMetrics.innerHTML = `
+
     <div class="metric-card">
       <div class="value">${metrics.months.toFixed(2)}</div>
       <strong>Calculated duration</strong>
       <span>${metrics.eligibleDays} eligible day(s) after leave.</span>
     </div>
+
     <div class="metric-card">
       <div class="value">${metrics.totalHours}</div>
       <strong>Estimated total hours</strong>
       <span>Calculated from saved weekly hours and expected duration.</span>
     </div>
+
     <div class="metric-card">
       <div class="value">${details.expectedLeaveDays ?? 0}</div>
       <strong>Leave shown</strong>
       <span>Visible in the final report for duration confirmation.</span>
     </div>
+
   `;
 }
 
