@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CPA - Program Admin Dashboard</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --navy:#0B1F3A; --blue:#1B5EA8; --accent:#2A9D8F; --amber:#E76F1A; --green:#2D7A4E; --red:#C0392B;
@@ -12,6 +12,11 @@
     --gray-400:#A8A49E; --gray-600:#6B6760; --gray-800:#2E2C2A;
     --shadow-sm:0 1px 3px rgba(11,31,58,0.07),0 1px 2px rgba(11,31,58,0.05);
     --radius-sm:6px; --radius-md:10px; --radius-lg:16px;
+    --imis-blue:#1B5EA8; --imis-header-blue:#1B5EA8;
+    --badge-green-bg:#E3F3E6; --badge-green-text:#2D7A4E;
+    --badge-yellow-bg:#FCF3D9; --badge-yellow-text:#8A6D1D;
+    --badge-blue-bg:#E8ECF7; --badge-blue-text:#3B4A7A;
+    --badge-gray-bg:#F2F1EF; --badge-gray-text:#6B6760;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:'DM Sans',sans-serif;background:var(--sand);color:var(--gray-800);min-height:100vh}
@@ -38,12 +43,12 @@
   .role-option.active{background:#EBF3FF;color:var(--blue);font-weight:600}
   .page{max-width:1380px;margin:0 auto;padding:2rem 2rem 4rem}
   .hero{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--gray-200)}
-  .hero h1{font-family:'DM Serif Display',serif;font-size:38px;font-weight:400;color:var(--navy);margin-bottom:4px}
+  .hero h1{font-family:'DM Sans',sans-serif;font-size:26px;font-weight:700;color:#1a1a1a;margin-bottom:4px}
   .hero p{font-size:14px;color:var(--gray-600);max-width:780px;line-height:1.5}
   .hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);padding:10px 16px;box-shadow:var(--shadow-sm);font-size:13px;color:var(--gray-600)}
   .hero-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:1rem}
   .dot{width:8px;height:8px;border-radius:50%;background:var(--blue);flex:0 0 auto}
-  .section-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gray-400);margin-bottom:.75rem}
+  .section-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#2E2C2A;margin-bottom:.75rem}
   .panel{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm)}
   .panel h2{font-size:17px;color:var(--navy);margin-bottom:4px}
   .panel-copy{font-size:12px;color:var(--gray-600);line-height:1.45}
@@ -51,32 +56,38 @@
   .message-bar{display:none;align-items:center;gap:10px;margin-bottom:1rem;padding:12px 14px;border-radius:var(--radius-md);background:#EBF3FF;border:1px solid rgba(27,94,168,.18);color:var(--navy);box-shadow:var(--shadow-sm)}
   .message-bar.visible{display:flex}
   .summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:1.5rem}
-  .summary-card{background:var(--sand);border:1px solid var(--gray-200);border-radius:var(--radius-md);padding:12px;min-height:84px}
-  .summary-card span{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--gray-400);margin-bottom:8px;font-weight:700}
-  .summary-card strong{display:block;font-family:'DM Serif Display',serif;font-size:30px;font-weight:400;color:var(--navy);line-height:1}
+  .summary-card{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-sm);padding:12px;min-height:84px}
+  .summary-card span{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:#2E2C2A;margin-bottom:8px;font-weight:700}
+  .summary-card strong{display:block;font-family:'DM Sans',sans-serif;font-size:26px;font-weight:700;color:#1a1a1a;line-height:1}
   .summary-card small{display:block;font-size:12px;color:var(--gray-600);margin-top:8px;line-height:1.35}
   .filter-shell{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end}
   .field{display:flex;flex-direction:column;gap:6px;min-width:180px;flex:1}
-  .field label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gray-400)}
-  .field input,.field select{height:42px;border-radius:var(--radius-md);border:1px solid var(--gray-200);background:var(--sand);padding:0 12px;color:var(--gray-800)}
-  .field input:focus,.field select:focus{outline:none;border-color:rgba(27,94,168,.32);box-shadow:0 0 0 3px rgba(27,94,168,.08)}
-  .action-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:var(--radius-sm);border:1px solid var(--gray-200);padding:9px 12px;background:var(--white);color:var(--navy);font-size:12px;font-weight:700;cursor:pointer;transition:all .15s ease}
-  .action-btn:hover{border-color:rgba(27,94,168,.28);background:#F7FAFF}
-  .action-btn.primary{background:#EBF3FF;border-color:rgba(27,94,168,.28);color:var(--blue)}
+  .field label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#2E2C2A}
+  .field input,.field select{height:38px;border-radius:var(--radius-sm);border:1px solid var(--gray-300);background:var(--white);padding:0 12px;color:var(--gray-800)}
+  .field input:focus,.field select:focus{outline:none;border-color:var(--imis-blue);box-shadow:0 0 0 3px rgba(27,94,168,.12)}
+  .action-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:var(--radius-sm);border:1px solid var(--imis-blue);padding:9px 16px;background:var(--white);color:var(--imis-blue);font-size:12px;font-weight:700;cursor:pointer;transition:all .15s ease}
+  .action-btn:hover{background:#EBF3FF}
+  .action-btn.primary{background:var(--imis-blue);border-color:var(--imis-blue);color:var(--white)}
+  .action-btn.primary:hover{background:#164e8f}
   .content-grid{display:grid;grid-template-columns:1fr;gap:16px}
-  .table-wrap{overflow:auto;border:1px solid var(--gray-200);border-radius:var(--radius-lg)}
+  .imis-table-panel{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-sm)}
+  .imis-table-header{background:var(--imis-header-blue);color:var(--white);display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 18px}
+  .imis-table-header h2{font-size:14px;font-weight:700;color:var(--white);letter-spacing:.02em;margin:0}
+  .imis-table-count{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:700;color:var(--white)}
+  .table-wrap{overflow:auto}
   table{width:100%;min-width:860px;border-collapse:collapse;background:var(--white)}
-  thead th{padding:11px 14px;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--gray-400);background:var(--sand);border-bottom:1px solid var(--gray-200);vertical-align:top}
-  tbody td{padding:14px;vertical-align:top;border-bottom:1px solid var(--gray-100);font-size:13px}
+  thead th{padding:10px 16px;text-align:left;font-size:12px;font-weight:700;text-transform:none;letter-spacing:0;color:#2E2C2A;background:var(--gray-100);border-bottom:1px solid var(--gray-300);vertical-align:top}
+  tbody td{padding:11px 16px;vertical-align:middle;border-bottom:1px solid var(--gray-200);font-size:13px;color:#2E2C2A}
   tbody tr:last-child td{border-bottom:none}
-  .position-btn{display:block;width:100%;text-align:left;border:none;background:transparent;padding:0;cursor:pointer}
-  .position-btn strong{display:block;font-size:14px;color:var(--navy);margin-bottom:4px}
-  .position-btn .subline,.list-item .subline{display:block;font-size:12px;color:var(--gray-600);line-height:1.45}
-  .position-btn:hover strong{text-decoration:underline}
-  .status-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:5px 10px;border-radius:20px;white-space:nowrap}
-  .status-badge .dot{width:6px;height:6px}
-  .badge-approved{background:#E8F5EE;color:var(--green)} .badge-approved .dot{background:var(--green)}
-  .badge-paused{background:#FEF3E8;color:var(--amber)} .badge-paused .dot{background:var(--amber)}
+  tbody tr[data-href]{cursor:pointer}
+  tbody tr[data-href]:hover td{background:#F7FAFF}
+  .position-btn{display:block;width:100%;text-align:left;border:none;background:transparent;padding:0;cursor:pointer;color:var(--imis-blue);font-weight:500;text-decoration:underline}
+  .position-btn strong{display:block;font-size:14px;font-weight:500}
+  .position-btn .subline{display:block;font-size:12px;color:var(--gray-600);line-height:1.45;text-decoration:none}
+  .list-item .subline{display:block;font-size:12px;color:var(--gray-600);line-height:1.45}
+  .status-badge{display:inline-block;padding:4px 10px;border-radius:3px;font-size:12px;font-weight:600;white-space:nowrap}
+  .badge-approved{background:var(--badge-green-bg);color:var(--badge-green-text)}
+  .badge-paused{background:var(--badge-yellow-bg);color:var(--badge-yellow-text)}
   .detail-card,.list-item{padding:12px;border:1px solid var(--gray-200);border-radius:var(--radius-md);background:var(--sand)}
   .detail-card strong,.list-item strong{display:block;font-size:13px;color:var(--navy);margin-bottom:6px}
   .detail-grid,.learner-list{display:flex;flex-direction:column;gap:12px}
@@ -137,7 +148,6 @@
         <a class="action-btn primary" href="../10_ProgramAdmin/1_ProgramAdminMgmt.html">Manage Pre-Approved Positions</a>
       </div>
     </div>
-    <div class="hero-badge"><span class="dot"></span><span id="hero-summary">Loading organization positions</span></div>
   </section>
 
   <div class="message-bar" id="message-bar" role="status" aria-live="polite">
@@ -171,16 +181,20 @@
           <option value="Paused">Paused</option>
         </select>
       </div>
-      <button class="action-btn primary" id="reset-filters-btn" type="button">Reset filters</button>
+      <button class="action-btn" id="reset-filters-btn" type="button">Reset filters</button>
     </div>
   </section>
 
-  <section class="content-grid" style="margin-top:1.5rem;">
-    <section class="panel positions-panel" id="positions-panel" aria-labelledby="positions-title">
-      <div class="section-label">Pre-approved positions</div>
-      <h2 id="positions-title">Position list</h2>
-      <p class="panel-copy">View all pre-approved positions for your organization, including status, number of learners, and capacity.</p>
-      <div class="table-wrap" style="margin-top:1rem;">
+  <div class="section-label">Pre-approved positions</div>
+  <p class="panel-copy" style="margin-bottom:1rem;">View all pre-approved positions for your organization, including status, number of learners, and capacity. Select a position to view its full details.</p>
+
+  <section class="content-grid">
+    <section class="imis-table-panel" id="positions-panel" aria-labelledby="positions-title">
+      <div class="imis-table-header">
+        <h2 id="positions-title">Position List</h2>
+        <div class="imis-table-count"><span id="positions-count">0 positions</span></div>
+      </div>
+      <div class="table-wrap">
         <table>
           <thead>
             <tr>
@@ -284,25 +298,27 @@ function renderSummary() {
     </div>
   `).join('');
 
-  document.getElementById('hero-summary').textContent = `${totalPositions} positions | ${totalLearners} learners | ${totalCapacity} total capacity`;
 }
 
 function renderPositions() {
   const positions = getVisiblePositions();
+  const positionsCount = document.getElementById('positions-count');
+  positionsCount.textContent = `${positions.length} of ${organization.positions.length} positions`;
+
   if (!positions.length) {
     positionsBody.innerHTML = '<tr><td colspan="4" class="empty-state">No pre-approved positions match the current filters.</td></tr>';
     return;
   }
 
   positionsBody.innerHTML = positions.map((position) => `
-    <tr>
+    <tr data-href="../10_ProgramAdmin/1_ProgramAdminMgmt.html">
       <td>
         <button class="position-btn" type="button" data-position-id="${escapeHtml(position.id)}">
           <strong>${escapeHtml(position.name)}</strong>
           <span class="subline">${escapeHtml(organization.name)}</span>
         </button>
       </td>
-      <td><span class="status-badge ${position.status === 'Approved' ? 'badge-approved' : 'badge-paused'}"><span class="dot"></span>${escapeHtml(position.status)}</span></td>
+      <td><span class="status-badge ${position.status === 'Approved' ? 'badge-approved' : 'badge-paused'}">${escapeHtml(position.status)}</span></td>
       <td>${escapeHtml(position.learners.length)}</td>
       <td>${escapeHtml(position.capacity)}</td>
     </tr>
@@ -317,9 +333,9 @@ function resetFilters() {
 }
 
 positionsBody.addEventListener('click', (event) => {
-  const button = event.target.closest('button[data-position-id]');
-  if (!button) return;
-  window.location.href = '../10_ProgramAdmin/1_ProgramAdminMgmt.html';
+  const row = event.target.closest('tr[data-href]');
+  if (!row) return;
+  window.location.href = row.dataset.href;
 });
 
 positionSearch.addEventListener('input', renderPositions);

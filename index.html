@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CPA - Learner Dashboard</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --navy:#0B1F3A; --blue:#1B5EA8; --accent:#2A9D8F; --amber:#E76F1A; --green:#2D7A4E; --red:#C0392B;
@@ -13,6 +13,12 @@
     --shadow-sm:0 1px 3px rgba(11,31,58,0.07),0 1px 2px rgba(11,31,58,0.05);
     --shadow-md:0 10px 28px rgba(11,31,58,0.10);
     --radius-sm:6px; --radius-md:10px; --radius-lg:16px;
+    --imis-blue:#1B5EA8; --imis-header-blue:#1B5EA8;
+    --badge-green-bg:#E3F3E6; --badge-green-text:#2D7A4E;
+    --badge-yellow-bg:#FCF3D9; --badge-yellow-text:#8A6D1D;
+    --badge-blue-bg:#E8ECF7; --badge-blue-text:#3B4A7A;
+    --badge-gray-bg:#F2F1EF; --badge-gray-text:#6B6760;
+    --imis-green:#6EA92B; --imis-green-light:#C7E2A6;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:'DM Sans',sans-serif;background:var(--sand);color:var(--gray-800);min-height:100vh}
@@ -38,26 +44,21 @@
   .role-option.active{background:#EBF3FF;color:var(--blue);font-weight:600}
   .page{max-width:1180px;margin:0 auto;padding:2rem 2rem 4rem}
   .hero{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--gray-200)}
-  .hero h1{font-family:'DM Serif Display',serif;font-size:38px;font-weight:400;color:var(--navy);margin-bottom:4px}
+  .hero h1{font-family:'DM Sans',sans-serif;font-size:26px;font-weight:700;color:#1a1a1a;margin-bottom:4px}
   .hero p{font-size:14px;color:var(--gray-600);max-width:620px}
   .hero-badge{display:flex;align-items:center;gap:8px;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);padding:10px 16px;box-shadow:var(--shadow-sm);font-size:13px;color:var(--gray-600);white-space:nowrap}
   .dot{width:8px;height:8px;border-radius:50%;background:var(--blue);flex:0 0 auto}
-  .section-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gray-400);margin-bottom:.75rem}
-  .journey-panel{padding:1.25rem;margin-bottom:1.75rem}
-  .journey-head{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:1rem}
-  .journey-flow{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-  .journey-card{position:relative;padding:1rem 1rem 1.1rem;border:1px solid var(--gray-200);border-radius:var(--radius-md);background:linear-gradient(180deg,#fff 0%,#fbfaf8 100%)}
-  .journey-card.current{border-color:rgba(27,94,168,.28);box-shadow:var(--shadow-sm)}
-  .journey-card.complete{background:linear-gradient(180deg,#f6fcf8 0%,#edf7f1 100%);border-color:rgba(45,122,78,.2)}
-  .journey-card.locked{background:var(--gray-100)}
-  .journey-card:not(:last-child)::after{content:"";position:absolute;top:28px;right:-13px;width:14px;height:2px;background:var(--gray-300)}
-  .journey-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
-  .journey-index{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--white);border:1px solid var(--gray-200);font-size:12px;font-weight:700;color:var(--gray-600)}
-  .journey-card.complete .journey-index{color:var(--green);border-color:rgba(45,122,78,.18)}
-  .journey-card.current .journey-index{color:var(--blue);border-color:rgba(27,94,168,.22)}
-  .journey-card h3{font-size:15px;color:var(--navy);margin-bottom:6px}
-  .journey-card p{font-size:12px;color:var(--gray-600);line-height:1.45}
-  .journey-percent{font-size:12px;font-weight:700;color:var(--gray-600)}
+  .section-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#2E2C2A;margin-bottom:.75rem}
+  .imis-tracker-panel{padding:1.5rem 1.25rem 1.75rem;margin-bottom:1.75rem}
+  .imis-tracker-head{margin-bottom:1.6rem}
+  .imis-tracker{display:flex;align-items:flex-start;justify-content:space-between;padding:.25rem .5rem 0}
+  .imis-tracker-step{position:relative;display:flex;flex-direction:column;align-items:center;flex:1;text-align:center;padding:0 6px}
+  .imis-tracker-step:not(:last-child)::after{content:"";position:absolute;top:21px;left:50%;width:100%;height:4px;background:var(--imis-green-light);z-index:0}
+  .imis-tracker-step.complete:not(:last-child)::after{background:var(--imis-green)}
+  .imis-tracker-dot{position:relative;z-index:1;width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;background:var(--white);border:3px solid var(--imis-green-light);color:var(--imis-green-light)}
+  .imis-tracker-step.complete .imis-tracker-dot{background:var(--imis-green);border-color:var(--imis-green);color:var(--white)}
+  .imis-tracker-step.current .imis-tracker-dot{background:var(--white);border-color:var(--imis-green);color:var(--imis-green)}
+  .imis-tracker-label{margin-top:12px;font-size:12.5px;font-weight:700;color:#2E2C2A;max-width:150px;line-height:1.35}
   .dashboard-grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(300px,.8fr);gap:16px;margin-bottom:1.75rem}
   .panel{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm)}
   .profile-panel{padding:1.25rem}
@@ -141,11 +142,29 @@
   .small-note{font-size:11px;color:var(--gray-600);text-align:right;max-width:132px;line-height:1.35}
   [data-checkin-required="false"] .checkin-card,[data-checkin-required="false"] .checkin-action,[data-checkin-required="false"] .checkin-step{display:none}
   [data-checkin-required="false"] .checkin-banner{display:none}
+  .imis-table-panel{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-sm);margin-bottom:1.75rem}
+  .imis-table-header{background:var(--imis-header-blue);color:var(--white);display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 18px}
+  .imis-table-header h2{font-size:14px;font-weight:700;color:var(--white);letter-spacing:.02em;margin:0}
+  .imis-table-count{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:700;color:var(--white)}
+  .imis-table-wrap{overflow-x:auto}
+  .imis-table{width:100%;border-collapse:collapse;font-size:13px}
+  .imis-table thead th{background:var(--gray-100);text-align:left;padding:10px 16px;font-weight:700;color:#2E2C2A;font-size:12px;border-bottom:1px solid var(--gray-300);white-space:nowrap}
+  .imis-table tbody td{padding:11px 16px;border-bottom:1px solid var(--gray-200);color:#2E2C2A;vertical-align:middle}
+  .imis-table tbody tr:last-child td{border-bottom:none}
+  .imis-table tbody tr:hover td{background:#F7FAFF}
+  .imis-table tbody tr[data-href]{cursor:pointer}
+  .imis-table a{color:var(--imis-blue);text-decoration:underline;font-weight:500}
+  .imis-badge{display:inline-block;padding:4px 10px;border-radius:3px;font-size:12px;font-weight:600;white-space:nowrap}
+  .imis-badge-green{background:var(--badge-green-bg);color:var(--badge-green-text)}
+  .imis-badge-yellow{background:var(--badge-yellow-bg);color:var(--badge-yellow-text)}
+  .imis-badge-blue{background:var(--badge-blue-bg);color:var(--badge-blue-text)}
+  .imis-badge-gray{background:var(--badge-gray-bg);color:var(--badge-gray-text)}
+  [data-checkin-required="false"] .checkin-row{display:none}
+  [data-checkin-required="false"] .checkin-required-type{display:none}
+  [data-checkin-required="true"] .checkin-not-required-type{display:none}
   @media(max-width:1040px){
     .dashboard-grid,.content-grid{grid-template-columns:1fr}
     .option-grid{grid-template-columns:repeat(2,1fr)}
-    .journey-flow{grid-template-columns:repeat(2,1fr)}
-    .journey-card:nth-child(2)::after{display:none}
   }
   @media(max-width:760px){
     .topbar{align-items:flex-start;flex-direction:column;padding:1rem}
@@ -154,8 +173,11 @@
     .page{padding:1.25rem 1rem 3rem}
     .hero,.options-head,.history-head,.profile-head,.journey-head,.checkin-banner{flex-direction:column;align-items:flex-start}
     .hero h1{font-size:34px}
-    .detail-grid,.option-grid,.experience-meta,.journey-flow{grid-template-columns:1fr}
-    .journey-card::after{display:none}
+    .detail-grid,.option-grid,.experience-meta{grid-template-columns:1fr}
+    .imis-tracker{flex-direction:column;align-items:stretch;gap:1.25rem}
+    .imis-tracker-step{flex-direction:row;text-align:left;gap:12px}
+    .imis-tracker-step:not(:last-child)::after{display:none}
+    .imis-tracker-label{margin-top:0;max-width:none}
     .timeline-step{grid-template-columns:32px 1fr}
     .progress-cell{grid-column:2;justify-content:flex-start}
     .progress-track{width:100%}
@@ -206,48 +228,29 @@
     <div class="hero-badge"><span class="dot"></span><span>Current stage: Experience plan in progress</span></div>
   </section>
 
-  <section class="panel journey-panel" aria-labelledby="journey-flow-title">
-    <div class="journey-head">
-      <div>
-        <div class="section-label">Journey flow</div>
-        <h2 id="journey-flow-title">Foundational experience to professional readiness</h2>
-        <p class="panel-copy">The main learner flow follows four core stages. Check-ins appear separately when they are required.</p>
-      </div>
-      <div class="expected-date">Overall progress: 62%</div>
+  <section class="panel imis-tracker-panel" aria-labelledby="journey-flow-title">
+    <div class="imis-tracker-head">
+      <div class="section-label">Journey flow</div>
+      <h2 id="journey-flow-title">Foundational experience to professional readiness</h2>
+      <p class="panel-copy">The main learner flow follows four core stages. Check-ins appear separately when they are required.</p>
     </div>
-    <div class="journey-flow">
-      <article class="journey-card complete">
-        <div class="journey-top">
-          <div class="journey-index">1</div>
-          <div class="journey-percent">100%</div>
-        </div>
-        <h3>Foundational experience</h3>
-        <p>Submitted, reviewed, and approved.</p>
-      </article>
-      <article class="journey-card current">
-        <div class="journey-top">
-          <div class="journey-index">2</div>
-          <div class="journey-percent">60%</div>
-        </div>
-        <h3>Experience plan</h3>
-        <p>Draft and approval activity for the current work plan.</p>
-      </article>
-      <article class="journey-card">
-        <div class="journey-top">
-          <div class="journey-index">3</div>
-          <div class="journey-percent">0%</div>
-        </div>
-        <h3>Completion report</h3>
-        <p>Final report opens once the planned experience period is complete.</p>
-      </article>
-      <article class="journey-card locked">
-        <div class="journey-top">
-          <div class="journey-index">4</div>
-          <div class="journey-percent">0%</div>
-        </div>
-        <h3>Professional readiness</h3>
-        <p>Registration is available after the experience is marked complete.</p>
-      </article>
+    <div class="imis-tracker">
+      <div class="imis-tracker-step complete">
+        <div class="imis-tracker-dot">1</div>
+        <div class="imis-tracker-label">Foundational Experience Complete</div>
+      </div>
+      <div class="imis-tracker-step current">
+        <div class="imis-tracker-dot">2</div>
+        <div class="imis-tracker-label">Experience Plan In Progress</div>
+      </div>
+      <div class="imis-tracker-step">
+        <div class="imis-tracker-dot">3</div>
+        <div class="imis-tracker-label">Completion Report Pending</div>
+      </div>
+      <div class="imis-tracker-step">
+        <div class="imis-tracker-dot">4</div>
+        <div class="imis-tracker-label">Professional Readiness Pending</div>
+      </div>
     </div>
   </section>
 
@@ -376,116 +379,120 @@
   </section>
 -->
 
-  <div class="content-grid">
-    <section class="panel actions-panel" aria-labelledby="actions-title">
-      <div class="section-label">Outstanding action items</div>
-      <h2 id="actions-title">Next actions</h2>
-      <p class="panel-copy">Items that need learner attention are listed by due date and stage.</p>
-      <div class="action-list">
-        <a class="action-item" href="2_ClaimFoundationalExp/1_LearnerFE/1_FE_YesorNo.html">
-          <div class="action-icon">1</div>
-          <div class="action-copy"><strong>Submit or revise foundational experience</strong><span>Approved record is available if revisions are requested later.</span></div>
-          <div class="due green">Done</div>
-        </a>
-        <a class="action-item" href="3_WorkPlan/1_LearnerWP/1_LearnerWorkPlanInfo.html">
-          <div class="action-icon">2</div>
-          <div class="action-copy"><strong>Submit or revise experience plan</strong><span>Mentor requested more detail on planned enabling competencies.</span></div>
-          <div class="due">Due Jul 22</div>
-        </a>
-        <a class="action-item checkin-action" href="4_RiskAssessment/1_LearnerRiskAssessment/1_LearnerSubmitCheckin.html">
-          <div class="action-icon">3</div>
-          <div class="action-copy"><strong>Submit check-in report</strong><span>Partial completion report is required for this learner.</span></div>
-          <div class="due">Due Jul 30</div>
-        </a>
-        <a class="action-item" href="5_FinalExperienceReport/1_SubmitFinalExperienceReport.html">
-          <div class="action-icon">4</div>
-          <div class="action-copy"><strong>Submit partial completion report</strong><span>Capture your completion-stage experience details and final assessment.</span></div>
-          <div class="due">Upcoming</div>
-        </a>
-        <a class="action-item" href="5_FinalExperienceReport/1_SubmitFinalExperienceReport.html">
-          <div class="action-icon">5</div>
-          <div class="action-copy"><strong>Submit completion report</strong><span>The final completion report opens after the plan period is complete.</span></div>
-          <div class="due">Upcoming</div>
-        </a>
-        <a class="action-item" href="7_ReportJobChange/1_LearnerJobChange/1_LearnerReportJobChange.html">
-          <div class="action-icon">6</div>
-          <div class="action-copy"><strong>Report job change</strong><span>Notify CPA Canada if your employer, role, mentor, or scope has changed so your experience path can be reassessed.</span></div>
-          <div class="due">As needed</div>
-        </a>
-        <a class="action-item" href="7_ReportJobChange/2_MentorJobChange/1_LearnerEndRelationshipWithMentor.html">
-          <div class="action-icon">7</div>
-          <div class="action-copy"><strong>End mentor relationship</strong><span>Start the learner request to end the current mentor relationship and move to the next support arrangement.</span></div>
-          <div class="due">As needed</div>
-        </a>
-        <a class="action-item" href="#professional-readiness">
-          <div class="action-icon">8</div>
-          <div class="action-copy"><strong>Register for Professional Readiness</strong><span>Available after experience is complete.</span></div>
-          <div class="due">Locked</div>
-        </a>
-      </div>
-    </section>
+  <div class="section-label">Experience progress</div>
 
-    <section class="panel history-panel" aria-labelledby="experience-progress-title">
-      <div class="history-head">
-        <div>
-          <div class="section-label">In-progress and past experience</div>
-          <h2 id="experience-progress-title">Experience progress</h2>
-          <p class="panel-copy">Open any item to view status details, feedback, and submission history.</p>
-        </div>
-        <div class="expected-date">Plan target: Aug 30, 2027</div>
-      </div>
-      <div class="experience-list">
-        <a class="experience-card" id="foundational-card" href="2_ClaimFoundationalExp/1_LearnerFE/3_LearnerViewFE.html">
-          <div>
-            <div class="experience-title"><span class="type-dot green"></span><h3>Foundational experience</h3></div>
-            <span class="status-badge badge-approved"><span class="dot"></span>Approved</span>
-            <div class="experience-meta">
-              <div class="meta-box"><span>Submitted</span><strong>Apr 19, 2026</strong></div>
-              <div class="meta-box"><span>Approved</span><strong>May 03, 2026</strong></div>
-              <div class="meta-box"><span>Declined</span><strong>Not applicable</strong></div>
-            </div>
-          </div>
-          <div class="card-side"><span class="view-btn">View details</span><span class="small-note">Supervisor, mentor, and CPA review complete</span></div>
-        </a>
-        <a class="experience-card" id="workplan-card" href="3_WorkPlan/1_LearnerWP/3_LearnerWPRevision.html">
-          <div>
-            <div class="experience-title"><span class="type-dot accent"></span><h3>Experience plan</h3></div>
-            <span class="status-badge badge-pending"><span class="dot"></span>Pending mentor approval</span>
-            <div class="experience-meta">
-              <div class="meta-box"><span>Submitted</span><strong>Jul 08, 2026</strong></div>
-              <div class="meta-box"><span>Approved</span><strong>Pending</strong></div>
-              <div class="meta-box"><span>Declined</span><strong>Not applicable</strong></div>
-            </div>
-          </div>
-          <div class="card-side"><span class="view-btn">View details</span><span class="small-note">Expected completion date: Aug 30, 2027</span></div>
-        </a>
-        <a class="experience-card checkin-card" id="checkin-card" href="4_RiskAssessment/1_LearnerRiskAssessment/2_LearnerViewCheckInReport.html">
-          <div>
-            <div class="experience-title"><span class="type-dot amber"></span><h3>Check-in progress</h3></div>
-            <span class="status-badge badge-draft"><span class="dot"></span>Draft</span>
-            <div class="experience-meta">
-              <div class="meta-box"><span>Next due</span><strong>Jul 30, 2026</strong></div>
-              <div class="meta-box"><span>Competencies</span><strong>4 awarded</strong></div>
-              <div class="meta-box"><span>Submitted</span><strong>Not submitted</strong></div>
-            </div>
-          </div>
-          <div class="card-side"><span class="view-btn">View details</span><span class="small-note">Displayed because a check-in is required</span></div>
-        </a>
-        <a class="experience-card" id="completion-card" href="5_FinalExperienceReport/2_ViewFinalExperienceReport.html">
-          <div>
-            <div class="experience-title"><span class="type-dot"></span><h3>Completion report</h3></div>
-            <span class="status-badge badge-neutral"><span class="dot"></span>Not started</span>
-            <div class="experience-meta">
-              <div class="meta-box"><span>Submitted</span><strong>Not submitted</strong></div>
-              <div class="meta-box"><span>Approved</span><strong>Pending</strong></div>
-              <div class="meta-box"><span>Declined</span><strong>Not applicable</strong></div>
-            </div>
-          </div>
-          <div class="card-side"><span class="view-btn">View details</span><span class="small-note">Next milestone after plan period</span></div>
-        </a>
-      </div>
-    </section>
-  </div>
+  <section class="panel imis-table-panel" id="foundational-card" aria-labelledby="foundational-title">
+    <div class="imis-table-header">
+      <h2 id="foundational-title">Foundational Experience</h2>
+      <div class="imis-table-count"><span>Complete</span><span aria-hidden="true">&#9652;</span></div>
+    </div>
+    <div class="imis-table-wrap">
+      <table class="imis-table">
+        <thead>
+          <tr>
+            <th>Submission</th>
+            <th>Status</th>
+            <th>Submitted</th>
+            <th>Decision Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-href="2_ClaimFoundationalExp/1_LearnerFE/3_LearnerViewFE.html">
+            <td><a href="2_ClaimFoundationalExp/1_LearnerFE/3_LearnerViewFE.html">Initial submission</a></td>
+            <td><span class="imis-badge imis-badge-green">Approved</span></td>
+            <td>Apr 19, 2026</td>
+            <td>May 03, 2026</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="panel imis-table-panel" id="workplan-card" aria-labelledby="workplan-title">
+    <div class="imis-table-header">
+      <h2 id="workplan-title">Experience Plan</h2>
+      <div class="imis-table-count"><span>In Progress</span><span aria-hidden="true">&#9652;</span></div>
+    </div>
+    <div class="imis-table-wrap">
+      <table class="imis-table">
+        <thead>
+          <tr>
+            <th>Submission</th>
+            <th>Status</th>
+            <th>Submitted</th>
+            <th>Decision Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-href="3_WorkPlan/1_LearnerWP/3_LearnerWPRevision.html">
+            <td><a href="3_WorkPlan/1_LearnerWP/3_LearnerWPRevision.html">Initial submission</a></td>
+            <td><span class="imis-badge imis-badge-yellow">Pending mentor approval</span></td>
+            <td>Jul 08, 2026</td>
+            <td>Pending</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="panel imis-table-panel checkin-row" id="checkin-card" aria-labelledby="checkin-title">
+    <div class="imis-table-header">
+      <h2 id="checkin-title">Check-in Progress</h2>
+      <div class="imis-table-count"><span>Draft</span><span aria-hidden="true">&#9652;</span></div>
+    </div>
+    <div class="imis-table-wrap">
+      <table class="imis-table">
+        <thead>
+          <tr>
+            <th>Submission</th>
+            <th>Status</th>
+            <th>Submitted</th>
+            <th>Decision Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-href="4_RiskAssessment/1_LearnerRiskAssessment/2_LearnerViewCheckInReport.html">
+            <td><a href="4_RiskAssessment/1_LearnerRiskAssessment/2_LearnerViewCheckInReport.html">Draft</a></td>
+            <td><span class="imis-badge imis-badge-blue">Draft</span></td>
+            <td>Not submitted</td>
+            <td>&mdash;</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="panel imis-table-panel" id="completion-card" aria-labelledby="completion-title">
+    <div class="imis-table-header">
+      <h2 id="completion-title">Completion Report</h2>
+      <div class="imis-table-count"><span>Not Started</span><span aria-hidden="true">&#9652;</span></div>
+    </div>
+    <div class="imis-table-wrap">
+      <table class="imis-table">
+        <thead>
+          <tr>
+            <th>Submission</th>
+            <th>Type</th>
+            <th>Status</th>
+            <th>Submitted</th>
+            <th>Decision Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr data-href="5_FinalExperienceReport/2_ViewFinalExperienceReport.html">
+            <td><a href="5_FinalExperienceReport/2_ViewFinalExperienceReport.html">Not started</a></td>
+            <td>
+              <span class="checkin-required-type">Partial Completion Report</span>
+              <span class="checkin-not-required-type">Completion Report</span>
+            </td>
+            <td><span class="imis-badge imis-badge-gray">Not started</span></td>
+            <td>Not submitted</td>
+            <td>Pending</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
 </main>
 
 <script>
@@ -493,6 +500,20 @@ const savedCheckInRequirement = localStorage.getItem('learnerDashboard:checkInRe
 if (savedCheckInRequirement === 'false') {
   document.body.dataset.checkinRequired = 'false';
 }
+
+document.querySelectorAll('.imis-table tbody tr[data-href]').forEach(function (row) {
+  row.tabIndex = 0;
+  row.addEventListener('click', function (e) {
+    if (e.target.closest('a')) return;
+    window.location.href = row.dataset.href;
+  });
+  row.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      window.location.href = row.dataset.href;
+    }
+  });
+});
 </script>
 </body>
 </html>
