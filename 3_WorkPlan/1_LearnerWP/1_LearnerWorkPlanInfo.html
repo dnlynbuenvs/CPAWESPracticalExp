@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CPA - Work Plan Information</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --navy:#0B1F3A; --blue:#1B5EA8; --accent:#2A9D8F; --amber:#E76F1A; --green:#2D7A4E; --red:#C0392B;
@@ -13,6 +13,12 @@
     --shadow-sm:0 1px 3px rgba(11,31,58,0.07),0 1px 2px rgba(11,31,58,0.05);
     --shadow-md:0 10px 28px rgba(11,31,58,0.10);
     --radius-sm:6px; --radius-md:10px; --radius-lg:16px;
+    --imis-blue:#1B5EA8;
+    --badge-green-bg:#E3F3E6; --badge-green-text:#2D7A4E;
+    --badge-yellow-bg:#FCF3D9; --badge-yellow-text:#8A6D1D;
+    --badge-blue-bg:#E8ECF7; --badge-blue-text:#3B4A7A;
+    --badge-red-bg:#FBE7E5; --badge-red-text:#9B3226;
+    --badge-gray-bg:#F2F1EF; --badge-gray-text:#6B6760;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:'DM Sans',sans-serif;background:var(--sand);color:var(--gray-800);min-height:100vh}
@@ -40,56 +46,57 @@
   .role-option.active{background:#EBF3FF;color:var(--blue);font-weight:600}
   .page{max-width:1340px;margin:0 auto;padding:2rem 2rem 4rem}
   .hero{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--gray-200)}
-  .hero h1{font-family:'DM Serif Display',serif;font-size:38px;font-weight:400;color:var(--navy);margin-bottom:6px}
+  .hero h1{font-family:'DM Sans',sans-serif;font-size:26px;font-weight:700;color:#1a1a1a;margin-bottom:6px}
   .hero p{font-size:14px;color:var(--gray-600);max-width:780px;line-height:1.5}
-  .hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);padding:10px 16px;box-shadow:var(--shadow-sm);font-size:13px;color:var(--gray-600)}
   .dot{width:8px;height:8px;border-radius:50%;background:var(--blue);flex:0 0 auto}
   .message-bar{display:none;align-items:center;gap:10px;margin-bottom:1rem;padding:12px 14px;border-radius:var(--radius-md);background:#EBF3FF;border:1px solid rgba(27,94,168,.18);color:var(--navy);box-shadow:var(--shadow-sm)}
   .message-bar.visible{display:flex}
-  .section-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gray-400);margin-bottom:.75rem}
+  .section-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#2E2C2A;margin-bottom:.75rem}
   .panel{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm)}
-  .panel h2{font-size:17px;color:var(--navy);margin-bottom:4px}
+  .panel h2{font-size:17px;color:#1a1a1a;margin-bottom:4px}
   .panel-copy{font-size:12px;color:var(--gray-600);line-height:1.45}
   .workspace{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:16px}
   .form-panel,.meta-panel{padding:1.25rem}
-  .form-stack,.meta-stack{display:flex;flex-direction:column;gap:16px}
-  .form-section{padding:1rem;border:1px solid var(--gray-200);border-radius:var(--radius-md);background:var(--sand)}
-  .form-section h3{font-size:15px;color:var(--navy);margin-bottom:6px}
+  .form-stack{display:flex;flex-direction:column;gap:16px}
+  .meta-stack{display:flex;flex-direction:column;gap:12px}
+  .form-section{padding:1rem 0;border-bottom:1px solid var(--gray-200)}
+  .form-section:last-child{border-bottom:none}
+  .form-section h3{font-size:15px;color:#1a1a1a;margin-bottom:10px;font-weight:700}
   .field-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
   .field{display:flex;flex-direction:column;gap:6px}
   .field.full{grid-column:1 / -1}
-  .field label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gray-400)}
-  .field input,.field select,.field textarea{border:1px solid var(--gray-200);border-radius:var(--radius-sm);background:var(--white);padding:10px 12px;color:var(--gray-800)}
-  .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:rgba(27,94,168,.32);box-shadow:0 0 0 3px rgba(27,94,168,.08)}
+  .field label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#2E2C2A}
+  .field input,.field select,.field textarea{border:1px solid var(--gray-300);border-radius:var(--radius-sm);background:var(--white);padding:10px 12px;color:var(--gray-800)}
+  .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--imis-blue);box-shadow:0 0 0 3px rgba(27,94,168,.12)}
   .field input[readonly],.field textarea[readonly]{background:var(--gray-100);color:var(--gray-600)}
   .subcopy{font-size:11px;color:var(--gray-600);line-height:1.4}
   .button-row{display:flex;flex-wrap:wrap;gap:8px}
-  .action-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:var(--radius-sm);border:1px solid var(--gray-200);padding:9px 12px;background:var(--white);color:var(--navy);font-size:12px;font-weight:700;cursor:pointer;transition:all .15s ease}
-  .action-btn:hover{border-color:rgba(27,94,168,.28);background:#F7FAFF}
-  .action-btn.primary{background:#EBF3FF;border-color:rgba(27,94,168,.28);color:var(--blue)}
-  .action-btn.success{background:#E8F5EE;border-color:rgba(45,122,78,.22);color:var(--green)}
-  .action-btn[disabled]{opacity:.55;cursor:not-allowed;background:var(--gray-100);color:var(--gray-600)}
+  .action-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:var(--radius-sm);border:1px solid var(--imis-blue);padding:9px 16px;background:var(--white);color:var(--imis-blue);font-size:12px;font-weight:700;cursor:pointer;transition:all .15s ease}
+  .action-btn:hover{background:#EBF3FF}
+  .action-btn.primary{background:var(--imis-blue);border-color:var(--imis-blue);color:var(--white)}
+  .action-btn.primary:hover{background:#164e8f}
+  .action-btn.success{background:var(--white);border-color:var(--badge-green-text);color:var(--badge-green-text)}
+  .action-btn.success:hover{background:var(--badge-green-bg)}
+  .action-btn[disabled]{opacity:.55;cursor:not-allowed;background:var(--gray-100);border-color:var(--gray-300);color:var(--gray-600)}
   .metric-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
-  .metric-card,.meta-card,.option-card,.notice-box,.checkbox-card{padding:12px;border-radius:var(--radius-md);border:1px solid var(--gray-200);background:var(--white)}
+  .metric-card,.meta-card,.option-card,.notice-box,.checkbox-card{padding:12px;border-radius:var(--radius-sm);border:1px solid var(--gray-200);background:var(--white)}
   .metric-card span,.meta-card span,.option-card span,.notice-box span,.checkbox-card span{display:block;font-size:12px;color:var(--gray-600);line-height:1.45}
-  .metric-card strong,.meta-card strong,.option-card strong,.notice-box strong,.checkbox-card strong{display:block;font-size:13px;color:var(--navy);margin-bottom:4px}
-  .metric-card .value{font-family:'DM Serif Display',serif;font-size:30px;line-height:1;color:var(--navy);margin-bottom:6px}
+  .metric-card strong,.meta-card strong,.option-card strong,.notice-box strong,.checkbox-card strong{display:block;font-size:13px;color:#1a1a1a;margin-bottom:4px}
+  .metric-card .value{font-family:'DM Sans',sans-serif;font-weight:700;font-size:26px;line-height:1;color:#1a1a1a;margin-bottom:6px}
   .doc-list{display:flex;flex-direction:column;gap:8px}
   .doc-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border-radius:var(--radius-sm);border:1px solid var(--gray-200);background:var(--white)}
-  .doc-copy strong{display:block;font-size:13px;color:var(--navy);margin-bottom:2px}
+  .doc-copy strong{display:block;font-size:13px;color:#1a1a1a;margin-bottom:2px}
   .doc-copy span{display:block;font-size:11px;color:var(--gray-600);line-height:1.35}
   .option-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-  .option-card{background:var(--sand)}
   .option-card.selected{border-color:rgba(27,94,168,.32);box-shadow:0 0 0 3px rgba(27,94,168,.08);background:#F7FAFF}
-  .notice-box{background:#F7FAFF}
-  .notice-box.warn{background:#FFF8F1;border-color:rgba(231,111,26,.22)}
-  .notice-box.error{background:#FDECEA;border-color:rgba(192,57,43,.16)}
-  .notice-box.success{background:#F2FBF6;border-color:rgba(45,122,78,.22)}
+  .notice-box.warn{background:var(--badge-yellow-bg);border-color:#EDD9A0}
+  .notice-box.error{background:var(--badge-red-bg);border-color:#EBBAB2}
+  .notice-box.success{background:var(--badge-green-bg);border-color:#B9DDC3}
   .checkbox-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-  .checkbox-card{display:flex;align-items:flex-start;gap:10px;background:var(--sand)}
+  .checkbox-card{display:flex;align-items:flex-start;gap:10px}
   .checkbox-card input{margin-top:3px}
   .hidden{display:none !important}
-  .empty-state{padding:18px;border:1px dashed var(--gray-300);border-radius:var(--radius-md);font-size:13px;color:var(--gray-600);text-align:center;background:var(--sand)}
+  .empty-state{padding:18px;border:1px dashed var(--gray-300);border-radius:var(--radius-md);font-size:13px;color:var(--gray-600);text-align:center;background:var(--white)}
   @media(max-width:1120px){
     .workspace{grid-template-columns:1fr}
   }
@@ -141,7 +148,6 @@
       <h1 id="work-plan-title">Prepare work plan information</h1>
       <p>Review your learner profile, confirm whether your role is pre-reviewed, add employer details, and describe the work experience that will shape your professional assessment path.</p>
     </div>
-    <div class="hero-badge"><span class="dot"></span><span id="hero-summary">Work plan setup in progress</span></div>
   </section>
 
   <div class="message-bar" id="message-bar" role="status" aria-live="polite">
@@ -402,15 +408,15 @@
             <span>After submission, the work plan becomes read-only, status updates to Pending Mentor Approval, mentor review workflow begins, and reminder notifications are scheduled for 30, 60, and 90 days if no action is taken. Learners have 3 resubmission attempts.</span>
           </div>
           <div class="button-row" style="margin-top:1rem;">
-            <button class="action-btn" type="button" onclick="location.href='../../../index.html'">
+            <button class="action-btn" id="save-draft-btn" type="button" onclick="location.href='../../../index.html'">
                 Save draft
             </button>
-            <button class="action-btn primary" type="button" onclick="location.href='2_LearnerWorkPlanInfo.html'">
+            <button class="action-btn primary" id="continue-btn" type="button" onclick="location.href='2_LearnerWorkPlanInfo.html'">
                 Continue
-            </button>      
-            
+            </button>
+
             <!--
-            <button class="action-btn success" type="button" onclick="location.href='../../index.html'">
+            <button class="action-btn success" id="submit-workplan-btn" type="button" onclick="location.href='../../index.html'">
                 Submit work plan
             </button>
             -->
@@ -573,7 +579,6 @@ const otherRoleField = document.getElementById('other-role-field');
 const otherRolePlan = document.getElementById('other-role-plan');
 const messageBar = document.getElementById('message-bar');
 const messageText = document.getElementById('message-text');
-const heroSummary = document.getElementById('hero-summary');
 const dateMetrics = document.getElementById('date-metrics');
 const actualGainedPe = document.getElementById('actual-gained-pe');
 const reviewerLimitIndicator = document.getElementById('reviewer-limit-indicator');
@@ -1169,7 +1174,8 @@ function setReadonlyState() {
     element.disabled = readonly;
   });
   document.getElementById('save-draft-btn').disabled = readonly;
-  document.getElementById('submit-workplan-btn').disabled = readonly;
+  const submitWorkPlanBtn = document.getElementById('submit-workplan-btn');
+  if (submitWorkPlanBtn) submitWorkPlanBtn.disabled = readonly;
   document.getElementById('attach-job-description-btn').disabled = readonly;
   document.getElementById('attach-supporting-btn').disabled = readonly;
 }
@@ -1263,10 +1269,6 @@ function renderSummary() {
   } else {
     summaryAvailability.textContent = employer ? 'Choose a pre-reviewed role to inspect role limits and remaining spots.' : 'Choose an employer to review availability and role limits.';
   }
-
-  heroSummary.textContent = issues.length
-    ? `Work plan setup | ${issues.length} item${issues.length === 1 ? '' : 's'} still to complete`
-    : 'Work plan setup ready for the next step';
 }
 
 function renderAll() {
@@ -1489,7 +1491,8 @@ document.getElementById('continue-btn').addEventListener('click', () => {
   renderSummary();
 });
 
-document.getElementById('submit-workplan-btn').addEventListener('click', submitWorkPlan);
+const submitWorkPlanBtnEl = document.getElementById('submit-workplan-btn');
+if (submitWorkPlanBtnEl) submitWorkPlanBtnEl.addEventListener('click', submitWorkPlan);
 
 loadWorkPlan();
 persistWorkPlan();

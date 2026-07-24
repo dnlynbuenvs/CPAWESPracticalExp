@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CPA - Foundational Experience Reports</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --navy:#0B1F3A; --blue:#1B5EA8; --accent:#2A9D8F; --amber:#E76F1A; --green:#2D7A4E; --red:#C0392B;
@@ -13,6 +13,11 @@
     --shadow-sm:0 1px 3px rgba(11,31,58,0.07),0 1px 2px rgba(11,31,58,0.05);
     --shadow-md:0 10px 28px rgba(11,31,58,0.10);
     --radius-sm:6px; --radius-md:10px; --radius-lg:16px;
+    --imis-blue:#1B5EA8;
+    --badge-green-bg:#E3F3E6; --badge-green-text:#2D7A4E;
+    --badge-yellow-bg:#FCF3D9; --badge-yellow-text:#8A6D1D;
+    --badge-red-bg:#FBE7E5; --badge-red-text:#9B3226;
+    --badge-gray-bg:#F2F1EF; --badge-gray-text:#6B6760;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:'DM Sans',sans-serif;background:var(--sand);color:var(--gray-800);min-height:100vh}
@@ -40,78 +45,71 @@
   .role-option.active{background:#EBF3FF;color:var(--blue);font-weight:600}
   .page{max-width:1280px;margin:0 auto;padding:2rem 2rem 4rem}
   .hero{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--gray-200)}
-  .hero h1{font-family:'DM Serif Display',serif;font-size:38px;font-weight:400;color:var(--navy);margin-bottom:6px}
+  .hero h1{font-family:'DM Sans',sans-serif;font-size:26px;font-weight:700;color:#1a1a1a;margin-bottom:6px}
   .hero p{font-size:14px;color:var(--gray-600);max-width:760px;line-height:1.5}
   .hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);padding:10px 16px;box-shadow:var(--shadow-sm);font-size:13px;color:var(--gray-600)}
   .dot{width:8px;height:8px;border-radius:50%;background:var(--blue);flex:0 0 auto}
   .message-bar{display:none;align-items:center;gap:10px;margin-bottom:1rem;padding:12px 14px;border-radius:var(--radius-md);background:#EBF3FF;border:1px solid rgba(27,94,168,.18);color:var(--navy);box-shadow:var(--shadow-sm)}
   .message-bar.visible{display:flex}
-  .workspace{display:grid;grid-template-columns:320px minmax(0,1fr);gap:16px}
   .panel{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm)}
-  .sidebar-panel,.form-panel,.meta-panel{padding:1.25rem}
-  .section-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gray-400);margin-bottom:.75rem}
-  .panel h2{font-size:17px;color:var(--navy);margin-bottom:4px}
+  .form-panel,.meta-panel{padding:1.25rem}
+  .section-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#2E2C2A;margin-bottom:.75rem}
+  .panel h2{font-size:17px;color:#1a1a1a;margin-bottom:4px}
   .panel-copy{font-size:12px;color:var(--gray-600);line-height:1.45}
-  .sidebar-stack{display:flex;flex-direction:column;gap:16px}
-  .report-list{display:flex;flex-direction:column;gap:10px;margin-top:1rem}
-  .report-card{padding:12px;border-radius:var(--radius-md);border:1px solid var(--gray-200);background:var(--sand);cursor:pointer;transition:all .15s ease}
-  .report-card.active{border-color:rgba(27,94,168,.32);box-shadow:0 0 0 3px rgba(27,94,168,.08);background:#F7FAFF}
-  .report-card strong{display:block;font-size:14px;color:var(--navy);margin-bottom:4px}
-  .report-card span{display:block;font-size:12px;color:var(--gray-600);line-height:1.4}
-  .status-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:5px 10px;border-radius:20px;white-space:nowrap;margin-top:.75rem}
-  .status-badge .dot{width:6px;height:6px}
-  .badge-approved{background:#E8F5EE;color:var(--green)} .badge-approved .dot{background:var(--green)}
-  .badge-pending{background:#FEF3E8;color:var(--amber)} .badge-pending .dot{background:var(--amber)}
-  .badge-progress{background:#EBF3FF;color:var(--blue)} .badge-progress .dot{background:var(--blue)}
-  .badge-declined{background:#FDECEA;color:var(--red)} .badge-declined .dot{background:var(--red)}
-  .badge-neutral{background:var(--gray-100);color:var(--gray-600)} .badge-neutral .dot{background:var(--gray-400)}
-  .action-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:var(--radius-sm);border:1px solid var(--gray-200);padding:9px 12px;background:var(--white);color:var(--navy);font-size:12px;font-weight:700;cursor:pointer;transition:all .15s ease}
-  .action-btn:hover{border-color:rgba(27,94,168,.28);background:#F7FAFF}
-  .action-btn.primary{background:#EBF3FF;border-color:rgba(27,94,168,.28);color:var(--blue)}
-  .action-btn.success{background:#E8F5EE;border-color:rgba(45,122,78,.22);color:var(--green)}
-  .action-btn.warn{background:#FEF3E8;border-color:rgba(231,111,26,.24);color:var(--amber)}
-  .action-btn.danger{background:#FFF4F1;border-color:rgba(192,57,43,.22);color:var(--red)}
-  .action-btn[disabled]{opacity:.55;cursor:not-allowed;background:var(--gray-100);color:var(--gray-600)}
+  .status-badge{display:inline-block;padding:4px 10px;border-radius:3px;font-size:12px;font-weight:600;white-space:nowrap}
+  .badge-approved{background:var(--badge-green-bg);color:var(--badge-green-text)}
+  .badge-pending{background:var(--badge-yellow-bg);color:var(--badge-yellow-text)}
+  .badge-progress{background:#E8ECF7;color:#3B4A7A}
+  .badge-declined{background:var(--badge-red-bg);color:var(--badge-red-text)}
+  .badge-neutral{background:var(--badge-gray-bg);color:var(--badge-gray-text)}
+  .action-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:var(--radius-sm);border:1px solid var(--imis-blue);padding:9px 16px;background:var(--white);color:var(--imis-blue);font-size:12px;font-weight:700;cursor:pointer;transition:all .15s ease}
+  .action-btn:hover{background:#EBF3FF}
+  .action-btn.primary{background:var(--imis-blue);border-color:var(--imis-blue);color:var(--white)}
+  .action-btn.primary:hover{background:#164e8f}
+  .action-btn.danger{background:var(--white);border-color:var(--badge-red-text);color:var(--badge-red-text)}
+  .action-btn.danger:hover{background:var(--badge-red-bg)}
+  .action-btn[disabled]{opacity:.55;cursor:not-allowed;background:var(--gray-100);border-color:var(--gray-300);color:var(--gray-600)}
+  .action-btn.full-width{width:100%}
+  #report-nav-row .action-btn{flex:1}
   .form-layout{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:16px}
   .form-shell{display:flex;flex-direction:column;gap:16px}
-  .form-section{padding:1rem;border:1px solid var(--gray-200);border-radius:var(--radius-md);background:var(--sand)}
-  .form-section h3{font-size:15px;color:var(--navy);margin-bottom:6px}
+  .form-section{padding:1rem 0;border-bottom:1px solid var(--gray-200)}
+  .form-section:last-child{border-bottom:none}
+  .form-section h3{font-size:15px;color:#1a1a1a;margin-bottom:10px;font-weight:700}
   .field-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
   .field{display:flex;flex-direction:column;gap:6px}
   .field.full{grid-column:1 / -1}
-  .field label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gray-400)}
-  .field input,.field textarea,.field select{border:1px solid var(--gray-200);border-radius:var(--radius-sm);background:var(--white);padding:10px 12px;color:var(--gray-800)}
+  .field label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#2E2C2A}
+  .field input,.field textarea,.field select{border:1px solid var(--gray-300);border-radius:var(--radius-sm);background:var(--white);padding:10px 12px;color:var(--gray-800)}
   .field textarea{min-height:92px}
-  .field input:focus,.field textarea:focus,.field select:focus{outline:none;border-color:rgba(27,94,168,.32);box-shadow:0 0 0 3px rgba(27,94,168,.08)}
+  .field input:focus,.field textarea:focus,.field select:focus{outline:none;border-color:var(--imis-blue);box-shadow:0 0 0 3px rgba(27,94,168,.12)}
   .field input[disabled],.field textarea[disabled],.field select[disabled]{background:var(--gray-100);color:var(--gray-600)}
   .subcopy{font-size:11px;color:var(--gray-600);line-height:1.4}
   .metric-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-  .metric-card{padding:12px;border-radius:var(--radius-md);border:1px solid var(--gray-200);background:var(--white)}
-  .metric-card span{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--gray-400);font-weight:700;margin-bottom:6px}
-  .metric-card strong{display:block;font-size:18px;color:var(--navy)}
+  .metric-card{padding:12px;border-radius:var(--radius-sm);border:1px solid var(--gray-200);background:var(--white)}
+  .metric-card span{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:#2E2C2A;font-weight:700;margin-bottom:6px}
+  .metric-card strong{display:block;font-size:18px;color:#1a1a1a}
   .metric-card small{display:block;font-size:11px;color:var(--gray-600);margin-top:4px;line-height:1.35}
   .upload-shell{display:flex;flex-direction:column;gap:10px}
   .upload-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
   .doc-list{display:flex;flex-direction:column;gap:8px}
   .doc-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border-radius:var(--radius-sm);border:1px solid var(--gray-200);background:var(--white)}
-  .doc-copy strong{display:block;font-size:13px;color:var(--navy);margin-bottom:2px}
+  .doc-copy strong{display:block;font-size:13px;color:#1a1a1a;margin-bottom:2px}
   .doc-copy span{display:block;font-size:11px;color:var(--gray-600);line-height:1.35}
-  .warning-box,.success-box{padding:12px;border-radius:var(--radius-md);border:1px solid var(--gray-200);background:var(--sand)}
-  .warning-box{border-color:rgba(231,111,26,.22);background:#FFF8F1}
-  .success-box{border-color:rgba(45,122,78,.22);background:#F2FBF6}
-  .warning-box strong,.success-box strong{display:block;font-size:13px;color:var(--navy);margin-bottom:4px}
+  .warning-box,.success-box{padding:12px;border-radius:var(--radius-sm);border:1px solid var(--gray-200)}
+  .warning-box{border-color:#EDD9A0;background:var(--badge-yellow-bg)}
+  .success-box{border-color:#B9DDC3;background:var(--badge-green-bg)}
+  .warning-box strong,.success-box strong{display:block;font-size:13px;color:#1a1a1a;margin-bottom:4px}
   .warning-box span,.success-box span{display:block;font-size:12px;color:var(--gray-600);line-height:1.45}
   .error-list{display:flex;flex-direction:column;gap:8px}
-  .error-item{padding:10px 12px;border-radius:var(--radius-sm);border:1px solid rgba(192,57,43,.16);background:#FDECEA;color:var(--red);font-size:12px;line-height:1.4}
+  .error-item{padding:10px 12px;border-radius:var(--radius-sm);border:1px solid #EBBAB2;background:var(--badge-red-bg);color:var(--badge-red-text);font-size:12px;line-height:1.4}
   .meta-stack{display:flex;flex-direction:column;gap:12px}
-  .meta-card{padding:12px;border-radius:var(--radius-md);border:1px solid var(--gray-200);background:var(--sand)}
-  .meta-card strong{display:block;font-size:13px;color:var(--navy);margin-bottom:4px}
+  .meta-card{padding:12px;border-radius:var(--radius-sm);border:1px solid var(--gray-200);background:var(--white)}
+  .meta-card strong{display:block;font-size:13px;color:#1a1a1a;margin-bottom:4px}
   .meta-card span{display:block;font-size:12px;color:var(--gray-600);line-height:1.45}
-  .flow-step{display:flex;align-items:flex-start;gap:8px}
-  .flow-index{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:var(--white);border:1px solid var(--gray-200);font-size:11px;font-weight:700;color:var(--blue);flex:0 0 auto}
   .button-row{display:flex;flex-wrap:wrap;gap:8px}
   @media(max-width:1120px){
-    .workspace,.form-layout{grid-template-columns:1fr}
+    .form-layout{grid-template-columns:1fr}
   }
   @media(max-width:760px){
     .topbar{align-items:flex-start;flex-direction:column;padding:1rem}
@@ -160,9 +158,8 @@
   <section class="hero" aria-labelledby="fe-record-title">
     <div>
       <h1 id="fe-record-title">Capture foundational experience</h1>
-      <p>Create one foundational experience report per employment experience, attach supporting documents, calculate eligible duration, save drafts, and submit each report independently to its assigned supervisor.</p>
+      <p>Record your foundational experience, attach supporting documents, calculate eligible duration, save as a draft, and submit to your assigned supervisor.</p>
     </div>
-    <div class="hero-badge"><span class="dot"></span><span id="hero-summary">Loading foundational experience reports</span></div>
   </section>
 
   <div class="message-bar" id="message-bar" role="status" aria-live="polite">
@@ -170,29 +167,15 @@
     <span id="message-text"></span>
   </div>
 
-  <section class="workspace">
-    <aside class="sidebar-stack">
-      <section class="panel sidebar-panel">
-        <div class="section-label">Employment experiences</div>
-        <h2>Foundational experience reports</h2>
-        <p class="panel-copy">Each report represents one employment experience and is routed to its own supervisor.</p>
-        <div class="button-row" style="margin-top:1rem;">
-          <button class="action-btn primary" id="add-report-btn" type="button">Add another FE report</button>
-        </div>
-        <div class="report-list" id="report-list"></div>
-      </section>
+  <section class="form-layout">
+    <section class="panel form-panel">
+      <div class="section-label">Report details</div>
+      <h2 id="active-report-title">Experience report</h2>
+      <p class="panel-copy" id="active-report-copy">Enter learner, role, duration, and document details for this employment experience.</p>
 
-    </aside>
-
-    <section class="form-layout">
-      <section class="panel form-panel">
-        <div class="section-label">Report details</div>
-        <h2 id="active-report-title">Experience report</h2>
-        <p class="panel-copy" id="active-report-copy">Enter learner, role, duration, and document details for this employment experience.</p>
-
-        <div class="form-shell">
-          <section class="form-section">
-            <h3>Learner information</h3>
+      <div class="form-shell">
+        <section class="form-section">
+          <h3>Learner information</h3>
             <div class="field-grid">
               <div class="field">
                 <label for="legal-name">Given legal name</label>
@@ -310,8 +293,8 @@
             <div class="error-list" id="validation-errors" style="margin-top:1rem;"></div>
             <div class="button-row" style="margin-top:1rem;">
               <button class="action-btn" id="save-draft-btn" type="button">Save draft</button>
-              <button class="action-btn success" id="submit-report-btn" type="button">Submit report</button>
-              <button class="action-btn danger" id="withdraw-report-btn" type="button">Withdraw report</button>
+              <button class="action-btn primary" id="submit-report-btn" type="button">Submit report</button>
+              <button class="action-btn danger" id="withdraw-report-btn" type="button">Withdraw experience</button>
             </div>
           </section>
         </div>
@@ -321,6 +304,10 @@
         <div class="section-label">Current report</div>
         <h2>Submission status</h2>
         <div class="meta-stack">
+          <div class="meta-card">
+            <strong>Employment experience</strong>
+            <span id="meta-report-position">1 of 1</span>
+          </div>
           <div class="meta-card">
             <strong>Status</strong>
             <span id="meta-status">Draft</span>
@@ -334,9 +321,15 @@
             <span id="meta-doc-count">0 document(s) attached.</span>
           </div>
         </div>
+        <div class="button-row" id="report-nav-row" style="margin-top:1rem;">
+          <button class="action-btn" id="prev-report-btn" type="button">&larr; Previous experience</button>
+          <button class="action-btn" id="next-report-btn" type="button">Next experience &rarr;</button>
+        </div>
+        <div class="button-row" style="margin-top:.5rem;">
+          <button class="action-btn full-width" id="add-new-report-btn" type="button">Add another employment experience</button>
+        </div>
       </aside>
     </section>
-  </section>
 </main>
 
 <script>
@@ -354,10 +347,8 @@ const defaultLearner = {
   phone: '604-555-0186'
 };
 
-const reportList = document.getElementById('report-list');
 const activeReportTitle = document.getElementById('active-report-title');
 const activeReportCopy = document.getElementById('active-report-copy');
-const heroSummary = document.getElementById('hero-summary');
 const messageBar = document.getElementById('message-bar');
 const messageText = document.getElementById('message-text');
 const durationMetrics = document.getElementById('duration-metrics');
@@ -369,6 +360,9 @@ const submissionSummary = document.getElementById('submission-summary');
 const metaStatus = document.getElementById('meta-status');
 const metaSubmittedAt = document.getElementById('meta-submitted-at');
 const metaDocCount = document.getElementById('meta-doc-count');
+const metaReportPosition = document.getElementById('meta-report-position');
+const prevReportBtn = document.getElementById('prev-report-btn');
+const nextReportBtn = document.getElementById('next-report-btn');
 const jobDescriptionUpload = document.getElementById('job-description-upload');
 const supportingDocsUpload = document.getElementById('supporting-docs-upload');
 const claimDecision = JSON.parse(localStorage.getItem(decisionKey) || 'null');
@@ -620,17 +614,6 @@ function validateReport(report, forSubmit) {
   return { errors: Array.from(new Set(errors)), metrics };
 }
 
-function renderReportList() {
-  reportList.innerHTML = reports.map((report, index) => `
-    <article class="report-card ${report.id === activeReportId ? 'active' : ''}" data-report-id="${report.id}">
-      <strong>${escapeHtml(report.roleInfo.reportTitle || `Employment experience ${index + 1}`)}</strong>
-      <span>${escapeHtml(report.roleInfo.employer || 'Employer not entered yet')}</span>
-      <span>${escapeHtml(report.roleInfo.supervisorName || 'Supervisor not assigned yet')}</span>
-      <span class="status-badge ${statusClass(report.status)}"><span class="dot"></span>${escapeHtml(report.status)}</span>
-    </article>
-  `).join('');
-}
-
 function renderDuration(metrics) {
   durationMetrics.innerHTML = `
     <div class="metric-card">
@@ -701,9 +684,14 @@ function renderDocuments(report) {
 }
 
 function renderMeta(report, validation) {
-  metaStatus.textContent = report.status;
+  metaStatus.innerHTML = `<span class="status-badge ${statusClass(report.status)}">${escapeHtml(report.status)}</span>`;
   metaSubmittedAt.textContent = report.submittedAt ? formatDate(report.submittedAt) : 'Not submitted';
   metaDocCount.textContent = `${report.documents.jobDescriptions.length + report.documents.supporting.length} document(s) attached.`;
+
+  const reportIndex = reports.findIndex((item) => item.id === report.id);
+  metaReportPosition.textContent = `${reportIndex + 1} of ${reports.length}`;
+  prevReportBtn.style.display = reportIndex > 0 ? 'inline-flex' : 'none';
+  nextReportBtn.style.display = reportIndex < reports.length - 1 ? 'inline-flex' : 'none';
 
   submissionSummary.className = report.status === 'Pending Supervisor/mentor approval' ? 'success-box' : 'success-box';
   if (report.status === 'Pending Supervisor/mentor approval') {
@@ -734,7 +722,6 @@ function setReadonlyState(report) {
   document.getElementById('attach-supporting-btn').disabled = readonly;
   document.getElementById('save-draft-btn').disabled = false;
   document.getElementById('submit-report-btn').disabled = readonly;
-  document.getElementById('withdraw-report-btn').disabled = reports.length === 0;
 }
 
 function renderActiveReport() {
@@ -756,30 +743,60 @@ function renderActiveReport() {
     : 'Enter learner, role, duration, and document details for this employment experience.';
 }
 
-function updateHero() {
-  const submittedCount = reports.filter((report) => report.status === 'Pending Supervisor/mentor approval').length;
-  heroSummary.textContent = `${reports.length} FE report${reports.length === 1 ? '' : 's'} | ${submittedCount} submitted`;
-}
-
 function renderAll() {
-  renderReportList();
   renderActiveReport();
-  updateHero();
   persistReports();
 }
 
-function switchReport(reportId) {
-  readFormIntoReport();
-  activeReportId = reportId;
-  renderAll();
-}
-
-function addReport() {
+function addAnotherReport() {
   readFormIntoReport();
   const newReport = createEmptyReport(reports.length + 1);
   reports.push(newReport);
   activeReportId = newReport.id;
-  setMessage('Added a new foundational experience report for another employment experience.');
+  setMessage('Started a new foundational experience report for another employment experience.');
+  renderAll();
+}
+
+function goToAdjacentReport(offset) {
+  const currentIndex = reports.findIndex((report) => report.id === activeReportId);
+  if (currentIndex === -1) return;
+  const targetIndex = currentIndex + offset;
+  if (targetIndex < 0 || targetIndex >= reports.length) return;
+
+  readFormIntoReport();
+  activeReportId = reports[targetIndex].id;
+  setMessage(`Switched to employment experience ${targetIndex + 1} of ${reports.length}.`);
+  renderAll();
+}
+
+function goToPreviousReport() {
+  goToAdjacentReport(-1);
+}
+
+function goToNextReport() {
+  goToAdjacentReport(1);
+}
+
+function withdrawReport() {
+  const report = getActiveReport();
+  if (!report) return;
+
+  const reportIndex = reports.findIndex((item) => item.id === report.id);
+  if (reportIndex === -1) return;
+
+  const label = report.roleInfo.reportTitle || `Employment experience ${reportIndex + 1}`;
+  reports.splice(reportIndex, 1);
+
+  if (!reports.length) {
+    const replacementReport = createEmptyReport(1);
+    reports.push(replacementReport);
+    activeReportId = replacementReport.id;
+  } else {
+    const nextIndex = Math.min(reportIndex, reports.length - 1);
+    activeReportId = reports[nextIndex].id;
+  }
+
+  setMessage(`${label} was withdrawn and removed.`);
   renderAll();
 }
 
@@ -877,31 +894,6 @@ function submitReport() {
   window.location.href = '../../index.html';
 }
 
-function withdrawReport() {
-  const report = getActiveReport();
-  if (!report) {
-    setMessage('No foundational experience report is available to delete.');
-    return;
-  }
-
-  const reportIndex = reports.findIndex((item) => item.id === report.id);
-  if (reportIndex === -1) return;
-
-  reports.splice(reportIndex, 1);
-
-  if (!reports.length) {
-    const replacementReport = createEmptyReport(1);
-    reports.push(replacementReport);
-    activeReportId = replacementReport.id;
-  } else {
-    const nextIndex = Math.min(reportIndex, reports.length - 1);
-    activeReportId = reports[nextIndex].id;
-  }
-
-  renderAll();
-  setMessage('Foundational experience report deleted.');
-}
-
 function escapeHtml(value) {
   return String(value || '')
     .replace(/&/g, '&amp;')
@@ -910,12 +902,6 @@ function escapeHtml(value) {
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#39;');
 }
-
-reportList.addEventListener('click', (event) => {
-  const card = event.target.closest('[data-report-id]');
-  if (!card) return;
-  switchReport(card.dataset.reportId);
-});
 
 jobDescriptionList.addEventListener('click', (event) => {
   const button = event.target.closest('[data-remove-doc]');
@@ -929,12 +915,14 @@ supportingDocList.addEventListener('click', (event) => {
   removeDocument(button.dataset.removeDoc);
 });
 
-document.getElementById('add-report-btn').addEventListener('click', addReport);
 document.getElementById('attach-job-description-btn').addEventListener('click', () => attachFiles(jobDescriptionUpload, 'jobDescriptions', 'Job description'));
 document.getElementById('attach-supporting-btn').addEventListener('click', () => attachFiles(supportingDocsUpload, 'supporting', 'Supporting document'));
 document.getElementById('save-draft-btn').addEventListener('click', saveDraft);
 document.getElementById('submit-report-btn').addEventListener('click', submitReport);
 document.getElementById('withdraw-report-btn').addEventListener('click', withdrawReport);
+document.getElementById('add-new-report-btn').addEventListener('click', addAnotherReport);
+prevReportBtn.addEventListener('click', goToPreviousReport);
+nextReportBtn.addEventListener('click', goToNextReport);
 
 Object.values(formIds).forEach((id) => {
   document.getElementById(id).addEventListener('input', () => {
