@@ -18,12 +18,12 @@
   body{font-family:'DM Sans',sans-serif;background:var(--sand);color:var(--gray-800);min-height:100vh}
   a{text-decoration:none;color:inherit}
   button,input,select,textarea{font:inherit}
-  .topbar{background:var(--navy);min-height:60px;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:0 2rem}
+  .topbar{background:#1B5EA8;border-bottom:3px solid #6E3226;min-height:60px;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:0 2rem}
   .logo-group{display:flex;align-items:center;gap:10px;min-width:225px}
-  .logo-mark{width:36px;height:36px;background:var(--white);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
-  .logo-text{display:flex;flex-direction:column;line-height:1.1}
-  .logo-text .brand{font-size:13px;font-weight:600;color:var(--white);letter-spacing:.04em}
-  .logo-text .sub{font-size:10px;color:rgba(255,255,255,.5);letter-spacing:.02em;text-transform:uppercase}
+  .logo-mark{width:32px;height:32px;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .logo-text{display:flex;align-items:center;gap:10px}
+  .logo-text .brand{font-size:22px;font-weight:700;color:var(--white);letter-spacing:.01em;font-family:'DM Sans',sans-serif}
+  .logo-text .divider{width:1px;height:26px;background:rgba(255,255,255,.35)}.logo-text .sub{display:flex;flex-direction:column;font-size:9px;font-weight:600;color:rgba(255,255,255,.9);letter-spacing:.03em;text-transform:uppercase;line-height:1.4}
   .topbar-right{display:flex;align-items:center;gap:12px}
   .nav-links{display:flex;align-items:center;gap:2px}
   .nav-links a{color:rgba(255,255,255,.55);font-size:14px;padding:8px 16px;border-radius:var(--radius-sm);white-space:nowrap}
@@ -111,27 +111,16 @@
 <body>
 <header class="topbar">
   <div class="logo-group">
-    <div class="logo-mark">
-      <svg width="24" height="20" viewBox="0 0 24 20" fill="none" aria-hidden="true">
-        <path d="M2 10C2 5.58 5.58 2 10 2h4c4.42 0 8 3.58 8 8s-3.58 8-8 8h-4C5.58 18 2 14.42 2 10z" fill="#0B1F3A" opacity="0.12"/>
-        <path d="M7 10.5l3 3 7-7" stroke="#0B1F3A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </div>
-    <div class="logo-text"><span class="brand">CPA Canada</span><span class="sub">Chartered Professional Accountants</span></div>
+    <div class="logo-mark"><svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true"><circle cx="16" cy="3.5" r="1.6" fill="#fff"/><circle cx="16" cy="28.5" r="1.6" fill="#fff"/><circle cx="3.5" cy="16" r="1.6" fill="#fff"/><circle cx="28.5" cy="16" r="1.6" fill="#fff"/><circle cx="7.2" cy="7.2" r="1.3" fill="#fff"/><circle cx="24.8" cy="24.8" r="1.3" fill="#fff"/><circle cx="7.2" cy="24.8" r="1.3" fill="#fff"/><circle cx="24.8" cy="7.2" r="1.3" fill="#fff"/><circle cx="16" cy="16" r="2.6" fill="#fff"/><circle cx="16" cy="10" r="1" fill="#fff"/><circle cx="16" cy="22" r="1" fill="#fff"/><circle cx="10" cy="16" r="1" fill="#fff"/><circle cx="22" cy="16" r="1" fill="#fff"/></svg></div><div class="logo-text"><span class="brand">cpa</span><span class="divider"></span><span class="sub">Chartered<br>Professional<br>Accountants</span></div>
   </div>
   <div class="topbar-right">
-    <nav class="nav-links" aria-label="Primary navigation">
-      <a href="../1_Dashboard/LearnerDashboard.html">Dashboard</a>
-      <a href="1_WorkPlanInfo.html">Work plan setup</a>
-      <a href="2_WorkPlanInfo.html" class="active">Competencies</a>
-    </nav>
                 <details class="role-dropdown">
       <summary class="role-trigger"><span class="role-label">Learner</span><span class="role-caret">&#9662;</span></summary>
       <div class="role-menu">
         <a class="role-option active" href="../../index.html">Learner</a>
         <a class="role-option" href="../../1_Dashboard/CPAReviewer.html">CPA Reviewer</a>
         <a class="role-option" href="../../1_Dashboard/MentorDashboard.html">Mentor</a>
-        <a class="role-option" href="../../1_Dashboard/PTSBStaffDashboard.html">PTSB Staff</a>
+        <a class="role-option" href="../../1_Dashboard/PTSBStaffDashboard.html">PTB Staff</a>
               <a class="role-option" href="../../8_MentorOnboarding/1_MentorOnboarding.html">Mentor onboarding</a>
         <a class="role-option" href="../../10_ProgramAdmin/1_ProgramAdminMgmt.html">Program Admin</a>
       </div>
@@ -186,7 +175,7 @@
         <section class="form-section">
           <h3>Core competency selection</h3>
           <div class="option-grid" id="core-competency-grid"></div>
-          <div class="subcopy" style="margin-top:.75rem;">Available competency areas for work plan mapping are shown below. Core competency choices are required for this work plan.</div>
+          <div class="subcopy" style="margin-top:.75rem;">Select Financial Reporting, Management Accounting, or a combination of the two as the learner's core competency (required). Assurance and Trust is included automatically based on role type or work experience selection. See all 8 competency areas in the reference framework below.</div>
           <div class="reference-grid" id="competency-reference-grid" style="margin-top:1rem;"></div>
         </section>
 
@@ -213,6 +202,17 @@
         </section>
 
         <section class="form-section">
+          <h3>Assurance and Trust task statements</h3>
+          <div class="subcopy" style="margin-bottom:1rem;">Assurance and Trust task statements are included automatically when the learner's role type is "Firm - Audit & Assurance" or "Audit and assurance" was selected as a work experience role plan. All applicable statements must be marked Yes with a current level.</div>
+          <div class="table-head">
+            <div>Assurance and Trust statement</div>
+            <div>Applicable</div>
+            <div>Current level</div>
+          </div>
+          <div id="at-section" class="dc-list"></div>
+        </section>
+
+        <section class="form-section">
           <h3>DC statements</h3>
           <div class="subcopy" style="margin-bottom:1rem;">All DC statements are mandatory. The learner must select the current proficiency level for every DC statement before the work plan can be completed.</div>
           <div class="table-head">
@@ -226,10 +226,10 @@
         <section class="form-section">
           <h3>Actions</h3>
           <div class="button-row" style="margin-top:1rem;">
-            <button class="action-btn" type="button" onclick="location.href='../../index.html'">
+            <button class="action-btn" id="save-draft-btn" type="button" onclick="location.href='../../index.html'">
                 Save draft
-            </button>         
-              <button class="action-btn primary" type="button" onclick="location.href='../../index.html'">
+            </button>
+              <button class="action-btn primary" id="continue-btn" type="button" onclick="location.href='../../index.html'">
                   Submit Work Plan
               </button>
           </div>
@@ -274,34 +274,25 @@ const competencyCatalog = {
       }
     ]
   },
-  at: {
-    id: 'at',
-    name: 'Assurance & Trust',
+  ma: {
+    id: 'ma',
+    name: 'Management Accounting',
     kind: 'core',
-    description: 'Assurance engagement planning, procedure design, and evidence-based conclusions.',
-    tasks: [
-      {
-        id: 'at-1a',
-        title: 'AT1a - Formulate the planning and risk assessment of the assurance engagement (including calculating materiality and assessing the control environment).',
-        subtasks: []
-      },
-      {
-        id: 'at-1b',
-        title: 'AT1b - Design appropriate planned procedures that meet the objective of the engagement.',
-        subtasks: []
-      },
-      {
-        id: 'at-1c',
-        title: 'AT1c - Critically evaluate supporting information and results of analysis to draw conclusions and communicate results.',
-        subtasks: []
-      }
-    ]
+    description: 'Cost management, planning, budgeting, and performance measurement for internal decision-making.',
+    tasks: []
   }
 };
 
+const atTaskStatements = [
+  { id: 'at-1a', title: 'AT1a - Formulate the planning and risk assessment of the assurance engagement (including calculating materiality and assessing the control environment).' },
+  { id: 'at-1b', title: 'AT1b - Design appropriate planned procedures that meet the objective of the engagement.' },
+  { id: 'at-1c', title: 'AT1c - Critically evaluate supporting information and results of analysis to draw conclusions and communicate results.' }
+];
+
 const competencyReferenceAreas = [
   { id:'fr', name:'Financial Reporting', kind:'core' },
-  { id:'at', name:'Assurance & Trust', kind:'core' },
+  { id:'ma', name:'Management Accounting', kind:'core' },
+  { id:'at', name:'Assurance & Trust', kind:'auto' },
   { id:'sg', name:'Strategy and Governance', kind:'reference' },
   { id:'md', name:'Management Decision-Making', kind:'reference' },
   { id:'fi', name:'Finance', kind:'reference' },
@@ -350,16 +341,23 @@ const defaultState = {
   coreMode: '',
   taskSelections: {},
   subtaskSelections: {},
+  atSelections: {},
   dcLevels: {},
   updatedAt: new Date().toISOString()
 };
 
-let competencyState = savedCompetencies || defaultState;
+let competencyState = Object.assign({}, defaultState, savedCompetencies || {});
+competencyState.taskSelections = competencyState.taskSelections || {};
+competencyState.subtaskSelections = competencyState.subtaskSelections || {};
+competencyState.atSelections = competencyState.atSelections || {};
+competencyState.dcLevels = competencyState.dcLevels || {};
+if (competencyState.coreMode === 'at') competencyState.coreMode = '';
 
 const coreCompetencyGrid = document.getElementById('core-competency-grid');
 const referenceGrid = document.getElementById('competency-reference-grid');
 const coreTaskSections = document.getElementById('core-task-sections');
 const subtaskSections = document.getElementById('subtask-sections');
+const atSection = document.getElementById('at-section');
 const dcSection = document.getElementById('dc-section');
 const messageBar = document.getElementById('message-bar');
 const messageText = document.getElementById('message-text');
@@ -429,12 +427,24 @@ function selectedRolePlans() {
 
 function activeCoreCompetencies() {
   if (competencyState.coreMode === 'fr') return ['fr'];
-  if (competencyState.coreMode === 'at') return ['at'];
+  if (competencyState.coreMode === 'ma') return ['ma'];
+  if (competencyState.coreMode === 'combo') return ['fr', 'ma'];
   return [];
 }
 
 function activeApplicableCompetencies() {
   return [...activeCoreCompetencies()];
+}
+
+function atApplies() {
+  return workPlan.roleType === 'Firm - Audit & Assurance' || selectedRolePlans().includes('Audit and assurance');
+}
+
+function atSelection(index) {
+  if (!competencyState.atSelections[index]) {
+    competencyState.atSelections[index] = { applicable: '', level: '' };
+  }
+  return competencyState.atSelections[index];
 }
 
 function taskSelection(taskId) {
@@ -473,8 +483,9 @@ function dcLevel(index) {
 
 function renderCoreCompetencySelection() {
   const options = [
-    { id:'fr', title:'Financial Reporting', description:'Use Financial Reporting as the primary core competency area.' },
-    { id:'at', title:'Assurance & Trust', description:'Use Assurance & Trust as the primary core competency area.' }
+    { id:'fr', title:'Financial Reporting', description:'Use Financial Reporting as the core competency area for this work plan.' },
+    { id:'ma', title:'Management Accounting', description:'Use Management Accounting as the core competency area for this work plan.' },
+    { id:'combo', title:'Financial Reporting + Management Accounting', description:'Use a combination of Financial Reporting and Management Accounting for this work plan.' }
   ];
 
   coreCompetencyGrid.innerHTML = options.map((option) => `
@@ -488,12 +499,15 @@ function renderCoreCompetencySelection() {
 
 function renderReferenceGrid() {
   referenceGrid.innerHTML = competencyReferenceAreas.map((area) => {
+    const isCoreSelected = activeCoreCompetencies().includes(area.id);
+    const isAtAuto = area.id === 'at' && atApplies();
     const classes = [
       'reference-card',
-      activeCoreCompetencies().includes(area.id) ? 'core' : ''
+      (isCoreSelected || isAtAuto) ? 'core' : ''
     ].filter(Boolean).join(' ');
     let helper = 'Available in the broader work plan framework.';
-    if (activeCoreCompetencies().includes(area.id)) helper = 'Selected as a required core competency for this work plan.';
+    if (isCoreSelected) helper = 'Selected as a required core competency for this work plan.';
+    if (isAtAuto) helper = 'Automatically included based on the learner\'s role type or work plan selection.';
     return `<div class="${classes}"><strong>${escapeHtml(area.name)}</strong><span>${escapeHtml(helper)}</span></div>`;
   }).join('');
 }
@@ -511,9 +525,16 @@ function renderCoreTaskSections() {
 
   coreTaskSections.innerHTML = active.map((competencyId) => {
     const competency = competencyCatalog[competencyId];
-    const requiredCopy = competency.kind === 'core'
-      ? 'Select at least 2 core task statements in this competency area.'
-      : 'Assurance and Trust applies automatically based on the learner role type or template.';
+    const requiredCopy = 'Select at least 2 core task statements in this competency area.';
+
+    if (!competency.tasks.length) {
+      return `
+        <section class="form-section">
+          <h3>${escapeHtml(competency.name)}</h3>
+          <div class="empty-state">Task statements for ${escapeHtml(competency.name)} are not yet available in the reference competency map. Contact CPA Staff to confirm the applicable task statements for this competency area.</div>
+        </section>
+      `;
+    }
 
     const tasks = competency.tasks.map((task) => {
       const selection = taskSelection(task.id);
@@ -611,6 +632,40 @@ function renderSubtaskSections() {
     : '<div class="empty-state">Select core task statements first to display the related sub-task statements.</div>';
 }
 
+function renderAtSection() {
+  if (!atApplies()) {
+    atSection.innerHTML = '<div class="empty-state">Assurance and Trust task statements are not required. They will appear automatically if the learner\'s role type is "Firm - Audit & Assurance" or "Audit and assurance" is selected as a work experience role plan.</div>';
+    return;
+  }
+
+  atSection.innerHTML = atTaskStatements.map((statement, index) => {
+    const selection = atSelection(index);
+    return `
+      <div class="statement-card">
+        <div class="statement-row">
+          <div>
+            <strong>${escapeHtml(statement.title)}</strong>
+            <span>Assurance & Trust</span>
+          </div>
+          <div class="field">
+            <label for="at-applicable-${index}">Applicable</label>
+            <select id="at-applicable-${index}" data-at-applicable="${index}">
+              <option value="" ${selection.applicable === '' ? 'selected' : ''}>Select</option>
+              <option value="Yes" ${selection.applicable === 'Yes' ? 'selected' : ''}>Yes</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="at-level-${index}">Current level</label>
+            <select id="at-level-${index}" data-at-level="${index}">
+              ${selectOptionsMarkup(selection.level)}
+            </select>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
 function renderDcSection() {
   dcSection.innerHTML = dcStatements.map((statement, index) => `
     <div class="statement-card">
@@ -645,9 +700,14 @@ function validateState() {
   }
 
   activeCore.forEach((competencyId) => {
+    const competency = competencyCatalog[competencyId];
+    if (!competency.tasks.length) {
+      issues.push(`Task statements for ${competency.name} are not yet available in the reference competency map.`);
+      return;
+    }
     const selectedTasks = selectedTasksForCompetency(competencyId);
     if (selectedTasks.length < 2) {
-      issues.push(`Select at least 2 core task statements for ${competencyCatalog[competencyId].name}.`);
+      issues.push(`Select at least 2 core task statements for ${competency.name}.`);
     }
     selectedTasks.forEach((task) => {
       if (!taskSelection(task.id).level) {
@@ -669,6 +729,18 @@ function validateState() {
       });
     });
   });
+
+  if (atApplies()) {
+    atTaskStatements.forEach((statement, index) => {
+      const selection = atSelection(index);
+      if (selection.applicable !== 'Yes') {
+        issues.push(`"${statement.title}" must be marked Yes for Assurance and Trust.`);
+      }
+      if (!selection.level) {
+        issues.push(`Current level is required for Assurance and Trust statement "${statement.title}".`);
+      }
+    });
+  }
 
   dcStatements.forEach((statement, index) => {
     if (!dcLevel(index)) {
@@ -719,6 +791,7 @@ function renderAll() {
   renderReferenceGrid();
   renderCoreTaskSections();
   renderSubtaskSections();
+  renderAtSection();
   renderDcSection();
   renderSummary();
   persists();
@@ -762,6 +835,16 @@ subtaskSections.addEventListener('change', (event) => {
   const selection = subtaskSelection(taskId, index);
   if (event.target.dataset.subtaskApplicable) selection.applicable = event.target.value;
   if (event.target.dataset.subtaskLevel) selection.level = event.target.value;
+  renderSummary();
+  persists();
+});
+
+atSection.addEventListener('change', (event) => {
+  const index = event.target.dataset.atApplicable !== undefined ? event.target.dataset.atApplicable : event.target.dataset.atLevel;
+  if (index === undefined) return;
+  const selection = atSelection(index);
+  if (event.target.dataset.atApplicable !== undefined) selection.applicable = event.target.value;
+  if (event.target.dataset.atLevel !== undefined) selection.level = event.target.value;
   renderSummary();
   persists();
 });

@@ -17,12 +17,12 @@
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:'DM Sans',sans-serif;background:var(--sand);color:var(--gray-800);min-height:100vh}
   a{color:inherit}
-  .topbar{background:var(--navy);min-height:60px;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:0 2rem}
+  .topbar{background:#1B5EA8;border-bottom:3px solid #6E3226;min-height:60px;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:0 2rem}
   .logo-group{display:flex;align-items:center;gap:10px;min-width:225px}
-  .logo-mark{width:36px;height:36px;background:var(--white);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
-  .logo-text{display:flex;flex-direction:column;line-height:1.1}
-  .logo-text .brand{font-size:13px;font-weight:600;color:var(--white);letter-spacing:.04em}
-  .logo-text .sub{font-size:10px;color:rgba(255,255,255,.5);letter-spacing:.02em;text-transform:uppercase}
+  .logo-mark{width:32px;height:32px;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .logo-text{display:flex;align-items:center;gap:10px}
+  .logo-text .brand{font-size:22px;font-weight:700;color:var(--white);letter-spacing:.01em;font-family:'DM Sans',sans-serif}
+  .logo-text .divider{width:1px;height:26px;background:rgba(255,255,255,.35)}.logo-text .sub{display:flex;flex-direction:column;font-size:9px;font-weight:600;color:rgba(255,255,255,.9);letter-spacing:.03em;text-transform:uppercase;line-height:1.4}
   .nav-links{display:flex;align-items:center;justify-content:center;gap:2px}
   .nav-links a{color:rgba(255,255,255,.55);font-size:14px;text-decoration:none;padding:8px 16px;border-radius:var(--radius-sm);white-space:nowrap}
   .nav-links a.active,.nav-links a:hover{color:var(--white);background:rgba(255,255,255,.08)}
@@ -168,28 +168,16 @@
 <body data-checkin-required="true">
 <header class="topbar">
   <div class="logo-group">
-    <div class="logo-mark">
-      <svg width="24" height="20" viewBox="0 0 24 20" fill="none" aria-hidden="true">
-        <path d="M2 10C2 5.58 5.58 2 10 2h4c4.42 0 8 3.58 8 8s-3.58 8-8 8h-4C5.58 18 2 14.42 2 10z" fill="#0B1F3A" opacity="0.12"/>
-        <path d="M7 10.5l3 3 7-7" stroke="#0B1F3A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </div>
-    <div class="logo-text"><span class="brand">CPA Canada</span><span class="sub">Chartered Professional Accountants</span></div>
+    <div class="logo-mark"><svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true"><circle cx="16" cy="3.5" r="1.6" fill="#fff"/><circle cx="16" cy="28.5" r="1.6" fill="#fff"/><circle cx="3.5" cy="16" r="1.6" fill="#fff"/><circle cx="28.5" cy="16" r="1.6" fill="#fff"/><circle cx="7.2" cy="7.2" r="1.3" fill="#fff"/><circle cx="24.8" cy="24.8" r="1.3" fill="#fff"/><circle cx="7.2" cy="24.8" r="1.3" fill="#fff"/><circle cx="24.8" cy="7.2" r="1.3" fill="#fff"/><circle cx="16" cy="16" r="2.6" fill="#fff"/><circle cx="16" cy="10" r="1" fill="#fff"/><circle cx="16" cy="22" r="1" fill="#fff"/><circle cx="10" cy="16" r="1" fill="#fff"/><circle cx="22" cy="16" r="1" fill="#fff"/></svg></div><div class="logo-text"><span class="brand">cpa</span><span class="divider"></span><span class="sub">Chartered<br>Professional<br>Accountants</span></div>
   </div>
   <div class="topbar-right">
-    <nav class="nav-links" aria-label="Primary navigation">
-      <a href="index.html" class="active">Dashboard</a>
-      <a href="#">Experience</a>
-      <a href="#">Reports</a>
-      <a href="#">Messages</a>
-    </nav>
                 <details class="role-dropdown">
       <summary class="role-trigger"><span class="role-label">Learner</span><span class="role-caret">&#9662;</span></summary>
       <div class="role-menu">
         <a class="role-option active" href="index.html">Learner</a>
         <a class="role-option" href="1_Dashboard/CPAReviewer.html">CPA Reviewer</a>
         <a class="role-option" href="1_Dashboard/MentorDashboard.html">Mentor</a>
-        <a class="role-option" href="1_Dashboard/PTSBStaffDashboard.html">PTSB Staff</a>
+        <a class="role-option" href="1_Dashboard/PTSBStaffDashboard.html">PTB Staff</a>
               <a class="role-option" href="../8_MentorOnboarding/1_MentorOnboarding.html">Mentor onboarding</a>
         <a class="role-option" href="../10_ProgramAdmin/1_ProgramAdminMgmt.html">Program Admin</a>
       </div>

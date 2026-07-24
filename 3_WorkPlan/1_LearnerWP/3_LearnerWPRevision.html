@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CPA - Work Plan Revision</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --navy:#0B1F3A; --blue:#1B5EA8; --accent:#2A9D8F; --amber:#E76F1A; --green:#2D7A4E; --red:#C0392B;
@@ -12,18 +12,24 @@
     --gray-400:#A8A49E; --gray-600:#6B6760; --gray-800:#2E2C2A;
     --shadow-sm:0 1px 3px rgba(11,31,58,0.07),0 1px 2px rgba(11,31,58,0.05);
     --radius-sm:6px; --radius-md:10px; --radius-lg:16px;
+    --imis-blue:#1B5EA8;
+    --badge-green-bg:#E3F3E6; --badge-green-text:#2D7A4E;
+    --badge-yellow-bg:#FCF3D9; --badge-yellow-text:#8A6D1D;
+    --badge-blue-bg:#E8ECF7; --badge-blue-text:#3B4A7A;
+    --badge-red-bg:#FBE7E5; --badge-red-text:#9B3226;
+    --badge-gray-bg:#F2F1EF; --badge-gray-text:#6B6760;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:'DM Sans',sans-serif;background:var(--sand);color:var(--gray-800);min-height:100vh}
   a{text-decoration:none;color:inherit}
   button,input,select,textarea{font:inherit}
   textarea{resize:vertical}
-  .topbar{background:var(--navy);min-height:60px;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:0 2rem}
+  .topbar{background:#1B5EA8;border-bottom:3px solid #6E3226;min-height:60px;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:0 2rem}
   .logo-group{display:flex;align-items:center;gap:10px;min-width:225px}
-  .logo-mark{width:36px;height:36px;background:var(--white);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
-  .logo-text{display:flex;flex-direction:column;line-height:1.1}
-  .logo-text .brand{font-size:13px;font-weight:600;color:var(--white);letter-spacing:.04em}
-  .logo-text .sub{font-size:10px;color:rgba(255,255,255,.5);letter-spacing:.02em;text-transform:uppercase}
+  .logo-mark{width:32px;height:32px;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .logo-text{display:flex;align-items:center;gap:10px}
+  .logo-text .brand{font-size:22px;font-weight:700;color:var(--white);letter-spacing:.01em;font-family:'DM Sans',sans-serif}
+  .logo-text .divider{width:1px;height:26px;background:rgba(255,255,255,.35)}.logo-text .sub{display:flex;flex-direction:column;font-size:9px;font-weight:600;color:rgba(255,255,255,.9);letter-spacing:.03em;text-transform:uppercase;line-height:1.4}
   .topbar-right{display:flex;align-items:center;gap:12px}
   .nav-links{display:flex;align-items:center;gap:2px}
   .nav-links a{color:rgba(255,255,255,.55);font-size:14px;padding:8px 16px;border-radius:var(--radius-sm);white-space:nowrap}
@@ -37,65 +43,62 @@
   .role-option{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:var(--radius-sm);font-size:13px;color:var(--gray-800)}
   .role-option:hover{background:var(--gray-100)}
   .role-option.active{background:#EBF3FF;color:var(--blue);font-weight:600}
-  .page{max-width:1540px;margin:0 auto;padding:2rem 2rem 4rem}
+  .page{max-width:1340px;margin:0 auto;padding:2rem 2rem 4rem}
   .hero{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--gray-200)}
-  .hero h1{font-family:'DM Serif Display',serif;font-size:38px;font-weight:400;color:var(--navy);margin-bottom:6px}
+  .hero h1{font-family:'DM Sans',sans-serif;font-size:26px;font-weight:700;color:#1a1a1a;margin-bottom:6px}
   .hero p{font-size:14px;color:var(--gray-600);max-width:920px;line-height:1.5}
-  .hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);padding:10px 16px;box-shadow:var(--shadow-sm);font-size:13px;color:var(--gray-600)}
   .dot{width:8px;height:8px;border-radius:50%;background:var(--blue);flex:0 0 auto}
   .message-bar{display:none;align-items:center;gap:10px;margin-bottom:1rem;padding:12px 14px;border-radius:var(--radius-md);background:#EBF3FF;border:1px solid rgba(27,94,168,.18);color:var(--navy);box-shadow:var(--shadow-sm)}
   .message-bar.visible{display:flex}
   .panel{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm)}
-  .panel h2{font-size:17px;color:var(--navy);margin-bottom:4px}
+  .panel h2{font-size:17px;color:#1a1a1a;margin-bottom:4px}
   .panel-copy{font-size:12px;color:var(--gray-600);line-height:1.45}
-  .section-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gray-400);margin-bottom:.75rem}
-  .workspace{display:grid;grid-template-columns:320px minmax(0,1fr) 320px;gap:16px}
-  .sidebar-panel,.detail-panel,.meta-panel{padding:1.25rem}
-  .sidebar-stack,.meta-stack,.comment-list,.trail-list,.doc-list,.section-stack,.task-stack,.dc-list{display:flex;flex-direction:column;gap:12px}
-  .queue-card{padding:12px;border-radius:var(--radius-md);border:1px solid var(--gray-200);background:var(--sand);cursor:pointer;transition:all .15s ease}
-  .queue-card.active{border-color:rgba(27,94,168,.32);box-shadow:0 0 0 3px rgba(27,94,168,.08);background:#F7FAFF}
-  .queue-card strong{display:block;font-size:14px;color:var(--navy);margin-bottom:4px}
-  .queue-card span{display:block;font-size:12px;color:var(--gray-600);line-height:1.4}
+  .section-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#2E2C2A;margin-bottom:.75rem}
+  .workspace-main{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:16px}
+  .detail-panel,.meta-panel{padding:1.25rem}
+  .meta-stack,.comment-list,.trail-list,.doc-list,.section-stack,.task-stack,.dc-list{display:flex;flex-direction:column;gap:12px}
   .detail-stack{display:flex;flex-direction:column;gap:16px}
-  .info-section{padding:1rem;border:1px solid var(--gray-200);border-radius:var(--radius-md);background:var(--sand)}
-  .info-section h3{font-size:15px;color:var(--navy);margin-bottom:6px}
+  .info-section{padding:1rem 0;border-bottom:1px solid var(--gray-200)}
+  .info-section:last-child{border-bottom:none}
+  .info-section h3{font-size:15px;color:#1a1a1a;margin-bottom:10px;font-weight:700}
   .grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
   .grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
   .field-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
   .field{display:flex;flex-direction:column;gap:6px}
   .field.full{grid-column:1 / -1}
-  .field label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gray-400)}
-  .field input,.field select,.field textarea{border:1px solid var(--gray-200);border-radius:var(--radius-sm);background:var(--white);padding:10px 12px;color:var(--gray-800)}
-  .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:rgba(27,94,168,.32);box-shadow:0 0 0 3px rgba(27,94,168,.08)}
+  .field label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#2E2C2A}
+  .field input,.field select,.field textarea{border:1px solid var(--gray-300);border-radius:var(--radius-sm);background:var(--white);padding:10px 12px;color:var(--gray-800)}
+  .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--imis-blue);box-shadow:0 0 0 3px rgba(27,94,168,.12)}
   .field input[readonly],.field textarea[readonly]{background:var(--gray-100);color:var(--gray-600)}
   .field-hint,.subcopy{font-size:11px;color:var(--gray-600);line-height:1.45}
-  .value-card,.metric-card,.meta-card,.notice-box,.comment-item,.trail-item,.doc-item,.option-card,.checkbox-card,.reference-card,.task-card,.statement-card{padding:12px;border-radius:var(--radius-md);border:1px solid var(--gray-200);background:var(--white)}
+  .value-card,.metric-card,.meta-card,.notice-box,.comment-item,.trail-item,.doc-item,.option-card,.checkbox-card,.reference-card,.task-card,.statement-card{padding:12px;border-radius:var(--radius-sm);border:1px solid var(--gray-200);background:var(--white)}
   .value-card span,.metric-card span,.meta-card span,.notice-box span,.comment-item span,.trail-item span,.doc-item span,.option-card span,.checkbox-card span,.reference-card span,.task-card span,.statement-card span{display:block;font-size:12px;color:var(--gray-600);line-height:1.45}
-  .value-card strong,.metric-card strong,.meta-card strong,.notice-box strong,.comment-item strong,.trail-item strong,.doc-item strong,.option-card strong,.checkbox-card strong,.reference-card strong,.task-card strong,.statement-card strong{display:block;font-size:13px;color:var(--navy);margin-bottom:4px}
+  .value-card strong,.metric-card strong,.meta-card strong,.notice-box strong,.comment-item strong,.trail-item strong,.doc-item strong,.option-card strong,.checkbox-card strong,.reference-card strong,.task-card strong,.statement-card strong{display:block;font-size:13px;color:#1a1a1a;margin-bottom:4px}
   .metric-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
-  .metric-card .value{font-family:'DM Serif Display',serif;font-size:30px;line-height:1;color:var(--navy);margin-bottom:6px}
+  .metric-card .value{font-family:'DM Sans',sans-serif;font-weight:700;font-size:26px;line-height:1;color:#1a1a1a;margin-bottom:6px}
   .button-row{display:flex;flex-wrap:wrap;gap:8px}
-  .action-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:var(--radius-sm);border:1px solid var(--gray-200);padding:9px 12px;background:var(--white);color:var(--navy);font-size:12px;font-weight:700;cursor:pointer;transition:all .15s ease}
-  .action-btn:hover{border-color:rgba(27,94,168,.28);background:#F7FAFF}
-  .action-btn.primary{background:#EBF3FF;border-color:rgba(27,94,168,.28);color:var(--blue)}
-  .action-btn.success{background:#E8F5EE;border-color:rgba(45,122,78,.22);color:var(--green)}
-  .action-btn.warn{background:#FEF3E8;border-color:rgba(231,111,26,.24);color:var(--amber)}
-  .action-btn[disabled]{opacity:.55;cursor:not-allowed;background:var(--gray-100);color:var(--gray-600)}
-  .status-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:5px 10px;border-radius:20px;white-space:nowrap}
-  .status-badge .dot{width:6px;height:6px}
-  .badge-draft{background:#EBF3FF;color:var(--blue)} .badge-draft .dot{background:var(--blue)}
-  .badge-pending{background:#FEF3E8;color:var(--amber)} .badge-pending .dot{background:var(--amber)}
-  .badge-review{background:#F5F1FF;color:#6B4EC9} .badge-review .dot{background:#6B4EC9}
-  .badge-declined{background:#FDECEA;color:var(--red)} .badge-declined .dot{background:var(--red)}
-  .badge-approved{background:#E8F5EE;color:var(--green)} .badge-approved .dot{background:var(--green)}
-  .notice-box{background:#F7FAFF}
-  .notice-box.warn{background:#FFF8F1;border-color:rgba(231,111,26,.22)}
-  .notice-box.success{background:#F2FBF6;border-color:rgba(45,122,78,.22)}
+  #version-nav-row .action-btn{flex:1}
+  .action-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:var(--radius-sm);border:1px solid var(--imis-blue);padding:9px 16px;background:var(--white);color:var(--imis-blue);font-size:12px;font-weight:700;cursor:pointer;transition:all .15s ease}
+  .action-btn:hover{background:#EBF3FF}
+  .action-btn.primary{background:var(--imis-blue);border-color:var(--imis-blue);color:var(--white)}
+  .action-btn.primary:hover{background:#164e8f}
+  .action-btn.success{background:var(--white);border-color:var(--badge-green-text);color:var(--badge-green-text)}
+  .action-btn.success:hover{background:var(--badge-green-bg)}
+  .action-btn.warn{background:var(--white);border-color:var(--badge-yellow-text);color:var(--badge-yellow-text)}
+  .action-btn.warn:hover{background:var(--badge-yellow-bg)}
+  .action-btn[disabled]{opacity:.55;cursor:not-allowed;background:var(--gray-100);border-color:var(--gray-300);color:var(--gray-600)}
+  .status-badge{display:inline-block;padding:4px 10px;border-radius:3px;font-size:12px;font-weight:600;white-space:nowrap}
+  .badge-draft{background:var(--badge-blue-bg);color:var(--badge-blue-text)}
+  .badge-pending{background:var(--badge-yellow-bg);color:var(--badge-yellow-text)}
+  .badge-review{background:var(--badge-blue-bg);color:var(--badge-blue-text)}
+  .badge-declined{background:var(--badge-red-bg);color:var(--badge-red-text)}
+  .badge-approved{background:var(--badge-green-bg);color:var(--badge-green-text)}
+  .notice-box.warn{background:var(--badge-yellow-bg);border-color:#EDD9A0}
+  .notice-box.success{background:var(--badge-green-bg);border-color:#B9DDC3}
   .option-grid,.checkbox-grid,.reference-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-  .option-card{background:var(--sand)}
   .option-card.selectable{cursor:pointer;transition:all .15s ease}
   .option-card.selected{border-color:rgba(27,94,168,.32);box-shadow:0 0 0 3px rgba(27,94,168,.08);background:#F7FAFF}
-  .checkbox-card{display:flex;align-items:flex-start;gap:10px;background:var(--sand)}
+  .checkbox-card{display:flex;align-items:flex-start;gap:10px}
   .checkbox-card input{margin-top:3px}
   .reference-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
   .reference-card.core{background:#F7FAFF;border-color:rgba(27,94,168,.18)}
@@ -104,13 +107,11 @@
   .checkbox-inline{display:flex;align-items:flex-start;gap:10px}
   .checkbox-inline input{margin-top:3px}
   .hidden{display:none !important}
-  .empty-state{padding:18px;border:1px dashed var(--gray-300);border-radius:var(--radius-md);background:var(--sand);text-align:center;font-size:13px;color:var(--gray-600)}
-  @media(max-width:1360px){
-    .workspace{grid-template-columns:300px minmax(0,1fr)}
-    .meta-panel{grid-column:1 / -1}
+  .empty-state{padding:18px;border:1px dashed var(--gray-300);border-radius:var(--radius-md);background:var(--white);text-align:center;font-size:13px;color:var(--gray-600)}
+  @media(max-width:1120px){
+    .workspace-main{grid-template-columns:1fr}
   }
   @media(max-width:980px){
-    .workspace{grid-template-columns:1fr}
     .reference-grid,.option-grid,.checkbox-grid,.field-grid,.metric-grid,.grid-2,.grid-3,.task-head,.statement-row,.table-head{grid-template-columns:1fr}
   }
   @media(max-width:760px){
@@ -126,28 +127,16 @@
 <body>
 <header class="topbar">
   <div class="logo-group">
-    <div class="logo-mark">
-      <svg width="24" height="20" viewBox="0 0 24 20" fill="none" aria-hidden="true">
-        <path d="M2 10C2 5.58 5.58 2 10 2h4c4.42 0 8 3.58 8 8s-3.58 8-8 8h-4C5.58 18 2 14.42 2 10z" fill="#0B1F3A" opacity="0.12"/>
-        <path d="M7 10.5l3 3 7-7" stroke="#0B1F3A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </div>
-    <div class="logo-text"><span class="brand">CPA Canada</span><span class="sub">Chartered Professional Accountants</span></div>
+    <div class="logo-mark"><svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true"><circle cx="16" cy="3.5" r="1.6" fill="#fff"/><circle cx="16" cy="28.5" r="1.6" fill="#fff"/><circle cx="3.5" cy="16" r="1.6" fill="#fff"/><circle cx="28.5" cy="16" r="1.6" fill="#fff"/><circle cx="7.2" cy="7.2" r="1.3" fill="#fff"/><circle cx="24.8" cy="24.8" r="1.3" fill="#fff"/><circle cx="7.2" cy="24.8" r="1.3" fill="#fff"/><circle cx="24.8" cy="7.2" r="1.3" fill="#fff"/><circle cx="16" cy="16" r="2.6" fill="#fff"/><circle cx="16" cy="10" r="1" fill="#fff"/><circle cx="16" cy="22" r="1" fill="#fff"/><circle cx="10" cy="16" r="1" fill="#fff"/><circle cx="22" cy="16" r="1" fill="#fff"/></svg></div><div class="logo-text"><span class="brand">cpa</span><span class="divider"></span><span class="sub">Chartered<br>Professional<br>Accountants</span></div>
   </div>
   <div class="topbar-right">
-    <nav class="nav-links" aria-label="Primary navigation">
-      <a href="../../1_Dashboard/LearnerDashboard.html">Dashboard</a>
-      <a href="1_LearnerWorkPlanInfo.html">Work plan setup</a>
-      <a href="2_LearnerWorkPlanInfo.html">Competencies</a>
-      <a href="3_LearnerWPRevision.html" class="active">Revisions</a>
-    </nav>
     <details class="role-dropdown">
       <summary class="role-trigger"><span class="role-label">Learner</span><span class="role-caret">&#9662;</span></summary>
       <div class="role-menu">
         <a class="role-option active" href="../../index.html">Learner</a>
         <a class="role-option" href="../../1_Dashboard/CPAReviewer.html">CPA Reviewer</a>
         <a class="role-option" href="../../1_Dashboard/MentorDashboard.html">Mentor</a>
-        <a class="role-option" href="../../1_Dashboard/PTSBStaffDashboard.html">PTSB Staff</a>
+        <a class="role-option" href="../../1_Dashboard/PTSBStaffDashboard.html">PTB Staff</a>
               <a class="role-option" href="../../8_MentorOnboarding/1_MentorOnboarding.html">Mentor onboarding</a>
         <a class="role-option" href="../../10_ProgramAdmin/1_ProgramAdminMgmt.html">Program Admin</a>
       </div>
@@ -161,7 +150,6 @@
       <h1 id="revision-title">Revise and resubmit work plan</h1>
       <p>Review the returned work plan, update the full intake and competency details in one place, then resubmit the revision through the recorded review route.</p>
     </div>
-    <div class="hero-badge"><span class="dot"></span><span id="hero-summary">Loading work plan versions</span></div>
   </section>
 
   <div class="message-bar" id="message-bar" role="status" aria-live="polite">
@@ -169,20 +157,7 @@
     <span id="message-text"></span>
   </div>
 
-  <section class="workspace">
-    <aside class="panel sidebar-panel">
-      <div class="section-label">Version history</div>
-      <h2>Work plan versions</h2>
-      <p class="panel-copy">Submitted versions remain available for reference. Open any version to review it, and update the active draft when a revision is required.</p>
-      <div class="sidebar-stack" style="margin-top:1rem;">
-        <div class="meta-card">
-          <strong>Learner</strong>
-          <span id="learner-summary">Loading learner details.</span>
-        </div>
-        <div id="queue-list"></div>
-      </div>
-    </aside>
-
+  <section class="workspace-main">
     <section class="panel detail-panel">
       <div class="section-label">Revision workspace</div>
       <h2 id="detail-title">Selected version</h2>
@@ -381,7 +356,7 @@
         <section class="info-section">
           <h3>Core competency selection</h3>
           <div class="option-grid" id="core-competency-grid"></div>
-          <div class="subcopy" style="margin-top:.75rem;">Select the core competency path for this revised work plan.</div>
+          <div class="subcopy" style="margin-top:.75rem;">Select Financial Reporting, Management Accounting, or a combination of both as the core competency path for this revised work plan. Assurance and Trust task statements are automatically included when the role type is Firm - Audit &amp; Assurance or Audit and assurance is selected under Job information.</div>
           <div class="reference-grid" id="competency-reference-grid" style="margin-top:1rem;"></div>
         </section>
 
@@ -405,6 +380,17 @@
             <div>Current level</div>
           </div>
           <div id="subtask-sections" class="section-stack"></div>
+        </section>
+
+        <section class="info-section">
+          <h3>Assurance and Trust task statements</h3>
+          <div class="subcopy" style="margin-bottom:1rem;">When applicable based on role type or job information, all Assurance and Trust task statements are required and must be marked "Yes" with a current level recorded.</div>
+          <div class="table-head">
+            <div>Assurance and Trust statement</div>
+            <div>Applicable</div>
+            <div>Current level</div>
+          </div>
+          <div id="at-section" class="dc-list"></div>
         </section>
 
         <section class="info-section">
@@ -438,6 +424,14 @@
       <div class="section-label">Audit and route</div>
       <h2>Submission history</h2>
       <div class="meta-stack" style="margin-top:1rem;">
+        <div class="meta-card">
+          <strong>Work plan version</strong>
+          <span id="meta-version-position">1 of 1</span>
+        </div>
+        <div class="button-row" id="version-nav-row">
+          <button type="button" class="action-btn" id="prev-version-btn">Previous</button>
+          <button type="button" class="action-btn" id="next-version-btn">Next</button>
+        </div>
         <div class="meta-card"><strong>Current status</strong><span id="meta-status">Not available</span></div>
         <div class="meta-card"><strong>Submitted date and time</strong><span id="meta-submitted">Not submitted</span></div>
         <div class="meta-card"><strong>Next workflow destination</strong><span id="meta-route">No route recorded.</span></div>
@@ -472,19 +466,21 @@ const competencyCatalog = {
       { id: 'fr-4', title: 'FR4 - Assess variances on historical, year-over-year financial statements and interpret the root causes, including insights into interconnectivity of multiple line items (over two business periods, at least one of which needs to be year-end).', subtasks: [] }
     ]
   },
-  at: {
-    id: 'at',
-    name: 'Assurance & Trust',
+  ma: {
+    id: 'ma',
+    name: 'Management Accounting',
     kind: 'core',
-    tasks: [
-      { id: 'at-1a', title: 'AT1a - Formulate the planning and risk assessment of the assurance engagement (including calculating materiality and assessing the control environment).', subtasks: [] },
-      { id: 'at-1b', title: 'AT1b - Design appropriate planned procedures that meet the objective of the engagement.', subtasks: [] },
-      { id: 'at-1c', title: 'AT1c - Critically evaluate supporting information and results of analysis to draw conclusions and communicate results.', subtasks: [] }
-    ]
+    tasks: []
   }
 };
+const atTaskStatements = [
+  { id: 'at-1a', title: 'AT1a - Formulate the planning and risk assessment of the assurance engagement (including calculating materiality and assessing the control environment).' },
+  { id: 'at-1b', title: 'AT1b - Design appropriate planned procedures that meet the objective of the engagement.' },
+  { id: 'at-1c', title: 'AT1c - Critically evaluate supporting information and results of analysis to draw conclusions and communicate results.' }
+];
 const competencyReferenceAreas = [
   { id:'fr', name:'Financial Reporting' },
+  { id:'ma', name:'Management Accounting' },
   { id:'at', name:'Assurance & Trust' },
   { id:'sg', name:'Strategy and Governance' },
   { id:'md', name:'Management Decision-Making' },
@@ -530,13 +526,14 @@ const defaultCompetencyState = {
   coreMode: '',
   taskSelections: {},
   subtaskSelections: {},
+  atSelections: {},
   dcLevels: {},
   updatedAt: new Date().toISOString()
 };
 
-const queueList = document.getElementById('queue-list');
-const learnerSummary = document.getElementById('learner-summary');
-const heroSummary = document.getElementById('hero-summary');
+const metaVersionPosition = document.getElementById('meta-version-position');
+const prevVersionBtn = document.getElementById('prev-version-btn');
+const nextVersionBtn = document.getElementById('next-version-btn');
 const detailTitle = document.getElementById('detail-title');
 const detailCopy = document.getElementById('detail-copy');
 const workflowNote = document.getElementById('workflow-note');
@@ -559,6 +556,7 @@ const coreCompetencyGrid = document.getElementById('core-competency-grid');
 const referenceGrid = document.getElementById('competency-reference-grid');
 const coreTaskSections = document.getElementById('core-task-sections');
 const subtaskSections = document.getElementById('subtask-sections');
+const atSection = document.getElementById('at-section');
 const dcSection = document.getElementById('dc-section');
 const dateMetrics = document.getElementById('date-metrics');
 const dateSnapshotMetrics = document.getElementById('date-snapshot-metrics');
@@ -569,7 +567,12 @@ const supportingDocsUpload = document.getElementById('supporting-docs-upload');
 
 let versions = [];
 let activeVersionId = null;
-let competencyState = JSON.parse(localStorage.getItem(competencyKey) || 'null') || cloneDeep(defaultCompetencyState);
+let competencyState = Object.assign({}, defaultCompetencyState, JSON.parse(localStorage.getItem(competencyKey) || 'null') || {});
+competencyState.taskSelections = competencyState.taskSelections || {};
+competencyState.subtaskSelections = competencyState.subtaskSelections || {};
+competencyState.atSelections = competencyState.atSelections || {};
+competencyState.dcLevels = competencyState.dcLevels || {};
+if (competencyState.coreMode === 'at') competencyState.coreMode = '';
 
 function setMessage(text) {
   messageText.textContent = text;
@@ -626,37 +629,37 @@ function createDefaultPlan() {
     id: 'work-plan-v1',
     version: 1,
     learnerInfo: {
-      legalName: 'Avery Chen',
-      preferredName: 'Avery',
-      cpaId: 'CPA-101245',
+      legalName: 'Amelia Reyes',
+      preferredName: 'Amelia',
+      cpaId: 'CPA-772401',
       governingBody: 'CPA British Columbia',
-      email: 'avery.chen@example.com',
-      phone: '604-555-0142'
+      email: 'amelia.reyes@example.com',
+      phone: '604-555-0186'
     },
     preReviewed: {
       employer: 'Northline Advisory Group',
-      roleId: 'pre-1',
-      roleName: 'Senior Accountant, External Audit',
-      approvedLimit: 24,
-      activeLearners: 18,
-      remainingSpots: 6,
-      seniorLeader: 'Morgan Patel',
+      roleId: 'nr-audit',
+      roleName: 'Pre-Reviewed Audit Associate',
+      approvedLimit: 8,
+      activeLearners: 5,
+      remainingSpots: 3,
+      seniorLeader: 'Priya Nair, CPA',
       templatePath: 'Pre-reviewed role template'
     },
     approvals: {
-      mentorEmail: 's.douglas@northline.ca',
+      mentorEmail: 'marcus.chen@northlineadvisory.example',
       mentorSearch: '',
-      mentorName: 'Shawn Douglas',
-      mentorSelectedEmail: 's.douglas@northline.ca',
-      seniorLeaderName: 'Morgan Patel'
+      mentorName: 'Marcus Chen, CPA',
+      mentorSelectedEmail: 'marcus.chen@northlineadvisory.example',
+      seniorLeaderName: 'Priya Nair, CPA'
     },
     roleType: 'Pre-reviewed',
     serviceArea: 'External audit and assurance',
     employerDetails: {
       organizationName: 'Northline Advisory Group',
-      organizationAddress: '1200 West Hastings Street, Vancouver, BC',
-      organizationWebsite: 'https://www.northlineadvisory.ca',
-      positionTitle: 'Senior Accountant',
+      organizationAddress: '700 Burrard Street, Vancouver, BC V6C 2X8',
+      organizationWebsite: 'https://www.northlineadvisory.example',
+      positionTitle: 'Audit Associate',
       professionalStartDate: '2026-01-05',
       positionStartDate: '2026-01-05',
       expectedCompletionDate: '2027-11-30',
@@ -709,14 +712,14 @@ function createDefaultVersions() {
   returned.workflow.status = 'More information needed';
   returned.workflow.submittedAt = '2026-07-08T15:30:00';
   returned.workflow.route = 'Returned by mentor. Update role pathway details and competency mapping before resubmitting to mentor review.';
-  returned.workflow.declinedBy = 'Shawn Douglas';
+  returned.workflow.declinedBy = 'Marcus Chen, CPA';
   returned.workflow.requestedRevisionDueDate = '2026-07-28';
   returned.workflow.comments = [
-    { author:'Shawn Douglas', role:'Mentor', at:'2026-07-10T09:15:00', text:'Please clarify the position scope, update the expected completion date, and confirm the selected competency levels.' }
+    { author:'Marcus Chen, CPA', role:'Mentor', at:'2026-07-10T09:15:00', text:'Please clarify the position scope, update the expected completion date, and confirm the selected competency levels.' }
   ];
   returned.workflow.auditTrail = [
     { at:'2026-07-08T15:30:00', actor:'Learner', role:'Learner', previousStatus:'Draft', newStatus:'Pending Mentor Approval', comments:'Initial work plan submitted.' },
-    { at:'2026-07-10T09:15:00', actor:'Shawn Douglas', role:'Mentor', previousStatus:'Pending Mentor Approval', newStatus:'More information needed', comments:'Returned for revision.' }
+    { at:'2026-07-10T09:15:00', actor:'Marcus Chen, CPA', role:'Mentor', previousStatus:'Pending Mentor Approval', newStatus:'More information needed', comments:'Returned for revision.' }
   ];
 
   const draft = cloneDeep(returned);
@@ -730,7 +733,7 @@ function createDefaultVersions() {
   ];
   draft.workflow.learnerResponse = '';
   draft.workflow.sourceVersion = 1;
-  draft.workflow.declinedBy = 'Shawn Douglas';
+  draft.workflow.declinedBy = 'Marcus Chen, CPA';
   draft.workflow.requestedRevisionDueDate = '2026-07-28';
   return [returned, draft];
 }
@@ -825,17 +828,6 @@ function calculateWorkPlanDuration(plan) {
   metrics.potentialMonths = eligibleDays / 30.4375;
   metrics.estimatedHours = (eligibleDays / 7) * avgHours;
   return metrics;
-}
-
-function renderQueue() {
-  queueList.innerHTML = versions.map((plan) => `
-    <article class="queue-card ${plan.id === activeVersionId ? 'active' : ''}" data-version-id="${escapeHtml(plan.id)}">
-      <strong>${escapeHtml(plan.employerDetails.positionTitle || 'Work Plan')} | Version ${plan.version}</strong>
-      <span>${escapeHtml(plan.employerDetails.organizationName || 'Employer not provided')}</span>
-      <span class="status-badge ${statusClass(plan.workflow.status)}"><span class="dot"></span>${escapeHtml(plan.workflow.status)}</span>
-      <span>${isEditable(plan) ? 'Editable revision draft' : 'Read-only submitted version'}</span>
-    </article>
-  `).join('');
 }
 
 function renderValueCards(container, values) {
@@ -947,7 +939,11 @@ function renderTrail(plan) {
 }
 
 function renderMeta(plan) {
-  metaStatus.innerHTML = `<span class="status-badge ${statusClass(plan.workflow.status)}"><span class="dot"></span>${escapeHtml(plan.workflow.status)}</span>`;
+  const position = versions.findIndex((item) => item.id === activeVersionId);
+  metaVersionPosition.textContent = `${position + 1} of ${versions.length}`;
+  prevVersionBtn.style.display = position > 0 ? 'inline-flex' : 'none';
+  nextVersionBtn.style.display = position < versions.length - 1 ? 'inline-flex' : 'none';
+  metaStatus.innerHTML = `<span class="status-badge ${statusClass(plan.workflow.status)}">${escapeHtml(plan.workflow.status)}</span>`;
   metaSubmitted.textContent = plan.workflow.submittedAt ? formatDate(plan.workflow.submittedAt) : 'Not submitted yet';
   metaRoute.textContent = plan.workflow.status === 'Draft'
     ? `On submission, route to ${plan.workflow.nextReviewStatus === 'Pending Mentor Approval' ? 'Mentor review first' : 'CPA Staff review directly'}.`
@@ -1043,8 +1039,18 @@ function setEditableState(plan) {
 
 function activeCoreCompetencies() {
   if (competencyState.coreMode === 'fr') return ['fr'];
-  if (competencyState.coreMode === 'at') return ['at'];
+  if (competencyState.coreMode === 'ma') return ['ma'];
+  if (competencyState.coreMode === 'combo') return ['fr', 'ma'];
   return [];
+}
+
+function atApplies(plan) {
+  return Boolean(plan && (plan.roleType === 'Firm - Audit & Assurance' || (plan.jobInformation.rolePlans || []).includes('Audit and assurance')));
+}
+
+function atSelection(index) {
+  if (!competencyState.atSelections[index]) competencyState.atSelections[index] = { applicable:'', level:'' };
+  return competencyState.atSelections[index];
 }
 
 function taskSelection(taskId) {
@@ -1071,7 +1077,8 @@ function renderCoreCompetencySelection(plan) {
   const editable = isEditable(plan);
   const options = [
     { id:'fr', title:'Financial Reporting', description:'Use Financial Reporting as the primary core competency area.' },
-    { id:'at', title:'Assurance & Trust', description:'Use Assurance & Trust as the primary core competency area.' }
+    { id:'ma', title:'Management Accounting', description:'Use Management Accounting as the primary core competency area.' },
+    { id:'combo', title:'Financial Reporting + Management Accounting', description:'Combine both core competency areas in this work plan.' }
   ];
   coreCompetencyGrid.innerHTML = options.map((option) => `
     <article class="option-card selectable ${competencyState.coreMode === option.id ? 'selected' : ''} ${editable ? '' : 'readonly'}" data-core-mode="${option.id}">
@@ -1080,8 +1087,9 @@ function renderCoreCompetencySelection(plan) {
     </article>
   `).join('');
   referenceGrid.innerHTML = competencyReferenceAreas.map((area) => {
-    const core = activeCoreCompetencies().includes(area.id) ? 'core' : '';
-    const helper = activeCoreCompetencies().includes(area.id) ? 'Selected as a required core competency for this work plan.' : 'Available in the broader work plan framework.';
+    const isActive = activeCoreCompetencies().includes(area.id) || (area.id === 'at' && atApplies(plan));
+    const core = isActive ? 'core' : '';
+    const helper = isActive ? 'Selected as a required core competency for this work plan.' : 'Available in the broader work plan framework.';
     return `<div class="reference-card ${core}"><strong>${escapeHtml(area.name)}</strong><span>${escapeHtml(helper)}</span></div>`;
   }).join('');
 }
@@ -1103,6 +1111,14 @@ function renderCoreTaskSections(plan) {
   }
   coreTaskSections.innerHTML = active.map((competencyId) => {
     const competency = competencyCatalog[competencyId];
+    if (!competency.tasks.length) {
+      return `
+        <section class="info-section">
+          <h3>${escapeHtml(competency.name)}</h3>
+          <div class="empty-state">Task statements for ${escapeHtml(competency.name)} are not yet available in the reference competency map.</div>
+        </section>
+      `;
+    }
     return `
       <section class="info-section">
         <h3>${escapeHtml(competency.name)}</h3>
@@ -1190,6 +1206,39 @@ function renderSubtaskSections(plan) {
   subtaskSections.innerHTML = blocks.length ? blocks.join('') : '<div class="empty-state">Select core task statements first to display the related sub-task statements.</div>';
 }
 
+function renderAtSection(plan) {
+  const editable = isEditable(plan);
+  if (!atApplies(plan)) {
+    atSection.innerHTML = '<div class="empty-state">Assurance and Trust task statements are not required unless the role type is Firm - Audit &amp; Assurance or Audit and assurance is selected under Job information.</div>';
+    return;
+  }
+  atSection.innerHTML = atTaskStatements.map((statement, index) => {
+    const selection = atSelection(index);
+    return `
+      <div class="statement-card">
+        <div class="statement-row">
+          <div>
+            <strong>${escapeHtml(statement.title)}</strong>
+          </div>
+          <div class="field">
+            <label for="at-applicable-${index}">Applicable</label>
+            <select id="at-applicable-${index}" data-at-applicable="${index}" ${editable ? '' : 'disabled'}>
+              <option value="" ${selection.applicable === '' ? 'selected' : ''}>Select</option>
+              <option value="Yes" ${selection.applicable === 'Yes' ? 'selected' : ''}>Yes</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="at-level-${index}">Current level</label>
+            <select id="at-level-${index}" data-at-level="${index}" ${editable ? '' : 'disabled'}>
+              ${selectOptionsMarkup(selection.level)}
+            </select>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
 function renderDcSection(plan) {
   const editable = isEditable(plan);
   dcSection.innerHTML = dcStatements.map((statement, index) => `
@@ -1269,12 +1318,18 @@ function validatePlan(plan) {
 }
 
 function validateCompetencies() {
+  const plan = getActiveVersion();
   const issues = [];
   const activeCore = activeCoreCompetencies();
   if (!competencyState.coreMode) issues.push('core competency selection');
   activeCore.forEach((competencyId) => {
+    const competency = competencyCatalog[competencyId];
+    if (!competency.tasks.length) {
+      issues.push(`${competency.name} task statements are not yet available in the reference competency map`);
+      return;
+    }
     const selected = selectedTasksForCompetency(competencyId);
-    if (selected.length < 2) issues.push(`at least 2 core task statements for ${competencyCatalog[competencyId].name}`);
+    if (selected.length < 2) issues.push(`at least 2 core task statements for ${competency.name}`);
     selected.forEach((task) => {
       if (!taskSelection(task.id).level) issues.push(`current level for ${task.title}`);
       displayedSubtasks(task).forEach((subtask, index) => {
@@ -1284,6 +1339,13 @@ function validateCompetencies() {
       });
     });
   });
+  if (plan && atApplies(plan)) {
+    atTaskStatements.forEach((statement, index) => {
+      const selection = atSelection(index);
+      if (selection.applicable !== 'Yes') issues.push(`mark "${statement.title}" as Yes`);
+      if (!selection.level) issues.push(`current level for ${statement.title}`);
+    });
+  }
   dcStatements.forEach((statement, index) => {
     if (!dcLevel(index)) issues.push(`current level for ${statement.title}`);
   });
@@ -1292,14 +1354,6 @@ function validateCompetencies() {
 
 function addAudit(plan, previousStatus, newStatus, comments, actor = 'Learner', role = 'Learner') {
   plan.workflow.auditTrail.push({ at:new Date().toISOString(), actor, role, previousStatus, newStatus, comments });
-}
-
-function updateHero() {
-  const drafts = versions.filter((plan) => plan.workflow.status === 'Draft').length;
-  const submitted = versions.length - drafts;
-  const basePlan = versions[0];
-  heroSummary.textContent = `${versions.length} version${versions.length === 1 ? '' : 's'} | ${drafts} draft | ${submitted} submitted`;
-  learnerSummary.textContent = basePlan ? `${basePlan.learnerInfo.legalName || 'Learner'} | ${basePlan.learnerInfo.cpaId || 'CPA ID not recorded'}` : 'No learner record loaded.';
 }
 
 function renderActiveVersion() {
@@ -1325,20 +1379,30 @@ function renderActiveVersion() {
   renderCoreCompetencySelection(plan);
   renderCoreTaskSections(plan);
   renderSubtaskSections(plan);
+  renderAtSection(plan);
   renderDcSection(plan);
   setEditableState(plan);
 }
 
 function renderAll() {
-  renderQueue();
   renderActiveVersion();
-  updateHero();
   persistVersions();
 }
 
-function switchVersion(versionId) {
-  activeVersionId = versionId;
+function goToAdjacentVersion(offset) {
+  const position = versions.findIndex((item) => item.id === activeVersionId);
+  const nextPosition = position + offset;
+  if (nextPosition < 0 || nextPosition >= versions.length) return;
+  activeVersionId = versions[nextPosition].id;
   renderAll();
+}
+
+function goToPreviousVersion() {
+  goToAdjacentVersion(-1);
+}
+
+function goToNextVersion() {
+  goToAdjacentVersion(1);
 }
 
 function saveDraft() {
@@ -1427,11 +1491,8 @@ function attachFiles(input, targetKey, categoryLabel) {
   setMessage(`${docs.length} ${categoryLabel.toLowerCase()} file${docs.length === 1 ? '' : 's'} attached to this revision draft.`);
 }
 
-queueList.addEventListener('click', (event) => {
-  const card = event.target.closest('[data-version-id]');
-  if (!card) return;
-  switchVersion(card.dataset.versionId);
-});
+prevVersionBtn.addEventListener('click', goToPreviousVersion);
+nextVersionBtn.addEventListener('click', goToNextVersion);
 
 document.getElementById('attach-job-description-btn').addEventListener('click', () => {
   if (!isEditable(getActiveVersion())) {
@@ -1509,6 +1570,17 @@ subtaskSections.addEventListener('change', (event) => {
   const selection = subtaskSelection(taskId, index);
   if (event.target.dataset.subtaskApplicable) selection.applicable = event.target.value;
   if (event.target.dataset.subtaskLevel) selection.level = event.target.value;
+  persistVersions();
+});
+
+atSection.addEventListener('change', (event) => {
+  const plan = getActiveVersion();
+  if (!isEditable(plan)) return;
+  const index = event.target.dataset.atApplicable !== undefined ? event.target.dataset.atApplicable : event.target.dataset.atLevel;
+  if (index === undefined) return;
+  const selection = atSelection(index);
+  if (event.target.dataset.atApplicable !== undefined) selection.applicable = event.target.value;
+  if (event.target.dataset.atLevel !== undefined) selection.level = event.target.value;
   persistVersions();
 });
 

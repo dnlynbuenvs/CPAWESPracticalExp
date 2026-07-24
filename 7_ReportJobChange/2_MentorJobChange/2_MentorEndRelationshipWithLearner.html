@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CPA - End Mentorship</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --navy:#0B1F3A; --blue:#1B5EA8; --accent:#2A9D8F; --amber:#E76F1A; --green:#2D7A4E; --red:#C0392B;
@@ -12,18 +12,24 @@
     --gray-400:#A8A49E; --gray-600:#6B6760; --gray-800:#2E2C2A;
     --shadow-sm:0 1px 3px rgba(11,31,58,0.07),0 1px 2px rgba(11,31,58,0.05);
     --radius-sm:6px; --radius-md:10px; --radius-lg:16px;
+    --imis-blue:#1B5EA8;
+    --badge-green-bg:#E3F3E6; --badge-green-text:#2D7A4E;
+    --badge-yellow-bg:#FCF3D9; --badge-yellow-text:#8A6D1D;
+    --badge-blue-bg:#E8ECF7; --badge-blue-text:#3B4A7A;
+    --badge-red-bg:#FBE7E5; --badge-red-text:#9B3226;
+    --badge-gray-bg:#F2F1EF; --badge-gray-text:#6B6760;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:'DM Sans',sans-serif;background:var(--sand);color:var(--gray-800);min-height:100vh}
   a{text-decoration:none;color:inherit}
   button,input,select,textarea{font:inherit}
   textarea{resize:vertical}
-  .topbar{background:var(--navy);min-height:60px;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:0 2rem}
+  .topbar{background:#1B5EA8;border-bottom:3px solid #6E3226;min-height:60px;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:0 2rem}
   .logo-group{display:flex;align-items:center;gap:10px;min-width:225px}
-  .logo-mark{width:36px;height:36px;background:var(--white);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
-  .logo-text{display:flex;flex-direction:column;line-height:1.1}
-  .logo-text .brand{font-size:13px;font-weight:600;color:var(--white);letter-spacing:.04em}
-  .logo-text .sub{font-size:10px;color:rgba(255,255,255,.5);letter-spacing:.02em;text-transform:uppercase}
+  .logo-mark{width:32px;height:32px;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .logo-text{display:flex;align-items:center;gap:10px}
+  .logo-text .brand{font-size:22px;font-weight:700;color:var(--white);letter-spacing:.01em;font-family:'DM Sans',sans-serif}
+  .logo-text .divider{width:1px;height:26px;background:rgba(255,255,255,.35)}.logo-text .sub{display:flex;flex-direction:column;font-size:9px;font-weight:600;color:rgba(255,255,255,.9);letter-spacing:.03em;text-transform:uppercase;line-height:1.4}
   .topbar-right{display:flex;align-items:center;gap:12px}
   .nav-links{display:flex;align-items:center;gap:2px}
   .nav-links a{color:rgba(255,255,255,.55);font-size:14px;padding:8px 16px;border-radius:var(--radius-sm);white-space:nowrap}
@@ -39,7 +45,7 @@
   .role-option.active{background:#EBF3FF;color:var(--blue);font-weight:600}
   .page{max-width:1460px;margin:0 auto;padding:2rem 2rem 4rem}
   .hero{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--gray-200)}
-  .hero h1{font-family:'DM Serif Display',serif;font-size:38px;font-weight:400;color:var(--navy);margin-bottom:6px}
+  .hero h1{font-family:'DM Sans',sans-serif;font-size:26px;font-weight:700;color:#1a1a1a;margin-bottom:6px}
   .hero p{font-size:14px;color:var(--gray-600);max-width:860px;line-height:1.5}
   .hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);padding:10px 16px;box-shadow:var(--shadow-sm);font-size:13px;color:var(--gray-600)}
   .dot{width:8px;height:8px;border-radius:50%;background:var(--blue);flex:0 0 auto}
@@ -52,35 +58,37 @@
   .panel h2{font-size:17px;color:var(--navy);margin-bottom:4px}
   .panel-copy{font-size:12px;color:var(--gray-600);line-height:1.45}
   .stack,.meta-stack,.mentor-results{display:flex;flex-direction:column;gap:16px}
-  .form-section{padding:1rem;border:1px solid var(--gray-200);border-radius:var(--radius-md);background:var(--sand)}
-  .form-section h3{font-size:15px;color:var(--navy);margin-bottom:6px}
+  .form-section{padding:1rem 0;border-bottom:1px solid var(--gray-200)}
+  .form-section:last-child{border-bottom:none}
+  .form-section h3{font-size:15px;color:#1a1a1a;margin-bottom:10px;font-weight:700}
   .field-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
   .field{display:flex;flex-direction:column;gap:6px}
   .field.full{grid-column:1 / -1}
-  .field label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gray-400)}
+  .field label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#2E2C2A}
   .field input,.field select,.field textarea{border:1px solid var(--gray-200);border-radius:var(--radius-sm);background:var(--white);padding:10px 12px;color:var(--gray-800)}
   .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:rgba(27,94,168,.32);box-shadow:0 0 0 3px rgba(27,94,168,.08)}
   .field textarea{min-height:110px}
   .subcopy{font-size:11px;color:var(--gray-600);line-height:1.45}
   .metric-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
-  .metric-card,.meta-card,.notice-box,.mentor-card{padding:12px;border-radius:var(--radius-md);border:1px solid var(--gray-200);background:var(--white)}
-  .metric-card strong,.meta-card strong,.notice-box strong,.mentor-card strong{display:block;font-size:13px;color:var(--navy);margin-bottom:4px}
+  .metric-card,.meta-card,.notice-box,.mentor-card{padding:12px;border-radius:var(--radius-sm);border:1px solid var(--gray-200);background:var(--white)}
+  .metric-card strong,.meta-card strong,.notice-box strong,.mentor-card strong{display:block;font-size:13px;color:#1a1a1a;margin-bottom:4px}
   .metric-card span,.meta-card span,.notice-box span,.mentor-card span{display:block;font-size:12px;color:var(--gray-600);line-height:1.45}
-  .metric-card .value{font-family:'DM Serif Display',serif;font-size:30px;line-height:1;color:var(--navy);margin-bottom:6px}
+  .metric-card .value{font-family:'DM Sans',sans-serif;font-weight:700;font-size:26px;line-height:1;color:#1a1a1a;margin-bottom:6px}
   .notice-box{background:#F7FAFF}
-  .notice-box.warn{background:#FFF8F1;border-color:rgba(231,111,26,.22)}
-  .notice-box.success{background:#F2FBF6;border-color:rgba(45,122,78,.22)}
+  .notice-box.warn{background:var(--badge-yellow-bg);border-color:#EDD9A0}
+  .notice-box.success{background:var(--badge-green-bg);border-color:#B9DDC3}
   .button-row{display:flex;flex-wrap:wrap;gap:8px}
-  .action-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:var(--radius-sm);border:1px solid var(--gray-200);padding:9px 12px;background:var(--white);color:var(--navy);font-size:12px;font-weight:700;cursor:pointer;transition:all .15s ease}
-  .action-btn:hover{border-color:rgba(27,94,168,.28);background:#F7FAFF}
-  .action-btn.primary{background:#EBF3FF;border-color:rgba(27,94,168,.28);color:var(--blue)}
-  .action-btn.success{background:#E8F5EE;border-color:rgba(45,122,78,.22);color:var(--green)}
-  .status-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:5px 10px;border-radius:20px;white-space:nowrap}
-  .status-badge .dot{width:6px;height:6px}
-  .badge-draft{background:#EBF3FF;color:var(--blue)} .badge-draft .dot{background:var(--blue)}
-  .badge-pending{background:#FEF3E8;color:var(--amber)} .badge-pending .dot{background:var(--amber)}
-  .badge-routed{background:#E8F5EE;color:var(--green)} .badge-routed .dot{background:var(--green)}
-  .badge-requested{background:#F3EEFF;color:#5B3DB4} .badge-requested .dot{background:#5B3DB4}
+  .action-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:var(--radius-sm);border:1px solid var(--imis-blue);padding:9px 16px;background:var(--white);color:var(--imis-blue);font-size:12px;font-weight:700;cursor:pointer;transition:all .15s ease}
+  .action-btn:hover{background:#EBF3FF}
+  .action-btn.primary{background:var(--imis-blue);border-color:var(--imis-blue);color:var(--white)}
+  .action-btn.primary:hover{background:#164e8f}
+  .action-btn.success{background:var(--white);border-color:var(--badge-green-text);color:var(--badge-green-text)}
+  .action-btn.success:hover{background:var(--badge-green-bg)}
+  .status-badge{display:inline-block;padding:4px 10px;border-radius:3px;font-size:12px;font-weight:600;white-space:nowrap}
+  .badge-draft{background:var(--badge-blue-bg);color:var(--badge-blue-text)}
+  .badge-pending{background:var(--badge-yellow-bg);color:var(--badge-yellow-text)}
+  .badge-routed{background:var(--badge-green-bg);color:var(--badge-green-text)}
+  .badge-requested{background:#F3EEFF;color:#5B3DB4}
   .selection-banner{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 12px;border-radius:var(--radius-md);background:#F7FAFF;border:1px solid rgba(27,94,168,.16)}
   .selection-banner span{font-size:12px;color:var(--gray-600)}
   .mentor-search-shell{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}
@@ -105,27 +113,16 @@
 <body>
 <header class="topbar">
   <div class="logo-group">
-    <div class="logo-mark">
-      <svg width="24" height="20" viewBox="0 0 24 20" fill="none" aria-hidden="true">
-        <path d="M2 10C2 5.58 5.58 2 10 2h4c4.42 0 8 3.58 8 8s-3.58 8-8 8h-4C5.58 18 2 14.42 2 10z" fill="#0B1F3A" opacity="0.12"/>
-        <path d="M7 10.5l3 3 7-7" stroke="#0B1F3A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </div>
-    <div class="logo-text"><span class="brand">CPA Canada</span><span class="sub">Chartered Professional Accountants</span></div>
+    <div class="logo-mark"><svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true"><circle cx="16" cy="3.5" r="1.6" fill="#fff"/><circle cx="16" cy="28.5" r="1.6" fill="#fff"/><circle cx="3.5" cy="16" r="1.6" fill="#fff"/><circle cx="28.5" cy="16" r="1.6" fill="#fff"/><circle cx="7.2" cy="7.2" r="1.3" fill="#fff"/><circle cx="24.8" cy="24.8" r="1.3" fill="#fff"/><circle cx="7.2" cy="24.8" r="1.3" fill="#fff"/><circle cx="24.8" cy="7.2" r="1.3" fill="#fff"/><circle cx="16" cy="16" r="2.6" fill="#fff"/><circle cx="16" cy="10" r="1" fill="#fff"/><circle cx="16" cy="22" r="1" fill="#fff"/><circle cx="10" cy="16" r="1" fill="#fff"/><circle cx="22" cy="16" r="1" fill="#fff"/></svg></div><div class="logo-text"><span class="brand">cpa</span><span class="divider"></span><span class="sub">Chartered<br>Professional<br>Accountants</span></div>
   </div>
   <div class="topbar-right">
-    <nav class="nav-links" aria-label="Primary navigation">
-      <a href="../../1_Dashboard/MentorDashboard.html">Dashboard</a>
-      <a href="../../1_Dashboard/MentorDashboard.html#assigned-learners" class="active">Mentorship changes</a>
-      <a href="../../1_Dashboard/MentorDashboard.html#roster-controls-title">Assigned learners</a>
-    </nav>
     <details class="role-dropdown">
       <summary class="role-trigger"><span class="role-label">Mentor</span><span class="role-caret">&#9662;</span></summary>
       <div class="role-menu">
         <a class="role-option" href="../../index.html">Learner</a>
         <a class="role-option" href="../../1_Dashboard/CPAReviewer.html">CPA Reviewer</a>
         <a class="role-option active" href="../../1_Dashboard/MentorDashboard.html">Mentor</a>
-        <a class="role-option" href="../../1_Dashboard/PTSBStaffDashboard.html">PTSB Staff</a>
+        <a class="role-option" href="../../1_Dashboard/PTSBStaffDashboard.html">PTB Staff</a>
               <a class="role-option" href="../../8_MentorOnboarding/1_MentorOnboarding.html">Mentor onboarding</a>
         <a class="role-option" href="../../10_ProgramAdmin/1_ProgramAdminMgmt.html">Program Admin</a>
       </div>
@@ -139,7 +136,6 @@
       <h1 id="mentor-end-title">End mentorship and assign a replacement mentor</h1>
       <p>Submit a mentorship termination request, notify the learner and CPA Reviewer, and prepare the learner handoff by selecting an approved replacement mentor. The mentor relationship remains in a requested state until approval is completed.</p>
     </div>
-    <div class="hero-badge"><span class="dot"></span><span id="hero-summary">Mentor change request draft in progress</span></div>
   </section>
 
   <div class="message-bar" id="message-bar" role="status" aria-live="polite">
@@ -211,7 +207,7 @@
               <strong style="display:block;font-size:13px;color:var(--navy);margin-bottom:4px;">Approved mentor search</strong>
               <span>Search the approved mentor list and choose a replacement mentor to receive the assignment notification once the change is submitted.</span>
             </div>
-            <div class="status-badge badge-requested"><span class="dot"></span><span>Mentor Change Requested</span></div>
+            <div class="status-badge badge-requested">Mentor Change Requested</div>
           </div>
           <div class="mentor-search-shell" style="margin-top:1rem;">
             <input id="mentor-search" type="search" placeholder="Search approved mentors by name, employer, or specialty">
@@ -386,9 +382,6 @@ function renderMeta() {
   document.getElementById('meta-replacement').textContent = selectedMentor ? `${selectedMentor.name} (${selectedMentor.id})` : 'Not selected';
   document.getElementById('meta-assignment-notification').textContent = requestRecord.assignmentNotification || 'Not sent';
   document.getElementById('meta-submitted-at').textContent = requestRecord.submittedAt || 'Not submitted';
-  document.getElementById('hero-summary').textContent = requestRecord.status === 'Submitted'
-    ? 'Mentorship change request submitted'
-    : 'Mentor change request draft in progress';
 }
 
 function toggleOtherReason() {

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CPA - View Check-In Report</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
     --navy:#0B1F3A; --blue:#1B5EA8; --accent:#2A9D8F; --amber:#E76F1A; --green:#2D7A4E; --red:#C0392B;
@@ -12,16 +12,22 @@
     --gray-400:#A8A49E; --gray-600:#6B6760; --gray-800:#2E2C2A;
     --shadow-sm:0 1px 3px rgba(11,31,58,0.07),0 1px 2px rgba(11,31,58,0.05);
     --radius-sm:6px; --radius-md:10px; --radius-lg:16px;
+    --imis-blue:#1B5EA8;
+    --badge-green-bg:#E3F3E6; --badge-green-text:#2D7A4E;
+    --badge-yellow-bg:#FCF3D9; --badge-yellow-text:#8A6D1D;
+    --badge-blue-bg:#E8ECF7; --badge-blue-text:#3B4A7A;
+    --badge-red-bg:#FBE7E5; --badge-red-text:#9B3226;
+    --badge-gray-bg:#F2F1EF; --badge-gray-text:#6B6760;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:'DM Sans',sans-serif;background:var(--sand);color:var(--gray-800);min-height:100vh}
   a{text-decoration:none;color:inherit}
-  .topbar{background:var(--navy);min-height:60px;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:0 2rem}
+  .topbar{background:#1B5EA8;border-bottom:3px solid #6E3226;min-height:60px;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:0 2rem}
   .logo-group{display:flex;align-items:center;gap:10px;min-width:225px}
-  .logo-mark{width:36px;height:36px;background:var(--white);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
-  .logo-text{display:flex;flex-direction:column;line-height:1.1}
-  .logo-text .brand{font-size:13px;font-weight:600;color:var(--white);letter-spacing:.04em}
-  .logo-text .sub{font-size:10px;color:rgba(255,255,255,.5);letter-spacing:.02em;text-transform:uppercase}
+  .logo-mark{width:32px;height:32px;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .logo-text{display:flex;align-items:center;gap:10px}
+  .logo-text .brand{font-size:22px;font-weight:700;color:var(--white);letter-spacing:.01em;font-family:'DM Sans',sans-serif}
+  .logo-text .divider{width:1px;height:26px;background:rgba(255,255,255,.35)}.logo-text .sub{display:flex;flex-direction:column;font-size:9px;font-weight:600;color:rgba(255,255,255,.9);letter-spacing:.03em;text-transform:uppercase;line-height:1.4}
   .topbar-right{display:flex;align-items:center;gap:12px}
   .nav-links{display:flex;align-items:center;gap:2px}
   .nav-links a{text-decoration:none;color:rgba(255,255,255,.55);font-size:14px;padding:8px 16px;border-radius:var(--radius-sm);white-space:nowrap}
@@ -37,39 +43,38 @@
   .role-option.active{background:#EBF3FF;color:var(--blue);font-weight:600}
   .page{max-width:1360px;margin:0 auto;padding:2rem 2rem 4rem}
   .hero{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--gray-200)}
-  .hero h1{font-family:'DM Serif Display',serif;font-size:38px;font-weight:400;color:var(--navy);margin-bottom:6px}
+  .hero h1{font-family:'DM Sans',sans-serif;font-size:26px;font-weight:700;color:#1a1a1a;margin-bottom:6px}
   .hero p{font-size:14px;color:var(--gray-600);max-width:860px;line-height:1.5}
-  .hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);padding:10px 16px;box-shadow:var(--shadow-sm);font-size:13px;color:var(--gray-600)}
   .dot{width:8px;height:8px;border-radius:50%;background:var(--blue);flex:0 0 auto}
   .workspace{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:16px}
   .panel{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm)}
   .main-panel,.side-panel{padding:1.25rem}
-  .section-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gray-400);margin-bottom:.75rem}
-  .panel h2{font-size:17px;color:var(--navy);margin-bottom:4px}
+  .section-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#2E2C2A;margin-bottom:.75rem}
+  .panel h2{font-size:17px;color:#1a1a1a;margin-bottom:4px}
   .panel-copy{font-size:12px;color:var(--gray-600);line-height:1.45}
   .stack,.meta-stack,.trail-list,.doc-list{display:flex;flex-direction:column;gap:16px}
-  .info-section{padding:1rem;border:1px solid var(--gray-200);border-radius:var(--radius-md);background:var(--sand)}
-  .info-section h3{font-size:15px;color:var(--navy);margin-bottom:6px}
+  .info-section{padding:1rem 0;border-bottom:1px solid var(--gray-200)}
+  .info-section:last-child{border-bottom:none}
+  .info-section h3{font-size:15px;color:#1a1a1a;margin-bottom:10px;font-weight:700}
   .grid-2,.grid-3{display:grid;gap:12px}
   .grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
   .grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
-  .value-card,.meta-card,.trail-item,.doc-item,.readonly-block{padding:12px;border-radius:var(--radius-md);border:1px solid var(--gray-200);background:var(--white)}
+  .value-card,.meta-card,.trail-item,.doc-item,.readonly-block{padding:12px;border-radius:var(--radius-sm);border:1px solid var(--gray-200);background:var(--white)}
   .value-card span,.meta-card span,.trail-item span,.doc-item span,.readonly-block span{display:block;font-size:12px;color:var(--gray-600);line-height:1.45}
-  .value-card strong,.meta-card strong,.trail-item strong,.doc-item strong,.readonly-block strong{display:block;font-size:13px;color:var(--navy);margin-bottom:4px}
+  .value-card strong,.meta-card strong,.trail-item strong,.doc-item strong,.readonly-block strong{display:block;font-size:13px;color:#1a1a1a;margin-bottom:4px}
   .readonly-block{background:#F7FAFF}
-  .status-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:5px 10px;border-radius:20px;white-space:nowrap}
-  .status-badge .dot{width:6px;height:6px}
-  .badge-draft{background:#EBF3FF;color:var(--blue)} .badge-draft .dot{background:var(--blue)}
-  .badge-pending{background:#FEF3E8;color:var(--amber)} .badge-pending .dot{background:var(--amber)}
-  .badge-approved{background:#E8F5EE;color:var(--green)} .badge-approved .dot{background:var(--green)}
-  .badge-declined{background:#FDECEA;color:var(--red)} .badge-declined .dot{background:var(--red)}
-  .badge-neutral{background:var(--gray-100);color:var(--gray-600)} .badge-neutral .dot{background:var(--gray-400)}
-  .empty-state{padding:18px;border:1px dashed var(--gray-300);border-radius:var(--radius-md);background:var(--sand);text-align:center;font-size:13px;color:var(--gray-600)}
+  .status-badge{display:inline-block;padding:4px 10px;border-radius:3px;font-size:12px;font-weight:600;white-space:nowrap}
+  .badge-draft{background:var(--badge-blue-bg);color:var(--badge-blue-text)}
+  .badge-pending{background:var(--badge-yellow-bg);color:var(--badge-yellow-text)}
+  .badge-approved{background:var(--badge-green-bg);color:var(--badge-green-text)}
+  .badge-declined{background:var(--badge-red-bg);color:var(--badge-red-text)}
+  .badge-neutral{background:var(--badge-gray-bg);color:var(--badge-gray-text)}
+  .empty-state{padding:18px;border:1px dashed var(--gray-300);border-radius:var(--radius-md);background:var(--white);text-align:center;font-size:13px;color:var(--gray-600)}
   .progress-shell{display:flex;flex-direction:column;gap:8px}
   .progress-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
-  .progress-value{font-family:'DM Serif Display',serif;font-size:32px;color:var(--navy)}
+  .progress-value{font-family:'DM Sans',sans-serif;font-weight:700;font-size:22px;color:#1a1a1a}
   .progress-track{height:8px;width:100%;background:var(--gray-100);border-radius:999px;overflow:hidden}
-  .progress-fill{height:100%;background:var(--blue);border-radius:999px}
+  .progress-fill{height:100%;background:var(--imis-blue);border-radius:999px}
   @media(max-width:1080px){.workspace{grid-template-columns:1fr}}
   @media(max-width:760px){
     .topbar{align-items:flex-start;flex-direction:column;padding:1rem}
@@ -85,27 +90,16 @@
 <body>
 <header class="topbar">
   <div class="logo-group">
-    <div class="logo-mark">
-      <svg width="24" height="20" viewBox="0 0 24 20" fill="none" aria-hidden="true">
-        <path d="M2 10C2 5.58 5.58 2 10 2h4c4.42 0 8 3.58 8 8s-3.58 8-8 8h-4C5.58 18 2 14.42 2 10z" fill="#0B1F3A" opacity="0.12"/>
-        <path d="M7 10.5l3 3 7-7" stroke="#0B1F3A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </div>
-    <div class="logo-text"><span class="brand">CPA Canada</span><span class="sub">Chartered Professional Accountants</span></div>
+    <div class="logo-mark"><svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true"><circle cx="16" cy="3.5" r="1.6" fill="#fff"/><circle cx="16" cy="28.5" r="1.6" fill="#fff"/><circle cx="3.5" cy="16" r="1.6" fill="#fff"/><circle cx="28.5" cy="16" r="1.6" fill="#fff"/><circle cx="7.2" cy="7.2" r="1.3" fill="#fff"/><circle cx="24.8" cy="24.8" r="1.3" fill="#fff"/><circle cx="7.2" cy="24.8" r="1.3" fill="#fff"/><circle cx="24.8" cy="7.2" r="1.3" fill="#fff"/><circle cx="16" cy="16" r="2.6" fill="#fff"/><circle cx="16" cy="10" r="1" fill="#fff"/><circle cx="16" cy="22" r="1" fill="#fff"/><circle cx="10" cy="16" r="1" fill="#fff"/><circle cx="22" cy="16" r="1" fill="#fff"/></svg></div><div class="logo-text"><span class="brand">cpa</span><span class="divider"></span><span class="sub">Chartered<br>Professional<br>Accountants</span></div>
   </div>
   <div class="topbar-right">
-    <nav class="nav-links" aria-label="Primary navigation">
-      <a href="../../index.html">Dashboard</a>
-      <a href="../1_LearnerRiskAssessment/1_LearnerSubmitCheckin.html">Check-in report</a>
-      <a href="2_LearnerViewCheckInReport.html" class="active">View check-in</a>
-    </nav>
     <details class="role-dropdown">
       <summary class="role-trigger"><span class="role-label">Learner</span><span class="role-caret">&#9662;</span></summary>
       <div class="role-menu">
         <a class="role-option active" href="../../index.html">Learner</a>
         <a class="role-option" href="../../1_Dashboard/CPAReviewer.html">CPA Reviewer</a>
         <a class="role-option" href="../../1_Dashboard/MentorDashboard.html">Mentor</a>
-        <a class="role-option" href="../../1_Dashboard/PTSBStaffDashboard.html">PTSB Staff</a>
+        <a class="role-option" href="../../1_Dashboard/PTSBStaffDashboard.html">PTB Staff</a>
               <a class="role-option" href="../../8_MentorOnboarding/1_MentorOnboarding.html">Mentor onboarding</a>
         <a class="role-option" href="../../10_ProgramAdmin/1_ProgramAdminMgmt.html">Program Admin</a>
       </div>
@@ -119,7 +113,6 @@
       <h1 id="view-title">View check-in report</h1>
       <p>Review your submitted or draft check-in report in read-only mode, including the approved work plan context, progress details, routing, and submission history.</p>
     </div>
-    <div class="hero-badge"><span class="dot"></span><span id="hero-summary">Loading check-in report</span></div>
   </section>
 
   <section class="workspace">
@@ -160,7 +153,7 @@
 
     <aside class="panel side-panel">
       <div class="section-label">Status and history</div>
-      <h2>STATUS</h2>
+      <h2>Report history</h2>
       <div class="meta-stack">
         <div class="meta-card">
           <strong>Current status</strong>
@@ -203,7 +196,6 @@ const versionsKey = 'workPlanVersions:learner-101';
 const activeApprovedKey = 'activeApprovedWorkPlan:learner-101';
 const checkInKey = 'workPlanCheckInReport:learner-101';
 
-const heroSummary = document.getElementById('hero-summary');
 const detailCopy = document.getElementById('detail-copy');
 const approvedPlanGrid = document.getElementById('approved-plan-grid');
 const reportGrid = document.getElementById('report-grid');
@@ -256,11 +248,11 @@ function renderValueCards(container, values) {
 }
 
 function statusBadge(status) {
-  if (status === 'Pending Mentor Approval') return `<span class="status-badge badge-pending"><span class="dot"></span>${escapeHtml(status)}</span>`;
-  if (status === 'Draft') return `<span class="status-badge badge-draft"><span class="dot"></span>${escapeHtml(status)}</span>`;
-  if (status === 'Approved') return `<span class="status-badge badge-approved"><span class="dot"></span>${escapeHtml(status)}</span>`;
-  if (status === 'Declined') return `<span class="status-badge badge-declined"><span class="dot"></span>${escapeHtml(status)}</span>`;
-  return `<span class="status-badge badge-neutral"><span class="dot"></span>${escapeHtml(status || 'Not started')}</span>`;
+  if (status === 'Pending Mentor Approval') return `<span class="status-badge badge-pending">${escapeHtml(status)}</span>`;
+  if (status === 'Draft') return `<span class="status-badge badge-draft">${escapeHtml(status)}</span>`;
+  if (status === 'Approved') return `<span class="status-badge badge-approved">${escapeHtml(status)}</span>`;
+  if (status === 'Declined') return `<span class="status-badge badge-declined">${escapeHtml(status)}</span>`;
+  return `<span class="status-badge badge-neutral">${escapeHtml(status || 'Not started')}</span>`;
 }
 
 function createDefaultApprovedPlan() {
@@ -413,7 +405,6 @@ function renderAll() {
   progressValue.textContent = `${progress.value}%`;
   progressFill.style.width = `${progress.value}%`;
 
-  heroSummary.textContent = `Check-in status: ${checkInReport.status || 'Not started'} | Work plan v${checkInReport.workPlanVersion || 'n/a'}`;
   detailCopy.textContent = checkInReport.status === 'Pending Mentor Approval'
     ? 'This learner check-in report has been submitted and is shown in read-only mode while mentor review is pending.'
     : 'This learner check-in report is shown in read-only mode so the saved draft or submitted details can be reviewed.';
