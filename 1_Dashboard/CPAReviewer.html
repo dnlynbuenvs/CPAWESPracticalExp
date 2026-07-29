@@ -64,7 +64,7 @@
   .modal-card p{font-size:13px;color:var(--gray-600);line-height:1.5}
   .overview-grid{display:grid;grid-template-columns:1fr;gap:16px;margin-bottom:1.5rem}
   .summary-panel,.filter-panel,.queue-panel{padding:1.25rem}
-  .summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  .summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
   .summary-card{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-sm);padding:12px;min-height:82px}
   .summary-card span{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:#2E2C2A;margin-bottom:8px;font-weight:700}
   .summary-card strong{display:block;font-family:'DM Sans',sans-serif;font-size:26px;font-weight:700;color:#1a1a1a;line-height:1}
@@ -90,6 +90,8 @@
   thead th{padding:10px 16px;text-align:left;font-size:12px;font-weight:700;text-transform:none;letter-spacing:0;color:#2E2C2A;background:var(--gray-100);border-bottom:1px solid var(--gray-300);vertical-align:top}
   tbody td{padding:11px 16px;vertical-align:top;border-bottom:1px solid var(--gray-200);font-size:13px;color:#2E2C2A}
   tbody tr:last-child td{border-bottom:none}
+  #roster-table-body tr{cursor:pointer}
+  #roster-table-body tr:hover td{background:#F7FAFF}
   .learner-cell strong{display:block;font-size:14px;color:var(--imis-blue);margin-bottom:4px}
   .subline{display:block;font-size:12px;color:var(--gray-600);line-height:1.45}
   .queue-row{cursor:pointer;transition:background .15s ease}
@@ -153,7 +155,6 @@
       <h1 id="reviewer-dashboard-title">CPA reviewer dashboard</h1>
       <p>Monitor all in-flight foundational experience, work plan, partial report, and completion submissions, then triage or review them from the same workspace.</p>
     </div>
-    <div class="hero-badge"><span class="dot"></span><span id="hero-summary">Loading in-flight submissions</span></div>
   </section>
 
   <div class="message-bar" id="message-bar" role="status" aria-live="polite">
@@ -168,7 +169,6 @@
         <div class="summary-card"><span>In-flight items</span><strong id="metric-total">0</strong><small>All submissions currently visible in the queue</small></div>
         <div class="summary-card"><span>Unassigned triage</span><strong id="metric-unassigned">0</strong><small>Needs a CPA staff reviewer assignment</small></div>
         <div class="summary-card"><span>Assigned to me</span><strong id="metric-assigned-me">0</strong><small>Items current user can review directly</small></div>
-        <div class="summary-card"><span>High risk</span><strong id="metric-high-risk">0</strong><small>Priority items with elevated review attention</small></div>
       </div>
     </div>
   </section>
@@ -178,7 +178,6 @@
       <div>
         <div class="section-label">Queue filters</div>
         <h2 id="filter-title">Filter all in-flight experiences</h2>
-        <p class="panel-copy">Filter by submission type, status, name, CPA Canada ID, iMIS ID, learner ID, and submission date.</p>
       </div>
     </div>
     <div class="reviewer-bar">
@@ -227,7 +226,33 @@
     </div>
   </section>
 
-  <div id="review-queue" style="margin-top:1.5rem;">
+  <div id="learner-roster" style="margin-top:1.5rem;">
+    <div class="section-label">Learner roster</div>
+    <h2 id="learner-roster-title" style="font-size:17px;color:#1a1a1a;margin-bottom:4px;">All learners with in-flight submissions</h2>
+    <p class="panel-copy" style="margin-bottom:1rem;">Select a learner to open their full profile.</p>
+
+    <section class="imis-table-panel" aria-label="Learner roster">
+      <div class="imis-table-header">
+        <h2>Learner Roster</h2>
+      </div>
+      <div class="table-wrap">
+        <table aria-describedby="learner-roster-title">
+          <thead>
+            <tr>
+              <th>Learner name</th>
+              <th>Learner ID</th>
+              <th>CPA Canada ID</th>
+              <th>iMIS ID</th>
+              <th>In-flight submissions</th>
+            </tr>
+          </thead>
+          <tbody id="roster-table-body"></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <div id="review-queue" style="margin-top:1.75rem;">
     <div class="section-label">Dashboard review queue</div>
     <h2 id="review-queue-title" style="font-size:17px;color:#1a1a1a;margin-bottom:4px;">All in-flight submissions</h2>
     <p class="panel-copy" style="margin-bottom:1rem;">Select any submission row to open the appropriate review page for that submission type.</p>
@@ -247,12 +272,13 @@
         <table aria-describedby="review-queue-title">
           <thead>
             <tr>
-              <th>Learner</th>
+              <th>Learner name</th>
+              <th>Learner ID</th>
               <th>Submission type</th>
               <th>Status</th>
               <th>Submitted date</th>
+              <th>Risk factor</th>
               <th>Last login date</th>
-              <th>Partial report type</th>
             </tr>
           </thead>
           <tbody id="queue-body"></tbody>
@@ -260,6 +286,113 @@
       </div>
     </section>
     <div class="hint">Click any submission row to continue to the correct CPA review screen.</div>
+  </div>
+
+  <div id="fe-queue" style="margin-top:1.75rem;">
+    <div class="section-label">Submitted foundational experience queue</div>
+    <h2 id="fe-queue-title" style="font-size:17px;color:#1a1a1a;margin-bottom:4px;">Foundational experience submissions</h2>
+    <p class="panel-copy" style="margin-bottom:1rem;">Foundational experience submissions currently in flight.</p>
+
+    <section class="imis-table-panel" aria-label="Submitted foundational experience queue">
+      <div class="imis-table-header">
+        <h2>Foundational Experience Queue</h2>
+      </div>
+      <div class="table-wrap">
+        <table aria-describedby="fe-queue-title">
+          <thead>
+            <tr>
+              <th>Learner name</th>
+              <th>Learner ID</th>
+              <th>Status</th>
+              <th>Submitted date</th>
+            </tr>
+          </thead>
+          <tbody id="fe-queue-body"></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <div id="wp-queue" style="margin-top:1.75rem;">
+    <div class="section-label">Submitted work plan queue</div>
+    <h2 id="wp-queue-title" style="font-size:17px;color:#1a1a1a;margin-bottom:4px;">Work plan submissions</h2>
+    <p class="panel-copy" style="margin-bottom:1rem;">Work plan submissions currently in flight, with risk level and pre-reviewed position status.</p>
+
+    <section class="imis-table-panel" aria-label="Submitted work plan queue">
+      <div class="imis-table-header">
+        <h2>Work Plan Queue</h2>
+      </div>
+      <div class="table-wrap">
+        <table aria-describedby="wp-queue-title">
+          <thead>
+            <tr>
+              <th>Learner name</th>
+              <th>Learner ID</th>
+              <th>Status</th>
+              <th>Submitted date</th>
+              <th>Risk level</th>
+              <th>Pre-reviewed position</th>
+            </tr>
+          </thead>
+          <tbody id="wp-queue-body"></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <div id="partial-queue" style="margin-top:1.75rem;">
+    <div class="section-label">Submitted partial report queue</div>
+    <h2 id="partial-queue-title" style="font-size:17px;color:#1a1a1a;margin-bottom:4px;">Partial report submissions</h2>
+    <p class="panel-copy" style="margin-bottom:1rem;">Check-in and interim partial report submissions currently in flight.</p>
+
+    <section class="imis-table-panel" aria-label="Submitted partial report queue">
+      <div class="imis-table-header">
+        <h2>Partial Report Queue</h2>
+      </div>
+      <div class="table-wrap">
+        <table aria-describedby="partial-queue-title">
+          <thead>
+            <tr>
+              <th>Learner name</th>
+              <th>Learner ID</th>
+              <th>Status</th>
+              <th>Submitted date</th>
+              <th>Risk level</th>
+              <th>Pre-reviewed</th>
+              <th>Type of partial report</th>
+            </tr>
+          </thead>
+          <tbody id="partial-queue-body"></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <div id="completion-queue" style="margin-top:1.75rem;">
+    <div class="section-label">Submitted experience completion queue</div>
+    <h2 id="completion-queue-title" style="font-size:17px;color:#1a1a1a;margin-bottom:4px;">Completion report submissions</h2>
+    <p class="panel-copy" style="margin-bottom:1rem;">Completion report submissions currently in flight, with risk level and pre-reviewed position status.</p>
+
+    <section class="imis-table-panel" aria-label="Submitted experience completion queue">
+      <div class="imis-table-header">
+        <h2>Completion Queue</h2>
+      </div>
+      <div class="table-wrap">
+        <table aria-describedby="completion-queue-title">
+          <thead>
+            <tr>
+              <th>Learner name</th>
+              <th>Learner ID</th>
+              <th>Status</th>
+              <th>Submitted date</th>
+              <th>Risk level</th>
+              <th>Pre-reviewed</th>
+            </tr>
+          </thead>
+          <tbody id="completion-queue-body"></tbody>
+        </table>
+      </div>
+    </section>
   </div>
 </main>
 
@@ -309,7 +442,7 @@ const submissions = [
     riskFactor: 'Low',
     lastLoginDate: '2026-07-13',
     assignedReviewer: '',
-    preReviewed: 'No',
+    preReviewed: 'Yes',
     partialType: ''
   },
   {
@@ -324,6 +457,7 @@ const submissions = [
     riskFactor: 'High',
     lastLoginDate: '2026-07-15',
     assignedReviewer: 'Noah Ramirez, CPA',
+    preReviewed: 'Yes',
     partialType: 'Check-in report'
   },
   {
@@ -338,6 +472,7 @@ const submissions = [
     riskFactor: 'Medium',
     lastLoginDate: '2026-07-14',
     assignedReviewer: 'Avery Patel, CPA',
+    preReviewed: 'No',
     partialType: ''
   },
   {
@@ -352,6 +487,7 @@ const submissions = [
     riskFactor: 'High',
     lastLoginDate: '2026-07-12',
     assignedReviewer: 'Harper Singh, CPA',
+    preReviewed: 'No',
     partialType: ''
   },
   {
@@ -366,6 +502,7 @@ const submissions = [
     riskFactor: 'Low',
     lastLoginDate: '2026-07-11',
     assignedReviewer: '',
+    preReviewed: 'No',
     partialType: 'Interim partial report'
   },
   {
@@ -380,6 +517,7 @@ const submissions = [
     riskFactor: 'High',
     lastLoginDate: '2026-07-15',
     assignedReviewer: 'Lena Ortiz, CPA',
+    preReviewed: 'No',
     partialType: ''
   },
   {
@@ -394,6 +532,7 @@ const submissions = [
     riskFactor: 'Medium',
     lastLoginDate: '2026-07-15',
     assignedReviewer: 'Avery Patel, CPA',
+    preReviewed: 'No',
     partialType: ''
   }
 ];
@@ -492,13 +631,10 @@ function renderMetrics() {
   const visibleItems = getVisibleItems();
   const unassigned = visibleItems.filter((item) => !item.assignedReviewer).length;
   const assignedToMe = visibleItems.filter((item) => item.assignedReviewer === currentReviewer).length;
-  const highRisk = visibleItems.filter((item) => item.riskFactor === 'High').length;
 
   document.getElementById('metric-total').textContent = visibleItems.length;
   document.getElementById('metric-unassigned').textContent = unassigned;
   document.getElementById('metric-assigned-me').textContent = assignedToMe;
-  document.getElementById('metric-high-risk').textContent = highRisk;
-  document.getElementById('hero-summary').textContent = `${visibleItems.length} in-flight item${visibleItems.length === 1 ? '' : 's'} | ${assignedToMe} assigned to ${currentReviewer.split(',')[0]}`;
 }
 
 function renderQueue() {
@@ -506,30 +642,100 @@ function renderQueue() {
   document.getElementById('visible-count').textContent = `${visibleItems.length} item${visibleItems.length === 1 ? '' : 's'} shown`;
 
   if (!visibleItems.length) {
-    queueBody.innerHTML = '<tr><td colspan="6" class="empty-state">No in-flight submissions match the current filters.</td></tr>';
+    queueBody.innerHTML = '<tr><td colspan="7" class="empty-state">No in-flight submissions match the current filters.</td></tr>';
     return;
   }
 
   queueBody.innerHTML = visibleItems.map((item) => `
-      <tr id="row-${escapeHtml(item.id)}" class="queue-row" data-id="${escapeHtml(item.id)}">
-        <td class="learner-cell">
-          <strong>${escapeHtml(item.learnerName)}</strong>
-          <span class="subline">Learner ID: ${escapeHtml(item.learnerId)}</span>
-          <span class="subline">CPA Canada ID: ${escapeHtml(item.cpaId)}</span>
-          <span class="subline">iMIS ID: ${escapeHtml(item.iMISId)}</span>
-        </td>
+      <tr id="row-${escapeHtml(item.id)}" class="queue-row" data-id="${escapeHtml(item.id)}" tabindex="0">
+        <td class="learner-cell"><strong>${escapeHtml(item.learnerName)}</strong></td>
+        <td>${escapeHtml(item.learnerId)}</td>
         <td>${escapeHtml(item.type)}</td>
         <td><span class="status-badge ${statusClass(item.status)}">${escapeHtml(item.status)}</span></td>
         <td>${escapeHtml(formatDate(item.submittedDate))}</td>
+        <td><span class="risk-chip ${riskClass(item.riskFactor)}">${escapeHtml(item.riskFactor)}</span></td>
         <td>${escapeHtml(formatDate(item.lastLoginDate))}</td>
-        <td>${escapeHtml(item.type === 'Partial Report' || item.type === 'Check-In Report' ? (item.partialType || item.type) : 'Not applicable')}</td>
       </tr>
     `).join('');
+}
+
+function yesNoBadge(value) {
+  const isYes = /yes/i.test(value);
+  return `<span class="status-badge ${isYes ? 'badge-approved' : 'badge-neutral'}">${escapeHtml(value || 'No')}</span>`;
+}
+
+function renderTypeQueue(tbodyId, types, options) {
+  const opts = options || {};
+  const tbody = document.getElementById(tbodyId);
+  const items = submissions
+    .filter((item) => types.includes(item.type))
+    .sort((a, b) => b.submittedDate.localeCompare(a.submittedDate));
+
+  const colCount = 4 + (opts.showRisk ? 1 : 0) + (opts.showPreReviewed ? 1 : 0) + (opts.showPartialType ? 1 : 0);
+
+  if (!items.length) {
+    tbody.innerHTML = `<tr><td colspan="${colCount}" class="empty-state">No submissions in this queue right now.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = items.map((item) => `
+    <tr class="queue-row" data-id="${escapeHtml(item.id)}" tabindex="0">
+      <td class="learner-cell"><strong>${escapeHtml(item.learnerName)}</strong></td>
+      <td>${escapeHtml(item.learnerId)}</td>
+      <td><span class="status-badge ${statusClass(item.status)}">${escapeHtml(item.status)}</span></td>
+      <td>${escapeHtml(formatDate(item.submittedDate))}</td>
+      ${opts.showRisk ? `<td><span class="risk-chip ${riskClass(item.riskFactor)}">${escapeHtml(item.riskFactor)}</span></td>` : ''}
+      ${opts.showPreReviewed ? `<td>${yesNoBadge(item.preReviewed)}</td>` : ''}
+      ${opts.showPartialType ? `<td>${escapeHtml(item.partialType || 'Not specified')}</td>` : ''}
+    </tr>
+  `).join('');
+}
+
+function getUniqueLearners() {
+  const map = new Map();
+  submissions.forEach((item) => {
+    if (!map.has(item.learnerId)) {
+      map.set(item.learnerId, {
+        learnerId: item.learnerId,
+        learnerName: item.learnerName,
+        cpaId: item.cpaId,
+        iMISId: item.iMISId,
+        count: 0
+      });
+    }
+    map.get(item.learnerId).count += 1;
+  });
+  return Array.from(map.values()).sort((a, b) => a.learnerName.localeCompare(b.learnerName));
+}
+
+function renderRoster() {
+  const rosterBody = document.getElementById('roster-table-body');
+  const learnersList = getUniqueLearners();
+
+  if (!learnersList.length) {
+    rosterBody.innerHTML = '<tr><td colspan="5" class="empty-state">No learners found.</td></tr>';
+    return;
+  }
+
+  rosterBody.innerHTML = learnersList.map((learner) => `
+    <tr data-roster-learner-id="${escapeHtml(learner.learnerId)}" tabindex="0">
+      <td class="learner-cell"><strong>${escapeHtml(learner.learnerName)}</strong></td>
+      <td>${escapeHtml(learner.learnerId)}</td>
+      <td>${escapeHtml(learner.cpaId)}</td>
+      <td>${escapeHtml(learner.iMISId)}</td>
+      <td>${learner.count} in-flight submission${learner.count === 1 ? '' : 's'}</td>
+    </tr>
+  `).join('');
 }
 
 function renderAll() {
   renderMetrics();
   renderQueue();
+  renderTypeQueue('fe-queue-body', ['Foundational Experience'], {});
+  renderTypeQueue('wp-queue-body', ['Work Plan'], { showRisk: true, showPreReviewed: true });
+  renderTypeQueue('partial-queue-body', ['Check-In Report', 'Partial Report'], { showRisk: true, showPreReviewed: true, showPartialType: true });
+  renderTypeQueue('completion-queue-body', ['Completion Report'], { showRisk: true, showPreReviewed: true });
+  renderRoster();
 }
 
 function getSubmissionById(id) {
@@ -586,10 +792,35 @@ currentReviewerSelect.addEventListener('change', () => {
 
 resetFiltersBtn.addEventListener('click', resetFilters);
 
-queueBody.addEventListener('click', (event) => {
-  const row = event.target.closest('tr[data-id]');
-  if (!row) return;
-  openSubmission(row.dataset.id);
+function goToLearnerProfile(learnerId) {
+  window.location.href = `1_LearnerProfile.html?learnerId=${encodeURIComponent(learnerId)}`;
+}
+
+document.querySelector('main.page').addEventListener('click', (event) => {
+  const queueRow = event.target.closest('tr.queue-row[data-id]');
+  if (queueRow) {
+    openSubmission(queueRow.dataset.id);
+    return;
+  }
+  const rosterRow = event.target.closest('tr[data-roster-learner-id]');
+  if (rosterRow) {
+    goToLearnerProfile(rosterRow.dataset.rosterLearnerId);
+  }
+});
+
+document.querySelector('main.page').addEventListener('keydown', (event) => {
+  if (event.key !== 'Enter' && event.key !== ' ') return;
+  const queueRow = event.target.closest('tr.queue-row[data-id]');
+  if (queueRow) {
+    event.preventDefault();
+    openSubmission(queueRow.dataset.id);
+    return;
+  }
+  const rosterRow = event.target.closest('tr[data-roster-learner-id]');
+  if (rosterRow) {
+    event.preventDefault();
+    goToLearnerProfile(rosterRow.dataset.rosterLearnerId);
+  }
 });
 
 document.getElementById('prr-modal-close').addEventListener('click', closeProfessionalReadinessModal);

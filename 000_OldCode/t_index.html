@@ -59,12 +59,6 @@
   .imis-tracker-step.complete .imis-tracker-dot{background:var(--imis-green);border-color:var(--imis-green);color:var(--white)}
   .imis-tracker-step.current .imis-tracker-dot{background:var(--white);border-color:var(--imis-green);color:var(--imis-green)}
   .imis-tracker-label{margin-top:12px;font-size:12.5px;font-weight:700;color:#2E2C2A;max-width:150px;line-height:1.35}
-  .imis-detail-panel{padding:1.25rem;margin-bottom:1.75rem}
-  .imis-detail-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem 1.5rem}
-  .imis-detail-item span{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--gray-600);margin-bottom:4px;font-weight:700}
-  .imis-detail-item strong{display:block;font-size:14px;color:#1a1a1a;font-weight:600}
-  .imis-table-action{display:inline-flex;align-items:center;gap:6px;background:var(--white);color:var(--imis-blue);border:none;border-radius:4px;padding:7px 14px;font-size:12px;font-weight:700;text-decoration:none;white-space:nowrap}
-  .imis-table-action:hover{background:#EBF3FF}
   .dashboard-grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(300px,.8fr);gap:16px;margin-bottom:1.75rem}
   .panel{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm)}
   .profile-panel{padding:1.25rem}
@@ -179,7 +173,7 @@
     .page{padding:1.25rem 1rem 3rem}
     .hero,.options-head,.history-head,.profile-head,.journey-head,.checkin-banner{flex-direction:column;align-items:flex-start}
     .hero h1{font-size:34px}
-    .detail-grid,.imis-detail-grid,.option-grid,.experience-meta{grid-template-columns:1fr}
+    .detail-grid,.option-grid,.experience-meta{grid-template-columns:1fr}
     .imis-tracker{flex-direction:column;align-items:stretch;gap:1.25rem}
     .imis-tracker-step{flex-direction:row;text-align:left;gap:12px}
     .imis-tracker-step:not(:last-child)::after{display:none}
@@ -219,6 +213,7 @@
       <h1 id="dashboard-title">Learner dashboard</h1>
       <p>Start, continue, and review each experience milestone from foundational experience through professional readiness.</p>
     </div>
+    <div class="hero-badge"><span class="dot"></span><span>Current stage: Experience plan in progress</span></div>
   </section>
 
   <section class="panel imis-tracker-panel" aria-labelledby="journey-flow-title">
@@ -244,18 +239,6 @@
         <div class="imis-tracker-dot">4</div>
         <div class="imis-tracker-label">Professional Readiness Pending</div>
       </div>
-    </div>
-  </section>
-
-  <section class="panel imis-detail-panel" aria-labelledby="learner-details-title">
-    <div class="section-label" id="learner-details-title">Learner details</div>
-    <div class="imis-detail-grid">
-      <div class="imis-detail-item"><span>Learner full name</span><strong>Amelia Reyes</strong></div>
-      <div class="imis-detail-item"><span>Learner ID</span><strong>CPA-772401</strong></div>
-      <div class="imis-detail-item"><span>Current employer</span><strong>Northline Advisory Group</strong></div>
-      <div class="imis-detail-item"><span>Current mentor</span><strong>Marcus Chen, CPA</strong></div>
-      <div class="imis-detail-item"><span>Current supervisor</span><strong>Priya Nair, CPA</strong></div>
-      <div class="imis-detail-item"><span>Program expiry date</span><strong>Dec 31, 2027</strong></div>
     </div>
   </section>
 
@@ -389,7 +372,7 @@
   <section class="panel imis-table-panel" id="foundational-card" aria-labelledby="foundational-title">
     <div class="imis-table-header">
       <h2 id="foundational-title">Foundational Experience</h2>
-      <a class="imis-table-action" href="2_ClaimFoundationalExp/1_LearnerFE/1_FE_YesorNo.html">Submit foundational experience</a>
+      <div class="imis-table-count"><span>Complete</span><span aria-hidden="true">&#9652;</span></div>
     </div>
     <div class="imis-table-wrap">
       <table class="imis-table">
@@ -403,16 +386,10 @@
         </thead>
         <tbody>
           <tr data-href="2_ClaimFoundationalExp/1_LearnerFE/3_LearnerViewFE.html">
-            <td><a href="2_ClaimFoundationalExp/1_LearnerFE/3_LearnerViewFE.html">Foundational experience submission</a></td>
+            <td><a href="2_ClaimFoundationalExp/1_LearnerFE/3_LearnerViewFE.html">Initial submission</a></td>
             <td><span class="imis-badge imis-badge-green">Approved</span></td>
             <td>Apr 19, 2026</td>
             <td>May 03, 2026</td>
-          </tr>
-          <tr data-href="2_ClaimFoundationalExp/1_LearnerFE/2_FE_RecordExpDuration.html">
-            <td><a href="2_ClaimFoundationalExp/1_LearnerFE/2_FE_RecordExpDuration.html">Revise foundational experience</a></td>
-            <td><span class="imis-badge imis-badge-blue">Draft</span></td>
-            <td>Not submitted</td>
-            <td>&mdash;</td>
           </tr>
         </tbody>
       </table>
@@ -422,7 +399,7 @@
   <section class="panel imis-table-panel" id="workplan-card" aria-labelledby="workplan-title">
     <div class="imis-table-header">
       <h2 id="workplan-title">Experience Plan</h2>
-      <a class="imis-table-action" href="3_WorkPlan/1_LearnerWP/1_LearnerWorkPlanInfo.html">Submit experience plan</a>
+      <div class="imis-table-count"><span>In Progress</span><span aria-hidden="true">&#9652;</span></div>
     </div>
     <div class="imis-table-wrap">
       <table class="imis-table">
@@ -436,16 +413,10 @@
         </thead>
         <tbody>
           <tr data-href="3_WorkPlan/1_LearnerWP/3_LearnerWPRevision.html">
-            <td><a href="3_WorkPlan/1_LearnerWP/3_LearnerWPRevision.html">Experience plan submission</a></td>
+            <td><a href="3_WorkPlan/1_LearnerWP/3_LearnerWPRevision.html">Initial submission</a></td>
             <td><span class="imis-badge imis-badge-yellow">Pending mentor approval</span></td>
             <td>Jul 08, 2026</td>
             <td>Pending</td>
-          </tr>
-          <tr data-href="3_WorkPlan/1_LearnerWP/3_LearnerWPRevision.html">
-            <td><a href="3_WorkPlan/1_LearnerWP/3_LearnerWPRevision.html">Revise experience plan</a></td>
-            <td><span class="imis-badge imis-badge-blue">Draft</span></td>
-            <td>Not submitted</td>
-            <td>&mdash;</td>
           </tr>
         </tbody>
       </table>
@@ -455,7 +426,7 @@
   <section class="panel imis-table-panel checkin-row" id="checkin-card" aria-labelledby="checkin-title">
     <div class="imis-table-header">
       <h2 id="checkin-title">Check-in Progress</h2>
-      <a class="imis-table-action" href="4_RiskAssessment/1_LearnerRiskAssessment/1_LearnerSubmitCheckin.html">Submit check-in report</a>
+      <div class="imis-table-count"><span>Draft</span><span aria-hidden="true">&#9652;</span></div>
     </div>
     <div class="imis-table-wrap">
       <table class="imis-table">
@@ -469,7 +440,7 @@
         </thead>
         <tbody>
           <tr data-href="4_RiskAssessment/1_LearnerRiskAssessment/2_LearnerViewCheckInReport.html">
-            <td><a href="4_RiskAssessment/1_LearnerRiskAssessment/2_LearnerViewCheckInReport.html">Check in report submission</a></td>
+            <td><a href="4_RiskAssessment/1_LearnerRiskAssessment/2_LearnerViewCheckInReport.html">Draft</a></td>
             <td><span class="imis-badge imis-badge-blue">Draft</span></td>
             <td>Not submitted</td>
             <td>&mdash;</td>
@@ -482,7 +453,7 @@
   <section class="panel imis-table-panel" id="completion-card" aria-labelledby="completion-title">
     <div class="imis-table-header">
       <h2 id="completion-title">Completion Report</h2>
-      <a class="imis-table-action" href="5_FinalExperienceReport/1_SubmitFinalExperienceReport.html">Submit completion report</a>
+      <div class="imis-table-count"><span>Not Started</span><span aria-hidden="true">&#9652;</span></div>
     </div>
     <div class="imis-table-wrap">
       <table class="imis-table">

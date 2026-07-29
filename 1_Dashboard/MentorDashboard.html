@@ -61,7 +61,7 @@
   .mentor-title h2{font-size:18px;color:var(--navy);margin-bottom:2px}
   .mentor-title p{font-size:12px;color:var(--gray-600)}
   .mentor-pill{display:inline-flex;align-items:center;gap:7px;background:#E8F5EE;color:var(--green);border:1px solid rgba(45,122,78,.18);border-radius:999px;padding:7px 11px;font-size:12px;font-weight:700}
-  .metric-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+  .metric-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
   .metric-card{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-sm);padding:12px;min-height:82px}
   .metric-card span{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:#2E2C2A;margin-bottom:8px;font-weight:700}
   .metric-card strong{display:block;font-family:'DM Sans',sans-serif;font-size:26px;font-weight:700;color:#1a1a1a;line-height:1}
@@ -117,6 +117,8 @@
   thead th{padding:10px 16px;text-align:left;font-size:12px;font-weight:700;text-transform:none;letter-spacing:0;color:#2E2C2A;background:var(--gray-100);border-bottom:1px solid var(--gray-300);vertical-align:top}
   tbody td{padding:11px 16px;vertical-align:top;border-bottom:1px solid var(--gray-200);font-size:13px;color:#2E2C2A}
   tbody tr:last-child td{border-bottom:none}
+  #learner-table-body tr{cursor:pointer}
+  #learner-table-body tr:hover td{background:#F7FAFF}
   .learner-cell strong{display:block;font-size:14px;color:var(--imis-blue);margin-bottom:4px}
   .subline{display:block;font-size:12px;color:var(--gray-600);line-height:1.45}
   .tiny-note{display:inline-flex;align-items:center;gap:6px;margin-top:8px;padding:4px 8px;border-radius:999px;background:#EBF3FF;color:var(--blue);font-size:11px;font-weight:700}
@@ -130,6 +132,11 @@
   .pending-item p{font-size:12px;color:var(--gray-600);line-height:1.4}
   .empty-copy{font-size:12px;color:var(--gray-600)}
   .empty-state{padding:20px;text-align:center;font-size:13px;color:var(--gray-600);background:var(--sand)}
+  .mentor-tag{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--gray-600);background:var(--gray-100);border-radius:999px;padding:4px 9px;white-space:nowrap}
+  .mentor-tag.current{background:#E8F5EE;color:var(--green)}
+  .restricted-note{display:flex;align-items:flex-start;gap:6px;font-size:11px;color:var(--red);margin-top:6px;line-height:1.4;max-width:260px}
+  .competency-pill-list{display:flex;flex-wrap:wrap;gap:6px}
+  .competency-pill{font-size:11px;font-weight:600;color:var(--green);background:#E8F5EE;border-radius:999px;padding:4px 9px;white-space:nowrap}
   @keyframes rise {
     from {opacity:0; transform:translateY(8px)}
     to {opacity:1; transform:translateY(0)}
@@ -139,7 +146,7 @@
     100% {background:var(--sand)}
   }
   @media(max-width:1100px){
-    .metric-grid{grid-template-columns:repeat(2,1fr)}
+    .metric-grid{grid-template-columns:repeat(3,1fr)}
   }
   @media(max-width:760px){
     .topbar{align-items:flex-start;flex-direction:column;padding:1rem}
@@ -200,9 +207,10 @@
       </div>
     <div class="metric-grid">
       <div class="metric-card"><span>Assigned learners</span><strong id="metric-learners">0</strong><small>Active mentorship relationships</small></div>
-      <div class="metric-card"><span>Pending reviews</span><strong id="metric-reviews">0</strong><small>Foundational experience, work plan, check-in, and completion report</small></div>
-      <div class="metric-card"><span>Pre-reviewed positions</span><strong id="metric-pre-reviewed">0</strong><small>Learners with role, senior leader, and program administrator details</small></div>
-      <div class="metric-card"><span>Prior mentor access</span><strong id="metric-prior-mentor">0</strong><small>View-only learners with limited approval actions</small></div>
+      <div class="metric-card"><span>Foundational experience</span><strong id="metric-fe-reviews">0</strong><small>Pending mentor review</small></div>
+      <div class="metric-card"><span>Work plan</span><strong id="metric-wp-reviews">0</strong><small>Pending mentor review</small></div>
+      <div class="metric-card"><span>Check-in</span><strong id="metric-checkin-reviews">0</strong><small>Pending mentor review</small></div>
+      <div class="metric-card"><span>Completion report</span><strong id="metric-completion-reviews">0</strong><small>Pending mentor review</small></div>
     </div>
   </div>
   </section>
@@ -250,7 +258,7 @@
   <div id="assigned-learners" style="margin-top:1.5rem;">
     <div class="section-label">Assigned learners</div>
     <h2 id="assigned-learners-title" style="font-size:17px;color:#1a1a1a;margin-bottom:4px;">Learner roster</h2>
-    <p class="panel-copy" style="margin-bottom:1rem;">Open submissions, manage review decisions, or end a learner relationship directly from the row actions.</p>
+    <p class="panel-copy" style="margin-bottom:1rem;">All learners currently assigned to this mentor. Review-specific actions are handled in the tables below.</p>
 
     <section class="imis-table-panel" aria-label="Learner roster">
       <div class="imis-table-header">
@@ -263,16 +271,121 @@
               <th>Learner</th>
               <th>Employer</th>
               <th>Current stage</th>
-              <th>FE status</th>
-              <th>WP status</th>
-              <th>Check-in status</th>
-              <th>Pending reviews</th>
+              <th>Mentor assignment</th>
               <th>Pre-reviewed role</th>
-              <th>Review actions</th>
               <th>Action</th>
             </tr>
           </thead>
           <tbody id="learner-table-body"></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <div id="fe-reviews" style="margin-top:1.75rem;">
+    <div class="section-label">Foundational experience review</div>
+    <h2 id="fe-review-title" style="font-size:17px;color:#1a1a1a;margin-bottom:4px;">Foundational experience queue</h2>
+    <p class="panel-copy" style="margin-bottom:1rem;">Foundational experience submissions, including the competencies awarded during this stage.</p>
+
+    <section class="imis-table-panel" aria-label="Foundational experience review queue">
+      <div class="imis-table-header">
+        <h2>Foundational Experience Review</h2>
+      </div>
+      <div class="table-wrap">
+        <table aria-describedby="fe-review-title">
+          <thead>
+            <tr>
+              <th>Learner</th>
+              <th>Employer</th>
+              <th>Submitted</th>
+              <th>Summary</th>
+              <th>Competencies awarded</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="fe-review-body"></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <div id="wp-reviews" style="margin-top:1.75rem;">
+    <div class="section-label">Work plan review</div>
+    <h2 id="wp-review-title" style="font-size:17px;color:#1a1a1a;margin-bottom:4px;">Work plan queue</h2>
+    <p class="panel-copy" style="margin-bottom:1rem;">Work plan submissions pending mentor review. Items are only actionable by the mentor associated with that submission.</p>
+
+    <section class="imis-table-panel" aria-label="Work plan review queue">
+      <div class="imis-table-header">
+        <h2>Work Plan Review</h2>
+      </div>
+      <div class="table-wrap">
+        <table aria-describedby="wp-review-title">
+          <thead>
+            <tr>
+              <th>Learner</th>
+              <th>Employer</th>
+              <th>Submitted</th>
+              <th>Summary</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="wp-review-body"></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <div id="checkin-reviews" style="margin-top:1.75rem;">
+    <div class="section-label">Check-in review</div>
+    <h2 id="checkin-review-title" style="font-size:17px;color:#1a1a1a;margin-bottom:4px;">Check-in queue</h2>
+    <p class="panel-copy" style="margin-bottom:1rem;">Check-in reports submitted for mentor review.</p>
+
+    <section class="imis-table-panel" aria-label="Check-in review queue">
+      <div class="imis-table-header">
+        <h2>Check-in Review</h2>
+      </div>
+      <div class="table-wrap">
+        <table aria-describedby="checkin-review-title">
+          <thead>
+            <tr>
+              <th>Learner</th>
+              <th>Employer</th>
+              <th>Submitted</th>
+              <th>Summary</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="checkin-review-body"></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <div id="completion-reviews" style="margin-top:1.75rem;">
+    <div class="section-label">Completion report review</div>
+    <h2 id="completion-review-title" style="font-size:17px;color:#1a1a1a;margin-bottom:4px;">Completion report queue</h2>
+    <p class="panel-copy" style="margin-bottom:1rem;">Completion reports submitted for mentor review before CPA handoff.</p>
+
+    <section class="imis-table-panel" aria-label="Completion report review queue">
+      <div class="imis-table-header">
+        <h2>Completion Report Review</h2>
+      </div>
+      <div class="table-wrap">
+        <table aria-describedby="completion-review-title">
+          <thead>
+            <tr>
+              <th>Learner</th>
+              <th>Employer</th>
+              <th>Submitted</th>
+              <th>Summary</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="completion-review-body"></tbody>
         </table>
       </div>
     </section>
@@ -288,6 +401,8 @@
 </div>
 
 <script>
+const CURRENT_MENTOR = { id: 'MTR-4021', name: 'Sofia Chen, CPA' };
+
 const learners = [
   {
     id: 'LRN-248109',
@@ -382,6 +497,24 @@ const learners = [
     priorMentor: true,
     relationshipEnded: false,
     preReviewedRole: null
+  },
+  {
+    id: 'LRN-249530',
+    name: 'Priya Fernandes',
+    employer: 'Halloway & Vance CPA',
+    currentStage: 'Work plan review',
+    feStatus: 'Approved',
+    wpStatus: 'Pending mentor approval',
+    checkinStatus: 'Not started',
+    completionStatus: 'Not started',
+    competenciesNote: '3 competencies awarded during foundational experience review.',
+    priorMentor: false,
+    relationshipEnded: false,
+    preReviewedRole: null,
+    mentorHistory: [
+      { mentor: 'Grace Okafor, CPA', role: 'Previous mentor', period: 'Jan 2025 – Feb 2026' },
+      { mentor: 'Sofia Chen, CPA', role: 'Current mentor', period: 'Feb 2026 – present' }
+    ]
   }
 ];
 
@@ -394,7 +527,8 @@ let reviews = [
     receivedAt: 'Jul 09, 2026',
     summary: 'Learner submitted foundational experience for mentor approval after supervisor review.',
     competencies: ['Ethics and trust-building', 'Professional communication'],
-    status: 'Pending mentor approval'
+    status: 'Pending mentor approval',
+    associatedMentor: CURRENT_MENTOR.name
   },
   {
     id: 'RV-1048',
@@ -404,7 +538,8 @@ let reviews = [
     receivedAt: 'Jul 08, 2026',
     summary: 'Work plan update includes revised enabling competency targets and expected completion date.',
     competencies: ['Planning and prioritization', 'Management reporting'],
-    status: 'Pending mentor approval'
+    status: 'Pending mentor approval',
+    associatedMentor: CURRENT_MENTOR.name
   },
   {
     id: 'RV-1053',
@@ -414,7 +549,8 @@ let reviews = [
     receivedAt: 'Jul 12, 2026',
     summary: 'Check-in report is ready for mentor review with competency evidence attached.',
     competencies: ['Data analysis', 'Stakeholder communication', 'Problem solving', 'Professionalism'],
-    status: 'Pending mentor approval'
+    status: 'Pending mentor approval',
+    associatedMentor: CURRENT_MENTOR.name
   },
   {
     id: 'RV-1059',
@@ -424,7 +560,30 @@ let reviews = [
     receivedAt: 'Jul 14, 2026',
     summary: 'Final completion report is ready for mentor approval before CPA review.',
     competencies: ['Financial reporting depth', 'Risk assessment', 'Leadership', 'Client service'],
-    status: 'Pending mentor approval'
+    status: 'Pending mentor approval',
+    associatedMentor: CURRENT_MENTOR.name
+  },
+  {
+    id: 'RV-1063',
+    learnerId: 'LRN-249530',
+    type: 'Work Plan',
+    field: 'wpStatus',
+    receivedAt: 'Feb 02, 2026',
+    summary: 'Initial work plan submission reviewed and approved before the mentor change.',
+    competencies: ['Planning and prioritization'],
+    status: 'Approved',
+    associatedMentor: 'Grace Okafor, CPA'
+  },
+  {
+    id: 'RV-1064',
+    learnerId: 'LRN-249530',
+    type: 'Work Plan',
+    field: 'wpStatus',
+    receivedAt: 'Jul 11, 2026',
+    summary: 'Updated work plan submitted for mentor approval after the relationship handoff.',
+    competencies: ['Planning and prioritization', 'Client engagement'],
+    status: 'Pending mentor approval',
+    associatedMentor: CURRENT_MENTOR.name
   }
 ];
 
@@ -460,8 +619,12 @@ function getLearnerById(id) {
   return learners.find((learner) => learner.id === id);
 }
 
+function isRestricted(review) {
+  return Boolean(review.associatedMentor) && review.associatedMentor !== CURRENT_MENTOR.name;
+}
+
 function getPendingReviews() {
-  return reviews.filter((review) => review.status === 'Pending mentor approval' && !getLearnerById(review.learnerId).relationshipEnded);
+  return reviews.filter((review) => review.status === 'Pending mentor approval' && !getLearnerById(review.learnerId).relationshipEnded && !isRestricted(review));
 }
 
 function getPendingReviewCount(learnerId) {
@@ -489,23 +652,33 @@ function escapeHtml(value) {
     .replace(/'/g, '&#39;');
 }
 
-function typeClass(type) {
-  if (type === 'Foundational Experience') return 'fe';
-  if (type === 'Work Plan') return 'wp';
-  if (type === 'Check-In Report') return 'checkin';
-  return 'completion';
+const REVIEW_TYPE_CONFIG = {
+  fe: { type: 'Foundational Experience', tbodyId: 'fe-review-body', showCompetencies: true, route: '../2_ClaimFoundationalExp/2_SupervisorMentorFE/1_SupervisorMentorFEReview.html' },
+  wp: { type: 'Work Plan', tbodyId: 'wp-review-body', showCompetencies: false, route: '../3_WorkPlan/2_MentorWP/1_MentorReviewWP.html' },
+  checkin: { type: 'Check-In Report', tbodyId: 'checkin-review-body', showCompetencies: false, route: '../4_RiskAssessment/2_MentorRiskAssessment/2_MentorReviewCheckin.html' },
+  completion: { type: 'Completion Report', tbodyId: 'completion-review-body', showCompetencies: false, route: '../5_FinalExperienceReport/3_MentorApprovalFinalReport.html' }
+};
+
+function getReviewsByType(type) {
+  return reviews
+    .filter((review) => review.type === type)
+    .filter((review) => !getLearnerById(review.learnerId).relationshipEnded)
+    .sort((a, b) => {
+      const pendingA = a.status === 'Pending mentor approval' ? 0 : 1;
+      const pendingB = b.status === 'Pending mentor approval' ? 0 : 1;
+      return pendingA - pendingB || b.receivedAt.localeCompare(a.receivedAt);
+    });
 }
 
 function renderMetrics() {
   const activeLearners = getActiveLearners();
   const pendingReviews = getPendingReviews();
-  const preReviewedCount = activeLearners.filter((learner) => learner.preReviewedRole).length;
-  const priorMentorCount = activeLearners.filter((learner) => learner.priorMentor).length;
 
   document.getElementById('metric-learners').textContent = activeLearners.length;
-  document.getElementById('metric-reviews').textContent = pendingReviews.length;
-  document.getElementById('metric-pre-reviewed').textContent = preReviewedCount;
-  document.getElementById('metric-prior-mentor').textContent = priorMentorCount;
+  document.getElementById('metric-fe-reviews').textContent = pendingReviews.filter((review) => review.type === 'Foundational Experience').length;
+  document.getElementById('metric-wp-reviews').textContent = pendingReviews.filter((review) => review.type === 'Work Plan').length;
+  document.getElementById('metric-checkin-reviews').textContent = pendingReviews.filter((review) => review.type === 'Check-In Report').length;
+  document.getElementById('metric-completion-reviews').textContent = pendingReviews.filter((review) => review.type === 'Completion Report').length;
 }
 
 function learnerMatchesStatus(learner, status) {
@@ -563,24 +736,24 @@ function getSortStatusValue(learner) {
   return `5-${primaryStatus}`;
 }
 
-function renderLearners() {
+function renderRoster() {
   const visibleLearners = getVisibleLearners();
 
   if (!visibleLearners.length) {
-    learnerTableBody.innerHTML = '<tr><td colspan="10" class="empty-state">No assigned learners match the current filter.</td></tr>';
+    learnerTableBody.innerHTML = '<tr><td colspan="6" class="empty-state">No assigned learners match the current filter.</td></tr>';
     return;
   }
 
   learnerTableBody.innerHTML = visibleLearners.map((learner) => {
-    const learnerPendingReviews = getPendingReviews().filter((review) => review.learnerId === learner.id);
     const preReviewed = learner.preReviewedRole;
+    const history = learner.mentorHistory || [];
+    const priorEntry = history.find((entry) => entry.role === 'Previous mentor');
 
     return `
-      <tr id="learner-${escapeHtml(learner.id)}">
+      <tr id="learner-${escapeHtml(learner.id)}" data-learner-id="${escapeHtml(learner.id)}" tabindex="0">
         <td class="learner-cell">
           <strong>${escapeHtml(learner.name)}</strong>
           <span class="subline">${escapeHtml(learner.id)}</span>
-          <span class="subline">${getPendingReviewCount(learner.id)} pending mentor review${getPendingReviewCount(learner.id) === 1 ? '' : 's'}</span>
           ${learner.priorMentor ? '<span class="tiny-note">Prior mentor: view-only access</span>' : ''}
         </td>
         <td>
@@ -589,22 +762,11 @@ function renderLearners() {
         </td>
         <td>
           <div class="stage-copy">${escapeHtml(learner.currentStage)}</div>
-          <div class="stage-note">${escapeHtml(learner.competenciesNote)}</div>
+          <div class="stage-note">${getPendingReviewCount(learner.id)} pending mentor review${getPendingReviewCount(learner.id) === 1 ? '' : 's'}</div>
         </td>
-        <td><span class="status-badge ${getStatusBadgeClass(learner.feStatus)}">${escapeHtml(learner.feStatus)}</span></td>
-        <td><span class="status-badge ${getStatusBadgeClass(learner.wpStatus)}">${escapeHtml(learner.wpStatus)}</span></td>
-        <td><span class="status-badge ${getStatusBadgeClass(learner.checkinStatus)}">${escapeHtml(learner.checkinStatus)}</span></td>
         <td>
-          ${learnerPendingReviews.length ? `
-            <div class="pending-stack">
-              ${learnerPendingReviews.map((review) => `
-                <div class="pending-item">
-                  <div class="review-type"><span class="type-dot ${typeClass(review.type)}"></span><span>${escapeHtml(review.type)}</span></div>
-                  <p>Pending approval since ${escapeHtml(review.receivedAt)}</p>
-                </div>
-              `).join('')}
-            </div>
-          ` : '<span class="empty-copy">No pending mentor approvals</span>'}
+          <span class="mentor-tag current">Current: ${escapeHtml(CURRENT_MENTOR.name)}</span>
+          ${priorEntry ? `<div class="restricted-note">Previously mentored by ${escapeHtml(priorEntry.mentor)} (${escapeHtml(priorEntry.period)}). Their work plan comments are not visible to you.</div>` : ''}
         </td>
         <td>
           ${preReviewed ? `
@@ -617,12 +779,6 @@ function renderLearners() {
           ` : '<span class="empty-copy">Not applicable</span>'}
         </td>
         <td>
-          <div class="row-actions">
-            <button class="table-btn" type="button" data-action="open-learner" data-learner-id="${escapeHtml(learner.id)}">Open submission</button>
-          </div>
-          ${learner.priorMentor ? '<div class="assist-note">Limited access applies because this mentor relationship is historical.</div>' : ''}
-        </td>
-        <td>
           <button class="table-btn danger" type="button" data-action="end-relationship" data-learner-id="${escapeHtml(learner.id)}">End relationship</button>
         </td>
       </tr>
@@ -630,34 +786,53 @@ function renderLearners() {
   }).join('');
 }
 
+function renderReviewTable(key) {
+  const config = REVIEW_TYPE_CONFIG[key];
+  const tbody = document.getElementById(config.tbodyId);
+  const items = getReviewsByType(config.type);
+  const colCount = config.showCompetencies ? 7 : 6;
 
-function updateLearnerFromReview(review, decision) {
-  const learner = getLearnerById(review.learnerId);
-  const nextStatus = decision === 'approve' ? 'Approved' : 'Declined';
-  learner[review.field] = nextStatus;
-
-  if (review.field === 'feStatus') {
-    learner.currentStage = decision === 'approve' ? 'Work plan in progress' : 'Foundational experience revision requested';
-  } else if (review.field === 'wpStatus') {
-    learner.currentStage = decision === 'approve' ? 'Check-in preparation' : 'Work plan revision requested';
-  } else if (review.field === 'checkinStatus') {
-    learner.currentStage = decision === 'approve' ? 'Completion report preparation' : 'Check-in revision requested';
-  } else if (review.field === 'completionStatus') {
-    learner.currentStage = decision === 'approve' ? 'Ready for CPA review handoff' : 'Completion report revision requested';
+  if (!items.length) {
+    tbody.innerHTML = `<tr><td colspan="${colCount}" class="empty-state">No ${config.type.toLowerCase()} reviews right now.</td></tr>`;
+    return;
   }
+
+  tbody.innerHTML = items.map((review) => {
+    const learner = getLearnerById(review.learnerId);
+    const restricted = isRestricted(review);
+
+    return `
+      <tr>
+        <td class="learner-cell">
+          <strong>${escapeHtml(learner.name)}</strong>
+          <span class="subline">${escapeHtml(learner.id)}</span>
+        </td>
+        <td>${escapeHtml(learner.employer)}</td>
+        <td>${escapeHtml(review.receivedAt)}</td>
+        <td>
+          ${restricted ? `
+            <span class="empty-copy">Restricted &mdash; submitted under a previous mentor assignment</span>
+            <div class="restricted-note">Associated mentor: ${escapeHtml(review.associatedMentor)}</div>
+          ` : escapeHtml(review.summary)}
+        </td>
+        ${config.showCompetencies ? `
+          <td>
+            ${restricted ? '<span class="empty-copy">Restricted</span>' : `
+              <div class="competency-pill-list">
+                ${review.competencies.map((competency) => `<span class="competency-pill">${escapeHtml(competency)}</span>`).join('')}
+              </div>
+            `}
+          </td>
+        ` : ''}
+        <td><span class="status-badge ${getStatusBadgeClass(review.status)}">${escapeHtml(review.status)}</span></td>
+        <td>
+          <button class="table-btn" type="button" data-action="open-review" data-review-id="${escapeHtml(review.id)}" ${restricted ? 'disabled title="Restricted: associated with a different mentor assignment"' : ''}>Open submission</button>
+        </td>
+      </tr>
+    `;
+  }).join('');
 }
 
-function handleReviewDecision(reviewId, decision) {
-  const review = reviews.find((item) => item.id === reviewId);
-  if (!review) return;
-
-  updateLearnerFromReview(review, decision);
-  review.status = decision === 'approve' ? 'Approved' : 'Declined';
-
-  const learner = getLearnerById(review.learnerId);
-  setMessage(`${learner.name}'s ${review.type.toLowerCase()} was ${decision === 'approve' ? 'approved' : 'rejected'} by the mentor.`);
-  renderAll();
-}
 
 function flashCard(reviewId) {
   const review = reviews.find((item) => item.id === reviewId);
@@ -679,71 +854,25 @@ function openReview(reviewId) {
   setMessage(`Opened ${learner.name}'s ${review.type.toLowerCase()} for mentor review.`);
 }
 
-function toggleCompetencies(reviewId, forceOpen) {
+function openReviewSubmission(reviewId) {
   const review = reviews.find((item) => item.id === reviewId);
   if (!review) return;
+
   const learner = getLearnerById(review.learnerId);
-  setMessage(`${learner.name}: ${review.competencies.join(', ')}`);
-}
 
-function openLearnerSubmission(learnerId) {
-  const learner = getLearnerById(learnerId);
-  const review = getFirstPendingReview(learnerId);
-
-  if (review) {
-    if (review.type === 'Work Plan') {
-      window.location.href = '../2_ClaimFoundationalExp/2_SupervisorMentorFE/1_SupervisorMentorFEReview.html';
-      return;
-    }
-    if (review.type === 'Foundational Experience') {
-      window.location.href = '../3_WorkPlan/2_MentorWP/1_MentorReviewWP.html';
-      return;
-    }
-    if (review.type === 'Check-In Report') {
-      window.location.href = '../4_RiskAssessment/2_MentorRiskAssessment/2_MentorReviewCheckin.html';
-      return;
-    }
-    if (review.type === 'Completion Report') {
-      window.location.href = '../5_FinalExperienceReport/3_MentorApprovalFinalReport.html';
-      return;
-    }
-    openReview(review.id);
+  if (isRestricted(review)) {
+    setMessage(`This submission is associated with ${review.associatedMentor} and is not visible to your mentor account.`);
     return;
   }
 
-  const row = document.getElementById(`learner-${learnerId}`);
-  if (row) row.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  setMessage(`${learner.name} has no pending mentor approval right now, but the learner record remains available for reference.`);
-}
-
-function showLearnerCompetencies(learnerId) {
-  const learner = getLearnerById(learnerId);
-  const review = getFirstPendingReview(learnerId);
-
-  if (review) {
-    openReview(review.id);
-    toggleCompetencies(review.id, true);
-    setMessage(`Showing competencies awarded for ${learner.name}.`);
+  const config = Object.values(REVIEW_TYPE_CONFIG).find((item) => item.type === review.type);
+  if (config) {
+    window.location.href = config.route;
     return;
   }
 
-  setMessage(`${learner.name}: ${learner.competenciesNote}`);
-}
-
-function handleRosterDecision(learnerId, decision) {
-  const learner = getLearnerById(learnerId);
-  if (learner.priorMentor) {
-    setMessage(`${learner.name} is view-only because this is prior mentor access.`);
-    return;
-  }
-
-  const review = getFirstPendingReview(learnerId);
-  if (!review) {
-    setMessage(`${learner.name} has no pending mentor approval to ${decision}.`);
-    return;
-  }
-
-  handleReviewDecision(review.id, decision);
+  openReview(review.id);
+  setMessage(`Opened ${learner.name}'s ${review.type.toLowerCase()} for mentor review.`);
 }
 
 function endLearnerRelationship(learnerId) {
@@ -758,24 +887,46 @@ function endLearnerRelationship(learnerId) {
 
 function renderAll() {
   renderMetrics();
-  renderLearners();
+  renderRoster();
+  renderReviewTable('fe');
+  renderReviewTable('wp');
+  renderReviewTable('checkin');
+  renderReviewTable('completion');
 }
 
-learnerTableBody.addEventListener('click', (event) => {
+document.querySelector('main.page').addEventListener('click', (event) => {
   const button = event.target.closest('button[data-action]');
   if (!button) return;
 
-  const learnerId = button.dataset.learnerId;
   const action = button.dataset.action;
 
-  if (action === 'open-learner') openLearnerSubmission(learnerId);
-  if (action === 'competencies-learner') showLearnerCompetencies(learnerId);
-  if (action === 'end-relationship') endLearnerRelationship(learnerId);
+  if (action === 'end-relationship') endLearnerRelationship(button.dataset.learnerId);
+  if (action === 'open-review') openReviewSubmission(button.dataset.reviewId);
 });
 
-nameFilter.addEventListener('input', renderLearners);
-statusFilter.addEventListener('change', renderLearners);
-sortFilter.addEventListener('change', renderLearners);
+function goToLearnerProfile(learnerId) {
+  window.location.href = `1_LearnerProfile.html?learnerId=${encodeURIComponent(learnerId)}`;
+}
+
+learnerTableBody.addEventListener('click', (event) => {
+  if (event.target.closest('button')) return;
+  const row = event.target.closest('tr[data-learner-id]');
+  if (!row) return;
+  goToLearnerProfile(row.dataset.learnerId);
+});
+
+learnerTableBody.addEventListener('keydown', (event) => {
+  if (event.key !== 'Enter' && event.key !== ' ') return;
+  if (event.target.closest('button')) return;
+  const row = event.target.closest('tr[data-learner-id]');
+  if (!row) return;
+  event.preventDefault();
+  goToLearnerProfile(row.dataset.learnerId);
+});
+
+nameFilter.addEventListener('input', renderRoster);
+statusFilter.addEventListener('change', renderRoster);
+sortFilter.addEventListener('change', renderRoster);
 document.getElementById('relationship-modal-close').addEventListener('click', closeRelationshipModal);
 relationshipModal.addEventListener('click', (event) => {
   if (event.target === relationshipModal) closeRelationshipModal();
