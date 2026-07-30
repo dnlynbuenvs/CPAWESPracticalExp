@@ -56,7 +56,7 @@
   .panel-copy{font-size:12px;color:var(--gray-600);line-height:1.45}
   .section-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#2E2C2A;margin-bottom:.75rem}
   .detail-panel,.meta-panel{padding:1.25rem}
-  .meta-stack,.comment-list,.trail-list,.reminder-list,.doc-list,.pill-row,.section-stack{display:flex;flex-direction:column;gap:12px}
+  .meta-stack,.comment-list,.trail-list,.reminder-list,.doc-list,.pill-row{display:flex;flex-direction:column;gap:12px}
   .workspace-main{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:16px}
   .detail-stack{display:flex;flex-direction:column;gap:16px}
   .info-section{padding:1rem 0;border-bottom:1px solid var(--gray-200)}
@@ -82,7 +82,6 @@
   .comment-form textarea{min-height:90px}
   .comment-form textarea:focus,.comment-form input:focus,.comment-form select:focus{outline:none;border-color:var(--imis-blue);box-shadow:0 0 0 3px rgba(27,94,168,.12)}
   .button-row{display:flex;flex-wrap:wrap;gap:8px}
-  #version-nav-row .action-btn{flex:1}
   .action-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:var(--radius-sm);border:1px solid var(--imis-blue);padding:9px 16px;background:var(--white);color:var(--imis-blue);font-size:12px;font-weight:700;cursor:pointer;transition:all .15s ease}
   .action-btn:hover{background:#EBF3FF}
   .action-btn.primary{background:var(--imis-blue);border-color:var(--imis-blue);color:var(--white)}
@@ -101,6 +100,34 @@
   .checkbox-inline input{margin-top:3px}
   .pill{display:inline-flex;align-items:center;gap:6px;background:#EBF3FF;color:var(--blue);border:1px solid rgba(27,94,168,.18);border-radius:999px;padding:5px 9px;font-size:11px;font-weight:700}
   .empty-state{padding:20px;border:1px dashed var(--gray-300);border-radius:var(--radius-md);font-size:13px;color:var(--gray-600);text-align:center;background:var(--white)}
+  .hidden{display:none !important}
+  .field-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .field{display:flex;flex-direction:column;gap:6px}
+  .field.full{grid-column:1 / -1}
+  .field label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#2E2C2A}
+  .field input,.field select,.field textarea{border:1px solid var(--gray-300);border-radius:var(--radius-sm);background:var(--white);padding:10px 12px;color:var(--gray-800)}
+  .field input[readonly],.field textarea[readonly]{background:var(--gray-100);color:var(--gray-600)}
+  .subcopy{font-size:11px;color:var(--gray-600);line-height:1.4}
+  .option-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .option-card{padding:12px;border-radius:var(--radius-sm);border:1px solid var(--gray-200);background:var(--white)}
+  .option-card strong{display:block;font-size:13px;color:#1a1a1a;margin-bottom:4px}
+  .option-card span{display:block;font-size:12px;color:var(--gray-600);line-height:1.45}
+  .option-card.selected{border-color:rgba(27,94,168,.32);box-shadow:0 0 0 3px rgba(27,94,168,.08);background:#F7FAFF}
+  .checkbox-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .checkbox-card{display:flex;align-items:flex-start;gap:10px;padding:12px;border-radius:var(--radius-sm);border:1px solid var(--gray-200);background:var(--white)}
+  .checkbox-card input{margin-top:3px}
+  .checkbox-card span strong{display:block;font-size:13px;color:#1a1a1a;margin-bottom:2px}
+  .checkbox-card span span{display:block;font-size:12px;color:var(--gray-600);line-height:1.4}
+  .imis-table-panel{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);overflow:hidden}
+  .imis-table-header{background:var(--imis-blue);color:var(--white);padding:10px 16px}
+  .imis-table-header h4{font-size:13px;font-weight:700;color:var(--white);letter-spacing:.02em;margin:0}
+  .imis-table-wrap{overflow-x:auto}
+  .imis-table{width:100%;border-collapse:collapse;font-size:13px;min-width:640px}
+  .imis-table thead th{background:var(--gray-100);text-align:left;padding:10px 16px;font-weight:700;color:#2E2C2A;font-size:12px;border-bottom:1px solid var(--gray-300);white-space:nowrap}
+  .imis-table tbody td{padding:11px 16px;border-bottom:1px solid var(--gray-200);color:#2E2C2A;vertical-align:top}
+  .imis-table tbody tr:last-child td{border-bottom:none}
+  .task-desc-list{margin:6px 0 0 18px;padding:0;display:flex;flex-direction:column;gap:3px}
+  .task-desc-list ul{margin:4px 0 0 18px;padding:0;list-style:lower-roman;display:flex;flex-direction:column;gap:3px}
   @media(max-width:1180px){
     .workspace-main{grid-template-columns:1fr}
   }
@@ -111,7 +138,7 @@
     .page{padding:1.25rem 1rem 3rem}
     .hero{flex-direction:column;align-items:flex-start}
     .hero h1{font-size:34px}
-    .grid-2,.grid-3{grid-template-columns:1fr}
+    .grid-2,.grid-3,.field-grid,.option-grid,.checkbox-grid{grid-template-columns:1fr}
   }
 </style>
 </head>
@@ -139,7 +166,7 @@
   <section class="hero" aria-labelledby="review-title">
     <div>
       <h1 id="review-title">Review submitted work plan</h1>
-      <p>Open the learner's submitted work plan in read-only mode, review the dates, documents, competencies, and supporting details, add learner-facing or staff-facing comments, and either approve it for CPA Staff review or return it for revision.</p>
+      <p>Open the learner's submitted work plan in read-only mode, review every intake section and competency table, add review comments, and either approve it for CPA Staff review or return it for revision.</p>
     </div>
   </section>
 
@@ -150,34 +177,164 @@
 
   <section class="workspace-main">
       <section class="panel detail-panel">
-        <div class="section-label">Work plan details</div>
+        <div class="field" style="max-width:360px;">
+          <label for="mentor-actor">Acting mentor</label>
+          <select id="mentor-actor">
+            <option value="Marcus Chen, CPA">Marcus Chen, CPA</option>
+            <option value="Sonia Malik, CPA">Sonia Malik, CPA</option>
+            <option value="Elena Flores, CPA">Elena Flores, CPA</option>
+          </select>
+          <span class="subcopy">Choose the mentor identity used for review comments, declarations, approvals, and revision actions.</span>
+        </div>
+
+        <div class="section-label" style="margin-top:1.5rem;">Work plan details</div>
         <h2 id="detail-title">Submitted work plan</h2>
         <p class="panel-copy" id="detail-copy">All learner work plan details are shown in read-only mode during mentor review.</p>
 
-        <div class="detail-stack">
+        <div class="detail-stack" style="margin-top:1rem;">
           <section class="info-section">
-            <h3>Learner and employer details</h3>
-            <div class="grid-3" id="overview-grid"></div>
+            <h3>Learner information</h3>
+            <div class="field-grid">
+              <div class="field"><label for="legal-name">Given legal name</label><input id="legal-name" type="text" readonly></div>
+              <div class="field"><label for="preferred-name">Preferred name</label><input id="preferred-name" type="text" readonly></div>
+              <div class="field"><label for="cpa-id">CPA ID</label><input id="cpa-id" type="text" readonly></div>
+              <div class="field"><label for="governing-body">Governing body</label><input id="governing-body" type="text" readonly></div>
+              <div class="field"><label for="email-address">Email address</label><input id="email-address" type="email" readonly></div>
+              <div class="field"><label for="phone-number">Phone number</label><input id="phone-number" type="tel" readonly></div>
+            </div>
+
+            <div class="section-label" style="margin-top:1.5rem;">Role type</div>
+            <div class="option-grid" id="role-type-grid">
+              <div class="option-card" data-role-type="Industry"><strong>Industry</strong><span>Standard work plan template with industry-aligned role planning.</span></div>
+              <div class="option-card" data-role-type="Firm - Audit & Assurance"><strong>Firm - Audit &amp; Assurance</strong><span>Firm role focused on audit and assurance engagements.</span></div>
+              <div class="option-card" data-role-type="Firm - Non assurance"><strong>Firm - Non assurance</strong><span>Firm role outside audit and assurance, such as tax or advisory.</span></div>
+              <div class="option-card" data-role-type="Firm - Other"><strong>Firm - Other</strong><span>Other firm-based role not covered by the categories above.</span></div>
+              <div class="option-card" data-role-type="Pre-reviewed"><strong>Pre-reviewed</strong><span>Employer's approved pre-reviewed role template.</span></div>
+            </div>
+            <div class="field full" style="margin-top:1rem;">
+              <label for="service-area">Service area</label>
+              <input id="service-area" type="text" readonly>
+            </div>
           </section>
 
           <section class="info-section">
-            <h3>Dates and duration</h3>
-            <div class="grid-3" id="duration-grid"></div>
+            <h3>Employer details</h3>
+            <div class="field-grid">
+              <div class="field"><label for="employer-name">Employer</label><input id="employer-name" type="text" readonly></div>
+              <div class="field"><label for="pre-reviewed-role-name">Pre-reviewed role</label><input id="pre-reviewed-role-name" type="text" readonly></div>
+            </div>
+            <div class="field-grid" style="margin-top:1rem;">
+              <div class="field"><label for="configured-senior-leader">Configured Senior Leader</label><input id="configured-senior-leader" type="text" readonly></div>
+              <div class="field"><label for="template-path-display">Template path</label><input id="template-path-display" type="text" readonly></div>
+            </div>
+            <div class="field-grid" style="margin-top:1rem;">
+              <div class="field full"><label for="organization-name">Organization name</label><input id="organization-name" type="text" readonly></div>
+              <div class="field full"><label for="organization-address">Organization address</label><textarea id="organization-address" rows="3" readonly></textarea></div>
+              <div class="field"><label for="organization-website">Organization website</label><input id="organization-website" type="url" readonly></div>
+              <div class="field"><label for="position-title">Position title</label><input id="position-title" type="text" readonly></div>
+              <div class="field"><label for="average-hours">Average hours worked per week</label><input id="average-hours" type="text" readonly></div>
+            </div>
           </section>
 
           <section class="info-section">
-            <h3>Role and organization details</h3>
-            <div class="grid-2" id="role-grid"></div>
+            <h3>Select mentor</h3>
+            <div class="field-grid">
+              <div class="field"><label for="mentor-email">Mentor work email</label><input id="mentor-email" type="email" readonly></div>
+              <div class="field"><label for="mentor-name-display">Selected mentor</label><input id="mentor-name-display" type="text" readonly></div>
+            </div>
+          </section>
+
+          <section class="info-section">
+            <h3>Select senior leader</h3>
+            <div class="field-grid">
+              <div class="field"><label for="senior-leader-name">Senior leader</label><input id="senior-leader-name" type="text" readonly></div>
+              <div class="field"><label for="senior-leader-email">Senior leader email</label><input id="senior-leader-email" type="text" readonly></div>
+            </div>
+          </section>
+
+          <section class="info-section">
+            <h3>Job information</h3>
+            <div class="checkbox-grid" id="role-plan-grid">
+              <label class="checkbox-card"><input type="checkbox" value="Audit and assurance" disabled><span><strong>Audit and assurance</strong><span>Professional work tied to assurance engagements and related delivery.</span></span></label>
+              <label class="checkbox-card"><input type="checkbox" value="Taxation" disabled><span><strong>Taxation</strong><span>Corporate, personal, indirect, or specialty tax work.</span></span></label>
+              <label class="checkbox-card"><input type="checkbox" value="Compilation" disabled><span><strong>Compilation</strong><span>Compilation engagements and close support responsibilities.</span></span></label>
+              <label class="checkbox-card"><input type="checkbox" value="Outsourced accounting/ controllership services" disabled><span><strong>Outsourced accounting / controllership services</strong><span>External accounting, controllership, or bookkeeping oversight.</span></span></label>
+              <label class="checkbox-card"><input type="checkbox" value="Advisory services" disabled><span><strong>Advisory services</strong><span>Client-facing advisory, transactions, or strategic work.</span></span></label>
+              <label class="checkbox-card"><input type="checkbox" value="Risk management and controls" disabled><span><strong>Risk management and controls</strong><span>Control design, testing, governance, or risk processes.</span></span></label>
+              <label class="checkbox-card"><input type="checkbox" value="Finance" disabled><span><strong>Finance</strong><span>Planning, forecasting, reporting, and finance operations.</span></span></label>
+              <label class="checkbox-card"><input type="checkbox" value="Consultancy" disabled><span><strong>Consultancy</strong><span>Project-based internal or external consulting work.</span></span></label>
+              <label class="checkbox-card"><input type="checkbox" value="Insolvency" disabled><span><strong>Insolvency</strong><span>Receivership, bankruptcy, restructuring, or recovery work.</span></span></label>
+              <label class="checkbox-card"><input type="checkbox" value="Valuations" disabled><span><strong>Valuations</strong><span>Business valuation and related advisory activities.</span></span></label>
+              <label class="checkbox-card"><input type="checkbox" value="Sustainability" disabled><span><strong>Sustainability</strong><span>Sustainability reporting, controls, and assurance-adjacent work.</span></span></label>
+              <label class="checkbox-card"><input type="checkbox" value="Other" disabled><span><strong>Other</strong><span>Use when the role plan falls outside the listed categories.</span></span></label>
+            </div>
+            <div class="field full" id="other-role-field" style="margin-top:1rem;">
+              <label for="other-role-plan">Other role plan</label>
+              <input id="other-role-plan" type="text" readonly>
+            </div>
+            <div class="field-grid" style="margin-top:1rem;">
+              <div class="field"><label for="org-employees">Number of employees organization wide</label><input id="org-employees" type="text" readonly></div>
+              <div class="field"><label for="org-cpas">Number of CPAs employed organization wide</label><input id="org-cpas" type="text" readonly></div>
+              <div class="field"><label for="department-name">Department name</label><input id="department-name" type="text" readonly></div>
+              <div class="field full"><label for="department-description">Brief description of department or area of activity</label><textarea id="department-description" rows="3" readonly></textarea></div>
+              <div class="field"><label for="department-employees">Number of employees in department or area</label><input id="department-employees" type="text" readonly></div>
+              <div class="field"><label for="department-cpas">Number of CPAs employed in department or area</label><input id="department-cpas" type="text" readonly></div>
+              <div class="field"><label for="direct-reports">Direct reports</label><input id="direct-reports" type="text" readonly></div>
+            </div>
+          </section>
+
+          <section class="info-section">
+            <h3>Work plan date</h3>
+            <div class="field-grid">
+              <div class="field"><label for="work-plan-start-date">Start date</label><input id="work-plan-start-date" type="text" readonly></div>
+              <div class="field"><label for="expected-completion-date">Expected completion date</label><input id="expected-completion-date" type="text" readonly></div>
+              <div class="field"><label for="expected-leave-days">Expected leave days</label><input id="expected-leave-days" type="text" readonly></div>
+            </div>
+            <div class="grid-3" id="duration-grid" style="margin-top:1rem;"></div>
+          </section>
+
+          <section class="info-section">
+            <h3>Financial Reporting</h3>
+            <div class="imis-table-panel">
+              <div class="imis-table-header"><h4>Financial Reporting task statements</h4></div>
+              <div class="imis-table-wrap">
+                <table class="imis-table">
+                  <thead><tr><th>ID</th><th>Task Statement Description</th><th>CPA Learner Plan</th><th>Level required</th></tr></thead>
+                  <tbody id="fr-task-body"></tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <section class="info-section">
+            <h3>Assurance &amp; Trust</h3>
+            <div class="imis-table-panel">
+              <div class="imis-table-header"><h4>Assurance &amp; Trust task statements</h4></div>
+              <div class="imis-table-wrap">
+                <table class="imis-table">
+                  <thead><tr><th>ID</th><th>Task Statement Description</th><th>CPA Learner Plan</th><th>Level required</th></tr></thead>
+                  <tbody id="at-task-body"></tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <section class="info-section">
+            <h3>DC statements</h3>
+            <div class="imis-table-panel">
+              <div class="imis-table-header"><h4>DC statements</h4></div>
+              <div class="imis-table-wrap">
+                <table class="imis-table">
+                  <thead><tr><th>ID</th><th>Competency</th><th>Description</th><th>CPA Learner Plan</th><th>Level required</th></tr></thead>
+                  <tbody id="dc-task-body"></tbody>
+                </table>
+              </div>
+            </div>
           </section>
 
           <section class="info-section">
             <h3>Supporting documents</h3>
             <div class="doc-list" id="document-list"></div>
-          </section>
-
-          <section class="info-section">
-            <h3>Competency selections</h3>
-            <div class="section-stack" id="competency-section"></div>
           </section>
 
           <section class="info-section">
@@ -187,9 +344,6 @@
               <textarea id="learner-comment" placeholder="Visible to the learner and CPA Staff Reviewer. Required when returning the work plan for revision."></textarea>
               <label for="staff-comment" class="subcopy">Comment for CPA Staff Reviewer</label>
               <textarea id="staff-comment" placeholder="Visible to CPA Staff Reviewer as part of the review history."></textarea>
-              <div class="button-row">
-                <button class="action-btn primary" id="add-comment-btn" type="button">Add comments</button>
-              </div>
             </div>
             <div class="comment-list" id="comment-list" style="margin-top:1rem;"></div>
           </section>
@@ -207,10 +361,24 @@
                 <span>I confirm that I reviewed this work plan, to the best of my knowledge it is accurate, and it can proceed to CPA Staff review.</span>
               </label>
             </div>
+            <div class="notice-box" style="margin-top:1rem;">
+              <label class="checkbox-inline">
+                <input id="resubmission-flag" type="checkbox">
+                <span>Learner has resubmitted too many times.</span>
+              </label>
+            </div>
+            <div class="field-grid" style="margin-top:1rem;">
+              <div class="field">
+                <label for="decision-select">Decision</label>
+                <select id="decision-select">
+                  <option value="" selected>Select decision</option>
+                  <option value="approve">Approve</option>
+                  <option value="return">Return for revision</option>
+                </select>
+              </div>
+            </div>
             <div class="button-row" style="margin-top:1rem;">
-              <button class="action-btn success" id="approve-btn" type="button">Approve work plan</button>
-              <button class="action-btn danger" id="return-btn" type="button">Return for revision</button>
-              <button class="action-btn warn" id="reminder-btn" type="button">Run reminder check</button>
+              <button class="action-btn primary" id="save-decision-btn" type="button">Save</button>
             </div>
           </section>
         </div>
@@ -220,25 +388,6 @@
         <div class="section-label">Workflow and history</div>
         <h2>Review history</h2>
         <div class="meta-stack">
-          <div class="meta-card">
-            <strong>Acting mentor</strong>
-            <span>Choose the mentor identity used for review comments, declarations, approvals, and revision actions.</span>
-            <div class="comment-form" style="margin-top:.75rem;">
-              <select id="mentor-actor">
-                <option value="Marcus Chen, CPA">Marcus Chen, CPA</option>
-                <option value="Sonia Malik, CPA">Sonia Malik, CPA</option>
-                <option value="Elena Flores, CPA">Elena Flores, CPA</option>
-              </select>
-            </div>
-          </div>
-          <div class="meta-card">
-            <strong>Work plan version</strong>
-            <span id="meta-version-position">1 of 1</span>
-          </div>
-          <div class="button-row" id="version-nav-row">
-            <button type="button" class="action-btn" id="prev-version-btn">Previous</button>
-            <button type="button" class="action-btn" id="next-version-btn">Next</button>
-          </div>
           <div class="meta-card">
             <strong>Current status</strong>
             <span id="meta-status">Not available</span>
@@ -251,55 +400,95 @@
             <strong>Mentor</strong>
             <span id="meta-mentor">No mentor recorded.</span>
           </div>
-          <div class="meta-card">
-            <strong>Reminder schedule</strong>
-            <div class="reminder-list" id="reminder-list" style="margin-top:.75rem;"></div>
-          </div>
-          <div class="meta-card">
-            <strong>Audit trail</strong>
-            <div class="trail-list" id="trail-list" style="margin-top:.75rem;"></div>
-          </div>
         </div>
       </aside>
   </section>
 </main>
 
 <script>
-const workPlanKey = 'workPlanRecord:learner-101';
-const competencyKey = 'workPlanCompetencies:learner-101';
+const workPlanKey = 'workPlanRecord:learner-101:v2';
 const versionsKey = 'workPlanVersions:learner-101';
 const activeReviewKey = 'mentorWorkPlanReviewActive:learner-101';
 
+const financialReportingStatements = [
+  { id: 'FR1', description: 'Assess decision makers’ needs and actively design the development/ modification of reporting requirements or financial-reporting systems required to meet external user needs, such as an MD&A or financing needs (a large, complex example, or several smaller ones).' },
+  { id: 'FR2', description: 'Critically evaluate and reach a preliminary conclusion on three distinct GAAP (or equivalent) transactions based on management requests, using the CPA Canada Handbook (or equivalent) as guidance.' },
+  { id: 'FR3', description: 'Prepare and critically evaluate financial statements and notes in accordance with GAAP or equivalent over two business periods (at least one of which is year-end).' },
+  { id: 'FR4', description: 'Assess variances on historical, year-over-year financial statements and interpret the root causes, including insights into interconnectivity of multiple line items (over two business periods, at least one of which needs to be year-end).' }
+];
+
+const assuranceTrustStatements = [
+  { id: 'AT1a', description: 'Formulate the planning and risk assessment of the assurance engagement (including calculating materiality and assessing the control environment).' },
+  { id: 'AT1b', description: 'Design appropriate planned procedures that meet the objective of the engagement.' },
+  { id: 'AT1c', description: 'Critically evaluate supporting information and results of analysis to draw conclusions and communicate results.' }
+];
+
+const dcStatements = [
+  {
+    id: 'DC1',
+    competency: 'Professional Skepticism',
+    intro: 'Critically evaluate actions and decisions by consistently demonstrating:',
+    points: [
+      'A questioning mindset',
+      'Awareness of new information and changes in facts and circumstances which could indicate possible misstatement due to error or fraud (spotting trends and irregularities)',
+      'Critical thinking skills applied to the evidence (how you interpret the story)',
+      'Awareness of how conscious and unconscious bias might impact how data or information is used, analyzed, or reported'
+    ]
+  },
+  {
+    id: 'DC2',
+    competency: 'Ethical Decision Making',
+    intro: 'Critically evaluate a decision by consistently demonstrating:',
+    points: [
+      'Understanding of the higher level of accountability and responsibility afforded by being part of the CPA profession',
+      'Adherence to the Provincial/Regional Body’s CPA Code of Professional Conduct including:'
+    ],
+    subPoints: [
+      'Maintaining the good reputation of the profession, protecting the public and acting in the public interest',
+      'Performing with integrity and due care',
+      'Avoiding compromise of professional judgment by bias, conflict of interest or undue influence',
+      'Exhibiting behaviours to comply with laws, regulations, organizational policies, societal norms and personal ideals',
+      'Identifying and raising unethical behaviours (if applicable)'
+    ]
+  },
+  {
+    id: 'DC3',
+    competency: 'Communication',
+    intro: 'Demonstrate ability to consistently:',
+    points: [
+      'Communicate analyses, findings, decision and next steps in a transparent, understandable, and professional manner, with due consideration of audience and appropriate communication channels/tools.',
+      'Assess that all communications fairly reflect underlying substance without bias.'
+    ]
+  }
+];
+
 const detailTitle = document.getElementById('detail-title');
 const detailCopy = document.getElementById('detail-copy');
-const metaVersionPosition = document.getElementById('meta-version-position');
-const prevVersionBtn = document.getElementById('prev-version-btn');
-const nextVersionBtn = document.getElementById('next-version-btn');
-const overviewGrid = document.getElementById('overview-grid');
+const roleTypeGrid = document.getElementById('role-type-grid');
+const roleplanGrid = document.getElementById('role-plan-grid');
+const otherRoleField = document.getElementById('other-role-field');
 const durationGrid = document.getElementById('duration-grid');
-const roleGrid = document.getElementById('role-grid');
+const frTaskBody = document.getElementById('fr-task-body');
+const atTaskBody = document.getElementById('at-task-body');
+const dcTaskBody = document.getElementById('dc-task-body');
 const documentList = document.getElementById('document-list');
-const competencySection = document.getElementById('competency-section');
 const learnerComment = document.getElementById('learner-comment');
 const staffComment = document.getElementById('staff-comment');
 const commentList = document.getElementById('comment-list');
 const decisionNote = document.getElementById('decision-note');
 const approvalDeclaration = document.getElementById('approval-declaration');
+const resubmissionFlag = document.getElementById('resubmission-flag');
+const decisionSelect = document.getElementById('decision-select');
+const saveDecisionBtn = document.getElementById('save-decision-btn');
 const metaStatus = document.getElementById('meta-status');
 const metaSubmitted = document.getElementById('meta-submitted');
 const metaMentor = document.getElementById('meta-mentor');
-const reminderList = document.getElementById('reminder-list');
-const trailList = document.getElementById('trail-list');
 const messageBar = document.getElementById('message-bar');
 const messageText = document.getElementById('message-text');
 const mentorActor = document.getElementById('mentor-actor');
-const approveBtn = document.getElementById('approve-btn');
-const returnBtn = document.getElementById('return-btn');
-const reminderBtn = document.getElementById('reminder-btn');
 
 let versions = [];
 let activeVersionId = null;
-let competencySnapshot = JSON.parse(localStorage.getItem(competencyKey) || 'null') || null;
 
 function setMessage(text) {
   messageText.textContent = text;
@@ -364,6 +553,7 @@ function createDefaultWorkPlan() {
       mentorName: 'Marcus Chen, CPA',
       mentorCpaId: 'CPA-100421',
       mentorSelectedEmail: 'marcus.chen@northlineadvisory.example',
+      mentorEmail: 'marcus.chen@northlineadvisory.example',
       seniorLeaderName: 'Priya Nair, CPA',
       seniorLeaderEmail: 'priya.nair@northlineadvisory.example'
     },
@@ -374,11 +564,17 @@ function createDefaultWorkPlan() {
       organizationAddress: '700 Burrard Street, Vancouver, BC V6C 2X8',
       organizationWebsite: 'https://www.northlineadvisory.example',
       positionTitle: 'Audit Associate',
-      professionalStartDate: '2026-01-02',
-      positionStartDate: '2026-01-02',
-      expectedCompletionDate: '2027-08-30',
-      expectedLeaveDays: 8,
       averageHoursPerWeek: 37.5
+    },
+    workPlanDates: {
+      startDate: '2026-01-02',
+      expectedCompletionDate: '2027-08-30',
+      expectedLeaveDays: 8
+    },
+    taskStatements: {
+      financialReporting: financialReportingStatements.map((item, index) => ({ id: item.id, learnerPlan: index < 2 ? 'Yes' : 'No', levelRequired: 2 })),
+      assuranceTrust: assuranceTrustStatements.map((item) => ({ id: item.id, learnerPlan: 'Yes', levelRequired: 2 })),
+      dc: dcStatements.map((item) => ({ id: item.id, learnerPlan: 'Yes', levelRequired: 2 }))
     },
     duration: {
       potentialMonths: 19.66,
@@ -412,6 +608,7 @@ function createDefaultWorkPlan() {
       ],
       reminderSchedule: [30,60,90].map((dayCount) => ({ dayCount, dueDate:new Date(Date.now() - (20 - dayCount) * 86400000).toISOString().slice(0,10), sent:false })),
       resubmissionCount: 1,
+      resubmissionFlag: false,
       comments: [],
       auditTrail: []
     },
@@ -419,33 +616,18 @@ function createDefaultWorkPlan() {
   };
 }
 
-function createDemoCompetencies() {
-  return {
-    coreMode: 'both',
-    taskSelections: {
-      'fr-1': { selected:true, level:'Level 2 - Emerging' },
-      'fr-2': { selected:true, level:'Level 1 - Foundational' },
-      'ma-1': { selected:true, level:'Level 2 - Emerging' },
-      'ma-2': { selected:true, level:'Level 1 - Foundational' },
-      'at-1': { selected:true, level:'Level 1 - Foundational' }
-    },
-    subtaskSelections: {
-      'fr-1-0': { applicable:'Yes', level:'Level 2 - Emerging' },
-      'fr-1-1': { applicable:'Yes', level:'Level 1 - Foundational' },
-      'fr-1-2': { applicable:'Yes', level:'Level 1 - Foundational' },
-      'fr-2-0': { applicable:'Yes', level:'Level 1 - Foundational' },
-      'fr-2-1': { applicable:'Yes', level:'Level 1 - Foundational' },
-      'fr-2-2': { applicable:'Yes', level:'Level 1 - Foundational' }
-    },
-    dcLevels: {
-      0:'Level 2 - Emerging', 1:'Level 2 - Emerging', 2:'Level 1 - Foundational',
-      3:'Level 2 - Emerging', 4:'Level 2 - Emerging', 5:'Level 1 - Foundational'
-    }
-  };
+function mergeTaskState(defaults, stored) {
+  return defaults.map((def) => {
+    const found = Array.isArray(stored) ? stored.find((item) => item && item.id === def.id) : null;
+    return found
+      ? { id: def.id, learnerPlan: found.learnerPlan || '', levelRequired: found.levelRequired ?? def.levelRequired }
+      : { ...def };
+  });
 }
 
 function normaliseVersion(plan) {
   const base = createDefaultWorkPlan();
+  const storedTaskStatements = plan.taskStatements || {};
   const merged = {
     ...base,
     ...plan,
@@ -453,6 +635,12 @@ function normaliseVersion(plan) {
     preReviewed: { ...base.preReviewed, ...(plan.preReviewed || {}) },
     approvals: { ...base.approvals, ...(plan.approvals || {}) },
     employerDetails: { ...base.employerDetails, ...(plan.employerDetails || {}) },
+    workPlanDates: { ...base.workPlanDates, ...(plan.workPlanDates || {}) },
+    taskStatements: {
+      financialReporting: mergeTaskState(base.taskStatements.financialReporting, storedTaskStatements.financialReporting),
+      assuranceTrust: mergeTaskState(base.taskStatements.assuranceTrust, storedTaskStatements.assuranceTrust),
+      dc: mergeTaskState(base.taskStatements.dc, storedTaskStatements.dc)
+    },
     duration: { ...base.duration, ...(plan.duration || {}) },
     documents: {
       jobDescriptions: ((plan.documents && plan.documents.jobDescriptions) || []).slice(),
@@ -472,11 +660,21 @@ function normaliseVersion(plan) {
 }
 
 function loadVersions() {
-  const storedVersions = JSON.parse(localStorage.getItem(versionsKey) || '[]');
+  let storedVersions = [];
+  try {
+    storedVersions = JSON.parse(localStorage.getItem(versionsKey) || '[]');
+  } catch (error) {
+    storedVersions = [];
+  }
   if (Array.isArray(storedVersions) && storedVersions.length) {
     versions = storedVersions.map(normaliseVersion);
   } else {
-    const storedPlan = JSON.parse(localStorage.getItem(workPlanKey) || 'null');
+    let storedPlan = null;
+    try {
+      storedPlan = JSON.parse(localStorage.getItem(workPlanKey) || 'null');
+    } catch (error) {
+      storedPlan = null;
+    }
     const seeded = storedPlan ? normaliseVersion(storedPlan) : createDefaultWorkPlan();
     if (!seeded.id) seeded.id = `wp-${Date.now()}`;
     if (!seeded.version) seeded.version = 1;
@@ -488,7 +686,6 @@ function loadVersions() {
         : [30,60,90].map((dayCount) => ({ dayCount, dueDate:new Date(new Date(seeded.workflow.submittedAt).getTime() + dayCount * 86400000).toISOString().slice(0,10), sent:false }));
     }
     versions = [seeded];
-    if (!competencySnapshot) competencySnapshot = createDemoCompetencies();
   }
 
   activeVersionId = localStorage.getItem(activeReviewKey) || versions[0].id;
@@ -510,13 +707,112 @@ function getActor() {
   return mentorActor.value || 'Mentor';
 }
 
-function renderValueCards(container, values, colsClass) {
-  container.innerHTML = values.map((item) => `
+function populateReadOnlyFields(plan) {
+  document.getElementById('legal-name').value = plan.learnerInfo.legalName || '';
+  document.getElementById('preferred-name').value = plan.learnerInfo.preferredName || '';
+  document.getElementById('cpa-id').value = plan.learnerInfo.cpaId || '';
+  document.getElementById('governing-body').value = plan.learnerInfo.governingBody || '';
+  document.getElementById('email-address').value = plan.learnerInfo.email || '';
+  document.getElementById('phone-number').value = plan.learnerInfo.phone || '';
+
+  Array.from(roleTypeGrid.querySelectorAll('.option-card')).forEach((card) => {
+    card.classList.toggle('selected', card.dataset.roleType === plan.roleType);
+  });
+  document.getElementById('service-area').value = plan.serviceArea || 'Not applicable';
+
+  document.getElementById('employer-name').value = plan.preReviewed.employer || plan.employerDetails.organizationName || 'Not provided';
+  document.getElementById('pre-reviewed-role-name').value = plan.preReviewed.roleName || 'Not applicable';
+  document.getElementById('configured-senior-leader').value = plan.preReviewed.seniorLeader || 'Not assigned';
+  document.getElementById('template-path-display').value = plan.preReviewed.templatePath || 'Standard / non-pre-reviewed work plan template';
+  document.getElementById('organization-name').value = plan.employerDetails.organizationName || '';
+  document.getElementById('organization-address').value = plan.employerDetails.organizationAddress || '';
+  document.getElementById('organization-website').value = plan.employerDetails.organizationWebsite || '';
+  document.getElementById('position-title').value = plan.employerDetails.positionTitle || '';
+  document.getElementById('average-hours').value = plan.employerDetails.averageHoursPerWeek != null ? String(plan.employerDetails.averageHoursPerWeek) : '';
+
+  document.getElementById('mentor-email').value = plan.approvals.mentorEmail || plan.approvals.mentorSelectedEmail || '';
+  document.getElementById('mentor-name-display').value = plan.approvals.mentorName
+    ? `${plan.approvals.mentorName} | ${plan.approvals.mentorCpaId || 'CPA ID not available'}`
+    : 'No mentor selected.';
+  document.getElementById('senior-leader-name').value = plan.approvals.seniorLeaderName || 'Not assigned';
+  document.getElementById('senior-leader-email').value = plan.approvals.seniorLeaderEmail || 'Not available';
+
+  Array.from(roleplanGrid.querySelectorAll('input[type="checkbox"]')).forEach((box) => {
+    box.checked = (plan.jobInformation.rolePlans || []).includes(box.value);
+  });
+  const hasOther = (plan.jobInformation.rolePlans || []).includes('Other');
+  otherRoleField.classList.toggle('hidden', !hasOther);
+  document.getElementById('other-role-plan').value = plan.jobInformation.otherRolePlan || '';
+  document.getElementById('org-employees').value = plan.jobInformation.orgEmployees || '';
+  document.getElementById('org-cpas').value = plan.jobInformation.orgCpas || '';
+  document.getElementById('department-name').value = plan.jobInformation.departmentName || '';
+  document.getElementById('department-description').value = plan.jobInformation.departmentDescription || '';
+  document.getElementById('department-employees').value = plan.jobInformation.departmentEmployees || '';
+  document.getElementById('department-cpas').value = plan.jobInformation.departmentCpas || '';
+  document.getElementById('direct-reports').value = plan.jobInformation.directReports || '';
+
+  document.getElementById('work-plan-start-date').value = formatShortDate(plan.workPlanDates.startDate);
+  document.getElementById('expected-completion-date').value = formatShortDate(plan.workPlanDates.expectedCompletionDate);
+  document.getElementById('expected-leave-days').value = String(plan.workPlanDates.expectedLeaveDays ?? 0);
+}
+
+function renderDurationGrid(plan) {
+  durationGrid.innerHTML = `
     <div class="value-card">
-      <span>${escapeHtml(item.label)}</span>
-      <strong>${escapeHtml(item.value)}</strong>
+      <span>Potential PE</span>
+      <strong>${Number(plan.duration.potentialMonths || 0).toFixed(2)} months</strong>
     </div>
-  `).join('');
+    <div class="value-card">
+      <span>Estimated hours</span>
+      <strong>${Math.round(Number(plan.duration.estimatedHours || 0))}</strong>
+    </div>
+    <div class="value-card">
+      <span>Actual gained PE</span>
+      <strong>${escapeHtml(plan.duration.actualGainedPE || 'Pending CPA Reviewer')}</strong>
+    </div>
+  `;
+}
+
+function renderTaskStatementTableReadOnly(bodyEl, definitions, group, plan) {
+  const state = plan.taskStatements[group] || [];
+  bodyEl.innerHTML = definitions.map((def) => {
+    const entry = state.find((item) => item.id === def.id) || { learnerPlan: '', levelRequired: '' };
+    return `
+      <tr>
+        <td>${escapeHtml(def.id)}</td>
+        <td>${escapeHtml(def.description)}</td>
+        <td>${escapeHtml(entry.learnerPlan || 'Not selected')}</td>
+        <td>${entry.levelRequired || '-'}</td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function renderDcPoints(item) {
+  const lastIndex = item.points.length - 1;
+  const pointItems = item.points.map((point, index) => {
+    const sub = (index === lastIndex && item.subPoints)
+      ? `<ul>${item.subPoints.map((sp) => `<li>${escapeHtml(sp)}</li>`).join('')}</ul>`
+      : '';
+    return `<li>${escapeHtml(point)}${sub}</li>`;
+  }).join('');
+  return `<p style="margin-bottom:6px;">${escapeHtml(item.intro)}</p><ul class="task-desc-list">${pointItems}</ul>`;
+}
+
+function renderDcTableReadOnly(plan) {
+  const state = plan.taskStatements.dc || [];
+  dcTaskBody.innerHTML = dcStatements.map((def) => {
+    const entry = state.find((item) => item.id === def.id) || { learnerPlan: '', levelRequired: '' };
+    return `
+      <tr>
+        <td>${escapeHtml(def.id)}</td>
+        <td><strong>${escapeHtml(def.competency)}</strong></td>
+        <td>${renderDcPoints(def)}</td>
+        <td>${escapeHtml(entry.learnerPlan || 'Not selected')}</td>
+        <td>${entry.levelRequired || '-'}</td>
+      </tr>
+    `;
+  }).join('');
 }
 
 function renderDocuments(plan) {
@@ -535,100 +831,26 @@ function renderDocuments(plan) {
 
 function renderComments(plan) {
   const comments = plan.workflow.comments || [];
-  if (!comments.length) {
-    commentList.innerHTML = '<div class="empty-state">No mentor review comments have been added yet.</div>';
-    return;
-  }
-  commentList.innerHTML = comments.slice().reverse().map((comment) => `
+  commentList.innerHTML = comments.length ? comments.slice().reverse().map((comment) => `
     <div class="comment-item">
       <strong>${escapeHtml(comment.author)} | ${escapeHtml(comment.visibility)}</strong>
       <span>${escapeHtml(formatDate(comment.at))}</span>
       <span>${escapeHtml(comment.text)}</span>
     </div>
-  `).join('');
-}
-
-function renderTrail(plan) {
-  const items = plan.workflow.auditTrail || [];
-  if (!items.length) {
-    trailList.innerHTML = '<div class="empty-state">No audit events recorded yet.</div>';
-    return;
-  }
-  trailList.innerHTML = items.slice().reverse().map((entry) => `
-    <div class="trail-item">
-      <strong>${escapeHtml(entry.actor)} | ${escapeHtml(entry.role)}</strong>
-      <span>${escapeHtml(formatDate(entry.at))}</span>
-      <span>${escapeHtml(entry.previousStatus)} -> ${escapeHtml(entry.newStatus)}</span>
-      <span>${escapeHtml(entry.comments || 'No comments recorded.')}</span>
-    </div>
-  `).join('');
-}
-
-function renderReminders(plan) {
-  const items = plan.workflow.reminderSchedule || [];
-  if (!items.length) {
-    reminderList.innerHTML = '<div class="empty-state">Reminder dates will appear after submission.</div>';
-    return;
-  }
-  reminderList.innerHTML = items.map((item) => `
-    <div class="reminder-item">
-      <strong>${item.dayCount}-day reminder</strong>
-      <span>Due ${escapeHtml(formatShortDate(item.dueDate))}</span>
-      <span>${item.sent ? `Sent ${escapeHtml(formatDate(item.sentAt))}` : 'Not sent yet'}</span>
-    </div>
-  `).join('');
-}
-
-function renderCompetencies(plan) {
-  const comp = competencySnapshot || createDemoCompetencies();
-  const coreModeMap = {
-    fr: ['Financial Reporting'],
-    ma: ['Management Accounting'],
-    both: ['Financial Reporting', 'Management Accounting']
-  };
-  const selectedCore = coreModeMap[comp.coreMode] || [];
-  const selectedTasks = Object.entries(comp.taskSelections || {}).filter(([, value]) => value.selected);
-  const selectedSubtasks = Object.entries(comp.subtaskSelections || {}).filter(([, value]) => value.applicable === 'Yes');
-  const dcComplete = Object.values(comp.dcLevels || {}).filter(Boolean).length;
-
-  competencySection.innerHTML = `
-    <div class="notice-box">
-      <strong>Selected core competencies</strong>
-      <div class="pill-row" style="margin-top:.5rem;">
-        ${selectedCore.length ? selectedCore.map((item) => `<span class="pill">${escapeHtml(item)}</span>`).join('') : '<span class="pill">None selected</span>'}
-        ${(/Audit & Assurance/.test(plan.roleType) || (plan.jobInformation.rolePlans || []).includes('Audit and assurance')) ? '<span class="pill">Assurance and Trust</span>' : ''}
-      </div>
-    </div>
-    <div class="task-card">
-      <strong>Core task statements</strong>
-      <span>${selectedTasks.length} selected with current levels.</span>
-    </div>
-    <div class="task-card">
-      <strong>Sub-task statements</strong>
-      <span>${selectedSubtasks.length} marked Yes with current levels.</span>
-    </div>
-    <div class="task-card">
-      <strong>DC statements</strong>
-      <span>${dcComplete} completed current level selections.</span>
-    </div>
-  `;
+  `).join('') : '';
 }
 
 function renderMeta(plan) {
-  const position = versions.findIndex((item) => item.id === activeVersionId);
-  metaVersionPosition.textContent = `${position + 1} of ${versions.length}`;
-  prevVersionBtn.style.display = position > 0 ? 'inline-flex' : 'none';
-  nextVersionBtn.style.display = position < versions.length - 1 ? 'inline-flex' : 'none';
   metaStatus.innerHTML = `<span class="status-badge ${statusClass(plan.workflow.status)}">${escapeHtml(plan.workflow.status)}</span>`;
   metaSubmitted.textContent = formatDate(plan.workflow.submittedAt);
   metaMentor.textContent = plan.approvals.mentorName
     ? `${plan.approvals.mentorName} (${plan.approvals.mentorSelectedEmail || 'email not available'})`
     : 'No mentor recorded.';
   const pending = plan.workflow.status === 'Pending Mentor Approval';
-  approveBtn.disabled = !pending;
-  returnBtn.disabled = !pending;
-  reminderBtn.disabled = !pending;
+  decisionSelect.disabled = !pending;
+  saveDecisionBtn.disabled = !pending;
   approvalDeclaration.disabled = !pending;
+  resubmissionFlag.checked = Boolean(plan.workflow.resubmissionFlag);
 
   if (plan.workflow.status === 'Pending CPA Review') {
     decisionNote.className = 'notice-box success';
@@ -646,66 +868,22 @@ function renderActiveVersion() {
   const plan = getActiveVersion();
   if (!plan) return;
 
-  detailTitle.textContent = `${plan.employerDetails.positionTitle || 'Submitted work plan'} | Version ${plan.version}`;
+  detailTitle.textContent = plan.employerDetails.positionTitle || 'Submitted work plan';
   detailCopy.textContent = `Current status: ${plan.workflow.status}. All work plan sections are read-only during mentor review.`;
 
-  renderValueCards(overviewGrid, [
-    { label:'Given legal name', value: plan.learnerInfo.legalName || 'Not provided' },
-    { label:'Preferred name', value: plan.learnerInfo.preferredName || 'Not provided' },
-    { label:'CPA ID', value: plan.learnerInfo.cpaId || 'Not provided' },
-    { label:'Employer', value: plan.employerDetails.organizationName || 'Not provided' },
-    { label:'Role type', value: plan.roleType || 'Not provided' },
-    { label:'Template path', value: plan.preReviewed.templatePath || 'Not provided' }
-  ]);
-
-  renderValueCards(durationGrid, [
-    { label:'Work plan start date', value: formatShortDate(plan.employerDetails.professionalStartDate || plan.employerDetails.positionStartDate) },
-    { label:'Expected completion', value: formatShortDate(plan.employerDetails.expectedCompletionDate) },
-    { label:'Expected leave days', value: String(plan.employerDetails.expectedLeaveDays ?? 0) },
-    { label:'Potential PE', value: `${Number(plan.duration.potentialMonths || 0).toFixed(2)} months` },
-    { label:'Estimated hours', value: `${Math.round(Number(plan.duration.estimatedHours || 0))}` },
-    { label:'Actual gained PE', value: plan.duration.actualGainedPE || 'Pending CPA Reviewer' }
-  ]);
-
-  renderValueCards(roleGrid, [
-    { label:'Position title', value: plan.employerDetails.positionTitle || 'Not provided' },
-    { label:'Organization website', value: plan.employerDetails.organizationWebsite || 'Not provided' },
-    { label:'Organization address', value: plan.employerDetails.organizationAddress || 'Not provided' },
-    { label:'Role plans', value: (plan.jobInformation.rolePlans || []).join(', ') || 'Not provided' },
-    { label:'Department', value: plan.jobInformation.departmentName || 'Not provided' },
-    { label:'Mentor / Senior Leader', value: `${plan.approvals.mentorName || 'Mentor not set'} / ${plan.approvals.seniorLeaderName || 'Senior leader not set'}` }
-  ]);
-
+  populateReadOnlyFields(plan);
+  renderDurationGrid(plan);
+  renderTaskStatementTableReadOnly(frTaskBody, financialReportingStatements, 'financialReporting', plan);
+  renderTaskStatementTableReadOnly(atTaskBody, assuranceTrustStatements, 'assuranceTrust', plan);
+  renderDcTableReadOnly(plan);
   renderDocuments(plan);
-  renderCompetencies(plan);
   renderComments(plan);
-  renderReminders(plan);
-  renderTrail(plan);
   renderMeta(plan);
 }
 
 function renderAll() {
   renderActiveVersion();
   persistVersions();
-}
-
-function goToAdjacentVersion(offset) {
-  const position = versions.findIndex((item) => item.id === activeVersionId);
-  const nextPosition = position + offset;
-  if (nextPosition < 0 || nextPosition >= versions.length) return;
-  activeVersionId = versions[nextPosition].id;
-  approvalDeclaration.checked = false;
-  learnerComment.value = '';
-  staffComment.value = '';
-  renderAll();
-}
-
-function goToPreviousVersion() {
-  goToAdjacentVersion(-1);
-}
-
-function goToNextVersion() {
-  goToAdjacentVersion(1);
 }
 
 function addAudit(plan, previousStatus, newStatus, comments) {
@@ -746,32 +924,6 @@ function addCommentsFromInput(requiredLearnerComment) {
   learnerComment.value = '';
   staffComment.value = '';
   return true;
-}
-
-function runReminderCheck() {
-  const plan = getActiveVersion();
-  if (plan.workflow.status !== 'Pending Mentor Approval') {
-    setMessage('Reminders apply only while the work plan is pending mentor review.');
-    return;
-  }
-  const now = new Date();
-  const due = (plan.workflow.reminderSchedule || []).filter((entry) => !entry.sent && now >= new Date(`${entry.dueDate}T00:00:00`));
-  if (!due.length) {
-    setMessage('No 30, 60, or 90 day reminder emails are due yet for this work plan.');
-    return;
-  }
-  due.forEach((entry) => {
-    entry.sent = true;
-    entry.sentAt = new Date().toISOString();
-    plan.workflow.notifications.push({
-      type: `${entry.dayCount}-day mentor reminder email`,
-      sentAt: entry.sentAt,
-      recipient: plan.approvals.mentorSelectedEmail || 'mentor'
-    });
-    addAudit(plan, plan.workflow.status, plan.workflow.status, `${entry.dayCount}-day reminder email sent to mentor.`);
-  });
-  renderAll();
-  setMessage(`Sent ${due.length} reminder email${due.length === 1 ? '' : 's'} for this pending mentor review.`);
 }
 
 function approveWorkPlan() {
@@ -846,32 +998,28 @@ function returnForRevision() {
   window.location.href = '../../1_Dashboard/MentorDashboard.html';
 }
 
-document.getElementById('add-comment-btn').addEventListener('click', () => {
-  const learnerText = learnerComment.value.trim();
-  const staffText = staffComment.value.trim();
-  if (!learnerText && !staffText) {
-    setMessage('Enter a learner-facing comment, a staff-facing note, or both before adding them.');
+saveDecisionBtn.addEventListener('click', () => {
+  const decision = decisionSelect.value;
+  if (!decision) {
+    setMessage('Select Approve or Return for revision before saving your decision.');
     return;
   }
-  addCommentsFromInput(false);
-  renderAll();
-  setMessage('Mentor comments added to the work plan review history.');
+  if (decision === 'approve') {
+    approveWorkPlan();
+  } else if (decision === 'return') {
+    returnForRevision();
+  }
 });
 
-approveBtn.addEventListener('click', approveWorkPlan);
-returnBtn.addEventListener('click', returnForRevision);
-reminderBtn.addEventListener('click', runReminderCheck);
-
-prevVersionBtn.addEventListener('click', goToPreviousVersion);
-nextVersionBtn.addEventListener('click', goToNextVersion);
+resubmissionFlag.addEventListener('change', () => {
+  const plan = getActiveVersion();
+  if (!plan) return;
+  plan.workflow.resubmissionFlag = resubmissionFlag.checked;
+  persistVersions();
+});
 
 loadVersions();
 renderAll();
 </script>
 </body>
 </html>
-
-
-
-
-
