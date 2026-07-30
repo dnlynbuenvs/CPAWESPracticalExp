@@ -173,62 +173,9 @@
     </div>
   </section>
 
-  <section class="panel filter-panel" aria-labelledby="filter-title">
-    <div class="filter-head">
-      <div>
-        <div class="section-label">Queue filters</div>
-        <h2 id="filter-title">Filter all in-flight experiences</h2>
-      </div>
-    </div>
-    <div class="reviewer-bar">
-      <div class="field">
-        <label for="filter-type">Submission type</label>
-        <select id="filter-type">
-          <option value="all">All submission types</option>
-          <option value="Foundational Experience">Foundational Experience</option>
-          <option value="Work Plan">Work Plan</option>
-          <option value="Check-In Report">Check-In Report</option>
-          <option value="Partial Report">Partial Report</option>
-          <option value="Completion Report">Completion Report</option>
-        </select>
-      </div>
-      <div class="field">
-        <label for="filter-status">Status</label>
-        <select id="filter-status">
-          <option value="all">All statuses</option>
-          <option value="Submitted">Submitted</option>
-          <option value="Assigned for review">Assigned for review</option>
-          <option value="In CPA review">In CPA review</option>
-          <option value="More information needed">More information needed</option>
-        </select>
-      </div>
-      <div class="field grow-2">
-        <label for="filter-name">Learner name</label>
-        <input id="filter-name" type="search" placeholder="Search learner name">
-      </div>
-      <div class="field">
-        <label for="filter-cpa-id">CPA Canada ID</label>
-        <input id="filter-cpa-id" type="search" placeholder="CPA ID">
-      </div>
-      <div class="field">
-        <label for="filter-imis-id">iMIS ID</label>
-        <input id="filter-imis-id" type="search" placeholder="iMIS ID">
-      </div>
-      <div class="field">
-        <label for="filter-learner-id">Learner ID</label>
-        <input id="filter-learner-id" type="search" placeholder="Learner ID">
-      </div>
-      <div class="field">
-        <label for="filter-date">Submission date</label>
-        <input id="filter-date" type="date">
-      </div>
-      <button class="toolbar-btn" id="reset-filters-btn" type="button">Reset filters</button>
-    </div>
-  </section>
-
   <div id="learner-roster" style="margin-top:1.5rem;">
     <div class="section-label">Learner roster</div>
-    <h2 id="learner-roster-title" style="font-size:17px;color:#1a1a1a;margin-bottom:4px;">All learners with in-flight submissions</h2>
+    <h2 id="learner-roster-title" style="font-size:17px;color:#1a1a1a;margin-bottom:4px;">List of Learners</h2>
     <p class="panel-copy" style="margin-bottom:1rem;">Select a learner to open their full profile.</p>
 
     <section class="imis-table-panel" aria-label="Learner roster">
@@ -242,8 +189,6 @@
               <th>Learner name</th>
               <th>Learner ID</th>
               <th>CPA Canada ID</th>
-              <th>iMIS ID</th>
-              <th>In-flight submissions</th>
             </tr>
           </thead>
           <tbody id="roster-table-body"></tbody>
@@ -256,17 +201,63 @@
     <div class="section-label">Dashboard review queue</div>
     <h2 id="review-queue-title" style="font-size:17px;color:#1a1a1a;margin-bottom:4px;">All in-flight submissions</h2>
     <p class="panel-copy" style="margin-bottom:1rem;">Select any submission row to open the appropriate review page for that submission type.</p>
-    <div class="reviewer-bar" style="margin-bottom:1.5rem;">
-      <div class="field grow-2">
-        <label for="current-reviewer">Current CPA staff user</label>
-        <select id="current-reviewer"></select>
+
+    <section class="panel filter-panel" aria-labelledby="filter-title" style="margin-bottom:1.5rem;">
+      <div class="filter-head">
+        <div>
+          <div class="section-label">Queue filters</div>
+          <h2 id="filter-title">Filter all in-flight experiences</h2>
+        </div>
       </div>
-    </div>
+      <div class="reviewer-bar">
+        <div class="field">
+          <label for="filter-type">Submission type</label>
+          <select id="filter-type">
+            <option value="all">All submission types</option>
+            <option value="Foundational Experience">Foundational Experience</option>
+            <option value="Work Plan">Work Plan</option>
+            <option value="Check-In Report">Check-In Report</option>
+            <option value="Partial Report">Partial Report</option>
+            <option value="Completion Report">Completion Report</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="filter-status">Status</label>
+          <select id="filter-status">
+            <option value="all">All statuses</option>
+            <option value="Submitted">Submitted</option>
+            <option value="Assigned for review">Assigned for review</option>
+            <option value="In CPA review">In CPA review</option>
+            <option value="More information needed">More information needed</option>
+          </select>
+        </div>
+        <div class="field grow-2">
+          <label for="filter-name">Learner name</label>
+          <input id="filter-name" type="search" placeholder="Search learner name">
+        </div>
+        <div class="field">
+          <label for="filter-cpa-id">CPA Canada ID</label>
+          <input id="filter-cpa-id" type="search" placeholder="CPA ID">
+        </div>
+        <div class="field">
+          <label for="filter-imis-id">iMIS ID</label>
+          <input id="filter-imis-id" type="search" placeholder="iMIS ID">
+        </div>
+        <div class="field">
+          <label for="filter-learner-id">Learner ID</label>
+          <input id="filter-learner-id" type="search" placeholder="Learner ID">
+        </div>
+        <div class="field">
+          <label for="filter-date">Submission date</label>
+          <input id="filter-date" type="date">
+        </div>
+        <button class="toolbar-btn" id="reset-filters-btn" type="button">Reset filters</button>
+      </div>
+    </section>
 
     <section class="imis-table-panel" aria-label="All in-flight submissions">
       <div class="imis-table-header">
         <h2>Submission Queue</h2>
-        <div class="imis-table-count"><span id="visible-count">0 items shown</span></div>
       </div>
       <div class="table-wrap">
         <table aria-describedby="review-queue-title">
@@ -277,7 +268,7 @@
               <th>Submission type</th>
               <th>Status</th>
               <th>Submitted date</th>
-              <th>Risk factor</th>
+              <th>Assigned to</th>
               <th>Last login date</th>
             </tr>
           </thead>
@@ -357,7 +348,6 @@
               <th>Learner ID</th>
               <th>Status</th>
               <th>Submitted date</th>
-              <th>Risk level</th>
               <th>Pre-reviewed</th>
               <th>Type of partial report</th>
             </tr>
@@ -385,7 +375,6 @@
               <th>Learner ID</th>
               <th>Status</th>
               <th>Submitted date</th>
-              <th>Risk level</th>
               <th>Pre-reviewed</th>
             </tr>
           </thead>
@@ -537,7 +526,6 @@ const submissions = [
   }
 ];
 
-const currentReviewerSelect = document.getElementById('current-reviewer');
 const filterType = document.getElementById('filter-type');
 const filterStatus = document.getElementById('filter-status');
 const filterName = document.getElementById('filter-name');
@@ -596,11 +584,6 @@ function escapeHtml(value) {
     .replace(/'/g, '&#39;');
 }
 
-function populateReviewerControls() {
-  currentReviewerSelect.innerHTML = reviewers.map((reviewer) => `<option value="${escapeHtml(reviewer)}">${escapeHtml(reviewer)}</option>`).join('');
-  currentReviewerSelect.value = currentReviewer;
-}
-
 function matchesFilter(item) {
   const typeValue = filterType.value;
   const statusValue = filterStatus.value;
@@ -639,7 +622,6 @@ function renderMetrics() {
 
 function renderQueue() {
   const visibleItems = getVisibleItems();
-  document.getElementById('visible-count').textContent = `${visibleItems.length} item${visibleItems.length === 1 ? '' : 's'} shown`;
 
   if (!visibleItems.length) {
     queueBody.innerHTML = '<tr><td colspan="7" class="empty-state">No in-flight submissions match the current filters.</td></tr>';
@@ -653,7 +635,7 @@ function renderQueue() {
         <td>${escapeHtml(item.type)}</td>
         <td><span class="status-badge ${statusClass(item.status)}">${escapeHtml(item.status)}</span></td>
         <td>${escapeHtml(formatDate(item.submittedDate))}</td>
-        <td><span class="risk-chip ${riskClass(item.riskFactor)}">${escapeHtml(item.riskFactor)}</span></td>
+        <td>${item.assignedReviewer ? escapeHtml(item.assignedReviewer) : '<span class="status-badge badge-neutral">Unassigned</span>'}</td>
         <td>${escapeHtml(formatDate(item.lastLoginDate))}</td>
       </tr>
     `).join('');
@@ -713,7 +695,7 @@ function renderRoster() {
   const learnersList = getUniqueLearners();
 
   if (!learnersList.length) {
-    rosterBody.innerHTML = '<tr><td colspan="5" class="empty-state">No learners found.</td></tr>';
+    rosterBody.innerHTML = '<tr><td colspan="3" class="empty-state">No learners found.</td></tr>';
     return;
   }
 
@@ -722,8 +704,6 @@ function renderRoster() {
       <td class="learner-cell"><strong>${escapeHtml(learner.learnerName)}</strong></td>
       <td>${escapeHtml(learner.learnerId)}</td>
       <td>${escapeHtml(learner.cpaId)}</td>
-      <td>${escapeHtml(learner.iMISId)}</td>
-      <td>${learner.count} in-flight submission${learner.count === 1 ? '' : 's'}</td>
     </tr>
   `).join('');
 }
@@ -733,8 +713,8 @@ function renderAll() {
   renderQueue();
   renderTypeQueue('fe-queue-body', ['Foundational Experience'], {});
   renderTypeQueue('wp-queue-body', ['Work Plan'], { showRisk: true, showPreReviewed: true });
-  renderTypeQueue('partial-queue-body', ['Check-In Report', 'Partial Report'], { showRisk: true, showPreReviewed: true, showPartialType: true });
-  renderTypeQueue('completion-queue-body', ['Completion Report'], { showRisk: true, showPreReviewed: true });
+  renderTypeQueue('partial-queue-body', ['Check-In Report', 'Partial Report'], { showPreReviewed: true, showPartialType: true });
+  renderTypeQueue('completion-queue-body', ['Completion Report'], { showPreReviewed: true });
   renderRoster();
 }
 
@@ -779,12 +759,6 @@ function resetFilters() {
   renderAll();
 }
 
-currentReviewerSelect.addEventListener('change', () => {
-  currentReviewer = currentReviewerSelect.value;
-  setMessage(`Current CPA staff user is now ${currentReviewer}.`);
-  renderAll();
-});
-
 [filterType, filterStatus, filterName, filterCpaId, filterImisId, filterLearnerId, filterDate].forEach((control) => {
   const eventName = control.tagName === 'INPUT' && control.type !== 'date' ? 'input' : 'change';
   control.addEventListener(eventName, renderAll);
@@ -793,7 +767,7 @@ currentReviewerSelect.addEventListener('change', () => {
 resetFiltersBtn.addEventListener('click', resetFilters);
 
 function goToLearnerProfile(learnerId) {
-  window.location.href = `1_LearnerProfile.html?learnerId=${encodeURIComponent(learnerId)}`;
+  window.location.href = `1_UserProfile/1_CPAReviewerLearnerProfile.html?learnerId=${encodeURIComponent(learnerId)}`;
 }
 
 document.querySelector('main.page').addEventListener('click', (event) => {
@@ -828,7 +802,6 @@ prrModal.addEventListener('click', (event) => {
   if (event.target === prrModal) closeProfessionalReadinessModal();
 });
 
-populateReviewerControls();
 renderAll();
 </script>
 </body>

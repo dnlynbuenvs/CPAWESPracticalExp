@@ -273,7 +273,6 @@
               <th>Current stage</th>
               <th>Mentor assignment</th>
               <th>Pre-reviewed role</th>
-              <th>Action</th>
             </tr>
           </thead>
           <tbody id="learner-table-body"></tbody>
@@ -298,7 +297,6 @@
               <th>Learner</th>
               <th>Employer</th>
               <th>Submitted</th>
-              <th>Summary</th>
               <th>Competencies awarded</th>
               <th>Status</th>
               <th>Action</th>
@@ -326,7 +324,7 @@
               <th>Learner</th>
               <th>Employer</th>
               <th>Submitted</th>
-              <th>Summary</th>
+              <th>Risk</th>
               <th>Status</th>
               <th>Action</th>
             </tr>
@@ -353,7 +351,6 @@
               <th>Learner</th>
               <th>Employer</th>
               <th>Submitted</th>
-              <th>Summary</th>
               <th>Status</th>
               <th>Action</th>
             </tr>
@@ -380,7 +377,6 @@
               <th>Learner</th>
               <th>Employer</th>
               <th>Submitted</th>
-              <th>Summary</th>
               <th>Status</th>
               <th>Action</th>
             </tr>
@@ -391,14 +387,6 @@
     </section>
   </div>
 </main>
-
-<div class="modal-backdrop" id="relationship-modal" aria-hidden="true">
-  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="relationship-modal-title">
-    <button class="modal-close" id="relationship-modal-close" type="button" aria-label="Close modal">X</button>
-    <h3 id="relationship-modal-title">Mentor relationship ended</h3>
-    <p id="relationship-modal-copy">This learner has been removed from your active mentor roster.</p>
-  </div>
-</div>
 
 <script>
 const CURRENT_MENTOR = { id: 'MTR-4021', name: 'Sofia Chen, CPA' };
@@ -539,6 +527,7 @@ let reviews = [
     summary: 'Work plan update includes revised enabling competency targets and expected completion date.',
     competencies: ['Planning and prioritization', 'Management reporting'],
     status: 'Pending mentor approval',
+    risk: 'Low',
     associatedMentor: CURRENT_MENTOR.name
   },
   {
@@ -572,6 +561,7 @@ let reviews = [
     summary: 'Initial work plan submission reviewed and approved before the mentor change.',
     competencies: ['Planning and prioritization'],
     status: 'Approved',
+    risk: 'Low',
     associatedMentor: 'Grace Okafor, CPA'
   },
   {
@@ -583,6 +573,7 @@ let reviews = [
     summary: 'Updated work plan submitted for mentor approval after the relationship handoff.',
     competencies: ['Planning and prioritization', 'Client engagement'],
     status: 'Pending mentor approval',
+    risk: 'High',
     associatedMentor: CURRENT_MENTOR.name
   }
 ];
@@ -593,22 +584,10 @@ const learnerTableBody = document.getElementById('learner-table-body');
 const nameFilter = document.getElementById('name-filter');
 const statusFilter = document.getElementById('status-filter');
 const sortFilter = document.getElementById('sort-filter');
-const relationshipModal = document.getElementById('relationship-modal');
 
 function setMessage(text) {
   messageText.textContent = text;
   messageBar.classList.add('visible');
-}
-
-function showRelationshipModal(learnerName) {
-  document.getElementById('relationship-modal-copy').textContent = `${learnerName}'s mentor relationship has been ended and the learner has been removed from your active roster.`;
-  relationshipModal.classList.add('visible');
-  relationshipModal.setAttribute('aria-hidden', 'false');
-}
-
-function closeRelationshipModal() {
-  relationshipModal.classList.remove('visible');
-  relationshipModal.setAttribute('aria-hidden', 'true');
 }
 
 function getActiveLearners() {
@@ -653,10 +632,10 @@ function escapeHtml(value) {
 }
 
 const REVIEW_TYPE_CONFIG = {
-  fe: { type: 'Foundational Experience', tbodyId: 'fe-review-body', showCompetencies: true, route: '../2_ClaimFoundationalExp/2_SupervisorMentorFE/1_SupervisorMentorFEReview.html' },
-  wp: { type: 'Work Plan', tbodyId: 'wp-review-body', showCompetencies: false, route: '../3_WorkPlan/2_MentorWP/1_MentorReviewWP.html' },
-  checkin: { type: 'Check-In Report', tbodyId: 'checkin-review-body', showCompetencies: false, route: '../4_RiskAssessment/2_MentorRiskAssessment/2_MentorReviewCheckin.html' },
-  completion: { type: 'Completion Report', tbodyId: 'completion-review-body', showCompetencies: false, route: '../5_FinalExperienceReport/3_MentorApprovalFinalReport.html' }
+  fe: { type: 'Foundational Experience', tbodyId: 'fe-review-body', showCompetencies: true, showRisk: false, route: '../2_ClaimFoundationalExp/2_SupervisorMentorFE/1_SupervisorMentorFEReview.html' },
+  wp: { type: 'Work Plan', tbodyId: 'wp-review-body', showCompetencies: false, showRisk: true, route: '../3_WorkPlan/2_MentorWP/1_MentorReviewWP.html' },
+  checkin: { type: 'Check-In Report', tbodyId: 'checkin-review-body', showCompetencies: false, showRisk: false, route: '../4_RiskAssessment/2_MentorRiskAssessment/2_MentorReviewCheckin.html' },
+  completion: { type: 'Completion Report', tbodyId: 'completion-review-body', showCompetencies: false, showRisk: false, route: '../5_FinalExperienceReport/3_MentorApprovalFinalReport.html' }
 };
 
 function getReviewsByType(type) {
@@ -740,7 +719,7 @@ function renderRoster() {
   const visibleLearners = getVisibleLearners();
 
   if (!visibleLearners.length) {
-    learnerTableBody.innerHTML = '<tr><td colspan="6" class="empty-state">No assigned learners match the current filter.</td></tr>';
+    learnerTableBody.innerHTML = '<tr><td colspan="5" class="empty-state">No assigned learners match the current filter.</td></tr>';
     return;
   }
 
@@ -778,9 +757,6 @@ function renderRoster() {
             </div>
           ` : '<span class="empty-copy">Not applicable</span>'}
         </td>
-        <td>
-          <button class="table-btn danger" type="button" data-action="end-relationship" data-learner-id="${escapeHtml(learner.id)}">End relationship</button>
-        </td>
       </tr>
     `;
   }).join('');
@@ -790,7 +766,7 @@ function renderReviewTable(key) {
   const config = REVIEW_TYPE_CONFIG[key];
   const tbody = document.getElementById(config.tbodyId);
   const items = getReviewsByType(config.type);
-  const colCount = config.showCompetencies ? 7 : 6;
+  const colCount = 5 + (config.showCompetencies ? 1 : 0) + (config.showRisk ? 1 : 0);
 
   if (!items.length) {
     tbody.innerHTML = `<tr><td colspan="${colCount}" class="empty-state">No ${config.type.toLowerCase()} reviews right now.</td></tr>`;
@@ -806,15 +782,10 @@ function renderReviewTable(key) {
         <td class="learner-cell">
           <strong>${escapeHtml(learner.name)}</strong>
           <span class="subline">${escapeHtml(learner.id)}</span>
+          ${restricted ? `<div class="restricted-note">Restricted &mdash; associated mentor: ${escapeHtml(review.associatedMentor)}</div>` : ''}
         </td>
         <td>${escapeHtml(learner.employer)}</td>
         <td>${escapeHtml(review.receivedAt)}</td>
-        <td>
-          ${restricted ? `
-            <span class="empty-copy">Restricted &mdash; submitted under a previous mentor assignment</span>
-            <div class="restricted-note">Associated mentor: ${escapeHtml(review.associatedMentor)}</div>
-          ` : escapeHtml(review.summary)}
-        </td>
         ${config.showCompetencies ? `
           <td>
             ${restricted ? '<span class="empty-copy">Restricted</span>' : `
@@ -823,6 +794,9 @@ function renderReviewTable(key) {
               </div>
             `}
           </td>
+        ` : ''}
+        ${config.showRisk ? `
+          <td><span class="status-badge ${review.risk === 'High' ? 'badge-declined' : 'badge-approved'}">${escapeHtml(review.risk)}</span></td>
         ` : ''}
         <td><span class="status-badge ${getStatusBadgeClass(review.status)}">${escapeHtml(review.status)}</span></td>
         <td>
@@ -875,16 +849,6 @@ function openReviewSubmission(reviewId) {
   setMessage(`Opened ${learner.name}'s ${review.type.toLowerCase()} for mentor review.`);
 }
 
-function endLearnerRelationship(learnerId) {
-  const learner = getLearnerById(learnerId);
-  if (!learner) return;
-  learner.relationshipEnded = true;
-  reviews = reviews.filter((review) => review.learnerId !== learnerId);
-  setMessage(`${learner.name} was removed from the mentor roster.`);
-  renderAll();
-  showRelationshipModal(learner.name);
-}
-
 function renderAll() {
   renderMetrics();
   renderRoster();
@@ -900,12 +864,11 @@ document.querySelector('main.page').addEventListener('click', (event) => {
 
   const action = button.dataset.action;
 
-  if (action === 'end-relationship') endLearnerRelationship(button.dataset.learnerId);
   if (action === 'open-review') openReviewSubmission(button.dataset.reviewId);
 });
 
 function goToLearnerProfile(learnerId) {
-  window.location.href = `1_LearnerProfile.html?learnerId=${encodeURIComponent(learnerId)}`;
+  window.location.href = `1_UserProfile/1_MentorLearnerProfile.html?learnerId=${encodeURIComponent(learnerId)}`;
 }
 
 learnerTableBody.addEventListener('click', (event) => {
@@ -927,10 +890,6 @@ learnerTableBody.addEventListener('keydown', (event) => {
 nameFilter.addEventListener('input', renderRoster);
 statusFilter.addEventListener('change', renderRoster);
 sortFilter.addEventListener('change', renderRoster);
-document.getElementById('relationship-modal-close').addEventListener('click', closeRelationshipModal);
-relationshipModal.addEventListener('click', (event) => {
-  if (event.target === relationshipModal) closeRelationshipModal();
-});
 
 renderAll();
 </script>

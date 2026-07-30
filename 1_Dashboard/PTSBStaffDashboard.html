@@ -156,7 +156,6 @@
       <h1 id="ptb-dashboard-title">PTB staff dashboard</h1>
       <p>Monitor learners, mentors, pre-reviewed positions, and operational exceptions so the practical experience program can be managed proactively.</p>
     </div>
-    <div class="hero-badge"><span class="dot"></span><span id="hero-summary">Loading PTB oversight</span></div>
   </section>
 
   <div class="message-bar" id="message-bar" role="status" aria-live="polite">
@@ -179,7 +178,6 @@
       <section class="imis-table-panel" aria-label="Priority exceptions">
         <div class="imis-table-header">
           <h2>Priority Exceptions</h2>
-          <div class="imis-table-count"><span id="high-risk-count">0 high-risk learners</span></div>
         </div>
         <div class="table-wrap">
           <table class="compact-table">
@@ -201,7 +199,6 @@
       <section class="imis-table-panel" aria-label="Learner monitoring">
         <div class="imis-table-header">
           <h2>Learner Monitoring</h2>
-          <div class="imis-table-count"><span id="learner-count">0 active learners</span></div>
         </div>
         <div class="table-wrap">
           <table>
@@ -232,7 +229,6 @@
       <section class="imis-table-panel" aria-label="Mentor monitoring">
         <div class="imis-table-header">
           <h2>Mentor Monitoring</h2>
-          <div class="imis-table-count"><span id="mentor-count">0 active mentors</span></div>
         </div>
         <div class="table-wrap">
           <table class="compact-table">
@@ -240,10 +236,7 @@
               <tr>
                 <th>Mentor</th>
                 <th>Active learners</th>
-                <th>Without validation</th>
-                <th>Requiring new mentor</th>
                 <th>New mentor application</th>
-                <th>Action</th>
               </tr>
             </thead>
             <tbody id="mentor-body"></tbody>
@@ -262,7 +255,6 @@
       <section class="imis-table-panel" aria-label="Job change requests">
         <div class="imis-table-header">
           <h2>Job Change Requests</h2>
-          <div class="imis-table-count"><span id="job-change-count">0 active requests</span></div>
         </div>
         <div class="table-wrap">
           <table class="compact-table">
@@ -270,8 +262,8 @@
               <tr>
                 <th>Request type</th>
                 <th>Person</th>
+                <th>Person type</th>
                 <th>Current mentor</th>
-                <th>Requested change</th>
                 <th>Status</th>
                 <th>Submitted</th>
                 <th>Action</th>
@@ -293,12 +285,11 @@
       <section class="imis-table-panel" aria-label="Employer rollup">
         <div class="imis-table-header">
           <h2>Employer Rollup</h2>
-          <div class="imis-table-count"><span id="employer-count">0 employers tracked</span></div>
         </div>
         <div class="table-wrap">
           <table class="compact-table">
             <thead>
-              <tr><th>Employer</th><th>Pre-reviewed positions</th><th>Learners assigned</th><th>PTB note</th></tr>
+              <tr><th>Employer</th><th>Pre-reviewed positions</th><th>Learners assigned</th></tr>
             </thead>
             <tbody id="employer-body"></tbody>
           </table>
@@ -492,6 +483,7 @@ const learners = [
 
 const mentors = [
   {
+    id: 'MTR-4008',
     name: 'Marcus Chen, CPA',
     activeLearners: 3,
     withoutValidation: 0,
@@ -501,6 +493,7 @@ const mentors = [
     transferRequests: 0
   },
   {
+    id: 'MTR-4021',
     name: 'Sofia Chen, CPA',
     activeLearners: 4,
     withoutValidation: 1,
@@ -510,6 +503,7 @@ const mentors = [
     transferRequests: 1
   },
   {
+    id: 'MTR-4033',
     name: 'Elena Flores, CPA',
     activeLearners: 5,
     withoutValidation: 1,
@@ -517,15 +511,6 @@ const mentors = [
     newMentorApplication: 'No new application',
     applicationDetails: 'Validation follow-up needed for one learner.',
     transferRequests: 0
-  },
-  {
-    name: 'Unassigned mentor pool',
-    activeLearners: 1,
-    withoutValidation: 1,
-    requiringNewMentor: 1,
-    newMentorApplication: 'New mentor application',
-    applicationDetails: 'Daniel Brooks requires a mentor match and intake application review.',
-    transferRequests: 1
   }
 ];
 
@@ -636,7 +621,7 @@ function getSummaryValues() {
     eligibleComplete: learners.filter((learner) => learner.stageGroup === 'Eligible PE complete').length,
     noEmployer: learners.filter((learner) => !learner.hasEmployer).length,
     preReviewed: learners.filter((learner) => learner.preReviewed).length,
-    activeMentors: mentors.filter((mentor) => mentor.name !== 'Unassigned mentor pool').length,
+    activeMentors: mentors.length,
     highRisk: learners.filter((learner) => learner.riskLevel === 'High').length,
     transferRequests: mentors.reduce((total, mentor) => total + mentor.transferRequests, 0)
   };
@@ -654,7 +639,6 @@ function renderSummaryCards() {
 }
 
 function renderLearnerQueue() {
-  document.getElementById('learner-count').textContent = `${learners.length} active learners`;
   learnerBody.innerHTML = learners.map((learner) => `
     <tr>
       <td class="learner-cell">
@@ -729,7 +713,6 @@ function saveReducedDuration() {
 
 function renderHighRiskQueue() {
   const highRiskLearners = learners.filter((learner) => learner.riskLevel === 'High');
-  document.getElementById('high-risk-count').textContent = `${highRiskLearners.length} high-risk learner${highRiskLearners.length === 1 ? '' : 's'}`;
 
   if (!highRiskLearners.length) {
     highRiskBody.innerHTML = '<tr><td colspan="5" class="empty-state">No high-risk learners currently flagged.</td></tr>';
@@ -751,24 +734,23 @@ function renderHighRiskQueue() {
 }
 
 function renderMentorQueue() {
-  document.getElementById('mentor-count').textContent = `${mentors.filter((mentor) => mentor.name !== 'Unassigned mentor pool').length} active mentors`;
-  mentorBody.innerHTML = mentors.map((mentor, index) => `
-    <tr>
+  mentorBody.innerHTML = mentors.map((mentor) => `
+    <tr ${mentor.id ? `class="clickable-row" data-mentor-id="${escapeHtml(mentor.id)}" tabindex="0"` : ''}>
       <td class="mentor-cell">
         <strong>${escapeHtml(mentor.name)}</strong>
         <span class="subline">${mentor.transferRequests} open transfer request${mentor.transferRequests === 1 ? '' : 's'}</span>
       </td>
       <td>${escapeHtml(mentor.activeLearners)}</td>
-      <td>${escapeHtml(mentor.withoutValidation)}</td>
-      <td>${escapeHtml(mentor.requiringNewMentor)}</td>
       <td><span class="status-badge ${statusClass(mentor.newMentorApplication)}">${escapeHtml(mentor.newMentorApplication)}</span></td>
-      <td><button class="action-btn primary" type="button" data-mentor-index="${index}">View application</button></td>
     </tr>
   `).join('');
 }
 
+function personTypeLabel(personId) {
+  return /^LRN/i.test(personId) ? 'Learner' : 'Mentor';
+}
+
 function renderJobChangeQueue() {
-  document.getElementById('job-change-count').textContent = `${jobChangeRequests.length} active request${jobChangeRequests.length === 1 ? '' : 's'}`;
   jobChangeBody.innerHTML = jobChangeRequests.map((request, index) => `
     <tr>
       <td>${escapeHtml(request.type)}</td>
@@ -776,8 +758,8 @@ function renderJobChangeQueue() {
         <strong>${escapeHtml(request.person)}</strong>
         <span class="subline">${escapeHtml(request.personId)}</span>
       </td>
+      <td>${escapeHtml(personTypeLabel(request.personId))}</td>
       <td>${escapeHtml(request.currentMentor)}</td>
-      <td>${escapeHtml(request.requestedChange)}</td>
       <td><span class="status-badge ${statusClass(request.status)}">${escapeHtml(request.status)}</span></td>
       <td>${escapeHtml(formatDate(request.submittedDate))}</td>
       <td><button class="action-btn primary" type="button" data-job-change-index="${index}">View</button></td>
@@ -786,7 +768,6 @@ function renderJobChangeQueue() {
 }
 
 function renderEmployerQueue() {
-  document.getElementById('employer-count').textContent = `${preReviewedEmployers.length} employers tracked`;
   employerBody.innerHTML = preReviewedEmployers.map((entry, index) => `
     <tr class="clickable-row" data-employer-index="${index}">
       <td class="employer-cell">
@@ -794,15 +775,26 @@ function renderEmployerQueue() {
       </td>
       <td>${escapeHtml(entry.positions)}</td>
       <td>${escapeHtml(entry.learnersAssigned)}</td>
-      <td>${escapeHtml(entry.note)}</td>
     </tr>
   `).join('');
 }
 
+function goToMentorProfile(mentorId) {
+  window.location.href = `1_UserProfile/1_PTBMentorProfileView.html?mentorId=${encodeURIComponent(mentorId)}`;
+}
+
 mentorBody.addEventListener('click', (event) => {
-  const button = event.target.closest('button[data-mentor-index]');
-  if (!button) return;
-  window.location.href = '../8_MentorOnboarding/2_PTBMentorApproval.html';
+  const row = event.target.closest('tr[data-mentor-id]');
+  if (!row) return;
+  goToMentorProfile(row.dataset.mentorId);
+});
+
+mentorBody.addEventListener('keydown', (event) => {
+  if (event.key !== 'Enter' && event.key !== ' ') return;
+  const row = event.target.closest('tr[data-mentor-id]');
+  if (!row) return;
+  event.preventDefault();
+  goToMentorProfile(row.dataset.mentorId);
 });
 
 learnerBody.addEventListener('click', (event) => {
@@ -830,14 +822,12 @@ durationModal.addEventListener('click', (event) => {
 });
 
 function renderAll() {
-  const summaryValues = getSummaryValues();
   renderSummaryCards();
   renderLearnerQueue();
   renderHighRiskQueue();
   renderMentorQueue();
   renderJobChangeQueue();
   renderEmployerQueue();
-  document.getElementById('hero-summary').textContent = `${summaryValues.activeLearners} learners | ${summaryValues.activeMentors} active mentors | ${summaryValues.highRisk} high-risk cases`;
 }
 
 renderAll();

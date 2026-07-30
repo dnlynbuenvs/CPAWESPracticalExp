@@ -118,9 +118,7 @@
   <section class="hero" aria-labelledby="fe-decision-title">
     <div>
       <h1 id="fe-decision-title">Declare foundational experience</h1>
-      <p>Choose whether you want to claim foundational experience now. Your decision is stored for later reference by CPA Reviewer and CPA Staff, and you can return to change a skipped decision while eligible work-plan experience is not yet complete.</p>
     </div>
-    <div class="hero-badge"><span class="dot"></span><span id="hero-summary">Decision not yet recorded</span></div>
   </section>
 
   <div class="message-bar" id="message-bar" role="status" aria-live="polite">
@@ -183,7 +181,6 @@ const claimBtn = document.getElementById('claim-btn');
 const skipBtn = document.getElementById('skip-btn');
 const claimCard = document.getElementById('claim-card');
 const skipCard = document.getElementById('skip-card');
-const heroSummary = document.getElementById('hero-summary');
 const messageBar = document.getElementById('message-bar');
 const messageText = document.getElementById('message-text');
 
@@ -204,11 +201,6 @@ function isWorkPlanCompleted() {
   return localStorage.getItem(workPlanCompleteKey) === 'true';
 }
 
-function getReportCount() {
-  const stored = JSON.parse(localStorage.getItem(reportsKey) || '[]');
-  return Array.isArray(stored) ? stored.length : 0;
-}
-
 function updateCards(currentDecision) {
   claimCard.classList.toggle('selected-claim', currentDecision && currentDecision.choice === 'claim');
   skipCard.classList.toggle('selected-skip', currentDecision && currentDecision.choice === 'skip');
@@ -217,22 +209,8 @@ function updateCards(currentDecision) {
 function renderStatus() {
   const currentDecision = getStoredDecision();
   const workPlanCompleted = isWorkPlanCompleted();
-  const reportCount = getReportCount();
   updateCards(currentDecision);
-
   claimBtn.disabled = workPlanCompleted && currentDecision && currentDecision.choice === 'skip';
-
-  if (!currentDecision) {
-    heroSummary.textContent = 'Decision not yet recorded';
-    return;
-  }
-
-  if (currentDecision.choice === 'claim') {
-    heroSummary.textContent = reportCount > 0 ? `Claiming foundational experience | ${reportCount} report${reportCount === 1 ? '' : 's'} started` : 'Claiming foundational experience';
-    return;
-  }
-
-  heroSummary.textContent = workPlanCompleted ? 'Foundational experience skipped | work-plan experience complete' : 'Foundational experience skipped';
 }
 
 function storeClaimDecision() {

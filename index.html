@@ -63,8 +63,10 @@
   .imis-detail-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem 1.5rem}
   .imis-detail-item span{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--gray-600);margin-bottom:4px;font-weight:700}
   .imis-detail-item strong{display:block;font-size:14px;color:#1a1a1a;font-weight:600}
-  .imis-table-action{display:inline-flex;align-items:center;gap:6px;background:var(--white);color:var(--imis-blue);border:none;border-radius:4px;padding:7px 14px;font-size:12px;font-weight:700;text-decoration:none;white-space:nowrap}
-  .imis-table-action:hover{background:#EBF3FF}
+  .imis-table-action{display:inline-flex;align-items:center;justify-content:center;gap:6px;background:var(--imis-blue);color:var(--white);border:none;border-radius:var(--radius-sm);padding:10px 20px;font-size:13px;font-weight:700;text-decoration:none;white-space:nowrap}
+  .imis-table-action:hover{background:#164e8f}
+  .imis-table-panel.has-footer-action{margin-bottom:.85rem}
+  .imis-table-footer{display:flex;justify-content:center;margin:0 0 1.75rem}
   .dashboard-grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(300px,.8fr);gap:16px;margin-bottom:1.75rem}
   .panel{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm)}
   .profile-panel{padding:1.25rem}
@@ -386,10 +388,9 @@
 
   <div class="section-label">Experience progress</div>
 
-  <section class="panel imis-table-panel" id="foundational-card" aria-labelledby="foundational-title">
+  <section class="panel imis-table-panel has-footer-action" id="foundational-card" aria-labelledby="foundational-title">
     <div class="imis-table-header">
       <h2 id="foundational-title">Foundational Experience</h2>
-      <a class="imis-table-action" href="2_ClaimFoundationalExp/1_LearnerFE/1_FE_YesorNo.html">Submit foundational experience</a>
     </div>
     <div class="imis-table-wrap">
       <table class="imis-table">
@@ -418,11 +419,13 @@
       </table>
     </div>
   </section>
+  <div class="imis-table-footer">
+    <a class="imis-table-action" href="2_ClaimFoundationalExp/1_LearnerFE/1_FE_YesorNo.html">Submit foundational experience</a>
+  </div>
 
-  <section class="panel imis-table-panel" id="workplan-card" aria-labelledby="workplan-title">
+  <section class="panel imis-table-panel has-footer-action" id="workplan-card" aria-labelledby="workplan-title">
     <div class="imis-table-header">
       <h2 id="workplan-title">Experience Plan</h2>
-      <a class="imis-table-action" href="3_WorkPlan/1_LearnerWP/1_LearnerWorkPlanInfo.html">Submit experience plan</a>
     </div>
     <div class="imis-table-wrap">
       <table class="imis-table">
@@ -451,11 +454,13 @@
       </table>
     </div>
   </section>
+  <div class="imis-table-footer">
+    <a class="imis-table-action" href="3_WorkPlan/1_LearnerWP/1_LearnerWorkPlanInfo.html">Submit experience plan</a>
+  </div>
 
-  <section class="panel imis-table-panel checkin-row" id="checkin-card" aria-labelledby="checkin-title">
+  <section class="panel imis-table-panel has-footer-action checkin-row" id="checkin-card" aria-labelledby="checkin-title">
     <div class="imis-table-header">
       <h2 id="checkin-title">Check-in Progress</h2>
-      <a class="imis-table-action" href="4_RiskAssessment/1_LearnerRiskAssessment/1_LearnerSubmitCheckin.html">Submit check-in report</a>
     </div>
     <div class="imis-table-wrap">
       <table class="imis-table">
@@ -478,11 +483,13 @@
       </table>
     </div>
   </section>
+  <div class="imis-table-footer">
+    <a class="imis-table-action" href="4_RiskAssessment/1_LearnerRiskAssessment/1_LearnerSubmitCheckin.html">Submit check-in report</a>
+  </div>
 
-  <section class="panel imis-table-panel" id="completion-card" aria-labelledby="completion-title">
+  <section class="panel imis-table-panel has-footer-action" id="completion-card" aria-labelledby="completion-title">
     <div class="imis-table-header">
       <h2 id="completion-title">Completion Report</h2>
-      <a class="imis-table-action" href="5_FinalExperienceReport/1_SubmitFinalExperienceReport.html">Submit completion report</a>
     </div>
     <div class="imis-table-wrap">
       <table class="imis-table">
@@ -510,6 +517,9 @@
       </table>
     </div>
   </section>
+  <div class="imis-table-footer">
+    <a class="imis-table-action" href="5_FinalExperienceReport/1_SubmitFinalExperienceReport.html">Submit completion report</a>
+  </div>
 </main>
 
 <script>

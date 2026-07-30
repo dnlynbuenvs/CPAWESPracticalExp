@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPA - Mentor Profile</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:#0B1F3A; --blue:#1B5EA8; --accent:#2A9D8F; --amber:#E76F1A; --green:#2D7A4E; --red:#C0392B;
+    --sand:#F7F5F2; --white:#FFFFFF; --gray-100:#F2F1EF; --gray-200:#E4E2DE; --gray-300:#D2CEC8;
+    --gray-400:#A8A49E; --gray-600:#6B6760; --gray-800:#2E2C2A;
+    --shadow-sm:0 1px 3px rgba(11,31,58,0.07),0 1px 2px rgba(11,31,58,0.05);
+    --shadow-md:0 10px 28px rgba(11,31,58,0.10);
+    --radius-sm:6px; --radius-md:10px; --radius-lg:16px;
+    --imis-blue:#1B5EA8; --imis-header-blue:#1B5EA8;
+    --badge-green-bg:#E3F3E6; --badge-green-text:#2D7A4E;
+    --badge-yellow-bg:#FCF3D9; --badge-yellow-text:#8A6D1D;
+    --badge-blue-bg:#E8ECF7; --badge-blue-text:#3B4A7A;
+    --badge-red-bg:#FBE7E5; --badge-red-text:#9B3226;
+    --badge-gray-bg:#F2F1EF; --badge-gray-text:#6B6760;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'DM Sans',sans-serif;background:var(--sand);color:var(--gray-800);min-height:100vh}
+  a{color:inherit}
+  .topbar{background:#1B5EA8;border-bottom:3px solid #6E3226;min-height:60px;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:0 2rem}
+  .logo-group{display:flex;align-items:center;gap:10px;min-width:225px}
+  .logo-mark{width:32px;height:32px;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .logo-text{display:flex;align-items:center;gap:10px}
+  .logo-text .brand{font-size:22px;font-weight:700;color:var(--white);letter-spacing:.01em;font-family:'DM Sans',sans-serif}
+  .logo-text .divider{width:1px;height:26px;background:rgba(255,255,255,.35)}.logo-text .sub{display:flex;flex-direction:column;font-size:9px;font-weight:600;color:rgba(255,255,255,.9);letter-spacing:.03em;text-transform:uppercase;line-height:1.4}
+  .nav-links{display:flex;align-items:center;justify-content:center;gap:2px}
+  .nav-links a{color:rgba(255,255,255,.55);font-size:14px;text-decoration:none;padding:8px 16px;border-radius:var(--radius-sm);white-space:nowrap}
+  .nav-links a.active,.nav-links a:hover{color:var(--white);background:rgba(255,255,255,.08)}
+  .topbar-right{display:flex;align-items:center;gap:12px}
+    .role-dropdown{position:relative}
+  .role-trigger{list-style:none;display:flex;align-items:center;gap:10px;padding:8px 14px;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);color:var(--white);font-size:13px;font-weight:600;cursor:pointer}
+  .role-trigger::-webkit-details-marker{display:none}
+  .role-label{display:inline-flex;align-items:center;justify-content:center;min-width:92px}
+  .role-caret{font-size:11px;color:rgba(255,255,255,.72)}
+  .role-menu{position:absolute;right:0;top:calc(100% + 10px);min-width:190px;padding:8px;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);box-shadow:0 12px 30px rgba(11,31,58,.14);display:flex;flex-direction:column;gap:4px;z-index:20}
+  .role-option{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:var(--radius-sm);font-size:13px;color:var(--gray-800);text-decoration:none}
+  .role-option:hover{background:var(--gray-100)}
+  .role-option.active{background:#EBF3FF;color:var(--blue);font-weight:600}
+  .page{max-width:1180px;margin:0 auto;padding:2rem 2rem 4rem}
+  .hero{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--gray-200)}
+  .hero h1{font-family:'DM Sans',sans-serif;font-size:26px;font-weight:700;color:#1a1a1a;margin-bottom:4px}
+  .hero p{font-size:14px;color:var(--gray-600);max-width:620px}
+  .back-link{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:var(--radius-sm);border:1px solid var(--imis-blue);padding:8px 14px;background:var(--white);color:var(--imis-blue);font-size:12px;font-weight:700;text-decoration:none;white-space:nowrap}
+  .back-link:hover{background:#EBF3FF}
+  .section-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#2E2C2A;margin-bottom:.75rem}
+  .panel{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm)}
+  .panel-copy{font-size:12px;color:var(--gray-600);line-height:1.45}
+  .imis-detail-panel{padding:1.25rem;margin-bottom:1.75rem}
+  .imis-detail-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem 1.5rem}
+  .imis-detail-item span{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--gray-600);margin-bottom:4px;font-weight:700}
+  .imis-detail-item strong{display:block;font-size:14px;color:#1a1a1a;font-weight:600}
+  .imis-detail-item.full{grid-column:1 / -1}
+  .imis-table-panel{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-sm);margin-bottom:1.75rem}
+  .imis-table-header{background:var(--imis-header-blue);color:var(--white);display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 18px}
+  .imis-table-header h2{font-size:14px;font-weight:700;color:var(--white);letter-spacing:.02em;margin:0}
+  .imis-table-wrap{overflow-x:auto}
+  .imis-table{width:100%;border-collapse:collapse;font-size:13px}
+  .imis-table thead th{background:var(--gray-100);text-align:left;padding:10px 16px;font-weight:700;color:#2E2C2A;font-size:12px;border-bottom:1px solid var(--gray-300);white-space:nowrap}
+  .imis-table tbody td{padding:11px 16px;border-bottom:1px solid var(--gray-200);color:#2E2C2A;vertical-align:middle}
+  .imis-table tbody tr:last-child td{border-bottom:none}
+  .imis-table tbody tr:hover td{background:#F7FAFF}
+  .learner-cell strong{display:block;font-size:14px;color:var(--imis-blue);margin-bottom:4px}
+  .subline{display:block;font-size:12px;color:var(--gray-600);line-height:1.45}
+  .status-badge{display:inline-block;padding:4px 10px;border-radius:3px;font-size:12px;font-weight:600;white-space:nowrap}
+  .badge-approved{background:var(--badge-green-bg);color:var(--badge-green-text)}
+  .badge-pending{background:var(--badge-yellow-bg);color:var(--badge-yellow-text)}
+  .badge-progress{background:var(--badge-blue-bg);color:var(--badge-blue-text)}
+  .badge-declined{background:var(--badge-red-bg);color:var(--badge-red-text)}
+  .badge-neutral{background:var(--badge-gray-bg);color:var(--badge-gray-text)}
+  .risk-chip{display:inline-block;padding:4px 10px;border-radius:3px;font-size:12px;font-weight:600;white-space:nowrap}
+  .risk-high{background:var(--badge-red-bg);color:var(--badge-red-text)}
+  .risk-medium{background:var(--badge-yellow-bg);color:var(--badge-yellow-text)}
+  .risk-low{background:var(--badge-green-bg);color:var(--badge-green-text)}
+  .empty-state{padding:20px;text-align:center;font-size:13px;color:var(--gray-600);background:var(--sand)}
+  .not-found-panel{padding:2rem;text-align:center}
+  .not-found-panel h2{font-size:18px;color:var(--navy);margin-bottom:8px}
+  .not-found-panel a{color:var(--imis-blue);font-weight:600;text-decoration:underline}
+  @media(max-width:1040px){
+    .imis-detail-grid{grid-template-columns:repeat(2,1fr)}
+  }
+  @media(max-width:760px){
+    .topbar{align-items:flex-start;flex-direction:column;padding:1rem}
+    .nav-links{display:none}
+    .topbar-right{width:100%;justify-content:space-between}
+    .page{padding:1.25rem 1rem 3rem}
+    .hero{flex-direction:column;align-items:flex-start}
+    .hero h1{font-size:34px}
+    .imis-detail-grid{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="logo-group">
+    <div class="logo-mark"><svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true"><circle cx="16" cy="3.5" r="1.6" fill="#fff"/><circle cx="16" cy="28.5" r="1.6" fill="#fff"/><circle cx="3.5" cy="16" r="1.6" fill="#fff"/><circle cx="28.5" cy="16" r="1.6" fill="#fff"/><circle cx="7.2" cy="7.2" r="1.3" fill="#fff"/><circle cx="24.8" cy="24.8" r="1.3" fill="#fff"/><circle cx="7.2" cy="24.8" r="1.3" fill="#fff"/><circle cx="24.8" cy="7.2" r="1.3" fill="#fff"/><circle cx="16" cy="16" r="2.6" fill="#fff"/><circle cx="16" cy="10" r="1" fill="#fff"/><circle cx="16" cy="22" r="1" fill="#fff"/><circle cx="10" cy="16" r="1" fill="#fff"/><circle cx="22" cy="16" r="1" fill="#fff"/></svg></div><div class="logo-text"><span class="brand">cpa</span><span class="divider"></span><span class="sub">Chartered<br>Professional<br>Accountants</span></div>
+  </div>
+  <div class="topbar-right">
+                <details class="role-dropdown">
+      <summary class="role-trigger"><span class="role-label">PTB Staff</span><span class="role-caret">&#9662;</span></summary>
+      <div class="role-menu">
+        <a class="role-option" href="../../index.html">Learner</a>
+        <a class="role-option" href="../CPAReviewer.html">CPA Reviewer</a>
+        <a class="role-option" href="../MentorDashboard.html">Mentor</a>
+        <a class="role-option active" href="../PTSBStaffDashboard.html">PTB Staff</a>
+              <a class="role-option" href="../../8_MentorOnboarding/1_MentorOnboarding.html">Mentor onboarding</a>
+        <a class="role-option" href="../../10_ProgramAdmin/1_ProgramAdminMgmt.html">Program Admin</a>
+      </div>
+    </details>
+  </div>
+</header>
+
+<main class="page">
+  <section class="hero" aria-labelledby="profile-title">
+    <div>
+      <h1 id="profile-title">PTB Staff View - Mentor Profile</h1>
+      <p>A PTB staff read-only view of a mentor's active learner load, validation status, and application activity.</p>
+    </div>
+    <a class="back-link" href="../PTSBStaffDashboard.html">&larr; Back to PTB staff dashboard</a>
+  </section>
+
+  <div id="profile-not-found" style="display:none;">
+    <section class="panel not-found-panel">
+      <h2>Mentor not found</h2>
+      <p class="panel-copy">No mentor matches this profile link. <a href="../PTSBStaffDashboard.html">Return to the PTB staff dashboard</a> and select a mentor from the monitoring queue.</p>
+    </section>
+  </div>
+
+  <div id="profile-body" style="display:none;">
+    <section class="panel imis-detail-panel" aria-labelledby="mentor-details-title">
+      <div class="section-label" id="mentor-details-title">Mentor details</div>
+      <div class="imis-detail-grid">
+        <div class="imis-detail-item"><span>Mentor name</span><strong id="profile-mentor-name">&mdash;</strong></div>
+        <div class="imis-detail-item"><span>Mentor ID</span><strong id="profile-mentor-id">&mdash;</strong></div>
+        <div class="imis-detail-item"><span>Active learners</span><strong id="profile-active-learners">&mdash;</strong></div>
+        <div class="imis-detail-item"><span>Learners without validation</span><strong id="profile-without-validation">&mdash;</strong></div>
+        <div class="imis-detail-item"><span>Learners requiring new mentor</span><strong id="profile-requiring-new-mentor">&mdash;</strong></div>
+        <div class="imis-detail-item"><span>Open transfer requests</span><strong id="profile-transfer-requests">&mdash;</strong></div>
+        <div class="imis-detail-item full"><span>New mentor application</span><strong id="profile-application-status">&mdash;</strong></div>
+        <div class="imis-detail-item full"><span>Application details</span><strong id="profile-application-details">&mdash;</strong></div>
+      </div>
+    </section>
+
+    <div class="section-label">Assigned learners</div>
+
+    <section class="imis-table-panel" aria-labelledby="assigned-learners-title">
+      <div class="imis-table-header">
+        <h2 id="assigned-learners-title">Assigned Learners</h2>
+      </div>
+      <div class="imis-table-wrap">
+        <table class="imis-table">
+          <thead>
+            <tr>
+              <th>Learner</th>
+              <th>Current stage</th>
+              <th>Employer</th>
+              <th>Current status</th>
+              <th>Risk level</th>
+            </tr>
+          </thead>
+          <tbody id="assigned-learners-body"></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</main>
+
+<script>
+const mentors = [
+  {
+    id: 'MTR-4008',
+    name: 'Marcus Chen, CPA',
+    activeLearners: 3,
+    withoutValidation: 0,
+    requiringNewMentor: 0,
+    newMentorApplication: 'No new application',
+    applicationDetails: 'All assigned learners currently validated.',
+    transferRequests: 0
+  },
+  {
+    id: 'MTR-4021',
+    name: 'Sofia Chen, CPA',
+    activeLearners: 4,
+    withoutValidation: 1,
+    requiringNewMentor: 0,
+    newMentorApplication: 'Review submitted',
+    applicationDetails: 'Application submitted for expanded pre-reviewed portfolio coverage.',
+    transferRequests: 1
+  },
+  {
+    id: 'MTR-4033',
+    name: 'Elena Flores, CPA',
+    activeLearners: 5,
+    withoutValidation: 1,
+    requiringNewMentor: 0,
+    newMentorApplication: 'No new application',
+    applicationDetails: 'Validation follow-up needed for one learner.',
+    transferRequests: 0
+  }
+];
+
+const learners = [
+  {
+    name: 'Amelia Reyes',
+    learnerId: 'LRN-248109',
+    currentStage: 'Submit work plan',
+    employer: 'Northline Advisory Group',
+    mentor: 'Marcus Chen, CPA',
+    currentStatus: 'Pending mentor approval',
+    riskLevel: 'Medium'
+  },
+  {
+    name: 'Mina Hassan',
+    learnerId: 'LRN-251887',
+    currentStage: 'Professional stage',
+    employer: 'Summit Rail Finance',
+    mentor: 'Sofia Chen, CPA',
+    currentStatus: 'Check-in under review',
+    riskLevel: 'High'
+  },
+  {
+    name: 'Olivia Park',
+    learnerId: 'LRN-247771',
+    currentStage: 'Professional stage',
+    employer: 'Grant Mercer Tax',
+    mentor: 'Elena Flores, CPA',
+    currentStatus: 'More information requested',
+    riskLevel: 'High'
+  },
+  {
+    name: 'Nina Patel',
+    learnerId: 'LRN-254771',
+    currentStage: 'Foundational stage',
+    employer: 'Grant Mercer Tax',
+    mentor: 'Elena Flores, CPA',
+    currentStatus: 'Foundational experience submitted',
+    riskLevel: 'Medium'
+  }
+];
+
+function escapeHtml(value) {
+  return String(value == null ? '' : value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function statusClass(status) {
+  if (/validated|on track/i.test(status)) return 'badge-approved';
+  if (/pending|submitted|under review|awaiting/i.test(status)) return 'badge-pending';
+  if (/more information|required/i.test(status)) return 'badge-declined';
+  if (/review|complete/i.test(status)) return 'badge-progress';
+  return 'badge-neutral';
+}
+
+function riskClass(level) {
+  if (level === 'High') return 'risk-high';
+  if (level === 'Medium') return 'risk-medium';
+  return 'risk-low';
+}
+
+function renderAssignedLearners(mentor) {
+  const tbody = document.getElementById('assigned-learners-body');
+  const assigned = learners.filter((learner) => learner.mentor === mentor.name);
+
+  if (!assigned.length) {
+    tbody.innerHTML = '<tr><td colspan="5" class="empty-state">No learners currently assigned to this mentor.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = assigned.map((learner) => `
+    <tr>
+      <td class="learner-cell">
+        <strong>${escapeHtml(learner.name)}</strong>
+        <span class="subline">${escapeHtml(learner.learnerId)}</span>
+      </td>
+      <td>${escapeHtml(learner.currentStage)}</td>
+      <td>${escapeHtml(learner.employer)}</td>
+      <td><span class="status-badge ${statusClass(learner.currentStatus)}">${escapeHtml(learner.currentStatus)}</span></td>
+      <td><span class="risk-chip ${riskClass(learner.riskLevel)}">${escapeHtml(learner.riskLevel)}</span></td>
+    </tr>
+  `).join('');
+}
+
+function renderProfile(mentor) {
+  document.title = `CPA - Mentor Profile - ${mentor.name}`;
+  document.getElementById('profile-mentor-name').textContent = mentor.name;
+  document.getElementById('profile-mentor-id').textContent = mentor.id;
+  document.getElementById('profile-active-learners').textContent = mentor.activeLearners;
+  document.getElementById('profile-without-validation').textContent = mentor.withoutValidation;
+  document.getElementById('profile-requiring-new-mentor').textContent = mentor.requiringNewMentor;
+  document.getElementById('profile-transfer-requests').textContent = mentor.transferRequests;
+  document.getElementById('profile-application-status').textContent = mentor.newMentorApplication;
+  document.getElementById('profile-application-details').textContent = mentor.applicationDetails;
+
+  renderAssignedLearners(mentor);
+}
+
+function init() {
+  const params = new URLSearchParams(window.location.search);
+  const mentorId = params.get('mentorId');
+  const mentor = mentors.find((item) => item.id === mentorId);
+
+  if (!mentor) {
+    document.getElementById('profile-not-found').style.display = '';
+    document.getElementById('profile-body').style.display = 'none';
+    return;
+  }
+
+  document.getElementById('profile-not-found').style.display = 'none';
+  document.getElementById('profile-body').style.display = '';
+  renderProfile(mentor);
+}
+
+init();
+</script>
+</body>
+</html>

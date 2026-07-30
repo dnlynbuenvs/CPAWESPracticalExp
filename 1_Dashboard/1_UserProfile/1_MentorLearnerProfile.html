@@ -92,6 +92,18 @@
   .not-found-panel{padding:2rem;text-align:center}
   .not-found-panel h2{font-size:18px;color:var(--navy);margin-bottom:8px}
   .not-found-panel a{color:var(--imis-blue);font-weight:600;text-decoration:underline}
+  .imis-table-footer{display:flex;justify-content:center;margin:0 0 1.75rem}
+  .imis-table-action{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:none;border-radius:var(--radius-sm);padding:10px 20px;font-size:13px;font-weight:700;cursor:pointer;text-decoration:none;white-space:nowrap}
+  .imis-table-action.danger{background:var(--white);border:1px solid var(--red);color:var(--red)}
+  .imis-table-action.danger:hover{background:#FFF4F1}
+  .imis-table-action[disabled]{opacity:.5;cursor:not-allowed;background:var(--gray-100);border:1px solid var(--gray-300);color:var(--gray-600)}
+  .modal-backdrop{position:fixed;inset:0;background:rgba(11,31,58,.48);display:none;align-items:center;justify-content:center;padding:1.25rem;z-index:40}
+  .modal-backdrop.visible{display:flex}
+  .modal-card{width:min(100%,420px);background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);box-shadow:var(--shadow-md);padding:1.25rem;position:relative}
+  .modal-close{position:absolute;top:12px;right:12px;width:32px;height:32px;border:1px solid var(--gray-200);border-radius:999px;background:var(--white);color:var(--navy);font-size:18px;line-height:1;cursor:pointer}
+  .modal-close:hover{background:var(--gray-100)}
+  .modal-card h3{font-size:20px;color:var(--navy);margin-bottom:8px;padding-right:2rem}
+  .modal-card p{font-size:13px;color:var(--gray-600);line-height:1.5}
   @media(max-width:1040px){
     .imis-detail-grid{grid-template-columns:repeat(2,1fr)}
   }
@@ -119,12 +131,12 @@
                 <details class="role-dropdown">
       <summary class="role-trigger"><span class="role-label">Mentor</span><span class="role-caret">&#9662;</span></summary>
       <div class="role-menu">
-        <a class="role-option" href="../index.html">Learner</a>
-        <a class="role-option" href="CPAReviewer.html">CPA Reviewer</a>
-        <a class="role-option active" href="MentorDashboard.html">Mentor</a>
-        <a class="role-option" href="PTSBStaffDashboard.html">PTB Staff</a>
-              <a class="role-option" href="../8_MentorOnboarding/1_MentorOnboarding.html">Mentor onboarding</a>
-        <a class="role-option" href="../10_ProgramAdmin/1_ProgramAdminMgmt.html">Program Admin</a>
+        <a class="role-option" href="../../index.html">Learner</a>
+        <a class="role-option" href="../CPAReviewer.html">CPA Reviewer</a>
+        <a class="role-option active" href="../MentorDashboard.html">Mentor</a>
+        <a class="role-option" href="../PTSBStaffDashboard.html">PTB Staff</a>
+              <a class="role-option" href="../../8_MentorOnboarding/1_MentorOnboarding.html">Mentor onboarding</a>
+        <a class="role-option" href="../../10_ProgramAdmin/1_ProgramAdminMgmt.html">Program Admin</a>
       </div>
     </details>
   </div>
@@ -133,16 +145,16 @@
 <main class="page">
   <section class="hero" aria-labelledby="profile-title">
     <div>
-      <h1 id="profile-title">Learner profile</h1>
+      <h1 id="profile-title">Mentor's View - Learner Profile</h1>
       <p>A mentor's read-only view of a learner's experience record. Submissions open in the same review pages used from the mentor dashboard.</p>
     </div>
-    <a class="back-link" href="MentorDashboard.html">&larr; Back to mentor dashboard</a>
+    <a class="back-link" href="../MentorDashboard.html">&larr; Back to mentor dashboard</a>
   </section>
 
   <div id="profile-not-found" style="display:none;">
     <section class="panel not-found-panel">
       <h2>Learner not found</h2>
-      <p class="panel-copy">No learner matches this profile link. <a href="MentorDashboard.html">Return to the mentor dashboard</a> and select a learner from the roster.</p>
+      <p class="panel-copy">No learner matches this profile link. <a href="../MentorDashboard.html">Return to the mentor dashboard</a> and select a learner from the roster.</p>
     </section>
   </div>
 
@@ -248,8 +260,39 @@
         </table>
       </div>
     </section>
+
+    <div class="section-label">Mentor relationship</div>
+
+    <section class="panel imis-table-panel" aria-labelledby="relationship-table-title">
+      <div class="imis-table-header">
+        <h2 id="relationship-table-title">Mentor Relationship Status</h2>
+      </div>
+      <div class="imis-table-wrap">
+        <table class="imis-table">
+          <thead>
+            <tr>
+              <th>Mentor</th>
+              <th>Relationship</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="relationship-table-body"></tbody>
+        </table>
+      </div>
+    </section>
+    <div class="imis-table-footer">
+      <button class="imis-table-action danger" type="button" id="end-relationship-btn">End relationship</button>
+    </div>
   </div>
 </main>
+
+<div class="modal-backdrop" id="relationship-modal" aria-hidden="true">
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="relationship-modal-title">
+    <button class="modal-close" id="relationship-modal-close" type="button" aria-label="Close modal">X</button>
+    <h3 id="relationship-modal-title">Mentor relationship ended</h3>
+    <p id="relationship-modal-copy">This learner has been removed from your active mentor roster.</p>
+  </div>
+</div>
 
 <script>
 const CURRENT_MENTOR = { id: 'MTR-4021', name: 'Sofia Chen, CPA' };
@@ -265,7 +308,8 @@ const learners = [
     completionStatus: 'Not started',
     competenciesNote: '4 competencies awarded across enabling and technical areas.',
     supervisor: 'Priya Nair, CPA',
-    programExpiry: 'Dec 31, 2027'
+    programExpiry: 'Dec 31, 2027',
+    relationshipEnded: false
   },
   {
     id: 'LRN-251004',
@@ -277,7 +321,8 @@ const learners = [
     completionStatus: 'Not started',
     competenciesNote: '2 competencies documented for ethical decision-making and communication.',
     supervisor: 'Harper Singh',
-    programExpiry: 'Mar 15, 2028'
+    programExpiry: 'Mar 15, 2028',
+    relationshipEnded: false
   },
   {
     id: 'LRN-251887',
@@ -289,7 +334,8 @@ const learners = [
     completionStatus: 'Not started',
     competenciesNote: '4 competencies awarded, including reporting, analytics, and professionalism.',
     supervisor: 'Devon Clarke',
-    programExpiry: 'Jun 30, 2027'
+    programExpiry: 'Jun 30, 2027',
+    relationshipEnded: false
   },
   {
     id: 'LRN-253102',
@@ -301,7 +347,8 @@ const learners = [
     completionStatus: 'Pending mentor approval',
     competenciesNote: '6 competencies awarded with final report evidence attached.',
     supervisor: 'Jordan Blake',
-    programExpiry: 'Sep 01, 2027'
+    programExpiry: 'Sep 01, 2027',
+    relationshipEnded: false
   },
   {
     id: 'LRN-247771',
@@ -313,7 +360,8 @@ const learners = [
     completionStatus: 'Not started',
     competenciesNote: '3 competencies awarded. CPA reviewer requested more evidence on tax planning depth.',
     supervisor: 'Renee Castillo',
-    programExpiry: 'Nov 20, 2027'
+    programExpiry: 'Nov 20, 2027',
+    relationshipEnded: false
   },
   {
     id: 'LRN-245664',
@@ -325,7 +373,8 @@ const learners = [
     completionStatus: 'In CPA review',
     competenciesNote: 'Prior mentor access is limited to viewing competencies already awarded.',
     supervisor: 'Ian Whitfield',
-    programExpiry: 'Jan 10, 2027'
+    programExpiry: 'Jan 10, 2027',
+    relationshipEnded: false
   },
   {
     id: 'LRN-249530',
@@ -338,6 +387,7 @@ const learners = [
     competenciesNote: '3 competencies awarded during foundational experience review.',
     supervisor: 'Naomi Reyes',
     programExpiry: 'Aug 25, 2028',
+    relationshipEnded: false,
     mentorHistory: [
       { mentor: 'Grace Okafor, CPA', role: 'Previous mentor', period: 'Jan 2025 – Feb 2026' },
       { mentor: 'Sofia Chen, CPA', role: 'Current mentor', period: 'Feb 2026 – present' }
@@ -353,7 +403,8 @@ const learners = [
     completionStatus: 'In CPA review',
     competenciesNote: '5 competencies awarded; completion report is with a CPA staff reviewer.',
     supervisor: 'Micah Alden',
-    programExpiry: 'Apr 18, 2028'
+    programExpiry: 'Apr 18, 2028',
+    relationshipEnded: false
   },
   {
     id: 'LRN-254771',
@@ -365,7 +416,8 @@ const learners = [
     completionStatus: 'Not started',
     competenciesNote: 'Foundational experience is with a CPA staff reviewer.',
     supervisor: 'Owen Whitmore',
-    programExpiry: 'Jul 05, 2029'
+    programExpiry: 'Jul 05, 2029',
+    relationshipEnded: false
   }
 ];
 
@@ -427,10 +479,10 @@ const reviews = [
 ];
 
 const REVIEW_TYPE_CONFIG = {
-  fe: { type: 'Foundational Experience', route: '../2_ClaimFoundationalExp/2_SupervisorMentorFE/1_SupervisorMentorFEReview.html' },
-  wp: { type: 'Work Plan', route: '../3_WorkPlan/2_MentorWP/1_MentorReviewWP.html' },
-  checkin: { type: 'Check-In Report', route: '../4_RiskAssessment/2_MentorRiskAssessment/2_MentorReviewCheckin.html' },
-  completion: { type: 'Completion Report', route: '../5_FinalExperienceReport/3_MentorApprovalFinalReport.html' }
+  fe: { type: 'Foundational Experience', route: '../../2_ClaimFoundationalExp/2_SupervisorMentorFE/1_SupervisorMentorFEReview.html' },
+  wp: { type: 'Work Plan', route: '../../3_WorkPlan/2_MentorWP/1_MentorReviewWP.html' },
+  checkin: { type: 'Check-In Report', route: '../../4_RiskAssessment/2_MentorRiskAssessment/2_MentorReviewCheckin.html' },
+  completion: { type: 'Completion Report', route: '../../5_FinalExperienceReport/3_MentorApprovalFinalReport.html' }
 };
 
 function escapeHtml(value) {
@@ -569,6 +621,41 @@ function attachRowNav() {
   });
 }
 
+let currentLearner = null;
+
+function renderRelationshipStatus(learner) {
+  const tbody = document.getElementById('relationship-table-body');
+  const history = learner.mentorHistory || [];
+  const rows = history
+    .filter((entry) => entry.role === 'Previous mentor')
+    .map((entry) => ({ mentor: entry.mentor, relationship: entry.role, active: false }));
+
+  rows.push({ mentor: CURRENT_MENTOR.name, relationship: 'Current mentor', active: !learner.relationshipEnded });
+
+  tbody.innerHTML = rows.map((row) => `
+    <tr>
+      <td>${escapeHtml(row.mentor)}</td>
+      <td>${escapeHtml(row.relationship)}</td>
+      <td><span class="imis-badge ${row.active ? 'imis-badge-green' : 'imis-badge-gray'}">${row.active ? 'Active' : 'Inactive'}</span></td>
+    </tr>
+  `).join('');
+
+  const endBtn = document.getElementById('end-relationship-btn');
+  endBtn.disabled = learner.relationshipEnded;
+  endBtn.textContent = learner.relationshipEnded ? 'Relationship ended' : 'End relationship';
+}
+
+function showRelationshipModal(learnerName) {
+  document.getElementById('relationship-modal-copy').textContent = `${learnerName}'s mentor relationship has been ended and the learner is now inactive on this mentor's roster.`;
+  document.getElementById('relationship-modal').classList.add('visible');
+  document.getElementById('relationship-modal').setAttribute('aria-hidden', 'false');
+}
+
+function closeRelationshipModal() {
+  document.getElementById('relationship-modal').classList.remove('visible');
+  document.getElementById('relationship-modal').setAttribute('aria-hidden', 'true');
+}
+
 function renderProfile(learner) {
   document.title = `CPA - Learner Profile - ${learner.name}`;
   document.getElementById('profile-learner-name').textContent = learner.name;
@@ -593,6 +680,7 @@ function renderProfile(learner) {
   renderSubmissionTable('wp', learner, 'wpStatus', 'Work plan submission', {});
   renderSubmissionTable('checkin', learner, 'checkinStatus', 'Check-in report submission', {});
   renderSubmissionTable('completion', learner, 'completionStatus', 'Completion report submission', { showType: true });
+  renderRelationshipStatus(learner);
 
   attachRowNav();
 }
@@ -608,10 +696,23 @@ function init() {
     return;
   }
 
+  currentLearner = learner;
   document.getElementById('profile-not-found').style.display = 'none';
   document.getElementById('profile-body').style.display = '';
   renderProfile(learner);
 }
+
+document.getElementById('end-relationship-btn').addEventListener('click', () => {
+  if (!currentLearner || currentLearner.relationshipEnded) return;
+  currentLearner.relationshipEnded = true;
+  renderRelationshipStatus(currentLearner);
+  showRelationshipModal(currentLearner.name);
+});
+
+document.getElementById('relationship-modal-close').addEventListener('click', closeRelationshipModal);
+document.getElementById('relationship-modal').addEventListener('click', (event) => {
+  if (event.target === document.getElementById('relationship-modal')) closeRelationshipModal();
+});
 
 init();
 </script>
