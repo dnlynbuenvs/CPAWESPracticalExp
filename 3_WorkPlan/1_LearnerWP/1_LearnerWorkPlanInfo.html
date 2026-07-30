@@ -218,18 +218,7 @@
             </div>
           </div>
 
-          <div class="metric-grid" id="role-metrics" style="margin-top:1rem;"></div>
-
-          <div class="notice-box" id="pre-reviewed-note" style="margin-top:1rem;">
-            <strong>Template path</strong>
-            <span>Select an employer to determine whether a pre-reviewed role template is available or whether the standard work plan template should be used.</span>
-          </div>
-
           <div class="field-grid" style="margin-top:1rem;">
-            <div class="field">
-              <label for="template-path">Assessment template</label>
-              <input id="template-path" type="text" readonly>
-            </div>
             <div class="field">
               <label for="configured-senior-leader">Configured Senior Leader</label>
               <input id="configured-senior-leader" type="text" readonly>
@@ -268,14 +257,11 @@
               <input id="mentor-email" type="email" placeholder="mentor@company.com">
               <span class="subcopy">The system checks whether the mentor work email exists in the approved mentor list for the selected employer.</span>
             </div>
-            <div class="field">
-              <label for="mentor-search">Search mentors</label>
-              <input id="mentor-search" type="text" placeholder="Search mentor name or CPA ID">
-              <span class="subcopy">Only approved mentors from the same company are shown in the list.</span>
-            </div>
             <div class="field full">
-              <label for="mentor-select">Select mentor</label>
-              <select id="mentor-select"></select>
+              <label for="mentor-search-select">Search or select mentor</label>
+              <input id="mentor-search-select" type="text" list="mentor-options" placeholder="Search mentor name or CPA ID">
+              <datalist id="mentor-options"></datalist>
+              <span class="subcopy">Only approved mentors from the same company are shown in the list.</span>
             </div>
           </div>
 
@@ -297,11 +283,6 @@
               <label for="senior-leader-select">Select senior leader</label>
               <select id="senior-leader-select"></select>
             </div>
-          </div>
-
-          <div class="notice-box" id="senior-leader-note" style="margin-top:1rem;">
-            <strong>Senior leader routing</strong>
-            <span>Select a senior leader from the same organization. This assignment is used for pre-reviewed role escalation and work plan oversight.</span>
           </div>
         </section>
 
@@ -456,30 +437,15 @@
               <span class="subcopy">Supporting documents are accessible to the mentor and CPA Reviewer.</span>
             </div>
           </div>
-          <div class="button-row" style="margin-top:1rem;">
-            <button class="action-btn" id="attach-job-description-btn" type="button">Attach job description</button>
-            <button class="action-btn" id="attach-supporting-btn" type="button">Attach supporting documents</button>
-          </div>
           <div class="doc-list" id="job-description-list" style="margin-top:1rem;"></div>
           <div class="doc-list" id="supporting-doc-list" style="margin-top:1rem;"></div>
         </section>
 
         <section class="form-section">
-          <h3>Save work plan information</h3>
-          <div class="notice-box success" id="save-note">
-            <strong>Work plan draft</strong>
-            <span>Employer selection, learner role pathway, dates, documents, and job details are stored as part of the work plan record. Draft work plans remain editable and visible to CPA Staff but do not enter the review queue until submitted.</span>
-          </div>
-          <div class="notice-box" id="submission-note" style="margin-top:1rem;">
-            <strong>Submission workflow</strong>
-            <span>After submission, the work plan becomes read-only, status updates to Pending Mentor Approval, mentor review workflow begins, and reminder notifications are scheduled for 30, 60, and 90 days if no action is taken. Learners have 3 resubmission attempts.</span>
-          </div>
+  
           <div class="button-row" style="margin-top:1rem;">
-            <button class="action-btn" id="save-draft-btn" type="button" onclick="location.href='../../../index.html'">
-                Save draft
-            </button>
-            <button class="action-btn primary" id="continue-btn" type="button" onclick="location.href='2_LearnerWorkPlanInfo.html'">
-                Continue
+            <button class="action-btn primary" id="continue-btn" type="button">
+                Submit
             </button>
           </div>
         </section>
@@ -492,43 +458,15 @@
       <div class="meta-stack">
         <div class="meta-card">
           <strong>Work plan duration</strong>
-          <div class="metric-grid" id="duration-metric-grid" style="margin-top:.5rem;"></div>
+          <span id="summary-duration">Enter a start date, expected completion date, and expected leaves to calculate duration.</span>
         </div>
         <div class="meta-card">
           <strong>Actual gained PE</strong>
           <span id="summary-actual-gained-pe">To be entered by CPA Reviewer.</span>
         </div>
         <div class="meta-card">
-          <strong>Three Work Plan resubmissions reached</strong>
-          <span id="summary-reviewer-limit">Not reached.</span>
-        </div>
-        <div class="meta-card">
-          <strong>Template path</strong>
-          <span id="summary-template">No template selected yet.</span>
-        </div>
-        <div class="meta-card">
-          <strong>Pre-reviewed role availability</strong>
-          <span id="summary-availability">Choose an employer to review availability and role limits.</span>
-        </div>
-        <div class="meta-card">
-          <strong>Selected employer</strong>
-          <span id="summary-employer">No employer selected.</span>
-        </div>
-        <div class="meta-card">
-          <strong>Selected role type</strong>
-          <span id="summary-role-type">No role type selected.</span>
-        </div>
-        <div class="meta-card">
-          <strong>Selected work experience plans</strong>
-          <div id="summary-role-plans" class="empty-state" style="padding:12px;">No role plans selected yet.</div>
-        </div>
-        <div class="meta-card">
           <strong>Work plan status</strong>
           <span id="summary-status">Draft</span>
-        </div>
-        <div class="meta-card">
-          <strong>Documents</strong>
-          <span id="summary-documents">No supporting documents attached.</span>
         </div>
         <div class="meta-card">
           <strong>Selected mentor</strong>
@@ -538,17 +476,13 @@
           <strong>Assigned Senior Leader</strong>
           <span id="summary-senior-leader">Not assigned.</span>
         </div>
-        <div class="meta-card">
-          <strong>Reminder schedule</strong>
-          <span id="summary-reminders">Reminder dates will appear after work plan submission.</span>
-        </div>
       </div>
     </aside>
   </section>
 </main>
 
 <script>
-const workPlanKey = 'workPlanRecord:learner-101';
+const workPlanKey = 'workPlanRecord:learner-101:v2';
 
 const defaultLearner = {
   legalName: 'Amelia Reyes',
@@ -674,17 +608,13 @@ const dcStatements = [
 const employerSelect = document.getElementById('employer-select');
 const preReviewedRoleSelect = document.getElementById('pre-reviewed-role');
 const roleSelectCopy = document.getElementById('role-select-copy');
-const roleMetrics = document.getElementById('role-metrics');
-const preReviewedNote = document.getElementById('pre-reviewed-note');
-const templatePath = document.getElementById('template-path');
 const configuredSeniorLeader = document.getElementById('configured-senior-leader');
 const mentorEmail = document.getElementById('mentor-email');
-const mentorSearch = document.getElementById('mentor-search');
-const mentorSelect = document.getElementById('mentor-select');
+const mentorSearchSelect = document.getElementById('mentor-search-select');
+const mentorOptionsList = document.getElementById('mentor-options');
 const seniorLeaderSearchInput = document.getElementById('senior-leader-search');
 const seniorLeaderSelect = document.getElementById('senior-leader-select');
 const mentorNote = document.getElementById('mentor-note');
-const seniorLeaderNote = document.getElementById('senior-leader-note');
 const roleTypeGrid = document.getElementById('role-type-grid');
 const serviceAreaField = document.getElementById('service-area-field');
 const serviceArea = document.getElementById('service-area');
@@ -704,20 +634,11 @@ const otherRoleField = document.getElementById('other-role-field');
 const otherRolePlan = document.getElementById('other-role-plan');
 const messageBar = document.getElementById('message-bar');
 const messageText = document.getElementById('message-text');
-const durationMetricGrid = document.getElementById('duration-metric-grid');
+const summaryDuration = document.getElementById('summary-duration');
 const summaryActualGainedPe = document.getElementById('summary-actual-gained-pe');
-const summaryReviewerLimit = document.getElementById('summary-reviewer-limit');
-const summaryTemplate = document.getElementById('summary-template');
-const summaryAvailability = document.getElementById('summary-availability');
-const summaryEmployer = document.getElementById('summary-employer');
-const summaryRoleType = document.getElementById('summary-role-type');
-const summaryRolePlans = document.getElementById('summary-role-plans');
 const summaryStatus = document.getElementById('summary-status');
-const summaryDocuments = document.getElementById('summary-documents');
 const summaryMentor = document.getElementById('summary-mentor');
 const summarySeniorLeader = document.getElementById('summary-senior-leader');
-const summaryReminders = document.getElementById('summary-reminders');
-const submissionNote = document.getElementById('submission-note');
 
 let workPlan = null;
 
@@ -988,22 +909,33 @@ function getFilteredSeniorLeaders() {
   );
 }
 
+function mentorDescriptor(mentor) {
+  return `${mentor.name} | ${mentor.cpaId}`;
+}
+
+function findMentorByDescriptor(text) {
+  const employer = getCurrentEmployerData();
+  if (!employer || !employer.approvedMentors) return null;
+  const normalized = String(text || '').trim().toLowerCase();
+  if (!normalized) return null;
+  return employer.approvedMentors.find((mentor) => mentorDescriptor(mentor).toLowerCase() === normalized) || null;
+}
+
 function renderMentorOptions() {
   const employer = getCurrentEmployerData();
   if (!employer) {
-    mentorSelect.innerHTML = '<option value="">Select employer first</option>';
-    mentorSelect.disabled = true;
+    mentorOptionsList.innerHTML = '';
+    mentorSearchSelect.disabled = true;
     mentorNote.className = 'notice-box';
     mentorNote.innerHTML = '<strong>Mentor approval routing</strong><span>Select an employer first. The mentor list will then show approved mentors from the same company only.</span>';
     return;
   }
 
   const mentors = getFilteredMentors();
-  mentorSelect.disabled = false;
-  mentorSelect.innerHTML = ['<option value="">Select mentor</option>']
-    .concat(mentors.map((mentor) => `<option value="${escapeHtml(mentor.email)}">${escapeHtml(mentor.name)} | ${escapeHtml(mentor.cpaId)}</option>`))
+  mentorSearchSelect.disabled = false;
+  mentorOptionsList.innerHTML = mentors
+    .map((mentor) => `<option value="${escapeHtml(mentorDescriptor(mentor))}"></option>`)
     .join('');
-  mentorSelect.value = workPlan.approvals.mentorSelectedEmail || '';
 
   if (!mentors.length) {
     mentorNote.className = 'notice-box warn';
@@ -1019,8 +951,6 @@ function renderSeniorLeaderOptions() {
   if (!employer) {
     seniorLeaderSelect.innerHTML = '<option value="">Select employer first</option>';
     seniorLeaderSelect.disabled = true;
-    seniorLeaderNote.className = 'notice-box';
-    seniorLeaderNote.innerHTML = '<strong>Senior leader routing</strong><span>Select an employer first. The senior leader list will then show approved senior leaders from the same company only.</span>';
     return;
   }
 
@@ -1030,14 +960,6 @@ function renderSeniorLeaderOptions() {
     .concat(leaders.map((leader) => `<option value="${escapeHtml(leader.email)}">${escapeHtml(leader.name)} | ${escapeHtml(leader.cpaId)}</option>`))
     .join('');
   seniorLeaderSelect.value = workPlan.approvals.seniorLeaderEmail || '';
-
-  if (!leaders.length) {
-    seniorLeaderNote.className = 'notice-box warn';
-    seniorLeaderNote.innerHTML = '<strong>No matching senior leaders found</strong><span>No senior leaders match the current search. Clear the search or reach out to CPA Staff offline if the senior leader is not in the system.</span>';
-  } else {
-    seniorLeaderNote.className = 'notice-box';
-    seniorLeaderNote.innerHTML = '<strong>Senior leader routing</strong><span>Select a senior leader from the same organization. This assignment is used for pre-reviewed role escalation and work plan oversight.</span>';
-  }
 }
 
 function getMentorByEmail(email) {
@@ -1081,7 +1003,6 @@ function renderRoleOptions() {
     preReviewedRoleSelect.innerHTML = '<option value="">Select employer first</option>';
     preReviewedRoleSelect.disabled = true;
     roleSelectCopy.textContent = 'Available roles will populate after an employer is selected.';
-    roleMetrics.innerHTML = '';
     return;
   }
 
@@ -1089,7 +1010,6 @@ function renderRoleOptions() {
     preReviewedRoleSelect.innerHTML = '<option value="">No pre-reviewed roles available</option>';
     preReviewedRoleSelect.disabled = true;
     roleSelectCopy.textContent = 'This employer does not have any pre-reviewed role templates on file.';
-    roleMetrics.innerHTML = '';
     return;
   }
 
@@ -1139,58 +1059,23 @@ function renderPreReviewedStatus() {
   const role = getSelectedRoleData();
 
   if (!employer) {
-    preReviewedNote.className = 'notice-box';
-    preReviewedNote.innerHTML = '<strong>Template path</strong><span>Select an employer to determine whether a pre-reviewed role template is available or whether the standard work plan template should be used.</span>';
-    templatePath.value = workPlan.preReviewed.templatePath;
     configuredSeniorLeader.value = workPlan.preReviewed.seniorLeader || 'Not assigned';
-    summaryAvailability.textContent = 'Choose an employer to review availability and role limits.';
-    roleMetrics.innerHTML = '';
     return;
   }
 
   if (!employer.roles.length) {
-    preReviewedNote.className = 'notice-box';
-    preReviewedNote.innerHTML = '<strong>Standard template required</strong><span>This employer has no pre-reviewed role templates on file. You can still proceed by completing a standard or non-pre-reviewed work plan template.</span>';
-    templatePath.value = 'Standard / non-pre-reviewed work plan template';
     configuredSeniorLeader.value = 'Not assigned';
-    summaryAvailability.textContent = 'No pre-reviewed roles are available for this employer.';
-    roleMetrics.innerHTML = '<div class="empty-state">No approved pre-reviewed role templates are available for this employer.</div>';
     return;
   }
 
   if (!role) {
-    preReviewedNote.className = 'notice-box';
-    preReviewedNote.innerHTML = '<strong>Pre-reviewed roles available</strong><span>Select one of the employer\'s pre-reviewed roles to validate learner capacity, or continue with the standard template if a pre-reviewed role does not apply.</span>';
-    templatePath.value = workPlan.preReviewed.templatePath;
     configuredSeniorLeader.value = workPlan.preReviewed.seniorLeader || 'Will populate after role selection';
-    summaryAvailability.textContent = 'Pre-reviewed roles exist for this employer. Select one to see limits and remaining capacity.';
-    roleMetrics.innerHTML = '<div class="empty-state">Choose a role to display approved role limit, active learner count, and remaining available spots.</div>';
     return;
   }
 
   const remaining = role.approvedLimit - role.activeLearners;
-  roleMetrics.innerHTML = `
-    <div class="metric-card">
-      <div class="value">${role.approvedLimit}</div>
-      <strong>Approved role limit</strong>
-      <span>The total number of learners the pre-reviewed role can support.</span>
-    </div>
-    <div class="metric-card">
-      <div class="value">${role.activeLearners}</div>
-      <strong>Current active learner count</strong>
-      <span>The number of active learners already using this role template.</span>
-    </div>
-    <div class="metric-card">
-      <div class="value">${Math.max(0, remaining)}</div>
-      <strong>Remaining available spots</strong>
-      <span>The number of learner spaces still available for this role template.</span>
-    </div>
-  `;
 
   if (remaining > 0) {
-    preReviewedNote.className = 'notice-box success';
-    preReviewedNote.innerHTML = `<strong>Pre-reviewed role available</strong><span>${escapeHtml(role.name)} still has capacity. The learner can select the pre-reviewed role template and the assigned Senior Leader is automatically applied to the work plan.</span>`;
-    summaryAvailability.textContent = `${role.name} is available with ${remaining} remaining spot${remaining === 1 ? '' : 's'}.`;
     if (!workPlan.roleType || workPlan.roleType === 'Pre-reviewed') {
       setRoleTypeSelection('Pre-reviewed');
     }
@@ -1199,7 +1084,7 @@ function renderPreReviewedStatus() {
     const fallbackMentor = configuredMentor || employerMentors[0];
     if (fallbackMentor && !workPlan.approvals.mentorSelectedEmail) {
       selectMentor(fallbackMentor);
-      mentorSelect.value = fallbackMentor.email;
+      mentorSearchSelect.value = mentorDescriptor(fallbackMentor);
       mentorEmail.value = fallbackMentor.email;
     }
     const matchingLeader = (employer.seniorLeaders || []).find((leader) => leader.name === role.seniorLeader);
@@ -1207,16 +1092,10 @@ function renderPreReviewedStatus() {
       selectSeniorLeader(matchingLeader);
       seniorLeaderSelect.value = matchingLeader.email;
     }
-  } else {
-    if (workPlan.roleType === 'Pre-reviewed') {
-      setRoleTypeSelection('');
-    }
-    preReviewedNote.className = 'notice-box warn';
-    preReviewedNote.innerHTML = `<strong>Role limit reached</strong><span>${escapeHtml(role.name)} has reached its learner limit. The learner cannot use the pre-reviewed role template and should proceed with the standard template and contact the assigned Senior Leader.</span>`;
-    summaryAvailability.textContent = `${role.name} has reached its learner limit. Contact ${role.seniorLeader}.`;
+  } else if (workPlan.roleType === 'Pre-reviewed') {
+    setRoleTypeSelection('');
   }
 
-  templatePath.value = workPlan.preReviewed.templatePath;
   configuredSeniorLeader.value = workPlan.preReviewed.seniorLeader || 'Not assigned';
 }
 
@@ -1240,7 +1119,7 @@ function readFormIntoState() {
   workPlan.preReviewed.employer = employerSelect.value;
   workPlan.serviceArea = serviceArea.value.trim();
   workPlan.approvals.mentorEmail = mentorEmail.value.trim();
-  workPlan.approvals.mentorSearch = mentorSearch.value.trim();
+  workPlan.approvals.mentorSearch = mentorSearchSelect.value.trim();
   workPlan.approvals.seniorLeaderSearch = seniorLeaderSearchInput.value.trim();
 
   workPlan.employerDetails.organizationName = organizationName.value.trim();
@@ -1267,7 +1146,9 @@ function readFormIntoState() {
 
 function loadStateIntoForm() {
   mentorEmail.value = workPlan.approvals.mentorEmail || '';
-  mentorSearch.value = workPlan.approvals.mentorSearch || '';
+  mentorSearchSelect.value = (workPlan.approvals.mentorSelectedEmail && workPlan.approvals.mentorName)
+    ? `${workPlan.approvals.mentorName} | ${workPlan.approvals.mentorCpaId}`
+    : (workPlan.approvals.mentorSearch || '');
   seniorLeaderSearchInput.value = workPlan.approvals.seniorLeaderSearch || '';
   serviceArea.value = workPlan.serviceArea || '';
 
@@ -1309,34 +1190,15 @@ function maybePopulateEmployerDetails() {
 function renderDurationMetrics() {
   const metrics = calculateWorkPlanDuration();
   if (!metrics.valid) {
-    durationMetricGrid.innerHTML = '<div class="empty-state">Enter a work plan start date, expected completion date, and expected leaves to calculate potential professional experience and duration.</div>';
+    summaryDuration.textContent = 'Enter a work plan start date, expected completion date, and expected leaves to calculate potential professional experience and duration.';
     return;
   }
 
-  durationMetricGrid.innerHTML = `
-    <div class="metric-card">
-      <div class="value">${metrics.potentialMonths.toFixed(2)}</div>
-      <strong>Potential professional experience</strong>
-      <span>${metrics.eligibleDays} eligible day(s) after expected leaves.</span>
-    </div>
-    <div class="metric-card">
-      <div class="value">${Math.round(metrics.estimatedHours)}</div>
-      <strong>Estimated hours</strong>
-      <span>Calculated from average hours worked per week.</span>
-    </div>
-    <div class="metric-card">
-      <div class="value">${metrics.totalDays}</div>
-      <strong>Planned duration</strong>
-      <span>${formatShortDate(workPlan.workPlanDates.startDate)} to ${formatShortDate(workPlan.workPlanDates.expectedCompletionDate)}</span>
-    </div>
-  `;
+  summaryDuration.textContent = `${metrics.potentialMonths.toFixed(2)} month(s) potential PE, ${Math.round(metrics.estimatedHours)} estimated hour(s), ${formatShortDate(workPlan.workPlanDates.startDate)} to ${formatShortDate(workPlan.workPlanDates.expectedCompletionDate)}.`;
 }
 
 function renderReviewerMaintainedFields() {
   summaryActualGainedPe.textContent = workPlan.duration.actualGainedPE || 'To be entered by CPA Reviewer.';
-  summaryReviewerLimit.textContent = workPlan.duration.reviewerThreeAttemptIndicator
-    ? 'Reached - three resubmissions used.'
-    : 'Not reached.';
 }
 
 function renderTaskStatementTable(bodyEl, definitions, group) {
@@ -1434,6 +1296,7 @@ function renderDocuments() {
   const editable = workPlan.workflow.status !== 'Pending Mentor Approval';
   renderGroup(workPlan.documents.jobDescriptions, jobDescriptionList, 'No job description uploaded yet.', editable);
   renderGroup(workPlan.documents.supporting, supportingDocList, 'No supporting documents uploaded yet.', editable);
+
   jobDescriptionCopy.textContent = isPreReviewedTemplate()
     ? 'For pre-reviewed positions, uploading a job description is optional.'
     : 'If the learner selected a standard work plan, a job description is required before submission. For pre-reviewed positions it is optional.';
@@ -1442,7 +1305,7 @@ function renderDocuments() {
 function setReadonlyState() {
   const readonly = workPlan.workflow.status === 'Pending Mentor Approval';
   document.querySelectorAll('.form-panel input, .form-panel select, .form-panel textarea').forEach((element) => {
-    if (['legal-name','preferred-name','cpa-id','governing-body','email-address','phone-number','template-path','configured-senior-leader'].includes(element.id)) {
+    if (['legal-name','preferred-name','cpa-id','governing-body','email-address','phone-number','configured-senior-leader'].includes(element.id)) {
       return;
     }
     if (element.id === 'continue-btn') return;
@@ -1451,9 +1314,6 @@ function setReadonlyState() {
   Array.from(roleTypeGrid.querySelectorAll('.role-type-card')).forEach((card) => {
     card.disabled = readonly;
   });
-  document.getElementById('save-draft-btn').disabled = readonly;
-  document.getElementById('attach-job-description-btn').disabled = readonly;
-  document.getElementById('attach-supporting-btn').disabled = readonly;
 }
 
 function validateWorkPlan() {
@@ -1505,42 +1365,11 @@ function validateForSubmit() {
 }
 
 function renderSummary() {
-  const employer = getCurrentEmployerData();
-  const role = getSelectedRoleData();
-
-  summaryTemplate.textContent = templatePath.value || 'No template selected yet.';
-  summaryEmployer.textContent = employerSelect.value || organizationName.value.trim() || 'No employer selected.';
-  summaryRoleType.textContent = workPlan.roleType || 'No role type selected.';
   summaryStatus.textContent = workPlan.workflow.status || 'Draft';
-  summaryDocuments.textContent = `${workPlan.documents.jobDescriptions.length} job description file(s) and ${workPlan.documents.supporting.length} supporting document(s) attached.`;
   summaryMentor.textContent = workPlan.approvals.mentorName
     ? `${workPlan.approvals.mentorName} (${workPlan.approvals.mentorCpaId})`
     : 'No mentor selected.';
   summarySeniorLeader.textContent = workPlan.approvals.seniorLeaderName || configuredSeniorLeader.value || 'Not assigned.';
-  summaryReminders.textContent = workPlan.workflow.reminderSchedule.length
-    ? workPlan.workflow.reminderSchedule.map((entry) => `${entry.dayCount}d: ${formatShortDate(entry.dueDate)}`).join(' | ')
-    : 'Reminder dates will appear after work plan submission.';
-
-  if (!workPlan.jobInformation.rolePlans.length) {
-    summaryRolePlans.className = 'empty-state';
-    summaryRolePlans.textContent = 'No role plans selected yet.';
-  } else {
-    summaryRolePlans.className = '';
-    summaryRolePlans.innerHTML = workPlan.jobInformation.rolePlans
-      .concat(workPlan.jobInformation.otherRolePlan ? [`Other: ${workPlan.jobInformation.otherRolePlan}`] : [])
-      .map((plan) => `<div class="option-card" style="margin-bottom:8px;"><strong>${escapeHtml(plan)}</strong><span>Selected for the work plan record.</span></div>`)
-      .join('');
-  }
-
-  if (role) {
-    summaryAvailability.textContent = role.approvedLimit > role.activeLearners
-      ? `${role.name} has ${role.approvedLimit - role.activeLearners} remaining available spot${role.approvedLimit - role.activeLearners === 1 ? '' : 's'}.`
-      : `${role.name} has reached its learner limit. Contact ${role.seniorLeader}.`;
-  } else if (employer && !employer.roles.length) {
-    summaryAvailability.textContent = 'This employer has no pre-reviewed roles available, so the learner should use the standard template.';
-  } else {
-    summaryAvailability.textContent = employer ? 'Choose a pre-reviewed role to inspect role limits and remaining spots.' : 'Choose an employer to review availability and role limits.';
-  }
 
   renderDurationMetrics();
   renderReviewerMaintainedFields();
@@ -1596,13 +1425,7 @@ function buildReminderSchedule(submittedAt) {
 }
 
 function updateWorkflowNotice() {
-  if (workPlan.workflow.status === 'Pending Mentor Approval') {
-    submissionNote.className = 'notice-box success';
-    submissionNote.innerHTML = `<strong>Pending Mentor Approval</strong><span>This work plan is now read-only. Mentor review workflow has started, mentor notifications have been recorded, and reminder notifications are scheduled for 30, 60, and 90 days if the work plan remains pending. Resubmission attempts used: ${workPlan.workflow.resubmissionCount} of 3.</span>`;
-  } else {
-    submissionNote.className = 'notice-box';
-    submissionNote.innerHTML = '<strong>Submission workflow</strong><span>After submission, the work plan becomes read-only, status updates to Pending Mentor Approval, mentor review workflow begins, and reminder notifications are scheduled for 30, 60, and 90 days if no action is taken. Learners have 3 resubmission attempts.</span>';
-  }
+  // Submission workflow notice box removed from the page; status is still reflected in the work plan summary sidebar.
 }
 
 function submitWorkPlan() {
@@ -1611,7 +1434,7 @@ function submitWorkPlan() {
   if (issues.length) {
     setMessage(`Submission blocked until ${issues.length} required item${issues.length === 1 ? '' : 's'} are completed.`);
     renderSummary();
-    return;
+    return false;
   }
 
   const now = new Date().toISOString();
@@ -1626,6 +1449,7 @@ function submitWorkPlan() {
   updateWorkflowNotice();
   renderAll();
   setMessage('Work plan submitted. Status is now Pending Mentor Approval and the mentor review workflow has started.');
+  return true;
 }
 
 employerSelect.addEventListener('change', () => {
@@ -1637,7 +1461,7 @@ employerSelect.addEventListener('change', () => {
   workPlan.approvals.mentorSearch = '';
   workPlan.approvals.seniorLeaderSearch = '';
   mentorEmail.value = '';
-  mentorSearch.value = '';
+  mentorSearchSelect.value = '';
   seniorLeaderSearchInput.value = '';
   maybePopulateEmployerDetails();
   renderRoleOptions();
@@ -1663,8 +1487,15 @@ preReviewedRoleSelect.addEventListener('change', () => {
   renderSummary();
 });
 
-mentorSearch.addEventListener('input', () => {
-  workPlan.approvals.mentorSearch = mentorSearch.value.trim();
+mentorSearchSelect.addEventListener('input', () => {
+  workPlan.approvals.mentorSearch = mentorSearchSelect.value.trim();
+  const matched = findMentorByDescriptor(mentorSearchSelect.value);
+  if (matched) {
+    selectMentor(matched);
+    mentorEmail.value = matched.email;
+  } else {
+    selectMentor(null);
+  }
   renderMentorOptions();
   renderSummary();
 });
@@ -1680,22 +1511,15 @@ mentorEmail.addEventListener('change', () => {
   const mentor = getMentorByEmail(mentorEmail.value);
   if (mentor) {
     selectMentor(mentor);
-    mentorSelect.value = mentor.email;
+    mentorSearchSelect.value = mentorDescriptor(mentor);
     mentorNote.className = 'notice-box success';
     mentorNote.innerHTML = `<strong>Mentor found</strong><span>${escapeHtml(mentor.name)} is an approved mentor in the same organization and has been selected for this work plan.</span>`;
   } else if (mentorEmail.value.trim()) {
     selectMentor(null);
-    mentorSelect.value = '';
+    mentorSearchSelect.value = '';
     mentorNote.className = 'notice-box warn';
     mentorNote.innerHTML = '<strong>Mentor not found</strong><span>The entered mentor work email was not found in the system for this employer. The learner should reach out to CPA Staff offline while the follow-up workflow is confirmed.</span>';
   }
-  renderSummary();
-});
-
-mentorSelect.addEventListener('change', () => {
-  const mentor = getMentorByEmail(mentorSelect.value);
-  selectMentor(mentor);
-  mentorEmail.value = mentor ? mentor.email : workPlan.approvals.mentorEmail;
   renderSummary();
 });
 
@@ -1717,8 +1541,8 @@ supportingDocList.addEventListener('click', (event) => {
   removeDocument(button.dataset.removeDoc);
 });
 
-document.getElementById('attach-job-description-btn').addEventListener('click', () => attachFiles(jobDescriptionUpload, 'jobDescriptions', 'Job description'));
-document.getElementById('attach-supporting-btn').addEventListener('click', () => attachFiles(supportingDocsUpload, 'supporting', 'Supporting document'));
+jobDescriptionUpload.addEventListener('change', () => attachFiles(jobDescriptionUpload, 'jobDescriptions', 'Job description'));
+supportingDocsUpload.addEventListener('change', () => attachFiles(supportingDocsUpload, 'supporting', 'Supporting document'));
 
 frTaskBody.addEventListener('change', handleTaskStatementChange);
 atTaskBody.addEventListener('change', handleTaskStatementChange);
@@ -1759,29 +1583,11 @@ document.querySelectorAll('input, select, textarea').forEach((element) => {
   });
 });
 
-document.getElementById('save-draft-btn').addEventListener('click', () => {
-  readFormIntoState();
-  workPlan.workflow.status = 'Draft';
-  persistWorkPlan();
-  const issues = validateWorkPlan();
-  setMessage(issues.length
-    ? `Work plan draft saved with ${issues.length} item${issues.length === 1 ? '' : 's'} still to complete.`
-    : 'Work plan draft saved. Employer, role path, and job information are stored in the work plan record.');
-  updateWorkflowNotice();
-  renderSummary();
-});
-
 document.getElementById('continue-btn').addEventListener('click', () => {
-  readFormIntoState();
-  persistWorkPlan();
-  const issues = validateWorkPlan();
-  if (issues.length) {
-    setMessage(`Work plan saved. Before the next step, ${issues.length} item${issues.length === 1 ? '' : 's'} still need attention.`);
-    renderSummary();
-    return;
+  const submitted = submitWorkPlan();
+  if (submitted) {
+    window.location.href = '../../index.html';
   }
-  setMessage('Work plan saved. Continue to the next step of the work plan flow.');
-  renderSummary();
 });
 
 try {
