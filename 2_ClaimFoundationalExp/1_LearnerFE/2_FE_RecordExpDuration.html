@@ -52,7 +52,9 @@
   .message-bar{display:none;align-items:center;gap:10px;margin-bottom:1rem;padding:12px 14px;border-radius:var(--radius-md);background:#EBF3FF;border:1px solid rgba(27,94,168,.18);color:var(--navy);box-shadow:var(--shadow-sm)}
   .message-bar.visible{display:flex}
   .panel{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm)}
-  .form-panel{padding:1.25rem}
+  .form-panel,.meta-panel{padding:1.25rem}
+  .form-layout{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:16px}
+  .meta-stack{display:flex;flex-direction:column;gap:12px}
   .section-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#2E2C2A;margin-bottom:.75rem}
   .panel h2{font-size:17px;color:#1a1a1a;margin-bottom:4px}
   .panel-copy{font-size:12px;color:var(--gray-600);line-height:1.45}
@@ -70,9 +72,6 @@
   .action-btn.danger:hover{background:var(--badge-red-bg)}
   .action-btn[disabled]{opacity:.55;cursor:not-allowed;background:var(--gray-100);border-color:var(--gray-300);color:var(--gray-600)}
   .experience-list{display:flex;flex-direction:column;gap:1.5rem}
-  .experience-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:.5rem}
-  .experience-meta{text-align:right}
-  .experience-meta .subcopy{margin-top:4px}
   .form-shell{display:flex;flex-direction:column;gap:16px}
   .form-section{padding:1rem 0;border-bottom:1px solid var(--gray-200)}
   .form-section:last-child{border-bottom:none}
@@ -99,6 +98,8 @@
   .error-list{display:flex;flex-direction:column;gap:8px}
   .error-item{padding:10px 12px;border-radius:var(--radius-sm);border:1px solid #EBBAB2;background:var(--badge-red-bg);color:var(--badge-red-text);font-size:12px;line-height:1.4}
   .meta-card{padding:12px;border-radius:var(--radius-sm);border:1px solid var(--gray-200);background:var(--white)}
+  .meta-card strong{display:block;font-size:13px;color:#1a1a1a;margin-bottom:4px}
+  .meta-card span{display:block;font-size:12px;color:var(--gray-600);line-height:1.45}
   .button-row{display:flex;flex-wrap:wrap;gap:8px}
   .imis-table-panel{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);overflow:hidden}
   .imis-table-header{background:var(--imis-blue);color:var(--white);padding:10px 16px}
@@ -109,6 +110,9 @@
   .imis-table tbody td{padding:11px 16px;border-bottom:1px solid var(--gray-200);color:#2E2C2A;vertical-align:middle}
   .imis-table tbody tr:last-child td{border-bottom:none}
   .imis-table select{border:1px solid var(--gray-300);border-radius:var(--radius-sm);background:var(--white);padding:6px 10px;color:var(--gray-800);font-size:12px}
+  @media(max-width:1120px){
+    .form-layout{grid-template-columns:1fr}
+  }
   @media(max-width:760px){
     .topbar{align-items:flex-start;flex-direction:column;padding:1rem}
     .nav-links{display:none}
@@ -117,7 +121,6 @@
     .hero{flex-direction:column;align-items:flex-start}
     .hero h1{font-size:34px}
     .field-grid,.metric-grid{grid-template-columns:1fr}
-    .experience-meta{text-align:left}
   }
 </style>
 </head>
@@ -144,7 +147,7 @@
 <main class="page">
   <section class="hero" aria-labelledby="fe-record-title">
     <div>
-      <h1 id="fe-record-title">Capture foundational experience</h1>
+      <h1 id="fe-record-title">Capture Foundational Experience</h1>
       <p>Record your foundational experience, attach supporting documents, calculate eligible duration, and submit to your assigned supervisor.</p>
     </div>
   </section>
@@ -159,7 +162,7 @@
   <section class="panel form-panel" id="add-experience-panel" style="margin-top:1.5rem;">
     <div class="section-label">Additional experience</div>
     <h2>Do you want to add another employment experience?</h2>
-    <p class="panel-copy">Select Yes to start a new employment experience report. It will be added below as the next experience.</p>
+    <p class="panel-copy">Select Yes to start a new employment experience report. It will be added below as the next experience, with the same fields as above.</p>
     <div class="field" style="max-width:220px;margin-top:1rem;">
       <label for="add-experience-select">Add another experience</label>
       <select id="add-experience-select">
@@ -172,7 +175,7 @@
 
 <script>
 const decisionKey = 'feDecision:learner-101';
-const reportsKey = 'feReports:learner-101';
+const reportsKey = 'feReports:learner-101:v2';
 const workPlanCompleteKey = 'workPlanEligibleExperienceComplete:learner-101';
 
 const defaultLearner = {
@@ -257,20 +260,44 @@ function createEmptyReport(index) {
   };
 }
 
+function isValidReportShape(report) {
+  return Boolean(
+    report &&
+    typeof report === 'object' &&
+    report.learnerInfo && typeof report.learnerInfo === 'object' &&
+    report.roleInfo && typeof report.roleInfo === 'object' &&
+    report.duration && typeof report.duration === 'object' &&
+    report.documents && typeof report.documents === 'object' &&
+    Array.isArray(report.documents.jobDescriptions) &&
+    Array.isArray(report.documents.supporting)
+  );
+}
+
 function loadReports() {
-  const stored = JSON.parse(localStorage.getItem(reportsKey) || '[]');
-  reports = Array.isArray(stored) && stored.length ? stored : [createEmptyReport(1)];
+  let stored = [];
+  try {
+    const parsed = JSON.parse(localStorage.getItem(reportsKey) || '[]');
+    if (Array.isArray(parsed)) stored = parsed;
+  } catch (error) {
+    stored = [];
+  }
+
+  const validReports = stored.filter(isValidReportShape);
+  reports = validReports.length ? validReports : [createEmptyReport(1)];
+
   reports.forEach((report) => {
     if (!Array.isArray(report.taskStatements) || !report.taskStatements.length) {
       report.taskStatements = defaultTaskStatements.map((item) => ({ ...item, learnerPlan: '' }));
     }
+    if (!Array.isArray(report.notifications)) report.notifications = [];
+    if (typeof report.status !== 'string') report.status = 'Draft';
   });
 }
 
 function persistReports() {
   localStorage.setItem(reportsKey, JSON.stringify(reports));
 }
-
+      
 function getReportById(reportId) {
   return reports.find((report) => report.id === reportId);
 }
@@ -487,20 +514,13 @@ function renderReportPanel(report, index) {
   const du = report.duration;
 
   return `
-    <section class="panel form-panel" data-report-panel="${report.id}">
-      <div class="experience-head">
-        <div>
-          <div class="section-label">Report details</div>
-          <h2>Experience ${index + 1}${ri.reportTitle ? ` &mdash; ${escapeHtml(ri.reportTitle)}` : ''}</h2>
-          <p class="panel-copy">${ri.employer
-            ? `Report for ${escapeHtml(ri.employer)}. Each report is submitted independently to the named supervisor.`
-            : 'Enter learner, role, duration, and document details for this employment experience.'}</p>
-        </div>
-        <div class="experience-meta">
-          <span class="status-badge ${statusClass(report.status)}">${escapeHtml(report.status)}</span>
-          <div class="subcopy">Submitted: ${report.submittedAt ? escapeHtml(formatDate(report.submittedAt)) : 'Not submitted'}</div>
-        </div>
-      </div>
+    <div class="form-layout" data-report-panel="${report.id}">
+    <section class="panel form-panel">
+      <div class="section-label">Report details</div>
+      <h2>Foundational Experience ${index + 1}</h2>
+      <p class="panel-copy">${ri.employer
+        ? `Report for ${escapeHtml(ri.employer)}. Each report is submitted independently to the named supervisor.`
+        : 'Enter learner, role, duration, and document details for this employment experience.'}</p>
 
       <div class="form-shell">
         <section class="form-section">
@@ -632,11 +652,27 @@ function renderReportPanel(report, index) {
           <div class="error-list" data-validation-errors="${report.id}">${validation.errors.length ? validation.errors.map((error) => `<div class="error-item">${escapeHtml(error)}</div>`).join('') : ''}</div>
           <div class="button-row" style="margin-top:1rem;">
             <button class="action-btn primary" type="button" data-action="submit" data-report-id="${report.id}" ${readonly ? 'disabled' : ''}>Submit report</button>
-            <button class="action-btn danger" type="button" data-action="withdraw" data-report-id="${report.id}">Withdraw experience</button>
+            <button class="action-btn danger" type="button" data-action="withdraw" data-report-id="${report.id}" ${reports.length <= 1 ? 'disabled title="At least one experience must remain"' : ''}>Withdraw experience</button>
           </div>
         </section>
       </div>
     </section>
+
+    <aside class="panel meta-panel">
+      <div class="section-label">Current report</div>
+      <h2>Submission status</h2>
+      <div class="meta-stack">
+        <div class="meta-card">
+          <strong>Status</strong>
+          <span><span class="status-badge ${statusClass(report.status)}">${escapeHtml(report.status)}</span></span>
+        </div>
+        <div class="meta-card">
+          <strong>Submission date and time</strong>
+          <span>${report.submittedAt ? escapeHtml(formatDate(report.submittedAt)) : 'Not submitted'}</span>
+        </div>
+      </div>
+    </aside>
+    </div>
   `;
 }
 
@@ -653,16 +689,14 @@ function addAnotherReport() {
 }
 
 function withdrawReport(reportId) {
+  if (reports.length <= 1) return;
+
   const reportIndex = reports.findIndex((item) => item.id === reportId);
   if (reportIndex === -1) return;
 
   const report = reports[reportIndex];
   const label = report.roleInfo.reportTitle || `Employment experience ${reportIndex + 1}`;
   reports.splice(reportIndex, 1);
-
-  if (!reports.length) {
-    reports.push(createEmptyReport(1));
-  }
 
   setMessage(`${label} was withdrawn and removed.`);
   renderAll();
@@ -751,9 +785,6 @@ function submitReport(reportId) {
 function updateDurationDisplay(report) {
   const metricGrid = document.querySelector(`[data-metric-grid="${report.id}"]`);
   if (metricGrid) metricGrid.innerHTML = renderDurationMetrics(report);
-  const validation = validateReport(report, false);
-  const errorsBox = document.querySelector(`[data-validation-errors="${report.id}"]`);
-  if (errorsBox) errorsBox.innerHTML = '';
 }
 
 function handleFieldChange(target) {
@@ -850,8 +881,15 @@ addExperienceSelect.addEventListener('change', () => {
   }
 });
 
-loadReports();
-renderAll();
+try {
+  loadReports();
+  renderAll();
+} catch (error) {
+  localStorage.removeItem(reportsKey);
+  localStorage.removeItem('feActiveReport:learner-101');
+  reports = [createEmptyReport(1)];
+  renderAll();
+}
 </script>
 </body>
 </html>

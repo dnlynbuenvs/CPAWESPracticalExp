@@ -58,7 +58,7 @@
   .message-bar{display:none;align-items:center;gap:10px;margin-bottom:1rem;padding:12px 14px;border-radius:var(--radius-md);background:#EBF3FF;border:1px solid rgba(27,94,168,.18);color:var(--navy);box-shadow:var(--shadow-sm)}
   .message-bar.visible{display:flex}
   .summary-panel,.learner-panel,.risk-panel,.mentor-panel,.prr-panel{padding:1.25rem}
-  .summary-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:1.5rem}
+  .summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:1.5rem}
   .summary-card{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-sm);padding:12px;min-height:90px}
   .summary-card span{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:#2E2C2A;margin-bottom:8px;font-weight:700}
   .summary-card strong{display:block;font-family:'DM Sans',sans-serif;font-size:26px;font-weight:700;color:#1a1a1a;line-height:1}
@@ -551,14 +551,7 @@ const preReviewedEmployers = [
 ];
 
 const summaryDefinitions = [
-  { label: 'Active learners', key: 'activeLearners', description: 'Learners currently in the practical experience pipeline' },
-  { label: 'Learners in foundational stage', key: 'foundational', description: 'Still completing foundational requirements' },
-  { label: 'Learners in submit workplan stage', key: 'submitWorkplan', description: 'At the work plan start or revision milestone' },
-  { label: 'Learners in professional stage', key: 'professional', description: 'Past foundational setup and progressing through reports' },
-  { label: 'Learners eligible PE complete', key: 'eligibleComplete', description: 'Ready for the final completion milestone' },
   { label: 'Learners with no employer', key: 'noEmployer', description: 'Requires operational follow-up to confirm placement' },
-  { label: 'Learners with pre-reviewed positions', key: 'preReviewed', description: 'Assigned to an employer with pre-reviewed status' },
-  { label: 'Active mentors', key: 'activeMentors', description: 'Mentors with active learner relationships' },
   { label: 'High-risk learners', key: 'highRisk', description: 'Priority learners with elevated risk flags' },
   { label: 'Open transfer requests for mentor', key: 'transferRequests', description: 'Learners waiting on mentor change processing' }
 ];

@@ -79,6 +79,14 @@
   .progress-track{height:8px;width:100%;background:var(--gray-100);border-radius:999px;overflow:hidden}
   .progress-fill{height:100%;background:var(--imis-blue);border-radius:999px}
   .empty-state{padding:20px;border:1px dashed var(--gray-300);border-radius:var(--radius-md);font-size:13px;color:var(--gray-600);text-align:center;background:var(--white)}
+  .imis-table-panel{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);overflow:hidden}
+  .imis-table-header{background:var(--imis-blue);color:var(--white);padding:10px 16px}
+  .imis-table-header h4{font-size:13px;font-weight:700;color:var(--white);letter-spacing:.02em;margin:0}
+  .imis-table-wrap{overflow-x:auto}
+  .imis-table{width:100%;border-collapse:collapse;font-size:13px;min-width:560px}
+  .imis-table thead th{background:var(--gray-100);text-align:left;padding:10px 16px;font-weight:700;color:#2E2C2A;font-size:12px;border-bottom:1px solid var(--gray-300);white-space:nowrap}
+  .imis-table tbody td{padding:11px 16px;border-bottom:1px solid var(--gray-200);color:#2E2C2A;vertical-align:middle}
+  .imis-table tbody tr:last-child td{border-bottom:none}
   .action-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:var(--radius-sm);border:1px solid var(--imis-blue);padding:9px 16px;background:var(--white);color:var(--imis-blue);font-size:12px;font-weight:700;cursor:pointer;transition:all .15s ease}
   .action-btn:hover{background:#EBF3FF}
   .button-row{display:flex;flex-wrap:wrap;gap:8px}
@@ -142,6 +150,11 @@
         </section>
 
         <section class="info-section">
+          <h3>Foundational task statements</h3>
+          <div id="task-statement-table"></div>
+        </section>
+
+        <section class="info-section">
           <h3>Supporting documents</h3>
           <div class="doc-list" id="document-list"></div>
         </section>
@@ -163,7 +176,6 @@
         </div>
         <div class="button-row" id="report-nav-row">
           <button type="button" class="action-btn" id="prev-report-btn">Previous</button>
-          <button type="button" class="action-btn" id="next-report-btn">Next</button>
         </div>
         <div class="meta-card">
           <strong>Current status</strong>
@@ -191,25 +203,27 @@
           <strong>Eligible duration</strong>
           <span id="meta-duration">Not available</span>
         </div>
-        <div class="meta-card">
-          <strong>Workflow route</strong>
-          <span id="meta-route">Not available</span>
-        </div>
       </div>
     </aside>
   </section>
 </main>
 
 <script>
-const reportsKey = 'feReports:learner-101';
+const reportsKey = 'feReports:learner-101:v2';
 const activeViewKey = 'feLearnerViewActive:learner-101';
+
+const defaultTaskStatements = [
+  { id: 'FTS1', description: 'Prepare or explain (2) information for input into internal or external reporting (e.g. financial statements, financial forecasts, financial budgets, management reports).', levelRequired: 2, learnerPlan: '' },
+  { id: 'FTS2', description: 'Identify (1) the users\' needs and prepare (2) practical alternatives or variance analysis, which consider the impact on users\' needs.', levelRequired: 2, learnerPlan: '' },
+  { id: 'FTS3', description: 'Explain (2) their analysis, findings in a transparent, understandable and professional manner.', levelRequired: 2, learnerPlan: '' }
+];
 
 const detailTitle = document.getElementById('detail-title');
 const metaReportPosition = document.getElementById('meta-report-position');
 const prevReportBtn = document.getElementById('prev-report-btn');
-const nextReportBtn = document.getElementById('next-report-btn');
 const learnerGrid = document.getElementById('learner-grid');
 const roleGrid = document.getElementById('role-grid');
+const taskStatementTable = document.getElementById('task-statement-table');
 const documentList = document.getElementById('document-list');
 const timelineList = document.getElementById('timeline-list');
 const metaStatus = document.getElementById('meta-status');
@@ -219,7 +233,6 @@ const progressValue = document.getElementById('progress-value');
 const progressFill = document.getElementById('progress-fill');
 const metaSubmitted = document.getElementById('meta-submitted');
 const metaDuration = document.getElementById('meta-duration');
-const metaRoute = document.getElementById('meta-route');
 
 let reports = [];
 let activeReportId = null;
@@ -279,10 +292,16 @@ function createDemoReports() {
       roleInfo: {
         employer: 'Northline Advisory Group',
         reportTitle: 'Audit Associate at Northline Advisory Group',
-        jobDescription: 'Audit associate role supporting external assurance engagements and client reporting.',
+        roleSummary: 'Audit associate role supporting external assurance engagements and client reporting.',
         experienceDates: 'Jan 02, 2026 to Aug 31, 2026',
-        supervisorName: 'Marcus Chen, CPA'
+        supervisorName: 'Marcus Chen, CPA',
+        supervisorEmail: 'marcus.chen@example.com'
       },
+      taskStatements: [
+        { id: 'FTS1', description: defaultTaskStatements[0].description, levelRequired: 2, learnerPlan: 'Yes' },
+        { id: 'FTS2', description: defaultTaskStatements[1].description, levelRequired: 3, learnerPlan: 'Yes' },
+        { id: 'FTS3', description: defaultTaskStatements[2].description, levelRequired: 2, learnerPlan: 'No' }
+      ],
       duration: {
         startDate: '2026-01-02',
         endDate: '2026-08-31',
@@ -324,10 +343,16 @@ function createDemoReports() {
       roleInfo: {
         employer: 'Harbour Tax Advisory',
         reportTitle: 'Tax Analyst at Harbour Tax Advisory',
-        jobDescription: 'Tax analyst role supporting compliance reviews and tax return preparation.',
+        roleSummary: 'Tax analyst role supporting compliance reviews and tax return preparation.',
         experienceDates: 'Sep 15, 2025 to Dec 20, 2025',
-        supervisorName: 'Elena Flores, CPA'
+        supervisorName: 'Elena Flores, CPA',
+        supervisorEmail: 'elena.flores@example.com'
       },
+      taskStatements: [
+        { id: 'FTS1', description: defaultTaskStatements[0].description, levelRequired: 2, learnerPlan: 'Yes' },
+        { id: 'FTS2', description: defaultTaskStatements[1].description, levelRequired: 2, learnerPlan: '' },
+        { id: 'FTS3', description: defaultTaskStatements[2].description, levelRequired: 2, learnerPlan: '' }
+      ],
       duration: {
         startDate: '2025-09-15',
         endDate: '2025-12-20',
@@ -390,6 +415,9 @@ function normaliseReport(report) {
   clone.notifications = clone.notifications || [];
   clone.review = clone.review || {};
   clone.review.auditTrail = clone.review.auditTrail || [];
+  clone.taskStatements = Array.isArray(clone.taskStatements) && clone.taskStatements.length
+    ? clone.taskStatements
+    : defaultTaskStatements.map((item) => ({ ...item }));
   clone.calculatedEligibility = calculateEligibility(clone);
   if (!clone.roleInfo.experienceDates && clone.duration.startDate && clone.duration.endDate) {
     clone.roleInfo.experienceDates = `${formatShortDate(clone.duration.startDate)} to ${formatShortDate(clone.duration.endDate)}`;
@@ -398,11 +426,32 @@ function normaliseReport(report) {
   return clone;
 }
 
+function isValidReportShape(report) {
+  return Boolean(
+    report &&
+    typeof report === 'object' &&
+    report.learnerInfo && typeof report.learnerInfo === 'object' &&
+    report.roleInfo && typeof report.roleInfo === 'object' &&
+    report.duration && typeof report.duration === 'object' &&
+    report.documents && typeof report.documents === 'object' &&
+    Array.isArray(report.documents.jobDescriptions) &&
+    Array.isArray(report.documents.supporting)
+  );
+}
+
 function loadReports() {
-  const stored = JSON.parse(localStorage.getItem(reportsKey) || '[]');
-  const submitted = Array.isArray(stored)
-    ? stored.filter((report) => report.status && report.status !== 'Draft').map(normaliseReport)
-    : [];
+  let stored = [];
+  try {
+    const parsed = JSON.parse(localStorage.getItem(reportsKey) || '[]');
+    if (Array.isArray(parsed)) stored = parsed;
+  } catch (error) {
+    stored = [];
+  }
+
+  const submitted = stored
+    .filter(isValidReportShape)
+    .filter((report) => report.status && report.status !== 'Draft')
+    .map(normaliseReport);
 
   reports = submitted.length ? submitted : createDemoReports().map(normaliseReport);
   activeReportId = localStorage.getItem(activeViewKey) || reports[0].id;
@@ -436,6 +485,41 @@ function renderValueCards(container, values) {
       <strong>${escapeHtml(item.value)}</strong>
     </div>
   `).join('');
+}
+
+function renderTaskStatements(report) {
+  const statements = Array.isArray(report.taskStatements) ? report.taskStatements : [];
+  if (!statements.length) {
+    taskStatementTable.innerHTML = '<div class="empty-state">No foundational task statements were recorded for this report.</div>';
+    return;
+  }
+  taskStatementTable.innerHTML = `
+    <div class="imis-table-panel">
+      <div class="imis-table-header"><h4>Task statements</h4></div>
+      <div class="imis-table-wrap">
+        <table class="imis-table">
+          <thead>
+            <tr>
+              <th>Foundational Task Statement (FTS)</th>
+              <th>Task Statement Description</th>
+              <th>CPA Learner Plan</th>
+              <th>Level required</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${statements.map((fts) => `
+              <tr>
+                <td>${escapeHtml(fts.id)}</td>
+                <td>${escapeHtml(fts.description)}</td>
+                <td>${escapeHtml(fts.learnerPlan || 'Not selected')}</td>
+                <td>${escapeHtml(fts.levelRequired ?? 'Not set')}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
 }
 
 function renderDocuments(report) {
@@ -501,14 +585,12 @@ function renderMeta(report) {
   const position = reports.findIndex((item) => item.id === activeReportId);
   metaReportPosition.textContent = `${position + 1} of ${reports.length}`;
   prevReportBtn.style.display = position > 0 ? 'inline-flex' : 'none';
-  nextReportBtn.style.display = position < reports.length - 1 ? 'inline-flex' : 'none';
   metaStatus.innerHTML = `<span class="status-badge ${statusClass(report.status)}">${escapeHtml(report.status)}</span>`;
   metaExpiry.textContent = formatShortDate(report.learnerInfo.programExpiryDate);
   progressLabel.textContent = progress.label;
   progressValue.textContent = `${progress.value}%`;
   progressFill.style.width = `${progress.value}%`;
   metaSubmitted.textContent = formatDate(report.submittedAt);
-  metaRoute.textContent = report.workflowRoute || 'No workflow route recorded.';
 
   const approvedMonths = report.review && report.review.approvedMonths
     ? `${Number(report.review.approvedMonths).toFixed(2)} approved months`
@@ -533,13 +615,16 @@ function renderActiveReport() {
 
   renderValueCards(roleGrid, [
     { label: 'Employer', value: report.roleInfo.employer || 'Not provided' },
-    { label: 'Job description', value: report.roleInfo.jobDescription || 'Not provided' },
+    { label: 'Employment experience label', value: report.roleInfo.reportTitle || 'Not provided' },
+    { label: 'Role summary', value: report.roleInfo.roleSummary || 'Not provided' },
     { label: 'Experience dates', value: report.roleInfo.experienceDates || 'Not provided' },
     { label: 'Leave days', value: report.duration.leaveDays ?? 'Not provided' },
     { label: 'Average hours worked per week', value: report.duration.avgHoursPerWeek ?? 'Not provided' },
-    { label: 'Supervisor', value: report.roleInfo.supervisorName || 'Not provided' }
+    { label: 'Supervisor name', value: report.roleInfo.supervisorName || 'Not provided' },
+    { label: 'Supervisor email', value: report.roleInfo.supervisorEmail || 'Not provided' }
   ]);
 
+  renderTaskStatements(report);
   renderDocuments(report);
   renderTimeline(report);
   renderMeta(report);
@@ -562,15 +647,17 @@ function goToPreviousReport() {
   goToAdjacentReport(-1);
 }
 
-function goToNextReport() {
-  goToAdjacentReport(1);
-}
-
 prevReportBtn.addEventListener('click', goToPreviousReport);
-nextReportBtn.addEventListener('click', goToNextReport);
 
-loadReports();
-renderAll();
+try {
+  loadReports();
+  renderAll();
+} catch (error) {
+  localStorage.removeItem(activeViewKey);
+  reports = createDemoReports().map(normaliseReport);
+  activeReportId = reports[0].id;
+  renderAll();
+}
 </script>
 </body>
 </html>

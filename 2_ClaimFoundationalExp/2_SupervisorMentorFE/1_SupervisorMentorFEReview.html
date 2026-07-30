@@ -97,6 +97,17 @@
   .warning-box span,.success-box span,.error-box span{display:block;font-size:12px;color:var(--gray-600);line-height:1.45}
   .button-row{display:flex;flex-wrap:wrap;gap:8px}
   .empty-state{padding:20px;border:1px dashed var(--gray-300);border-radius:var(--radius-md);font-size:13px;color:var(--gray-600);text-align:center;background:var(--sand)}
+  .attachment-link{display:inline-flex;align-items:center;gap:6px;color:var(--blue);font-size:13px;font-weight:600;text-decoration:underline;cursor:pointer}
+  .attachment-link:hover{color:#164e8f}
+  .attachment-icon{font-size:14px}
+  .imis-table-panel{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);overflow:hidden}
+  .imis-table-header{background:var(--imis-blue);color:var(--white);padding:10px 16px}
+  .imis-table-header h4{font-size:13px;font-weight:700;color:var(--white);letter-spacing:.02em;margin:0}
+  .imis-table-wrap{overflow-x:auto}
+  .imis-table{width:100%;border-collapse:collapse;font-size:13px;min-width:560px}
+  .imis-table thead th{background:var(--gray-100);text-align:left;padding:10px 16px;font-weight:700;color:#2E2C2A;font-size:12px;border-bottom:1px solid var(--gray-300);white-space:nowrap}
+  .imis-table tbody td{padding:11px 16px;border-bottom:1px solid var(--gray-200);color:#2E2C2A;vertical-align:middle}
+  .imis-table tbody tr:last-child td{border-bottom:none}
   @media(max-width:1180px){
     .workspace-main{grid-template-columns:1fr}
   }
@@ -162,56 +173,49 @@
           </section>
 
           <section class="info-section">
-            <h3>Supporting documents</h3>
-            <div class="doc-list" id="document-list"></div>
+            <h3>Foundational task statements</h3>
+            <div id="task-statement-table"></div>
           </section>
 
           <section class="info-section">
-            <h3>Status timeline</h3>
-            <div class="timeline-stack" id="timeline-list"></div>
+            <h3>Supporting documents</h3>
+            <div class="doc-list" id="document-list"></div>
           </section>
 
           <section class="info-section">
             <h3>Comments</h3>
             <div class="comment-form">
               <textarea id="comment-text" placeholder="Add feedback for the learner and downstream staff reviewers."></textarea>
-              <div class="button-row">
-                <button class="action-btn primary" id="add-comment-btn" type="button">Add comment</button>
-              </div>
             </div>
             <div class="comment-list" id="comment-list" style="margin-top:1rem;"></div>
           </section>
 
           <section class="info-section">
             <h3>Review actions</h3>
-            <div class="warning-box" id="decision-note">
-              <strong>Pending action</strong>
-              <span>The current Foundational Experience status is awaiting supervisor or mentor review. Rejections require a comment. Approvals route the report to the CPA staff review queue.</span>
-            </div>
             <div class="comment-form" style="margin-top:1rem;">
               <label for="approved-months" style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gray-400)">Approved experience months</label>
               <input id="approved-months" type="number" min="0" max="8" step="0.01" placeholder="Enter approved months">
             </div>
+            <div class="comment-form" style="margin-top:1rem;max-width:280px;">
+              <label for="decision-select" style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gray-400)">Decision</label>
+              <select id="decision-select">
+                <option value="" selected>Select decision</option>
+                <option value="approve">Approve</option>
+                <option value="reject">Reject</option>
+              </select>
+            </div>
             <div class="button-row" style="margin-top:1rem;">
-              <button class="action-btn success" id="approve-btn" type="button">Approve Foundational Experience</button>
-              <button class="action-btn danger" id="reject-btn" type="button">Reject Foundational Experience</button>
-              <button class="action-btn" id="limit-btn" type="button">Mark review limit reached</button>
+              <button class="action-btn primary" id="save-decision-btn" type="button">Save</button>
             </div>
           </section>
         </div>
       </section>
 
       <aside class="panel meta-panel">
-        <div class="section-label">Review metadata</div>
         <h2>Workflow and history</h2>
         <div class="meta-stack">
-          <div class="meta-card">
-            <strong>Foundational experience report</strong>
-            <span id="meta-report-position">1 of 1</span>
-          </div>
           <div class="button-row" id="report-nav-row">
             <button type="button" class="action-btn" id="prev-report-btn">Previous</button>
-            <button type="button" class="action-btn" id="next-report-btn">Next</button>
           </div>
           <div class="meta-card">
             <strong>Current status</strong>
@@ -225,31 +229,29 @@
             <strong>Assigned supervisor</strong>
             <span id="meta-supervisor">No supervisor listed.</span>
           </div>
-          <div class="meta-card">
-            <strong>Audit trail</strong>
-            <div class="trail-list" id="trail-list" style="margin-top:.75rem;"></div>
-          </div>
         </div>
       </aside>
   </section>
 </main>
 
 <script>
-const reportsKey = 'feReports:learner-101';
+const reportsKey = 'feReports:learner-101:v2';
 const activeReviewKey = 'feSupervisorReviewActive:learner-101';
+
+const defaultTaskStatements = [
+  { id: 'FTS1', description: 'Prepare or explain (2) information for input into internal or external reporting (e.g. financial statements, financial forecasts, financial budgets, management reports).', levelRequired: 2, learnerPlan: '' },
+  { id: 'FTS2', description: 'Identify (1) the users\' needs and prepare (2) practical alternatives or variance analysis, which consider the impact on users\' needs.', levelRequired: 2, learnerPlan: '' },
+  { id: 'FTS3', description: 'Explain (2) their analysis, findings in a transparent, understandable and professional manner.', levelRequired: 2, learnerPlan: '' }
+];
 
 const detailTitle = document.getElementById('detail-title');
 const detailCopy = document.getElementById('detail-copy');
 const learnerGrid = document.getElementById('learner-grid');
 const roleGrid = document.getElementById('role-grid');
+const taskStatementTable = document.getElementById('task-statement-table');
 const documentList = document.getElementById('document-list');
-const timelineList = document.getElementById('timeline-list');
 const commentList = document.getElementById('comment-list');
-const trailList = document.getElementById('trail-list');
-const decisionNote = document.getElementById('decision-note');
-const metaReportPosition = document.getElementById('meta-report-position');
 const prevReportBtn = document.getElementById('prev-report-btn');
-const nextReportBtn = document.getElementById('next-report-btn');
 const metaStatus = document.getElementById('meta-status');
 const metaSubmitted = document.getElementById('meta-submitted');
 const metaSupervisor = document.getElementById('meta-supervisor');
@@ -257,9 +259,8 @@ const commentText = document.getElementById('comment-text');
 const approvedMonthsInput = document.getElementById('approved-months');
 const messageBar = document.getElementById('message-bar');
 const messageText = document.getElementById('message-text');
-const approveBtn = document.getElementById('approve-btn');
-const rejectBtn = document.getElementById('reject-btn');
-const limitBtn = document.getElementById('limit-btn');
+const decisionSelect = document.getElementById('decision-select');
+const saveDecisionBtn = document.getElementById('save-decision-btn');
 
 let reports = [];
 let activeReportId = null;
@@ -329,11 +330,18 @@ function createDemoReports() {
       },
       roleInfo: {
         employer: 'Northline Advisory Group',
+        reportTitle: 'Audit Associate at Northline Advisory Group',
+        roleSummary: 'Audit associate role supporting external assurance engagements and client reporting.',
         jobDescription: 'Audit associate role supporting external assurance engagements and client reporting.',
         experienceDates: 'Jan 02, 2026 to Aug 31, 2026',
         supervisorName: 'Marcus Chen, CPA',
         supervisorEmail: 'marcus.chen@example.com'
       },
+      taskStatements: [
+        { id: 'FTS1', description: defaultTaskStatements[0].description, levelRequired: 2, learnerPlan: 'Yes' },
+        { id: 'FTS2', description: defaultTaskStatements[1].description, levelRequired: 3, learnerPlan: 'Yes' },
+        { id: 'FTS3', description: defaultTaskStatements[2].description, levelRequired: 2, learnerPlan: 'No' }
+      ],
       documents: {
         jobDescriptions: [{ id: 'jd-1', name: 'job-description.pdf', category: 'Job description', sizeLabel: '212 KB', uploadedAt: seventyFiveDaysAgo }],
         supporting: [{ id: 'sd-1', name: 'employment-letter.pdf', category: 'Supporting document', sizeLabel: '145 KB', uploadedAt: twentyDaysAgo }]
@@ -364,11 +372,18 @@ function createDemoReports() {
       },
       roleInfo: {
         employer: 'Harbour Tax Advisory',
+        reportTitle: 'Tax Analyst at Harbour Tax Advisory',
+        roleSummary: 'Tax analyst role supporting compliance reviews and tax return preparation.',
         jobDescription: 'Tax analyst role supporting compliance reviews and tax return preparation.',
         experienceDates: 'Sep 15, 2025 to Dec 20, 2025',
         supervisorName: 'Elena Flores, CPA',
         supervisorEmail: 'elena.flores@example.com'
       },
+      taskStatements: [
+        { id: 'FTS1', description: defaultTaskStatements[0].description, levelRequired: 2, learnerPlan: 'Yes' },
+        { id: 'FTS2', description: defaultTaskStatements[1].description, levelRequired: 2, learnerPlan: '' },
+        { id: 'FTS3', description: defaultTaskStatements[2].description, levelRequired: 2, learnerPlan: '' }
+      ],
       documents: {
         jobDescriptions: [{ id: 'jd-2', name: 'tax-analyst-job-description.pdf', category: 'Job description', sizeLabel: '198 KB', uploadedAt: fortyDaysAgo }],
         supporting: []
@@ -399,11 +414,18 @@ function createDemoReports() {
       },
       roleInfo: {
         employer: 'Crestview Consulting',
+        reportTitle: 'Advisory Associate at Crestview Consulting',
+        roleSummary: 'Advisory associate role supporting business valuation and financial modeling engagements.',
         jobDescription: 'Advisory associate role supporting business valuation and financial modeling engagements.',
         experienceDates: 'Feb 01, 2026 to May 15, 2026',
         supervisorName: 'Daniel Brooks, CPA',
         supervisorEmail: 'daniel.brooks@example.com'
       },
+      taskStatements: [
+        { id: 'FTS1', description: defaultTaskStatements[0].description, levelRequired: 2, learnerPlan: '' },
+        { id: 'FTS2', description: defaultTaskStatements[1].description, levelRequired: 2, learnerPlan: '' },
+        { id: 'FTS3', description: defaultTaskStatements[2].description, levelRequired: 2, learnerPlan: '' }
+      ],
       documents: {
         jobDescriptions: [{ id: 'jd-3', name: 'advisory-associate-job-description.pdf', category: 'Job description', sizeLabel: '204 KB', uploadedAt: twentyDaysAgo }],
         supporting: []
@@ -452,16 +474,33 @@ function normaliseReport(report) {
   }
   if (!clone.roleInfo.supervisorName && clone.roleInfo.supervisorEmail) clone.roleInfo.supervisorName = 'Assigned supervisor';
   if (!clone.submittedAt && clone.createdAt) clone.submittedAt = clone.createdAt;
+  clone.taskStatements = Array.isArray(clone.taskStatements) && clone.taskStatements.length
+    ? clone.taskStatements
+    : defaultTaskStatements.map((item) => ({ ...item }));
   return clone;
 }
 
+function isValidReportShape(report) {
+  return Boolean(
+    report &&
+    typeof report === 'object' &&
+    report.documents && typeof report.documents === 'object'
+  );
+}
+
 function loadReports() {
-  const stored = JSON.parse(localStorage.getItem(reportsKey) || '[]');
-  const submittedReports = Array.isArray(stored)
-    ? stored
-        .filter((report) => report.status && report.status !== 'Draft')
-        .map(normaliseReport)
-    : [];
+  let stored = [];
+  try {
+    const parsed = JSON.parse(localStorage.getItem(reportsKey) || '[]');
+    if (Array.isArray(parsed)) stored = parsed;
+  } catch (error) {
+    stored = [];
+  }
+
+  const submittedReports = stored
+    .filter(isValidReportShape)
+    .filter((report) => report.status && report.status !== 'Draft')
+    .map(normaliseReport);
   reports = submittedReports.length ? submittedReports : createDemoReports();
   activeReportId = localStorage.getItem(activeReviewKey) || reports[0].id;
   if (!reports.some((report) => report.id === activeReportId)) {
@@ -470,7 +509,12 @@ function loadReports() {
 }
 
 function persistIfStored() {
-  const stored = JSON.parse(localStorage.getItem(reportsKey) || '[]');
+  let stored;
+  try {
+    stored = JSON.parse(localStorage.getItem(reportsKey) || '[]');
+  } catch (error) {
+    return;
+  }
   if (!Array.isArray(stored) || !stored.length) return;
   const updated = stored.map((report) => {
     const reviewed = reports.find((item) => item.id === report.id);
@@ -519,6 +563,41 @@ function getReminderSchedule(report) {
   });
 }
 
+function renderTaskStatements(report) {
+  const statements = Array.isArray(report.taskStatements) ? report.taskStatements : [];
+  if (!statements.length) {
+    taskStatementTable.innerHTML = '<div class="empty-state">No foundational task statements were recorded for this report.</div>';
+    return;
+  }
+  taskStatementTable.innerHTML = `
+    <div class="imis-table-panel">
+      <div class="imis-table-header"><h4>Task statements</h4></div>
+      <div class="imis-table-wrap">
+        <table class="imis-table">
+          <thead>
+            <tr>
+              <th>Foundational Task Statement (FTS)</th>
+              <th>Task Statement Description</th>
+              <th>CPA Learner Plan</th>
+              <th>Level required</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${statements.map((fts) => `
+              <tr>
+                <td>${escapeHtml(fts.id)}</td>
+                <td>${escapeHtml(fts.description)}</td>
+                <td>${escapeHtml(fts.learnerPlan || 'Not selected')}</td>
+                <td>${escapeHtml(fts.levelRequired ?? 'Not set')}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
+}
+
 function renderDocuments(report) {
   const docs = [...report.documents.jobDescriptions, ...report.documents.supporting];
   if (!docs.length) {
@@ -526,60 +605,13 @@ function renderDocuments(report) {
     return;
   }
   documentList.innerHTML = docs.map((doc) => `
-    <div class="doc-item">
-      <strong>${escapeHtml(doc.name)}</strong>
-      <span>${escapeHtml(doc.category)} | ${escapeHtml(doc.sizeLabel || 'File attached')} | Uploaded ${escapeHtml(formatDate(doc.uploadedAt))}</span>
-    </div>
-  `).join('');
-}
-
-function renderTimeline(report) {
-  const audit = (report.review.auditTrail || []).slice().reverse();
-  const events = [];
-
-  if (report.submittedAt) {
-    events.push({
-      title: 'Learner submission recorded',
-      meta: formatDate(report.submittedAt),
-      copy: 'The foundational experience was submitted and became read-only for the learner.'
-    });
-  }
-
-  audit.forEach((entry) => {
-    events.push({
-      title: `${entry.previousStatus || 'Previous status'} -> ${entry.newStatus || 'Current status'}`,
-      meta: `${entry.actor || 'System'} | ${entry.role || 'Workflow'} | ${formatDate(entry.at)}`,
-      copy: entry.comments || 'No comments recorded.'
-    });
-  });
-
-  if (report.notifications && report.notifications.length) {
-    report.notifications.slice().reverse().forEach((entry) => {
-      events.push({
-        title: entry.type || 'Notification',
-        meta: formatDate(entry.sentAt),
-        copy: `Notification sent to ${entry.recipient || 'recipient'}.`
-      });
-    });
-  }
-
-  if (!events.length) {
-    timelineList.innerHTML = '<div class="empty-state">No submission history is available for this report yet.</div>';
-    return;
-  }
-
-  timelineList.innerHTML = events.map((event) => `
-    <div class="timeline-item">
-      <strong>${escapeHtml(event.title)}</strong>
-      <span>${escapeHtml(event.meta)}</span>
-      <span>${escapeHtml(event.copy)}</span>
-    </div>
+    <a class="attachment-link" href="javascript:void(0);"><span class="attachment-icon">&#128206;</span>${escapeHtml(doc.name)}</a>
   `).join('');
 }
 
 function renderComments(report) {
   if (!report.review.comments.length) {
-    commentList.innerHTML = '<div class="empty-state">No review comments have been added yet.</div>';
+    commentList.innerHTML = '';
     return;
   }
   commentList.innerHTML = report.review.comments
@@ -594,27 +626,9 @@ function renderComments(report) {
     `).join('');
 }
 
-function renderTrail(report) {
-  const items = [...report.review.auditTrail].reverse();
-  if (!items.length) {
-    trailList.innerHTML = '<div class="empty-state">No audit events recorded yet.</div>';
-    return;
-  }
-  trailList.innerHTML = items.map((entry) => `
-    <div class="trail-item">
-      <strong>${escapeHtml(entry.actor)} | ${escapeHtml(entry.role)}</strong>
-      <span>${escapeHtml(formatDate(entry.at))}</span>
-      <span>${escapeHtml(entry.previousStatus)} -> ${escapeHtml(entry.newStatus)}</span>
-      <span>${escapeHtml(entry.comments || 'No comments recorded.')}</span>
-    </div>
-  `).join('');
-}
-
 function renderMeta(report) {
   const position = reports.findIndex((item) => item.id === activeReportId);
-  metaReportPosition.textContent = `${position + 1} of ${reports.length}`;
   prevReportBtn.style.display = position > 0 ? 'inline-flex' : 'none';
-  nextReportBtn.style.display = position < reports.length - 1 ? 'inline-flex' : 'none';
   metaStatus.innerHTML = `<span class="status-badge ${statusClass(report.status)}">${escapeHtml(report.status)}</span>`;
   metaSubmitted.textContent = formatDate(report.submittedAt);
   metaSupervisor.textContent = report.roleInfo.supervisorName
@@ -622,25 +636,11 @@ function renderMeta(report) {
     : 'No supervisor listed.';
 
   const pending = /pending supervisor|pending mentor|pending supervisor\/mentor/i.test(report.status);
-  approveBtn.disabled = !pending;
-  rejectBtn.disabled = !pending;
-  limitBtn.disabled = !pending;
   approvedMonthsInput.disabled = !pending;
   approvedMonthsInput.value = report.review.approvedMonths ?? '';
-
-  if (report.status === 'Pending CPA Review') {
-    decisionNote.className = 'success-box';
-    decisionNote.innerHTML = '<strong>Approved</strong><span>This Foundational Experience submission has already been approved and routed to the CPA staff review queue for assignment.</span>';
-  } else if (report.status === 'Declined') {
-    decisionNote.className = 'warning-box';
-    decisionNote.innerHTML = '<strong>Declined</strong><span>This Foundational Experience submission was returned to the learner. A new draft version may have been created from the declined submission.</span>';
-  } else if (report.status === 'Review Limit Reached') {
-    decisionNote.className = 'error-box';
-    decisionNote.innerHTML = '<strong>Review limit reached</strong><span>CPA Staff marked this Foundational Experience report as review limit reached after the maximum number of review attempts.</span>';
-  } else {
-    decisionNote.className = 'warning-box';
-    decisionNote.innerHTML = '<strong>Pending Supervisor/Mentor Review</strong><span>Supervisor or mentor can approve or reject this submitted Foundational Experience report. If the report is rejected, comments are required.</span>';
-  }
+  decisionSelect.disabled = !pending;
+  decisionSelect.value = '';
+  saveDecisionBtn.disabled = !pending;
 }
 
 function renderActiveReport() {
@@ -660,17 +660,18 @@ function renderActiveReport() {
 
   renderValueCards(roleGrid, [
     { label: 'Employer', value: report.roleInfo.employer || 'Not provided' },
-    { label: 'Job description', value: report.roleInfo.jobDescription || 'Not provided' },
+    { label: 'Employment experience label', value: report.roleInfo.reportTitle || 'Not provided' },
+    { label: 'Role summary', value: report.roleInfo.roleSummary || report.roleInfo.jobDescription || 'Not provided' },
     { label: 'Experience dates', value: report.roleInfo.experienceDates || 'Not provided' },
     { label: 'Leave days', value: report.learnerInfo.leaveDays ?? 'Not provided' },
     { label: 'Average hours worked per week', value: report.learnerInfo.avgHoursPerWeek ?? 'Not provided' },
-    { label: 'Supervisor', value: report.roleInfo.supervisorName || 'Not provided' }
+    { label: 'Supervisor name', value: report.roleInfo.supervisorName || 'Not provided' },
+    { label: 'Supervisor email', value: report.roleInfo.supervisorEmail || 'Not provided' }
   ]);
 
+  renderTaskStatements(report);
   renderDocuments(report);
-  renderTimeline(report);
   renderComments(report);
-  renderTrail(report);
   renderMeta(report);
 }
 
@@ -685,15 +686,12 @@ function goToAdjacentReport(offset) {
   if (nextPosition < 0 || nextPosition >= reports.length) return;
   activeReportId = reports[nextPosition].id;
   commentText.value = '';
+  decisionSelect.value = '';
   renderAll();
 }
 
 function goToPreviousReport() {
   goToAdjacentReport(-1);
-}
-
-function goToNextReport() {
-  goToAdjacentReport(1);
 }
 
 function addComment(text, actor) {
@@ -813,36 +811,19 @@ function rejectReport() {
   renderAll();
 }
 
-function markReviewLimitReached() {
-  const report = getActiveReport();
-  const actor = getActor();
-  const previousStatus = report.status;
-  report.status = 'Review Limit Reached';
-  report.workflowRoute = 'CPA Staff marked this Foundational Experience submission as Review Limit Reached after the maximum number of review attempts.';
-  addAudit(previousStatus, report.status, 'Maximum review attempts reached.', actor);
-  addNotification('Review limit reached notification', report.learnerInfo.email || 'learner-notification');
-  setMessage('Submission status updated to Review Limit Reached.');
-  renderAll();
-}
-
-document.getElementById('add-comment-btn').addEventListener('click', () => {
-  const text = commentText.value.trim();
-  if (!text) {
-    setMessage('Enter a comment before adding it to the submission history.');
+saveDecisionBtn.addEventListener('click', () => {
+  const decision = decisionSelect.value;
+  if (!decision) {
+    setMessage('Select Approve or Reject before saving your decision.');
     return;
   }
-  addComment(text, getActor());
-  addAudit(getActiveReport().status, getActiveReport().status, text, getActor());
-  commentText.value = '';
-  setMessage('Comment added to the Foundational Experience review history.');
-  renderAll();
+  if (decision === 'approve') {
+    approveReport();
+  } else if (decision === 'reject') {
+    rejectReport();
+  }
 });
-
-approveBtn.addEventListener('click', approveReport);
-rejectBtn.addEventListener('click', rejectReport);
-limitBtn.addEventListener('click', markReviewLimitReached);
 prevReportBtn.addEventListener('click', goToPreviousReport);
-nextReportBtn.addEventListener('click', goToNextReport);
 
 loadReports();
 renderAll();

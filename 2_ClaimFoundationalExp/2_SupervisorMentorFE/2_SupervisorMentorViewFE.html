@@ -40,21 +40,15 @@
   .hero{display:flex;align-items:flex-end;justify-content:space-between;gap:1rem;margin-bottom:1.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--gray-200)}
   .hero h1{font-family:'DM Serif Display',serif;font-size:38px;font-weight:400;color:var(--navy);margin-bottom:6px}
   .hero p{font-size:14px;color:var(--gray-600);max-width:780px;line-height:1.5}
-  .hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);padding:10px 16px;box-shadow:var(--shadow-sm);font-size:13px;color:var(--gray-600)}
   .dot{width:8px;height:8px;border-radius:50%;background:var(--blue);flex:0 0 auto}
   .panel{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm)}
   .panel h2{font-size:17px;color:var(--navy);margin-bottom:4px}
   .panel-copy{font-size:12px;color:var(--gray-600);line-height:1.45}
   .section-label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gray-400);margin-bottom:.75rem}
-  .workspace{display:grid;grid-template-columns:320px minmax(0,1fr);gap:16px}
-  .sidebar-panel,.detail-panel,.meta-panel{padding:1.25rem}
-  .sidebar-stack,.meta-stack,.timeline-stack,.doc-list{display:flex;flex-direction:column;gap:12px}
-  .queue-card{padding:12px;border-radius:var(--radius-md);border:1px solid var(--gray-200);background:var(--sand);cursor:pointer;transition:all .15s ease}
-  .queue-card.active{border-color:rgba(27,94,168,.32);box-shadow:0 0 0 3px rgba(27,94,168,.08);background:#F7FAFF}
-  .queue-card strong{display:block;font-size:14px;color:var(--navy);margin-bottom:4px}
-  .queue-card span{display:block;font-size:12px;color:var(--gray-600);line-height:1.4}
   .workspace-main{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:16px}
+  .detail-panel,.meta-panel{padding:1.25rem}
   .detail-stack{display:flex;flex-direction:column;gap:16px}
+  .meta-stack,.comment-list,.doc-list{display:flex;flex-direction:column;gap:12px}
   .info-section{padding:1rem;border:1px solid var(--gray-200);border-radius:var(--radius-md);background:var(--sand)}
   .info-section h3{font-size:15px;color:var(--navy);margin-bottom:6px}
   .grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
@@ -62,9 +56,9 @@
   .value-card span{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--gray-400);font-weight:700;margin-bottom:4px}
   .value-card strong{display:block;font-size:13px;color:var(--gray-800);line-height:1.45}
   .readonly-copy{padding:12px;border-radius:var(--radius-md);border:1px solid var(--gray-200);background:#F7FAFF;font-size:12px;color:var(--gray-600);line-height:1.45}
-  .meta-card,.timeline-item,.doc-item{padding:12px;border-radius:var(--radius-md);border:1px solid var(--gray-200);background:var(--sand)}
-  .meta-card strong,.timeline-item strong,.doc-item strong{display:block;font-size:13px;color:var(--navy);margin-bottom:4px}
-  .meta-card span,.timeline-item span,.doc-item span{display:block;font-size:12px;color:var(--gray-600);line-height:1.45}
+  .meta-card,.comment-item{padding:12px;border-radius:var(--radius-md);border:1px solid var(--gray-200);background:var(--sand)}
+  .meta-card strong,.comment-item strong{display:block;font-size:13px;color:var(--navy);margin-bottom:4px}
+  .meta-card span,.comment-item span{display:block;font-size:12px;color:var(--gray-600);line-height:1.45}
   .status-badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:5px 10px;border-radius:20px;white-space:nowrap}
   .status-badge .dot{width:6px;height:6px}
   .badge-approved{background:#E8F5EE;color:var(--green)} .badge-approved .dot{background:var(--green)}
@@ -72,14 +66,24 @@
   .badge-progress{background:#EBF3FF;color:var(--blue)} .badge-progress .dot{background:var(--blue)}
   .badge-declined{background:#FDECEA;color:var(--red)} .badge-declined .dot{background:var(--red)}
   .badge-neutral{background:var(--gray-100);color:var(--gray-600)} .badge-neutral .dot{background:var(--gray-400)}
-  .progress-shell{display:flex;flex-direction:column;gap:8px}
-  .progress-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
-  .progress-value{font-family:'DM Serif Display',serif;font-size:32px;color:var(--navy)}
-  .progress-track{height:8px;width:100%;background:var(--gray-100);border-radius:999px;overflow:hidden}
-  .progress-fill{height:100%;background:var(--blue);border-radius:999px}
   .empty-state{padding:20px;border:1px dashed var(--gray-300);border-radius:var(--radius-md);font-size:13px;color:var(--gray-600);text-align:center;background:var(--sand)}
+  .button-row{display:flex;flex-wrap:wrap;gap:8px}
+  #report-nav-row .action-btn{flex:1}
+  .action-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:var(--radius-sm);border:1px solid var(--gray-200);padding:9px 12px;background:var(--white);color:#1a1a1a;font-size:12px;font-weight:700;cursor:pointer;transition:all .15s ease}
+  .action-btn:hover{border-color:rgba(27,94,168,.28);background:#F7FAFF}
+  .attachment-link{display:inline-flex;align-items:center;gap:6px;color:var(--blue);font-size:13px;font-weight:600;text-decoration:underline;cursor:pointer}
+  .attachment-link:hover{color:#164e8f}
+  .attachment-icon{font-size:14px}
+  .imis-table-panel{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);overflow:hidden}
+  .imis-table-header{background:var(--blue);color:var(--white);padding:10px 16px}
+  .imis-table-header h4{font-size:13px;font-weight:700;color:var(--white);letter-spacing:.02em;margin:0}
+  .imis-table-wrap{overflow-x:auto}
+  .imis-table{width:100%;border-collapse:collapse;font-size:13px;min-width:560px}
+  .imis-table thead th{background:var(--gray-100);text-align:left;padding:10px 16px;font-weight:700;color:#2E2C2A;font-size:12px;border-bottom:1px solid var(--gray-300);white-space:nowrap}
+  .imis-table tbody td{padding:11px 16px;border-bottom:1px solid var(--gray-200);color:#2E2C2A;vertical-align:middle}
+  .imis-table tbody tr:last-child td{border-bottom:none}
   @media(max-width:1120px){
-    .workspace,.workspace-main{grid-template-columns:1fr}
+    .workspace-main{grid-template-columns:1fr}
   }
   @media(max-width:760px){
     .topbar{align-items:flex-start;flex-direction:column;padding:1rem}
@@ -99,11 +103,11 @@
   </div>
   <div class="topbar-right">
                 <details class="role-dropdown">
-      <summary class="role-trigger"><span class="role-label">Learner</span><span class="role-caret">&#9662;</span></summary>
+      <summary class="role-trigger"><span class="role-label">Mentor</span><span class="role-caret">&#9662;</span></summary>
       <div class="role-menu">
-        <a class="role-option active" href="../../index.html">Learner</a>
+        <a class="role-option" href="../../index.html">Learner</a>
         <a class="role-option" href="../../1_Dashboard/CPAReviewer.html">CPA Reviewer</a>
-        <a class="role-option" href="../../1_Dashboard/MentorDashboard.html">Mentor</a>
+        <a class="role-option active" href="../../1_Dashboard/MentorDashboard.html">Mentor</a>
         <a class="role-option" href="../../1_Dashboard/PTSBStaffDashboard.html">PTB Staff</a>
               <a class="role-option" href="../../8_MentorOnboarding/1_MentorOnboarding.html">Mentor onboarding</a>
         <a class="role-option" href="../../10_ProgramAdmin/1_ProgramAdminMgmt.html">Program Admin</a>
@@ -116,110 +120,95 @@
   <section class="hero" aria-labelledby="view-fe-title">
     <div>
       <h1 id="view-fe-title">View submitted foundational experience</h1>
-      <p>Review each submitted foundational experience report in read-only mode, see your current status, and track progress to date without changing the original submission.</p>
+      <p>Review each submitted foundational experience report in read-only mode, see the current status, and track progress to date without changing the original submission.</p>
     </div>
-    <div class="hero-badge"><span class="dot"></span><span id="hero-summary">Loading submitted FE reports</span></div>
   </section>
 
-  <section class="workspace">
-    <aside class="panel sidebar-panel">
-      <div class="section-label">Submitted reports</div>
-      <h2>Foundational experience history</h2>
-      <p class="panel-copy">Each employment experience appears as its own report. Open any submitted FE record to review its details and current status.</p>
-      <div id="report-list" class="sidebar-stack" style="margin-top:1rem;"></div>
-    </aside>
+  <section class="workspace-main">
+    <section class="panel detail-panel">
+      <div class="section-label">Submitted FE details</div>
+      <h2 id="detail-title">Foundational experience report</h2>
+      <p class="panel-copy" id="detail-copy">All learner and role fields are displayed in read-only mode.</p>
 
-    <section class="workspace-main">
-      <section class="panel detail-panel">
-        <div class="section-label">Submitted FE details</div>
-        <h2 id="detail-title">Foundational experience report</h2>
-        <p class="panel-copy" id="detail-copy">All learner and role fields are displayed in read-only mode.</p>
+      <div class="detail-stack">
+        <div class="readonly-copy">This is a read-only view of the submitted foundational experience. You can review what was submitted and track its status, but you cannot make changes from this page.</div>
 
-        <div class="detail-stack">
-          <div class="readonly-copy">This is a read-only view of the submitted foundational experience. You can review what was submitted and track its status, but you cannot make changes from this page.</div>
+        <section class="info-section">
+          <h3>Learner information</h3>
+          <div class="grid-2" id="learner-grid"></div>
+        </section>
 
-          <section class="info-section">
-            <h3>Learner information</h3>
-            <div class="grid-2" id="learner-grid"></div>
-          </section>
+        <section class="info-section">
+          <h3>Role information</h3>
+          <div class="grid-2" id="role-grid"></div>
+        </section>
 
-          <section class="info-section">
-            <h3>Role information</h3>
-            <div class="grid-2" id="role-grid"></div>
-          </section>
+        <section class="info-section">
+          <h3>Foundational task statements</h3>
+          <div id="task-statement-table"></div>
+        </section>
 
-          <section class="info-section">
-            <h3>Supporting documents</h3>
-            <div class="doc-list" id="document-list"></div>
-          </section>
-<!--
-          <section class="info-section">
-            <h3>Status timeline</h3>
-            <div class="timeline-stack" id="timeline-list"></div>
-          </section>
-        </div>
-      </section>
+        <section class="info-section">
+          <h3>Supporting documents</h3>
+          <div class="doc-list" id="document-list"></div>
+        </section>
 
-      <aside class="panel meta-panel">
-        <div class="section-label">Progress to date</div>
-        <h2>Submission progress</h2>
-        <div class="meta-stack">
-          <div class="meta-card">
-            <strong>Current status</strong>
-            <span id="meta-status">Not available</span>
-          </div>
-          <div class="meta-card">
-            <strong>Program expiry date</strong>
-            <span id="meta-expiry">Not available</span>
-          </div>
-          <div class="meta-card">
-            <strong>Progress to date</strong>
-            <div class="progress-shell" style="margin-top:.75rem;">
-              <div class="progress-head">
-                <span id="progress-label">Submitted</span>
-                <span class="progress-value" id="progress-value">0%</span>
-              </div>
-              <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
-            </div>
-          </div>
-          <div class="meta-card">
-            <strong>Submitted date and time</strong>
-            <span id="meta-submitted">Not submitted</span>
-          </div>
-          <div class="meta-card">
-            <strong>Current route</strong>
-            <span id="meta-route">No workflow route recorded.</span>
-          </div>
-          <div class="meta-card">
-            <strong>Eligible duration</strong>
-            <span id="meta-duration">Not available</span>
-          </div>
-        </div>
-      </aside>
+        <section class="info-section">
+          <h3>Comments</h3>
+          <div class="comment-list" id="comment-list"></div>
+        </section>
+      </div>
     </section>
+
+    <aside class="panel meta-panel">
+      <h2>Submission progress</h2>
+      <div class="meta-stack">
+        <div class="button-row" id="report-nav-row">
+          <button type="button" class="action-btn" id="prev-report-btn">Previous</button>
+        </div>
+        <div class="meta-card">
+          <strong>Current status</strong>
+          <span id="meta-status">Not available</span>
+        </div>
+        <div class="meta-card">
+          <strong>Submitted date and time</strong>
+          <span id="meta-submitted">Not submitted</span>
+        </div>
+        <div class="meta-card">
+          <strong>Assigned supervisor</strong>
+          <span id="meta-supervisor">No supervisor listed.</span>
+        </div>
+        <div class="meta-card">
+          <strong>Approved experience months</strong>
+          <span id="meta-approved-months">Not available</span>
+        </div>
+      </div>
+    </aside>
   </section>
 </main>
--->
-<script>
-const reportsKey = 'feReports:learner-101';
-const activeViewKey = 'feLearnerViewActive:learner-101';
 
-const reportList = document.getElementById('report-list');
+<script>
+const reportsKey = 'feReports:learner-101:v2';
+const activeViewKey = 'feSupervisorViewActive:learner-101';
+
+const defaultTaskStatements = [
+  { id: 'FTS1', description: 'Prepare or explain (2) information for input into internal or external reporting (e.g. financial statements, financial forecasts, financial budgets, management reports).', levelRequired: 2, learnerPlan: '' },
+  { id: 'FTS2', description: 'Identify (1) the users\' needs and prepare (2) practical alternatives or variance analysis, which consider the impact on users\' needs.', levelRequired: 2, learnerPlan: '' },
+  { id: 'FTS3', description: 'Explain (2) their analysis, findings in a transparent, understandable and professional manner.', levelRequired: 2, learnerPlan: '' }
+];
+
 const detailTitle = document.getElementById('detail-title');
 const detailCopy = document.getElementById('detail-copy');
-const heroSummary = document.getElementById('hero-summary');
 const learnerGrid = document.getElementById('learner-grid');
 const roleGrid = document.getElementById('role-grid');
+const taskStatementTable = document.getElementById('task-statement-table');
 const documentList = document.getElementById('document-list');
-const timelineList = document.getElementById('timeline-list');
+const commentList = document.getElementById('comment-list');
+const prevReportBtn = document.getElementById('prev-report-btn');
 const metaStatus = document.getElementById('meta-status');
-const metaExpiry = document.getElementById('meta-expiry');
-const progressLabel = document.getElementById('progress-label');
-const progressValue = document.getElementById('progress-value');
-const progressFill = document.getElementById('progress-fill');
 const metaSubmitted = document.getElementById('meta-submitted');
-const metaRoute = document.getElementById('meta-route');
-const metaDuration = document.getElementById('meta-duration');
+const metaSupervisor = document.getElementById('meta-supervisor');
+const metaApprovedMonths = document.getElementById('meta-approved-months');
 
 let reports = [];
 let activeReportId = null;
@@ -261,148 +250,153 @@ function statusClass(status) {
 
 function createDemoReports() {
   const now = Date.now();
+  const seventyFiveDaysAgo = new Date(now - 75 * 86400000).toISOString();
   const fortyDaysAgo = new Date(now - 40 * 86400000).toISOString();
-  const twelveDaysAgo = new Date(now - 12 * 86400000).toISOString();
+  const twentyDaysAgo = new Date(now - 20 * 86400000).toISOString();
+  const learnerInfo = {
+    legalName: 'Amelia Reyes',
+    preferredName: 'Amelia',
+    cpaId: 'CPA-772401',
+    governingBody: 'CPA British Columbia',
+    email: 'amelia.reyes@example.com',
+    phone: '604-555-0186'
+  };
   return [
     {
-      id: 'fe-view-1',
-      status: 'Approved',
-      learnerInfo: {
-        legalName: 'Amelia Reyes',
-        preferredName: 'Amelia',
-        cpaId: 'CPA-772401',
-        governingBody: 'CPA British Columbia',
-        email: 'amelia.reyes@example.com',
-        phone: '604-555-0186',
-        programExpiryDate: '2028-11-30'
-      },
+      id: 'fe-demo-1',
+      status: 'Pending CPA Review',
+      learnerInfo: { ...learnerInfo, leaveDays: 3, avgHoursPerWeek: 37.5 },
       roleInfo: {
         employer: 'Northline Advisory Group',
         reportTitle: 'Audit Associate at Northline Advisory Group',
-        jobDescription: 'Audit associate role supporting external assurance engagements and client reporting.',
+        roleSummary: 'Audit associate role supporting external assurance engagements and client reporting.',
         experienceDates: 'Jan 02, 2026 to Aug 31, 2026',
-        supervisorName: 'Marcus Chen, CPA'
+        supervisorName: 'Marcus Chen, CPA',
+        supervisorEmail: 'marcus.chen@example.com'
       },
-      duration: {
-        startDate: '2026-01-02',
-        endDate: '2026-08-31',
-        leaveDays: 3,
-        avgHoursPerWeek: 37.5
-      },
+      taskStatements: [
+        { id: 'FTS1', description: defaultTaskStatements[0].description, levelRequired: 2, learnerPlan: 'Yes' },
+        { id: 'FTS2', description: defaultTaskStatements[1].description, levelRequired: 3, learnerPlan: 'Yes' },
+        { id: 'FTS3', description: defaultTaskStatements[2].description, levelRequired: 2, learnerPlan: 'No' }
+      ],
       documents: {
-        jobDescriptions: [{ id: 'jd-1', name: 'job-description.pdf', category: 'Job description', sizeLabel: '212 KB', uploadedAt: fortyDaysAgo }],
-        supporting: [{ id: 'sd-1', name: 'employment-letter.pdf', category: 'Supporting document', sizeLabel: '145 KB', uploadedAt: fortyDaysAgo }]
+        jobDescriptions: [{ id: 'jd-1', name: 'job-description.pdf', category: 'Job description', sizeLabel: '212 KB', uploadedAt: seventyFiveDaysAgo }],
+        supporting: [{ id: 'sd-1', name: 'employment-letter.pdf', category: 'Supporting document', sizeLabel: '145 KB', uploadedAt: twentyDaysAgo }]
       },
-      submittedAt: fortyDaysAgo,
-      workflowRoute: 'Approved in CPA staff review. Learner may proceed to create and submit a work plan.',
-      notifications: [{ type: 'Learner FE approval notice', sentAt: twelveDaysAgo, recipient: 'amelia.reyes@example.com' }],
+      submittedAt: seventyFiveDaysAgo,
+      workflowRoute: 'Approved by Marcus Chen, CPA. Routed to the CPA Admin queue for assignment to a CPA PTB reviewer.',
       review: {
-        auditTrail: [{
-          id: 'a-1',
-          at: twelveDaysAgo,
-          actor: 'Priya Sharma, CPA',
-          role: 'CPA Staff Reviewer',
-          previousStatus: 'In CPA Review',
-          newStatus: 'Approved',
-          comments: 'Approved 7.88 months of eligible foundational experience.'
-        }],
-        approvedMonths: 7.88
+        comments: [
+          { id: 'c-1', author: 'Marcus Chen, CPA', role: 'Supervisor', at: twentyDaysAgo, text: 'Approved and routed to CPA staff review queue. Approved experience months: 7.5.' }
+        ],
+        approvedMonths: 7.5
       }
     },
     {
-      id: 'fe-view-2',
-      status: 'Pending CPA Review',
-      learnerInfo: {
-        legalName: 'Amelia Reyes',
-        preferredName: 'Amelia',
-        cpaId: 'CPA-772401',
-        governingBody: 'CPA British Columbia',
-        email: 'amelia.reyes@example.com',
-        phone: '604-555-0186',
-        programExpiryDate: '2028-11-30'
-      },
+      id: 'fe-demo-2',
+      status: 'Declined',
+      learnerInfo: { ...learnerInfo, leaveDays: 1, avgHoursPerWeek: 40 },
       roleInfo: {
         employer: 'Harbour Tax Advisory',
         reportTitle: 'Tax Analyst at Harbour Tax Advisory',
-        jobDescription: 'Tax analyst role supporting compliance reviews and tax return preparation.',
+        roleSummary: 'Tax analyst role supporting compliance reviews and tax return preparation.',
         experienceDates: 'Sep 15, 2025 to Dec 20, 2025',
-        supervisorName: 'Elena Flores, CPA'
+        supervisorName: 'Elena Flores, CPA',
+        supervisorEmail: 'elena.flores@example.com'
       },
-      duration: {
-        startDate: '2025-09-15',
-        endDate: '2025-12-20',
-        leaveDays: 0,
-        avgHoursPerWeek: 40
-      },
+      taskStatements: [
+        { id: 'FTS1', description: defaultTaskStatements[0].description, levelRequired: 2, learnerPlan: 'Yes' },
+        { id: 'FTS2', description: defaultTaskStatements[1].description, levelRequired: 2, learnerPlan: '' },
+        { id: 'FTS3', description: defaultTaskStatements[2].description, levelRequired: 2, learnerPlan: '' }
+      ],
       documents: {
         jobDescriptions: [{ id: 'jd-2', name: 'tax-analyst-job-description.pdf', category: 'Job description', sizeLabel: '198 KB', uploadedAt: fortyDaysAgo }],
         supporting: []
       },
-      submittedAt: twelveDaysAgo,
-      workflowRoute: 'Supervisor approved this FE and routed it to the CPA review queue for triage and assignment.',
-      notifications: [{ type: 'Supervisor approval notice', sentAt: twelveDaysAgo, recipient: 'amelia.reyes@example.com' }],
+      submittedAt: fortyDaysAgo,
+      workflowRoute: 'Declined by supervisor or mentor and returned to the learner for revision.',
       review: {
-        auditTrail: [{
-          id: 'a-2',
-          at: twelveDaysAgo,
-          actor: 'Elena Flores, CPA',
-          role: 'Supervisor',
-          previousStatus: 'Pending Supervisor/Mentor Review',
-          newStatus: 'Pending CPA Review',
-          comments: 'Supervisor approved foundational experience and routed it to CPA review.'
-        }]
+        comments: [
+          { id: 'c-2', author: 'Elena Flores, CPA', role: 'Supervisor', at: fortyDaysAgo, text: 'Please attach a signed employment letter before resubmitting.' }
+        ],
+        approvedMonths: null
+      }
+    },
+    {
+      id: 'fe-demo-3',
+      status: 'Pending Supervisor/Mentor Review',
+      learnerInfo: { ...learnerInfo, leaveDays: 0, avgHoursPerWeek: 35 },
+      roleInfo: {
+        employer: 'Crestview Consulting',
+        reportTitle: 'Advisory Associate at Crestview Consulting',
+        roleSummary: 'Advisory associate role supporting business valuation and financial modeling engagements.',
+        experienceDates: 'Feb 01, 2026 to May 15, 2026',
+        supervisorName: 'Daniel Brooks, CPA',
+        supervisorEmail: 'daniel.brooks@example.com'
+      },
+      taskStatements: [
+        { id: 'FTS1', description: defaultTaskStatements[0].description, levelRequired: 2, learnerPlan: '' },
+        { id: 'FTS2', description: defaultTaskStatements[1].description, levelRequired: 2, learnerPlan: '' },
+        { id: 'FTS3', description: defaultTaskStatements[2].description, levelRequired: 2, learnerPlan: '' }
+      ],
+      documents: {
+        jobDescriptions: [{ id: 'jd-3', name: 'advisory-associate-job-description.pdf', category: 'Job description', sizeLabel: '204 KB', uploadedAt: twentyDaysAgo }],
+        supporting: []
+      },
+      submittedAt: twentyDaysAgo,
+      workflowRoute: 'Submitted independently to Daniel Brooks, CPA. Awaiting supervisor review before routing to CPA staff.',
+      review: {
+        comments: [],
+        approvedMonths: null
       }
     }
   ];
 }
 
-function calculateEligibility(report) {
-  const duration = report.duration || {};
-  const startDate = duration.startDate;
-  const endDate = duration.endDate;
-  const leaveDays = Number(duration.leaveDays || 0);
-  const avgHoursPerWeek = Number(duration.avgHoursPerWeek || 0);
-  if (!startDate || !endDate) {
-    return { creditedMonths: 0, estimatedHours: 0 };
-  }
-
-  const start = new Date(`${startDate}T00:00:00`);
-  const end = new Date(`${endDate}T00:00:00`);
-  if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime()) || end < start) {
-    return { creditedMonths: 0, estimatedHours: 0 };
-  }
-
-  const totalDays = Math.floor((end - start) / 86400000) + 1;
-  const eligibleDays = Math.max(0, totalDays - Math.max(0, Math.min(leaveDays, totalDays)));
-  const creditedMonths = Math.min(eligibleDays / 30.4375, 8);
-  const estimatedHours = (eligibleDays / 7) * avgHoursPerWeek;
-  return { creditedMonths, estimatedHours };
+function isValidReportShape(report) {
+  return Boolean(
+    report &&
+    typeof report === 'object' &&
+    report.documents && typeof report.documents === 'object'
+  );
 }
 
 function normaliseReport(report) {
   const clone = cloneDeep(report);
+  clone.status = clone.status || 'Pending Supervisor/Mentor Review';
   clone.learnerInfo = clone.learnerInfo || {};
   clone.roleInfo = clone.roleInfo || {};
   clone.duration = clone.duration || {};
   clone.documents = clone.documents || { jobDescriptions: [], supporting: [] };
   clone.documents.jobDescriptions = clone.documents.jobDescriptions || [];
   clone.documents.supporting = clone.documents.supporting || [];
-  clone.notifications = clone.notifications || [];
   clone.review = clone.review || {};
-  clone.review.auditTrail = clone.review.auditTrail || [];
-  clone.calculatedEligibility = calculateEligibility(clone);
+  clone.review.comments = clone.review.comments || [];
+  clone.taskStatements = Array.isArray(clone.taskStatements) && clone.taskStatements.length
+    ? clone.taskStatements
+    : defaultTaskStatements.map((item) => ({ ...item }));
+  if (!clone.learnerInfo.leaveDays && clone.duration.leaveDays) clone.learnerInfo.leaveDays = clone.duration.leaveDays;
+  if (!clone.learnerInfo.avgHoursPerWeek && clone.duration.avgHoursPerWeek) clone.learnerInfo.avgHoursPerWeek = clone.duration.avgHoursPerWeek;
   if (!clone.roleInfo.experienceDates && clone.duration.startDate && clone.duration.endDate) {
     clone.roleInfo.experienceDates = `${formatShortDate(clone.duration.startDate)} to ${formatShortDate(clone.duration.endDate)}`;
   }
-  if (!clone.learnerInfo.programExpiryDate) clone.learnerInfo.programExpiryDate = '2028-12-31';
+  if (!clone.roleInfo.roleSummary && clone.roleInfo.jobDescription) clone.roleInfo.roleSummary = clone.roleInfo.jobDescription;
   return clone;
 }
 
 function loadReports() {
-  const stored = JSON.parse(localStorage.getItem(reportsKey) || '[]');
-  const submitted = Array.isArray(stored)
-    ? stored.filter((report) => report.status && report.status !== 'Draft').map(normaliseReport)
-    : [];
+  let stored = [];
+  try {
+    const parsed = JSON.parse(localStorage.getItem(reportsKey) || '[]');
+    if (Array.isArray(parsed)) stored = parsed;
+  } catch (error) {
+    stored = [];
+  }
+
+  const submitted = stored
+    .filter(isValidReportShape)
+    .filter((report) => report.status && report.status !== 'Draft')
+    .map(normaliseReport);
 
   reports = submitted.length ? submitted : createDemoReports().map(normaliseReport);
   activeReportId = localStorage.getItem(activeViewKey) || reports[0].id;
@@ -419,27 +413,6 @@ function getActiveReport() {
   return reports.find((report) => report.id === activeReportId);
 }
 
-function getProgress(report) {
-  const status = report.status || '';
-  if (/approved/i.test(status)) return { label: 'Approved', value: 100 };
-  if (/in cpa review/i.test(status)) return { label: 'In CPA review', value: 85 };
-  if (/pending cpa review/i.test(status)) return { label: 'Pending CPA review', value: 70 };
-  if (/pending supervisor|pending mentor/i.test(status)) return { label: 'Pending supervisor review', value: 45 };
-  if (/declined|rejected/i.test(status)) return { label: 'Returned for revision', value: 35 };
-  return { label: 'Submitted', value: 25 };
-}
-
-function renderReportList() {
-  reportList.innerHTML = reports.map((report) => `
-    <article class="queue-card ${report.id === activeReportId ? 'active' : ''}" data-report-id="${report.id}">
-      <strong>${escapeHtml(report.roleInfo.reportTitle || report.roleInfo.employer || 'Foundational experience report')}</strong>
-      <span>${escapeHtml(report.roleInfo.employer || 'Employer not provided')}</span>
-      <span>${escapeHtml(report.roleInfo.experienceDates || 'Dates not available')}</span>
-      <span class="status-badge ${statusClass(report.status)}"><span class="dot"></span>${escapeHtml(report.status)}</span>
-    </article>
-  `).join('');
-}
-
 function renderValueCards(container, values) {
   container.innerHTML = values.map((item) => `
     <div class="value-card">
@@ -449,6 +422,41 @@ function renderValueCards(container, values) {
   `).join('');
 }
 
+function renderTaskStatements(report) {
+  const statements = Array.isArray(report.taskStatements) ? report.taskStatements : [];
+  if (!statements.length) {
+    taskStatementTable.innerHTML = '<div class="empty-state">No foundational task statements were recorded for this report.</div>';
+    return;
+  }
+  taskStatementTable.innerHTML = `
+    <div class="imis-table-panel">
+      <div class="imis-table-header"><h4>Task statements</h4></div>
+      <div class="imis-table-wrap">
+        <table class="imis-table">
+          <thead>
+            <tr>
+              <th>Foundational Task Statement (FTS)</th>
+              <th>Task Statement Description</th>
+              <th>CPA Learner Plan</th>
+              <th>Level required</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${statements.map((fts) => `
+              <tr>
+                <td>${escapeHtml(fts.id)}</td>
+                <td>${escapeHtml(fts.description)}</td>
+                <td>${escapeHtml(fts.learnerPlan || 'Not selected')}</td>
+                <td>${escapeHtml(fts.levelRequired ?? 'Not set')}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
+}
+
 function renderDocuments(report) {
   const docs = [...report.documents.jobDescriptions, ...report.documents.supporting];
   if (!docs.length) {
@@ -456,71 +464,39 @@ function renderDocuments(report) {
     return;
   }
   documentList.innerHTML = docs.map((doc) => `
-    <div class="doc-item">
-      <strong>${escapeHtml(doc.name)}</strong>
-      <span>${escapeHtml(doc.category)} | ${escapeHtml(doc.sizeLabel || 'File attached')} | Uploaded ${escapeHtml(formatDate(doc.uploadedAt))}</span>
-    </div>
+    <a class="attachment-link" href="javascript:void(0);"><span class="attachment-icon">&#128206;</span>${escapeHtml(doc.name)}</a>
   `).join('');
 }
 
-function renderTimeline(report) {
-  const audit = (report.review.auditTrail || []).slice().reverse();
-  const events = [];
-
-  if (report.submittedAt) {
-    events.push({
-      title: 'Learner submission recorded',
-      meta: formatDate(report.submittedAt),
-      copy: 'The foundational experience was submitted and became read-only for the learner.'
-    });
-  }
-
-  audit.forEach((entry) => {
-    events.push({
-      title: `${entry.previousStatus || 'Previous status'} -> ${entry.newStatus || 'Current status'}`,
-      meta: `${entry.actor || 'System'} | ${entry.role || 'Workflow'} | ${formatDate(entry.at)}`,
-      copy: entry.comments || 'No comments recorded.'
-    });
-  });
-
-  if (report.notifications && report.notifications.length) {
-    report.notifications.slice().reverse().forEach((entry) => {
-      events.push({
-        title: entry.type || 'Notification',
-        meta: formatDate(entry.sentAt),
-        copy: `Notification sent to ${entry.recipient || 'recipient'}.`
-      });
-    });
-  }
-
-  if (!events.length) {
-    timelineList.innerHTML = '<div class="empty-state">No submission history is available for this report yet.</div>';
+function renderComments(report) {
+  const comments = report.review.comments || [];
+  if (!comments.length) {
+    commentList.innerHTML = '';
     return;
   }
-
-  timelineList.innerHTML = events.map((event) => `
-    <div class="timeline-item">
-      <strong>${escapeHtml(event.title)}</strong>
-      <span>${escapeHtml(event.meta)}</span>
-      <span>${escapeHtml(event.copy)}</span>
-    </div>
-  `).join('');
+  commentList.innerHTML = comments
+    .slice()
+    .reverse()
+    .map((comment) => `
+      <div class="comment-item">
+        <strong>${escapeHtml(comment.author)} | ${escapeHtml(comment.role)}</strong>
+        <span>${escapeHtml(formatDate(comment.at))}</span>
+        <span>${escapeHtml(comment.text)}</span>
+      </div>
+    `).join('');
 }
 
 function renderMeta(report) {
-  const progress = getProgress(report);
+  const position = reports.findIndex((item) => item.id === activeReportId);
+  prevReportBtn.style.display = position > 0 ? 'inline-flex' : 'none';
   metaStatus.innerHTML = `<span class="status-badge ${statusClass(report.status)}"><span class="dot"></span>${escapeHtml(report.status)}</span>`;
-  metaExpiry.textContent = formatShortDate(report.learnerInfo.programExpiryDate);
-  progressLabel.textContent = progress.label;
-  progressValue.textContent = `${progress.value}%`;
-  progressFill.style.width = `${progress.value}%`;
   metaSubmitted.textContent = formatDate(report.submittedAt);
-  metaRoute.textContent = report.workflowRoute || 'No workflow route recorded.';
-
-  const approvedMonths = report.review && report.review.approvedMonths
-    ? `${Number(report.review.approvedMonths).toFixed(2)} approved months`
-    : `${report.calculatedEligibility.creditedMonths.toFixed(2)} calculated credited months`;
-  metaDuration.textContent = `${approvedMonths} | ${Math.round(report.calculatedEligibility.estimatedHours)} estimated hours`;
+  metaSupervisor.textContent = report.roleInfo.supervisorName
+    ? `${report.roleInfo.supervisorName} (${report.roleInfo.supervisorEmail || 'email not entered'})`
+    : 'No supervisor listed.';
+  metaApprovedMonths.textContent = report.review.approvedMonths != null
+    ? `${Number(report.review.approvedMonths).toFixed(2)} months`
+    : 'Not available';
 }
 
 function renderActiveReport() {
@@ -529,7 +505,7 @@ function renderActiveReport() {
 
   detailTitle.textContent = report.roleInfo.reportTitle || 'Foundational experience report';
   detailCopy.textContent = report.roleInfo.employer
-    ? `Submitted record for ${report.roleInfo.employer}. All fields are shown exactly as a learner would review them after submission.`
+    ? `Submitted record for ${report.roleInfo.employer}. All fields are shown exactly as submitted for supervisor or mentor review.`
     : 'All learner and role fields are displayed in read-only mode.';
 
   renderValueCards(learnerGrid, [
@@ -543,48 +519,49 @@ function renderActiveReport() {
 
   renderValueCards(roleGrid, [
     { label: 'Employer', value: report.roleInfo.employer || 'Not provided' },
-    { label: 'Job description', value: report.roleInfo.jobDescription || 'Not provided' },
+    { label: 'Employment experience label', value: report.roleInfo.reportTitle || 'Not provided' },
+    { label: 'Role summary', value: report.roleInfo.roleSummary || 'Not provided' },
     { label: 'Experience dates', value: report.roleInfo.experienceDates || 'Not provided' },
-    { label: 'Leave days', value: report.duration.leaveDays ?? 'Not provided' },
-    { label: 'Average hours worked per week', value: report.duration.avgHoursPerWeek ?? 'Not provided' },
-    { label: 'Supervisor', value: report.roleInfo.supervisorName || 'Not provided' }
+    { label: 'Leave days', value: report.learnerInfo.leaveDays ?? 'Not provided' },
+    { label: 'Average hours worked per week', value: report.learnerInfo.avgHoursPerWeek ?? 'Not provided' },
+    { label: 'Supervisor name', value: report.roleInfo.supervisorName || 'Not provided' },
+    { label: 'Supervisor email', value: report.roleInfo.supervisorEmail || 'Not provided' }
   ]);
 
+  renderTaskStatements(report);
   renderDocuments(report);
-  renderTimeline(report);
+  renderComments(report);
   renderMeta(report);
 }
 
-function updateHero() {
-  const approvedCount = reports.filter((report) => /approved/i.test(report.status || '')).length;
-  heroSummary.textContent = `${reports.length} submitted FE report${reports.length === 1 ? '' : 's'} | ${approvedCount} approved`;
-}
-
 function renderAll() {
-  renderReportList();
   renderActiveReport();
-  updateHero();
   saveState();
 }
 
-function switchReport(reportId) {
-  activeReportId = reportId;
+function goToAdjacentReport(offset) {
+  const position = reports.findIndex((item) => item.id === activeReportId);
+  const nextPosition = position + offset;
+  if (nextPosition < 0 || nextPosition >= reports.length) return;
+  activeReportId = reports[nextPosition].id;
   renderAll();
 }
 
-reportList.addEventListener('click', (event) => {
-  const card = event.target.closest('[data-report-id]');
-  if (!card) return;
-  switchReport(card.dataset.reportId);
-});
+function goToPreviousReport() {
+  goToAdjacentReport(-1);
+}
 
-loadReports();
-renderAll();
+prevReportBtn.addEventListener('click', goToPreviousReport);
+
+try {
+  loadReports();
+  renderAll();
+} catch (error) {
+  localStorage.removeItem(activeViewKey);
+  reports = createDemoReports().map(normaliseReport);
+  activeReportId = reports[0].id;
+  renderAll();
+}
 </script>
 </body>
 </html>
-
-
-
-
-
