@@ -18,6 +18,7 @@
     --badge-yellow-bg:#FCF3D9; --badge-yellow-text:#8A6D1D;
     --badge-blue-bg:#E8ECF7; --badge-blue-text:#3B4A7A;
     --badge-red-bg:#FBE7E5; --badge-red-text:#9B3226;
+    --badge-gray-bg:#F2F1EF; --badge-gray-text:#6B6760;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:'DM Sans',sans-serif;background:var(--sand);color:var(--gray-800);min-height:100vh}
@@ -88,8 +89,6 @@
   .doc-copy span{display:block;font-size:11px;color:var(--gray-600);line-height:1.35}
   .option-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
   .option-card.selected{border-color:rgba(27,94,168,.32);box-shadow:0 0 0 3px rgba(27,94,168,.08);background:#F7FAFF}
-  button.option-card{width:100%;text-align:left;cursor:pointer;transition:all .15s ease}
-  button.option-card:hover{border-color:rgba(27,94,168,.28);background:#F7FAFF}
   .notice-box.warn{background:var(--badge-yellow-bg);border-color:#EDD9A0}
   .notice-box.error{background:var(--badge-red-bg);border-color:#EBBAB2}
   .notice-box.success{background:var(--badge-green-bg);border-color:#B9DDC3}
@@ -98,17 +97,6 @@
   .checkbox-card input{margin-top:3px}
   .hidden{display:none !important}
   .empty-state{padding:18px;border:1px dashed var(--gray-300);border-radius:var(--radius-md);font-size:13px;color:var(--gray-600);text-align:center;background:var(--white)}
-  .imis-table-panel{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius-md);overflow:hidden}
-  .imis-table-header{background:var(--imis-blue);color:var(--white);padding:10px 16px}
-  .imis-table-header h4{font-size:13px;font-weight:700;color:var(--white);letter-spacing:.02em;margin:0}
-  .imis-table-wrap{overflow-x:auto}
-  .imis-table{width:100%;border-collapse:collapse;font-size:13px;min-width:640px}
-  .imis-table thead th{background:var(--gray-100);text-align:left;padding:10px 16px;font-weight:700;color:#2E2C2A;font-size:12px;border-bottom:1px solid var(--gray-300);white-space:nowrap}
-  .imis-table tbody td{padding:11px 16px;border-bottom:1px solid var(--gray-200);color:#2E2C2A;vertical-align:top}
-  .imis-table tbody tr:last-child td{border-bottom:none}
-  .imis-table select{border:1px solid var(--gray-300);border-radius:var(--radius-sm);background:var(--white);padding:6px 10px;color:var(--gray-800);font-size:12px}
-  .task-desc-list{margin:6px 0 0 18px;padding:0;display:flex;flex-direction:column;gap:3px}
-  .task-desc-list ul{margin:4px 0 0 18px;padding:0;list-style:lower-roman;display:flex;flex-direction:column;gap:3px}
   @media(max-width:1120px){
     .workspace{grid-template-columns:1fr}
   }
@@ -147,7 +135,7 @@
   <section class="hero" aria-labelledby="work-plan-title">
     <div>
       <h1 id="work-plan-title">Prepare work plan information</h1>
-      <p>Review your learner profile, confirm your role type, add employer and approver details, and describe the work experience that will shape your professional assessment path.</p>
+      <p>Review your learner profile, confirm whether your role is pre-reviewed, add employer details, and describe the work experience that will shape your professional assessment path.</p>
     </div>
   </section>
 
@@ -173,38 +161,10 @@
             <div class="field"><label for="email-address">Email address</label><input id="email-address" type="email" readonly></div>
             <div class="field"><label for="phone-number">Phone number</label><input id="phone-number" type="tel" readonly></div>
           </div>
-
-          <div class="section-label" style="margin-top:1.5rem;">Role type</div>
-          <div class="option-grid" id="role-type-grid">
-            <button type="button" class="option-card role-type-card" data-role-type="Industry">
-              <strong>Industry</strong>
-              <span>Standard work plan template with industry-aligned role planning.</span>
-            </button>
-            <button type="button" class="option-card role-type-card" data-role-type="Firm - Audit & Assurance">
-              <strong>Firm - Audit &amp; Assurance</strong>
-              <span>Firm role focused on audit and assurance engagements.</span>
-            </button>
-            <button type="button" class="option-card role-type-card" data-role-type="Firm - Non assurance">
-              <strong>Firm - Non assurance</strong>
-              <span>Firm role outside audit and assurance, such as tax or advisory.</span>
-            </button>
-            <button type="button" class="option-card role-type-card" data-role-type="Firm - Other">
-              <strong>Firm - Other</strong>
-              <span>Other firm-based role not covered by the categories above.</span>
-            </button>
-            <button type="button" class="option-card role-type-card" data-role-type="Pre-reviewed">
-              <strong>Pre-reviewed</strong>
-              <span>Use the employer's approved pre-reviewed role template when capacity remains available.</span>
-            </button>
-          </div>
-          <div class="field full hidden" id="service-area-field" style="margin-top:1rem;">
-            <label for="service-area">Service area</label>
-            <input id="service-area" type="text" placeholder="Enter service area">
-          </div>
         </section>
 
         <section class="form-section">
-          <h3>Employer details</h3>
+          <h3>Pre-reviewed role validation</h3>
           <div class="field-grid">
             <div class="field">
               <label for="employer-select">Select employer</label>
@@ -235,8 +195,66 @@
               <input id="configured-senior-leader" type="text" readonly>
             </div>
           </div>
+        </section>
 
-          <div class="field-grid" style="margin-top:1rem;">
+        <section class="form-section">
+          <h3>Mentor and senior leader</h3>
+          <div class="field-grid">
+            <div class="field">
+              <label for="mentor-email">Mentor work email</label>
+              <input id="mentor-email" type="email" placeholder="mentor@company.com">
+              <span class="subcopy">The system checks whether the mentor work email exists in the approved mentor list for the selected employer.</span>
+            </div>
+            <div class="field">
+              <label for="mentor-search">Search mentors</label>
+              <input id="mentor-search" type="text" placeholder="Search mentor name or CPA ID">
+              <span class="subcopy">Only approved mentors from the same company are shown in the list.</span>
+            </div>
+            <div class="field">
+              <label for="mentor-select">Select mentor</label>
+              <select id="mentor-select"></select>
+            </div>
+            <div class="field">
+              <label for="senior-leader-select">Select senior leader</label>
+              <select id="senior-leader-select"></select>
+            </div>
+          </div>
+
+          <div class="notice-box" id="mentor-note" style="margin-top:1rem;">
+            <strong>Mentor approval routing</strong>
+            <span>Select a mentor from the same organization to route the work plan for mentor approval. If the mentor cannot be found, the learner should reach out to CPA Staff offline.</span>
+          </div>
+        </section>
+
+        <section class="form-section">
+          <h3>Role type</h3>
+          <div class="field-grid">
+            <div class="field">
+              <label for="role-type">Role type</label>
+              <select id="role-type">
+                <option value="">Select role type</option>
+                <option value="Industry">Industry</option>
+                <option value="Firm - Audit & Assurance">Firm - Audit & Assurance</option>
+                <option value="Firm - Non assurance">Firm - Non assurance</option>
+                <option value="Firm - Other">Firm - Other</option>
+                <option value="Pre-reviewed">Pre-reviewed</option>
+              </select>
+            </div>
+            <div class="field" id="service-area-field">
+              <label for="service-area">Service area</label>
+              <input id="service-area" type="text" placeholder="Enter service area if applicable">
+            </div>
+          </div>
+
+          <div class="option-grid" id="role-type-summary" style="margin-top:1rem;">
+            <div class="option-card"><strong>Industry</strong><span>Use a standard work plan template with industry-aligned role planning.</span></div>
+            <div class="option-card"><strong>Pre-reviewed</strong><span>Use the employer's approved role template when capacity remains available.</span></div>
+          </div>
+        </section>
+
+        <section class="form-section">
+          <h3>Employer details</h3>
+          <div class="field-grid">
             <div class="field full">
               <label for="organization-name">Organization name</label>
               <input id="organization-name" type="text">
@@ -254,55 +272,64 @@
               <input id="position-title" type="text">
             </div>
             <div class="field">
+              <label for="professional-start-date">Start date of professional level work</label>
+              <input id="professional-start-date" type="date">
+            </div>
+            <div class="field">
+              <label for="position-start-date">Start date of this position or employment</label>
+              <input id="position-start-date" type="date">
+            </div>
+            <div class="field">
+              <label for="expected-completion-date">Expected date of completion of this work plan</label>
+              <input id="expected-completion-date" type="date">
+            </div>
+            <div class="field">
+              <label for="expected-leave-days">Expected leave days</label>
+              <input id="expected-leave-days" type="number" min="0" step="1" value="0">
+            </div>
+            <div class="field">
               <label for="average-hours">Average hours worked per week</label>
               <input id="average-hours" type="number" min="0" step="0.5" value="37.5">
             </div>
           </div>
-        </section>
-
-        <section class="form-section">
-          <h3>Select mentor</h3>
-          <div class="field-grid">
+          <div class="metric-grid" id="date-metrics" style="margin-top:1rem;"></div>
+          <div class="field-grid" style="margin-top:1rem;">
             <div class="field">
-              <label for="mentor-email">Mentor work email</label>
-              <input id="mentor-email" type="email" placeholder="mentor@company.com">
-              <span class="subcopy">The system checks whether the mentor work email exists in the approved mentor list for the selected employer.</span>
+              <label for="actual-gained-pe">Actual gained PE</label>
+              <input id="actual-gained-pe" type="text" readonly>
+              <span class="subcopy">This field is manually maintained by CPA Reviewer.</span>
             </div>
             <div class="field">
-              <label for="mentor-search">Search mentors</label>
-              <input id="mentor-search" type="text" placeholder="Search mentor name or CPA ID">
-              <span class="subcopy">Only approved mentors from the same company are shown in the list.</span>
+              <label for="reviewer-limit-indicator">Reviewer maintained indicator</label>
+              <div class="checkbox-card">
+                <input id="reviewer-limit-indicator" type="checkbox" disabled>
+                <span><strong>Three Work Plan resubmissions reached</strong><span>This indicator is maintained by a reviewer once the maximum resubmission threshold has been reached.</span></span>
+              </div>
+              <span class="subcopy">Records whether the learner has reached three Work Plan resubmissions.</span>
             </div>
-            <div class="field full">
-              <label for="mentor-select">Select mentor</label>
-              <select id="mentor-select"></select>
-            </div>
-          </div>
-
-          <div class="notice-box" id="mentor-note" style="margin-top:1rem;">
-            <strong>Mentor approval routing</strong>
-            <span>Select a mentor from the same organization to route the work plan for mentor approval. If the mentor cannot be found, the learner should reach out to CPA Staff offline.</span>
           </div>
         </section>
 
         <section class="form-section">
-          <h3>Select senior leader</h3>
+          <h3>Supporting documents</h3>
           <div class="field-grid">
-            <div class="field">
-              <label for="senior-leader-search">Search senior leaders</label>
-              <input id="senior-leader-search" type="text" placeholder="Search senior leader name or CPA ID">
-              <span class="subcopy">Only senior leaders from the same company are shown in the list.</span>
+            <div class="field full">
+              <label for="job-description-upload">Job description</label>
+              <input id="job-description-upload" type="file" multiple>
+              <span class="subcopy" id="job-description-copy">If the learner selected a standard work plan, a job description is required before submission. For pre-reviewed positions it is optional.</span>
             </div>
             <div class="field full">
-              <label for="senior-leader-select">Select senior leader</label>
-              <select id="senior-leader-select"></select>
+              <label for="supporting-docs-upload">Other supporting documents</label>
+              <input id="supporting-docs-upload" type="file" multiple>
+              <span class="subcopy">Supporting documents are accessible to the mentor and CPA Reviewer.</span>
             </div>
           </div>
-
-          <div class="notice-box" id="senior-leader-note" style="margin-top:1rem;">
-            <strong>Senior leader routing</strong>
-            <span>Select a senior leader from the same organization. This assignment is used for pre-reviewed role escalation and work plan oversight.</span>
+          <div class="button-row" style="margin-top:1rem;">
+            <button class="action-btn" id="attach-job-description-btn" type="button">Attach job description</button>
+            <button class="action-btn" id="attach-supporting-btn" type="button">Attach supporting documents</button>
           </div>
+          <div class="doc-list" id="job-description-list" style="margin-top:1rem;"></div>
+          <div class="doc-list" id="supporting-doc-list" style="margin-top:1rem;"></div>
         </section>
 
         <section class="form-section">
@@ -360,111 +387,6 @@
         </section>
 
         <section class="form-section">
-          <h3>Work plan date</h3>
-          <div class="field-grid">
-            <div class="field">
-              <label for="work-plan-start-date">Start date</label>
-              <input id="work-plan-start-date" type="date">
-            </div>
-            <div class="field">
-              <label for="expected-completion-date">Expected completion date</label>
-              <input id="expected-completion-date" type="date">
-            </div>
-            <div class="field">
-              <label for="expected-leave-days">Expected leave days</label>
-              <input id="expected-leave-days" type="number" min="0" step="1" value="0">
-            </div>
-          </div>
-          <p class="subcopy" style="margin-top:.75rem;">Potential professional experience, duration, and actual gained PE are calculated automatically and shown in the work plan summary panel on the right.</p>
-        </section>
-
-        <section class="form-section">
-          <h3>Financial Reporting</h3>
-          <p class="subcopy" style="margin-bottom:.75rem;">The learner is required to select a minimum of 2 task statements by choosing Yes on the CPA Learner Plan dropdown, and setting the applicable level (1-5) for each selected statement.</p>
-          <div class="imis-table-panel">
-            <div class="imis-table-header"><h4>Financial Reporting task statements</h4></div>
-            <div class="imis-table-wrap">
-              <table class="imis-table">
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Task Statement Description</th>
-                    <th>CPA Learner Plan</th>
-                    <th>Level required</th>
-                  </tr>
-                </thead>
-                <tbody id="fr-task-body"></tbody>
-              </table>
-            </div>
-          </div>
-        </section>
-
-        <section class="form-section">
-          <h3>Assurance &amp; Trust</h3>
-          <p class="subcopy" style="margin-bottom:.75rem;">The learner is required to select a minimum of 2 task statements by choosing Yes on the CPA Learner Plan dropdown, and setting the applicable level (1-5) for each selected statement.</p>
-          <div class="imis-table-panel">
-            <div class="imis-table-header"><h4>Assurance &amp; Trust task statements</h4></div>
-            <div class="imis-table-wrap">
-              <table class="imis-table">
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Task Statement Description</th>
-                    <th>CPA Learner Plan</th>
-                    <th>Level required</th>
-                  </tr>
-                </thead>
-                <tbody id="at-task-body"></tbody>
-              </table>
-            </div>
-          </div>
-        </section>
-
-        <section class="form-section">
-          <h3>DC statements</h3>
-          <p class="subcopy" style="margin-bottom:.75rem;">All Development and Competency (DC) statements below are required for this work plan. Select Yes or No on the CPA Learner Plan dropdown for each statement, and set the applicable level (1-5).</p>
-          <div class="imis-table-panel">
-            <div class="imis-table-header"><h4>DC statements</h4></div>
-            <div class="imis-table-wrap">
-              <table class="imis-table">
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Competency</th>
-                    <th>Description</th>
-                    <th>CPA Learner Plan</th>
-                    <th>Level required</th>
-                  </tr>
-                </thead>
-                <tbody id="dc-task-body"></tbody>
-              </table>
-            </div>
-          </div>
-        </section>
-
-        <section class="form-section">
-          <h3>Supporting documents</h3>
-          <div class="field-grid">
-            <div class="field full">
-              <label for="job-description-upload">Job description</label>
-              <input id="job-description-upload" type="file" multiple>
-              <span class="subcopy" id="job-description-copy">If the learner selected a standard work plan, a job description is required before submission. For pre-reviewed positions it is optional.</span>
-            </div>
-            <div class="field full">
-              <label for="supporting-docs-upload">Other supporting documents</label>
-              <input id="supporting-docs-upload" type="file" multiple>
-              <span class="subcopy">Supporting documents are accessible to the mentor and CPA Reviewer.</span>
-            </div>
-          </div>
-          <div class="button-row" style="margin-top:1rem;">
-            <button class="action-btn" id="attach-job-description-btn" type="button">Attach job description</button>
-            <button class="action-btn" id="attach-supporting-btn" type="button">Attach supporting documents</button>
-          </div>
-          <div class="doc-list" id="job-description-list" style="margin-top:1rem;"></div>
-          <div class="doc-list" id="supporting-doc-list" style="margin-top:1rem;"></div>
-        </section>
-
-        <section class="form-section">
           <h3>Save work plan information</h3>
           <div class="notice-box success" id="save-note">
             <strong>Work plan draft</strong>
@@ -481,6 +403,13 @@
             <button class="action-btn primary" id="continue-btn" type="button" onclick="location.href='2_LearnerWorkPlanInfo.html'">
                 Continue
             </button>
+
+            <!--
+            <button class="action-btn success" id="submit-workplan-btn" type="button" onclick="location.href='../../index.html'">
+                Submit work plan
+            </button>
+            -->
+
           </div>
         </section>
       </div>
@@ -490,18 +419,6 @@
       <div class="section-label">Work plan summary</div>
       <h2>Current selection</h2>
       <div class="meta-stack">
-        <div class="meta-card">
-          <strong>Work plan duration</strong>
-          <div class="metric-grid" id="duration-metric-grid" style="margin-top:.5rem;"></div>
-        </div>
-        <div class="meta-card">
-          <strong>Actual gained PE</strong>
-          <span id="summary-actual-gained-pe">To be entered by CPA Reviewer.</span>
-        </div>
-        <div class="meta-card">
-          <strong>Three Work Plan resubmissions reached</strong>
-          <span id="summary-reviewer-limit">Not reached.</span>
-        </div>
         <div class="meta-card">
           <strong>Template path</strong>
           <span id="summary-template">No template selected yet.</span>
@@ -525,6 +442,10 @@
         <div class="meta-card">
           <strong>Work plan status</strong>
           <span id="summary-status">Draft</span>
+        </div>
+        <div class="meta-card">
+          <strong>Potential professional experience</strong>
+          <span id="summary-duration">Not calculated yet.</span>
         </div>
         <div class="meta-card">
           <strong>Documents</strong>
@@ -619,58 +540,6 @@ const preReviewedEmployers = {
   }
 };
 
-const financialReportingStatements = [
-  { id: 'FR1', description: 'Assess decision makers’ needs and actively design the development/ modification of reporting requirements or financial-reporting systems required to meet external user needs, such as an MD&A or financing needs (a large, complex example, or several smaller ones).' },
-  { id: 'FR2', description: 'Critically evaluate and reach a preliminary conclusion on three distinct GAAP (or equivalent) transactions based on management requests, using the CPA Canada Handbook (or equivalent) as guidance.' },
-  { id: 'FR3', description: 'Prepare and critically evaluate financial statements and notes in accordance with GAAP or equivalent over two business periods (at least one of which is year-end).' },
-  { id: 'FR4', description: 'Assess variances on historical, year-over-year financial statements and interpret the root causes, including insights into interconnectivity of multiple line items (over two business periods, at least one of which needs to be year-end).' }
-];
-
-const assuranceTrustStatements = [
-  { id: 'AT1a', description: 'Formulate the planning and risk assessment of the assurance engagement (including calculating materiality and assessing the control environment).' },
-  { id: 'AT1b', description: 'Design appropriate planned procedures that meet the objective of the engagement.' },
-  { id: 'AT1c', description: 'Critically evaluate supporting information and results of analysis to draw conclusions and communicate results.' }
-];
-
-const dcStatements = [
-  {
-    id: 'DC1',
-    competency: 'Professional Skepticism',
-    intro: 'Critically evaluate actions and decisions by consistently demonstrating:',
-    points: [
-      'A questioning mindset',
-      'Awareness of new information and changes in facts and circumstances which could indicate possible misstatement due to error or fraud (spotting trends and irregularities)',
-      'Critical thinking skills applied to the evidence (how you interpret the story)',
-      'Awareness of how conscious and unconscious bias might impact how data or information is used, analyzed, or reported'
-    ]
-  },
-  {
-    id: 'DC2',
-    competency: 'Ethical Decision Making',
-    intro: 'Critically evaluate a decision by consistently demonstrating:',
-    points: [
-      'Understanding of the higher level of accountability and responsibility afforded by being part of the CPA profession',
-      'Adherence to the Provincial/Regional Body’s CPA Code of Professional Conduct including:'
-    ],
-    subPoints: [
-      'Maintaining the good reputation of the profession, protecting the public and acting in the public interest',
-      'Performing with integrity and due care',
-      'Avoiding compromise of professional judgment by bias, conflict of interest or undue influence',
-      'Exhibiting behaviours to comply with laws, regulations, organizational policies, societal norms and personal ideals',
-      'Identifying and raising unethical behaviours (if applicable)'
-    ]
-  },
-  {
-    id: 'DC3',
-    competency: 'Communication',
-    intro: 'Demonstrate ability to consistently:',
-    points: [
-      'Communicate analyses, findings, decision and next steps in a transparent, understandable, and professional manner, with due consideration of audience and appropriate communication channels/tools.',
-      'Assess that all communications fairly reflect underlying substance without bias.'
-    ]
-  }
-];
-
 const employerSelect = document.getElementById('employer-select');
 const preReviewedRoleSelect = document.getElementById('pre-reviewed-role');
 const roleSelectCopy = document.getElementById('role-select-copy');
@@ -681,11 +550,9 @@ const configuredSeniorLeader = document.getElementById('configured-senior-leader
 const mentorEmail = document.getElementById('mentor-email');
 const mentorSearch = document.getElementById('mentor-search');
 const mentorSelect = document.getElementById('mentor-select');
-const seniorLeaderSearchInput = document.getElementById('senior-leader-search');
 const seniorLeaderSelect = document.getElementById('senior-leader-select');
 const mentorNote = document.getElementById('mentor-note');
-const seniorLeaderNote = document.getElementById('senior-leader-note');
-const roleTypeGrid = document.getElementById('role-type-grid');
+const roleType = document.getElementById('role-type');
 const serviceAreaField = document.getElementById('service-area-field');
 const serviceArea = document.getElementById('service-area');
 const organizationName = document.getElementById('organization-name');
@@ -697,22 +564,20 @@ const jobDescriptionCopy = document.getElementById('job-description-copy');
 const jobDescriptionList = document.getElementById('job-description-list');
 const supportingDocList = document.getElementById('supporting-doc-list');
 const rolePlanGrid = document.getElementById('role-plan-grid');
-const frTaskBody = document.getElementById('fr-task-body');
-const atTaskBody = document.getElementById('at-task-body');
-const dcTaskBody = document.getElementById('dc-task-body');
 const otherRoleField = document.getElementById('other-role-field');
 const otherRolePlan = document.getElementById('other-role-plan');
 const messageBar = document.getElementById('message-bar');
 const messageText = document.getElementById('message-text');
-const durationMetricGrid = document.getElementById('duration-metric-grid');
-const summaryActualGainedPe = document.getElementById('summary-actual-gained-pe');
-const summaryReviewerLimit = document.getElementById('summary-reviewer-limit');
+const dateMetrics = document.getElementById('date-metrics');
+const actualGainedPe = document.getElementById('actual-gained-pe');
+const reviewerLimitIndicator = document.getElementById('reviewer-limit-indicator');
 const summaryTemplate = document.getElementById('summary-template');
 const summaryAvailability = document.getElementById('summary-availability');
 const summaryEmployer = document.getElementById('summary-employer');
 const summaryRoleType = document.getElementById('summary-role-type');
 const summaryRolePlans = document.getElementById('summary-role-plans');
 const summaryStatus = document.getElementById('summary-status');
+const summaryDuration = document.getElementById('summary-duration');
 const summaryDocuments = document.getElementById('summary-documents');
 const summaryMentor = document.getElementById('summary-mentor');
 const summarySeniorLeader = document.getElementById('summary-senior-leader');
@@ -754,7 +619,6 @@ function createDefaultWorkPlan() {
       mentorName: '',
       mentorCpaId: '',
       mentorSelectedEmail: '',
-      seniorLeaderSearch: '',
       seniorLeaderName: '',
       seniorLeaderEmail: ''
     },
@@ -765,17 +629,11 @@ function createDefaultWorkPlan() {
       organizationAddress: '',
       organizationWebsite: '',
       positionTitle: '',
-      averageHoursPerWeek: 37.5
-    },
-    workPlanDates: {
-      startDate: '',
+      professionalStartDate: '',
+      positionStartDate: '',
       expectedCompletionDate: '',
-      expectedLeaveDays: 0
-    },
-    taskStatements: {
-      financialReporting: financialReportingStatements.map((item) => ({ id: item.id, learnerPlan: '', levelRequired: 2 })),
-      assuranceTrust: assuranceTrustStatements.map((item) => ({ id: item.id, learnerPlan: '', levelRequired: 2 })),
-      dc: dcStatements.map((item) => ({ id: item.id, learnerPlan: '', levelRequired: 2 }))
+      expectedLeaveDays: 0,
+      averageHoursPerWeek: 37.5
     },
     duration: {
       potentialMonths: 0,
@@ -811,44 +669,15 @@ function createDefaultWorkPlan() {
   };
 }
 
-function mergeTaskState(defaults, stored) {
-  return defaults.map((def) => {
-    const found = Array.isArray(stored) ? stored.find((item) => item && item.id === def.id) : null;
-    return found
-      ? { id: def.id, learnerPlan: found.learnerPlan || '', levelRequired: found.levelRequired ?? def.levelRequired }
-      : { ...def };
-  });
-}
-
 function normaliseWorkPlan(record) {
   const base = createDefaultWorkPlan();
-  const legacyEmployerDetails = record.employerDetails || {};
-  const storedTaskStatements = record.taskStatements || {};
-  const legacyWorkPlanDates = {
-    startDate: legacyEmployerDetails.professionalStartDate || legacyEmployerDetails.positionStartDate || '',
-    expectedCompletionDate: legacyEmployerDetails.expectedCompletionDate || '',
-    expectedLeaveDays: legacyEmployerDetails.expectedLeaveDays ?? 0
-  };
   const merged = {
     ...base,
     ...record,
     learnerInfo: { ...base.learnerInfo, ...(record.learnerInfo || {}) },
     preReviewed: { ...base.preReviewed, ...(record.preReviewed || {}) },
     approvals: { ...base.approvals, ...(record.approvals || {}) },
-    employerDetails: {
-      ...base.employerDetails,
-      organizationName: legacyEmployerDetails.organizationName ?? base.employerDetails.organizationName,
-      organizationAddress: legacyEmployerDetails.organizationAddress ?? base.employerDetails.organizationAddress,
-      organizationWebsite: legacyEmployerDetails.organizationWebsite ?? base.employerDetails.organizationWebsite,
-      positionTitle: legacyEmployerDetails.positionTitle ?? base.employerDetails.positionTitle,
-      averageHoursPerWeek: legacyEmployerDetails.averageHoursPerWeek ?? base.employerDetails.averageHoursPerWeek
-    },
-    workPlanDates: { ...legacyWorkPlanDates, ...(record.workPlanDates || {}) },
-    taskStatements: {
-      financialReporting: mergeTaskState(base.taskStatements.financialReporting, storedTaskStatements.financialReporting),
-      assuranceTrust: mergeTaskState(base.taskStatements.assuranceTrust, storedTaskStatements.assuranceTrust),
-      dc: mergeTaskState(base.taskStatements.dc, storedTaskStatements.dc)
-    },
+    employerDetails: { ...base.employerDetails, ...(record.employerDetails || {}) },
     duration: { ...base.duration, ...(record.duration || {}) },
     documents: {
       jobDescriptions: ((record.documents && record.documents.jobDescriptions) || []).slice(),
@@ -861,12 +690,7 @@ function normaliseWorkPlan(record) {
 }
 
 function loadWorkPlan() {
-  let stored = null;
-  try {
-    stored = JSON.parse(localStorage.getItem(workPlanKey) || 'null');
-  } catch (error) {
-    stored = null;
-  }
+  const stored = JSON.parse(localStorage.getItem(workPlanKey) || 'null');
   workPlan = stored ? normaliseWorkPlan(stored) : createDefaultWorkPlan();
 }
 
@@ -881,9 +705,9 @@ function isPreReviewedTemplate() {
 }
 
 function calculateWorkPlanDuration() {
-  const startDate = workPlan.workPlanDates.startDate;
-  const endDate = workPlan.workPlanDates.expectedCompletionDate;
-  const leaveDays = Number(workPlan.workPlanDates.expectedLeaveDays || 0);
+  const startDate = workPlan.employerDetails.professionalStartDate || workPlan.employerDetails.positionStartDate;
+  const endDate = workPlan.employerDetails.expectedCompletionDate;
+  const leaveDays = Number(workPlan.employerDetails.expectedLeaveDays || 0);
   const avgHours = Number(workPlan.employerDetails.averageHoursPerWeek || 0);
 
   const metrics = {
@@ -978,21 +802,13 @@ function getFilteredMentors() {
   );
 }
 
-function getFilteredSeniorLeaders() {
-  const employer = getCurrentEmployerData();
-  if (!employer || !employer.seniorLeaders) return [];
-  const query = (workPlan.approvals.seniorLeaderSearch || '').trim().toLowerCase();
-  if (!query) return employer.seniorLeaders;
-  return employer.seniorLeaders.filter((leader) =>
-    leader.name.toLowerCase().includes(query) || leader.cpaId.toLowerCase().includes(query)
-  );
-}
-
 function renderMentorOptions() {
   const employer = getCurrentEmployerData();
   if (!employer) {
     mentorSelect.innerHTML = '<option value="">Select employer first</option>';
     mentorSelect.disabled = true;
+    seniorLeaderSelect.innerHTML = '<option value="">Select employer first</option>';
+    seniorLeaderSelect.disabled = true;
     mentorNote.className = 'notice-box';
     mentorNote.innerHTML = '<strong>Mentor approval routing</strong><span>Select an employer first. The mentor list will then show approved mentors from the same company only.</span>';
     return;
@@ -1005,38 +821,19 @@ function renderMentorOptions() {
     .join('');
   mentorSelect.value = workPlan.approvals.mentorSelectedEmail || '';
 
+  const seniorLeaders = employer.seniorLeaders || [];
+  seniorLeaderSelect.disabled = false;
+  seniorLeaderSelect.innerHTML = ['<option value="">Select senior leader</option>']
+    .concat(seniorLeaders.map((leader) => `<option value="${escapeHtml(leader.email)}">${escapeHtml(leader.name)} | ${escapeHtml(leader.cpaId)}</option>`))
+    .join('');
+  seniorLeaderSelect.value = workPlan.approvals.seniorLeaderEmail || '';
+
   if (!mentors.length) {
     mentorNote.className = 'notice-box warn';
     mentorNote.innerHTML = '<strong>No matching mentors found</strong><span>No approved mentors match the current search. You can clear the search, try a work email lookup, or reach out to CPA Staff offline if the mentor is not in the system.</span>';
   } else {
     mentorNote.className = 'notice-box';
     mentorNote.innerHTML = '<strong>Mentor approval routing</strong><span>Select a mentor from the same organization to route the work plan for mentor approval. If the mentor cannot be found, the learner should reach out to CPA Staff offline.</span>';
-  }
-}
-
-function renderSeniorLeaderOptions() {
-  const employer = getCurrentEmployerData();
-  if (!employer) {
-    seniorLeaderSelect.innerHTML = '<option value="">Select employer first</option>';
-    seniorLeaderSelect.disabled = true;
-    seniorLeaderNote.className = 'notice-box';
-    seniorLeaderNote.innerHTML = '<strong>Senior leader routing</strong><span>Select an employer first. The senior leader list will then show approved senior leaders from the same company only.</span>';
-    return;
-  }
-
-  const leaders = getFilteredSeniorLeaders();
-  seniorLeaderSelect.disabled = false;
-  seniorLeaderSelect.innerHTML = ['<option value="">Select senior leader</option>']
-    .concat(leaders.map((leader) => `<option value="${escapeHtml(leader.email)}">${escapeHtml(leader.name)} | ${escapeHtml(leader.cpaId)}</option>`))
-    .join('');
-  seniorLeaderSelect.value = workPlan.approvals.seniorLeaderEmail || '';
-
-  if (!leaders.length) {
-    seniorLeaderNote.className = 'notice-box warn';
-    seniorLeaderNote.innerHTML = '<strong>No matching senior leaders found</strong><span>No senior leaders match the current search. Clear the search or reach out to CPA Staff offline if the senior leader is not in the system.</span>';
-  } else {
-    seniorLeaderNote.className = 'notice-box';
-    seniorLeaderNote.innerHTML = '<strong>Senior leader routing</strong><span>Select a senior leader from the same organization. This assignment is used for pre-reviewed role escalation and work plan oversight.</span>';
   }
 }
 
@@ -1129,11 +926,6 @@ function updatePreReviewedSelectionFromRole(role) {
     : 'Standard / non-pre-reviewed work plan template';
 }
 
-function setRoleTypeSelection(value) {
-  workPlan.roleType = value;
-  syncRoleTypeBehavior();
-}
-
 function renderPreReviewedStatus() {
   const employer = getCurrentEmployerData();
   const role = getSelectedRoleData();
@@ -1192,7 +984,8 @@ function renderPreReviewedStatus() {
     preReviewedNote.innerHTML = `<strong>Pre-reviewed role available</strong><span>${escapeHtml(role.name)} still has capacity. The learner can select the pre-reviewed role template and the assigned Senior Leader is automatically applied to the work plan.</span>`;
     summaryAvailability.textContent = `${role.name} is available with ${remaining} remaining spot${remaining === 1 ? '' : 's'}.`;
     if (!workPlan.roleType || workPlan.roleType === 'Pre-reviewed') {
-      setRoleTypeSelection('Pre-reviewed');
+      workPlan.roleType = 'Pre-reviewed';
+      roleType.value = 'Pre-reviewed';
     }
     const employerMentors = (employer.approvedMentors || []);
     const configuredMentor = employerMentors.find((mentor) => mentor.email === role.defaultMentorEmail);
@@ -1208,8 +1001,9 @@ function renderPreReviewedStatus() {
       seniorLeaderSelect.value = matchingLeader.email;
     }
   } else {
-    if (workPlan.roleType === 'Pre-reviewed') {
-      setRoleTypeSelection('');
+    if (roleType.value === 'Pre-reviewed') {
+      workPlan.roleType = '';
+      roleType.value = '';
     }
     preReviewedNote.className = 'notice-box warn';
     preReviewedNote.innerHTML = `<strong>Role limit reached</strong><span>${escapeHtml(role.name)} has reached its learner limit. The learner cannot use the pre-reviewed role template and should proceed with the standard template and contact the assigned Senior Leader.</span>`;
@@ -1221,13 +1015,13 @@ function renderPreReviewedStatus() {
 }
 
 function syncRoleTypeBehavior() {
-  const value = workPlan.roleType;
-  Array.from(roleTypeGrid.querySelectorAll('.role-type-card')).forEach((card) => {
-    card.classList.toggle('selected', card.dataset.roleType === value);
-  });
+  const value = roleType.value;
   const showServiceArea = value === 'Firm - Audit & Assurance' || value === 'Firm - Non assurance';
   serviceAreaField.classList.toggle('hidden', !showServiceArea);
-  if (!showServiceArea) serviceArea.value = '';
+
+  if (value !== 'Pre-reviewed' && !value.startsWith('Firm -')) {
+    serviceArea.value = '';
+  }
 }
 
 function syncOtherRoleField() {
@@ -1238,20 +1032,20 @@ function syncOtherRoleField() {
 
 function readFormIntoState() {
   workPlan.preReviewed.employer = employerSelect.value;
+  workPlan.roleType = roleType.value;
   workPlan.serviceArea = serviceArea.value.trim();
   workPlan.approvals.mentorEmail = mentorEmail.value.trim();
   workPlan.approvals.mentorSearch = mentorSearch.value.trim();
-  workPlan.approvals.seniorLeaderSearch = seniorLeaderSearchInput.value.trim();
 
   workPlan.employerDetails.organizationName = organizationName.value.trim();
   workPlan.employerDetails.organizationAddress = organizationAddress.value.trim();
   workPlan.employerDetails.organizationWebsite = organizationWebsite.value.trim();
   workPlan.employerDetails.positionTitle = document.getElementById('position-title').value.trim();
+  workPlan.employerDetails.professionalStartDate = document.getElementById('professional-start-date').value;
+  workPlan.employerDetails.positionStartDate = document.getElementById('position-start-date').value;
+  workPlan.employerDetails.expectedCompletionDate = document.getElementById('expected-completion-date').value;
+  workPlan.employerDetails.expectedLeaveDays = Number(document.getElementById('expected-leave-days').value || 0);
   workPlan.employerDetails.averageHoursPerWeek = Number(document.getElementById('average-hours').value || 0);
-
-  workPlan.workPlanDates.startDate = document.getElementById('work-plan-start-date').value;
-  workPlan.workPlanDates.expectedCompletionDate = document.getElementById('expected-completion-date').value;
-  workPlan.workPlanDates.expectedLeaveDays = Number(document.getElementById('expected-leave-days').value || 0);
 
   workPlan.jobInformation.rolePlans = Array.from(rolePlanGrid.querySelectorAll('input[type="checkbox"]:checked')).map((box) => box.value);
   workPlan.jobInformation.otherRolePlan = otherRolePlan.value.trim();
@@ -1268,18 +1062,18 @@ function readFormIntoState() {
 function loadStateIntoForm() {
   mentorEmail.value = workPlan.approvals.mentorEmail || '';
   mentorSearch.value = workPlan.approvals.mentorSearch || '';
-  seniorLeaderSearchInput.value = workPlan.approvals.seniorLeaderSearch || '';
+  roleType.value = workPlan.roleType || '';
   serviceArea.value = workPlan.serviceArea || '';
 
   organizationName.value = workPlan.employerDetails.organizationName || '';
   organizationAddress.value = workPlan.employerDetails.organizationAddress || '';
   organizationWebsite.value = workPlan.employerDetails.organizationWebsite || '';
   document.getElementById('position-title').value = workPlan.employerDetails.positionTitle || '';
+  document.getElementById('professional-start-date').value = workPlan.employerDetails.professionalStartDate || '';
+  document.getElementById('position-start-date').value = workPlan.employerDetails.positionStartDate || '';
+  document.getElementById('expected-completion-date').value = workPlan.employerDetails.expectedCompletionDate || '';
+  document.getElementById('expected-leave-days').value = workPlan.employerDetails.expectedLeaveDays ?? 0;
   document.getElementById('average-hours').value = workPlan.employerDetails.averageHoursPerWeek ?? 37.5;
-
-  document.getElementById('work-plan-start-date').value = workPlan.workPlanDates.startDate || '';
-  document.getElementById('expected-completion-date').value = workPlan.workPlanDates.expectedCompletionDate || '';
-  document.getElementById('expected-leave-days').value = workPlan.workPlanDates.expectedLeaveDays ?? 0;
 
   Array.from(rolePlanGrid.querySelectorAll('input[type="checkbox"]')).forEach((box) => {
     box.checked = workPlan.jobInformation.rolePlans.includes(box.value);
@@ -1292,6 +1086,8 @@ function loadStateIntoForm() {
   document.getElementById('department-employees').value = workPlan.jobInformation.departmentEmployees || '';
   document.getElementById('department-cpas').value = workPlan.jobInformation.departmentCpas || '';
   document.getElementById('direct-reports').value = workPlan.jobInformation.directReports || '';
+  actualGainedPe.value = workPlan.duration.actualGainedPE || 'To be entered by CPA Reviewer';
+  reviewerLimitIndicator.checked = Boolean(workPlan.duration.reviewerThreeAttemptIndicator);
 
   syncRoleTypeBehavior();
   syncOtherRoleField();
@@ -1309,11 +1105,11 @@ function maybePopulateEmployerDetails() {
 function renderDurationMetrics() {
   const metrics = calculateWorkPlanDuration();
   if (!metrics.valid) {
-    durationMetricGrid.innerHTML = '<div class="empty-state">Enter a work plan start date, expected completion date, and expected leaves to calculate potential professional experience and duration.</div>';
+    dateMetrics.innerHTML = '<div class="empty-state">Enter a professional-level start date, expected completion date, and expected leaves to calculate potential professional experience and duration.</div>';
     return;
   }
 
-  durationMetricGrid.innerHTML = `
+  dateMetrics.innerHTML = `
     <div class="metric-card">
       <div class="value">${metrics.potentialMonths.toFixed(2)}</div>
       <strong>Potential professional experience</strong>
@@ -1327,91 +1123,9 @@ function renderDurationMetrics() {
     <div class="metric-card">
       <div class="value">${metrics.totalDays}</div>
       <strong>Planned duration</strong>
-      <span>${formatShortDate(workPlan.workPlanDates.startDate)} to ${formatShortDate(workPlan.workPlanDates.expectedCompletionDate)}</span>
+      <span>${formatShortDate(workPlan.employerDetails.professionalStartDate || workPlan.employerDetails.positionStartDate)} to ${formatShortDate(workPlan.employerDetails.expectedCompletionDate)}</span>
     </div>
   `;
-}
-
-function renderReviewerMaintainedFields() {
-  summaryActualGainedPe.textContent = workPlan.duration.actualGainedPE || 'To be entered by CPA Reviewer.';
-  summaryReviewerLimit.textContent = workPlan.duration.reviewerThreeAttemptIndicator
-    ? 'Reached - three resubmissions used.'
-    : 'Not reached.';
-}
-
-function renderTaskStatementTable(bodyEl, definitions, group) {
-  const state = workPlan.taskStatements[group] || [];
-  bodyEl.innerHTML = definitions.map((def) => {
-    const entry = state.find((item) => item.id === def.id) || { learnerPlan: '', levelRequired: 2 };
-    return `
-      <tr>
-        <td>${escapeHtml(def.id)}</td>
-        <td>${escapeHtml(def.description)}</td>
-        <td>
-          <select data-task-group="${group}" data-task-id="${def.id}" data-field="learnerPlan">
-            <option value="" ${entry.learnerPlan === '' ? 'selected' : ''}>Select</option>
-            <option value="Yes" ${entry.learnerPlan === 'Yes' ? 'selected' : ''}>Yes</option>
-            <option value="No" ${entry.learnerPlan === 'No' ? 'selected' : ''}>No</option>
-          </select>
-        </td>
-        <td>
-          <select data-task-group="${group}" data-task-id="${def.id}" data-field="levelRequired">
-            ${[1, 2, 3, 4, 5].map((lvl) => `<option value="${lvl}" ${Number(entry.levelRequired) === lvl ? 'selected' : ''}>${lvl}</option>`).join('')}
-          </select>
-        </td>
-      </tr>
-    `;
-  }).join('');
-}
-
-function renderDcPoints(item) {
-  const lastIndex = item.points.length - 1;
-  const pointItems = item.points.map((point, index) => {
-    const sub = (index === lastIndex && item.subPoints)
-      ? `<ul>${item.subPoints.map((sp) => `<li>${escapeHtml(sp)}</li>`).join('')}</ul>`
-      : '';
-    return `<li>${escapeHtml(point)}${sub}</li>`;
-  }).join('');
-  return `<p style="margin-bottom:6px;">${escapeHtml(item.intro)}</p><ul class="task-desc-list">${pointItems}</ul>`;
-}
-
-function renderDcTable() {
-  const state = workPlan.taskStatements.dc || [];
-  dcTaskBody.innerHTML = dcStatements.map((def) => {
-    const entry = state.find((item) => item.id === def.id) || { learnerPlan: '', levelRequired: 2 };
-    return `
-      <tr>
-        <td>${escapeHtml(def.id)}</td>
-        <td><strong>${escapeHtml(def.competency)}</strong></td>
-        <td>${renderDcPoints(def)}</td>
-        <td>
-          <select data-task-group="dc" data-task-id="${def.id}" data-field="learnerPlan">
-            <option value="" ${entry.learnerPlan === '' ? 'selected' : ''}>Select</option>
-            <option value="Yes" ${entry.learnerPlan === 'Yes' ? 'selected' : ''}>Yes</option>
-            <option value="No" ${entry.learnerPlan === 'No' ? 'selected' : ''}>No</option>
-          </select>
-        </td>
-        <td>
-          <select data-task-group="dc" data-task-id="${def.id}" data-field="levelRequired">
-            ${[1, 2, 3, 4, 5].map((lvl) => `<option value="${lvl}" ${Number(entry.levelRequired) === lvl ? 'selected' : ''}>${lvl}</option>`).join('')}
-          </select>
-        </td>
-      </tr>
-    `;
-  }).join('');
-}
-
-function handleTaskStatementChange(event) {
-  const select = event.target.closest('select[data-task-group]');
-  if (!select) return;
-  const group = select.dataset.taskGroup;
-  const taskId = select.dataset.taskId;
-  const field = select.dataset.field;
-  const list = workPlan.taskStatements[group];
-  const entry = list && list.find((item) => item.id === taskId);
-  if (!entry) return;
-  entry[field] = field === 'levelRequired' ? Number(select.value) : select.value;
-  persistWorkPlan();
 }
 
 function renderDocuments() {
@@ -1442,16 +1156,15 @@ function renderDocuments() {
 function setReadonlyState() {
   const readonly = workPlan.workflow.status === 'Pending Mentor Approval';
   document.querySelectorAll('.form-panel input, .form-panel select, .form-panel textarea').forEach((element) => {
-    if (['legal-name','preferred-name','cpa-id','governing-body','email-address','phone-number','template-path','configured-senior-leader'].includes(element.id)) {
+    if (['legal-name','preferred-name','cpa-id','governing-body','email-address','phone-number','template-path','configured-senior-leader','actual-gained-pe','reviewer-limit-indicator'].includes(element.id)) {
       return;
     }
     if (element.id === 'continue-btn') return;
     element.disabled = readonly;
   });
-  Array.from(roleTypeGrid.querySelectorAll('.role-type-card')).forEach((card) => {
-    card.disabled = readonly;
-  });
   document.getElementById('save-draft-btn').disabled = readonly;
+  const submitWorkPlanBtn = document.getElementById('submit-workplan-btn');
+  if (submitWorkPlanBtn) submitWorkPlanBtn.disabled = readonly;
   document.getElementById('attach-job-description-btn').disabled = readonly;
   document.getElementById('attach-supporting-btn').disabled = readonly;
 }
@@ -1475,7 +1188,7 @@ function validateWorkPlan() {
 
 function validateForSubmit() {
   const issues = validateWorkPlan();
-  const startDate = workPlan.workPlanDates.startDate;
+  const startDate = workPlan.employerDetails.professionalStartDate || workPlan.employerDetails.positionStartDate;
   if (!workPlan.employerDetails.organizationName) {
     issues.push('Organization name is required before the work plan can be submitted.');
   }
@@ -1485,12 +1198,12 @@ function validateForSubmit() {
   if (!startDate) {
     issues.push('A work plan start date is required before submission.');
   }
-  if (!workPlan.workPlanDates.expectedCompletionDate) {
+  if (!workPlan.employerDetails.expectedCompletionDate) {
     issues.push('Expected completion date is required before submission.');
   }
-  if (startDate && workPlan.workPlanDates.expectedCompletionDate) {
+  if (startDate && workPlan.employerDetails.expectedCompletionDate) {
     const start = new Date(`${startDate}T00:00:00`);
-    const end = new Date(`${workPlan.workPlanDates.expectedCompletionDate}T00:00:00`);
+    const end = new Date(`${workPlan.employerDetails.expectedCompletionDate}T00:00:00`);
     if (end < start) {
       issues.push('Expected completion date must be on or after the work plan start date.');
     }
@@ -1507,11 +1220,15 @@ function validateForSubmit() {
 function renderSummary() {
   const employer = getCurrentEmployerData();
   const role = getSelectedRoleData();
+  const issues = validateWorkPlan();
 
   summaryTemplate.textContent = templatePath.value || 'No template selected yet.';
   summaryEmployer.textContent = employerSelect.value || organizationName.value.trim() || 'No employer selected.';
-  summaryRoleType.textContent = workPlan.roleType || 'No role type selected.';
+  summaryRoleType.textContent = roleType.value || 'No role type selected.';
   summaryStatus.textContent = workPlan.workflow.status || 'Draft';
+  summaryDuration.textContent = calculateWorkPlanDuration().valid
+    ? `${workPlan.duration.potentialMonths.toFixed(2)} potential month(s) | ${Math.round(workPlan.duration.estimatedHours)} estimated hour(s) | Actual gained PE: ${workPlan.duration.actualGainedPE || 'Pending CPA Reviewer'}`
+    : 'Not calculated yet.';
   summaryDocuments.textContent = `${workPlan.documents.jobDescriptions.length} job description file(s) and ${workPlan.documents.supporting.length} supporting document(s) attached.`;
   summaryMentor.textContent = workPlan.approvals.mentorName
     ? `${workPlan.approvals.mentorName} (${workPlan.approvals.mentorCpaId})`
@@ -1541,9 +1258,6 @@ function renderSummary() {
   } else {
     summaryAvailability.textContent = employer ? 'Choose a pre-reviewed role to inspect role limits and remaining spots.' : 'Choose an employer to review availability and role limits.';
   }
-
-  renderDurationMetrics();
-  renderReviewerMaintainedFields();
 }
 
 function renderAll() {
@@ -1553,10 +1267,7 @@ function renderAll() {
   loadStateIntoForm();
   maybePopulateEmployerDetails();
   renderMentorOptions();
-  renderSeniorLeaderOptions();
-  renderTaskStatementTable(frTaskBody, financialReportingStatements, 'financialReporting');
-  renderTaskStatementTable(atTaskBody, assuranceTrustStatements, 'assuranceTrust');
-  renderDcTable();
+  renderDurationMetrics();
   renderDocuments();
   renderPreReviewedStatus();
   updateWorkflowNotice();
@@ -1635,14 +1346,11 @@ employerSelect.addEventListener('change', () => {
   selectSeniorLeader(null);
   workPlan.approvals.mentorEmail = '';
   workPlan.approvals.mentorSearch = '';
-  workPlan.approvals.seniorLeaderSearch = '';
   mentorEmail.value = '';
   mentorSearch.value = '';
-  seniorLeaderSearchInput.value = '';
   maybePopulateEmployerDetails();
   renderRoleOptions();
   renderMentorOptions();
-  renderSeniorLeaderOptions();
   renderPreReviewedStatus();
   renderSummary();
 });
@@ -1652,13 +1360,12 @@ preReviewedRoleSelect.addEventListener('change', () => {
   const role = employer ? employer.roles.find((item) => item.id === preReviewedRoleSelect.value) : null;
   updatePreReviewedSelectionFromRole(role || null);
   if (role && workPlan.preReviewed.remainingSpots > 0) {
-    setRoleTypeSelection('Pre-reviewed');
+    roleType.value = 'Pre-reviewed';
     setMessage(`${role.name} is available. The pre-reviewed role template can be used for this work plan.`);
   } else if (role) {
     setMessage(`The learner limit for ${role.name} has been reached. Use the standard template and contact ${role.seniorLeader}.`);
   }
   renderMentorOptions();
-  renderSeniorLeaderOptions();
   renderPreReviewedStatus();
   renderSummary();
 });
@@ -1666,12 +1373,6 @@ preReviewedRoleSelect.addEventListener('change', () => {
 mentorSearch.addEventListener('input', () => {
   workPlan.approvals.mentorSearch = mentorSearch.value.trim();
   renderMentorOptions();
-  renderSummary();
-});
-
-seniorLeaderSearchInput.addEventListener('input', () => {
-  workPlan.approvals.seniorLeaderSearch = seniorLeaderSearchInput.value.trim();
-  renderSeniorLeaderOptions();
   renderSummary();
 });
 
@@ -1720,14 +1421,9 @@ supportingDocList.addEventListener('click', (event) => {
 document.getElementById('attach-job-description-btn').addEventListener('click', () => attachFiles(jobDescriptionUpload, 'jobDescriptions', 'Job description'));
 document.getElementById('attach-supporting-btn').addEventListener('click', () => attachFiles(supportingDocsUpload, 'supporting', 'Supporting document'));
 
-frTaskBody.addEventListener('change', handleTaskStatementChange);
-atTaskBody.addEventListener('change', handleTaskStatementChange);
-dcTaskBody.addEventListener('change', handleTaskStatementChange);
-
-roleTypeGrid.addEventListener('click', (event) => {
-  const card = event.target.closest('.role-type-card');
-  if (!card) return;
-  setRoleTypeSelection(card.dataset.roleType);
+roleType.addEventListener('change', () => {
+  workPlan.roleType = roleType.value;
+  syncRoleTypeBehavior();
   renderSummary();
 });
 
@@ -1784,18 +1480,18 @@ document.getElementById('continue-btn').addEventListener('click', () => {
   renderSummary();
 });
 
-try {
-  loadWorkPlan();
-  persistWorkPlan();
-  updateWorkflowNotice();
-  renderAll();
-} catch (error) {
-  localStorage.removeItem(workPlanKey);
-  workPlan = createDefaultWorkPlan();
-  persistWorkPlan();
-  updateWorkflowNotice();
-  renderAll();
-}
+const submitWorkPlanBtnEl = document.getElementById('submit-workplan-btn');
+if (submitWorkPlanBtnEl) submitWorkPlanBtnEl.addEventListener('click', submitWorkPlan);
+
+loadWorkPlan();
+persistWorkPlan();
+updateWorkflowNotice();
+renderAll();
 </script>
 </body>
 </html>
+
+
+
+
+
