@@ -206,10 +206,6 @@
               <input id="final-hours" type="number" min="0" step="1">
             </div>
           </div>
-          <div class="notice-box warn" style="margin-top:1rem;">
-            <strong>Leave display</strong>
-            <span>The saved leave value from the learner's work plan is shown here and should remain visible for final duration confirmation.</span>
-          </div>
         </section>
 
         <section class="form-section">
@@ -227,11 +223,11 @@
               <input id="chargeable-hours-note" type="text" placeholder="Example: Assurance engagement time summary">
             </div>
           </div>
-          <div class="button-row" style="margin-top:1rem;">
-            <button class="action-btn" id="attach-chargeable-btn" type="button">Attach chargeable hour form</button>
+          <div class="field" style="margin-top:1rem;max-width:420px;">
+            <label for="chargeable-upload">Attach chargeable hour form</label>
+            <input id="chargeable-upload" type="file">
           </div>
           <div class="attachment-list" id="attachment-list" style="margin-top:1rem;"></div>
-          <input id="chargeable-upload" type="file" hidden>
           <div class="subcopy" style="margin-top:.75rem;">This attachment is optional and should only be included when the learner's pathway requires chargeable hour support.</div>
         </section>
 
@@ -260,10 +256,6 @@
         <section class="form-section">
           <h3>Submission actions</h3>
           <div class="button-row">
-          <button class="action-btn primary" id="save-draft-btn" type="button">
-              Save draft
-          </button>
-
           <button class="action-btn success" id="submit-btn" type="button">
               Submit final experience report
           </button>
@@ -289,16 +281,12 @@
           <span id="meta-duration">Pending confirmation</span>
         </div>
         <div class="meta-card">
-          <strong>Chargeable hour form</strong>
-          <span id="meta-chargeable">Not required</span>
-        </div>
-        <div class="meta-card">
           <strong>Submitted date and time</strong>
           <span id="meta-submitted">Not submitted</span>
         </div>
         <div class="meta-card">
-          <strong>Completion readiness</strong>
-          <span id="meta-readiness">Finish the final assessment and duration confirmation to submit.</span>
+          <strong>Assigned mentor</strong>
+          <span id="meta-mentor">Not recorded</span>
         </div>
       </div>
     </aside>
@@ -362,9 +350,8 @@ const coreCompetencyList = document.getElementById('core-competency-list');
 const dcList = document.getElementById('dc-list');
 const metaStatus = document.getElementById('meta-status');
 const metaDuration = document.getElementById('meta-duration');
-const metaChargeable = document.getElementById('meta-chargeable');
 const metaSubmitted = document.getElementById('meta-submitted');
-const metaReadiness = document.getElementById('meta-readiness');
+const metaMentor = document.getElementById('meta-mentor');
 const messageBar = document.getElementById('message-bar');
 const messageText = document.getElementById('message-text');
 
@@ -613,13 +600,8 @@ function renderMeta() {
   const statusClass = report.status === 'Submitted' ? 'badge-pending' : ready ? 'badge-ready' : 'badge-draft';
   metaStatus.innerHTML = `<span class="status-badge ${statusClass}">${report.status === 'Submitted' ? 'Submitted' : 'Draft'}</span>`;
   metaDuration.textContent = report.confirmedMonths !== '' ? `${Number(report.confirmedMonths).toFixed(2)} months | ${report.confirmedHours || 0} hours` : 'Pending confirmation';
-  metaChargeable.textContent = report.chargeableHoursRequired === 'Yes'
-    ? `${report.attachments && report.attachments.length ? 'Attached' : 'Required attachment missing'}`
-    : 'Not required';
   metaSubmitted.textContent = formatDate(report.submittedAt);
-  metaReadiness.textContent = ready
-    ? 'All required final report items are complete and ready for submission.'
-    : `${issues.length} required item${issues.length === 1 ? '' : 's'} still need attention.`;
+  metaMentor.textContent = report.mentor || 'Not recorded';
 }
 
 function renderAll() {
@@ -631,10 +613,6 @@ function renderAll() {
   renderMeta();
   persistReport();
 }
-
-document.getElementById('attach-chargeable-btn').addEventListener('click', () => {
-  chargeableUpload.click();
-});
 
 chargeableUpload.addEventListener('change', () => {
   if (!chargeableUpload.files || !chargeableUpload.files.length) return;
@@ -690,14 +668,6 @@ dcList.addEventListener('input', (event) => {
   report.dc[evidenceId].evidence = event.target.value.trim();
   renderMeta();
   persistReport();
-});
-
-document.getElementById('save-draft-btn').addEventListener('click', () => {
-  report.status = 'Draft';
-  readForm();
-  persistReport();
-  renderMeta();
-  setMessage('Final experience report draft saved.');
 });
 
 document.getElementById('submit-btn').addEventListener('click', () => {

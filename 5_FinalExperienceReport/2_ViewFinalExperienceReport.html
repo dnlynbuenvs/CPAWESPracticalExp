@@ -130,6 +130,7 @@
 
         <section class="info-section">
           <h3>Chargeable hours attachment</h3>
+          <div class="grid-2" id="chargeable-status-grid" style="margin-bottom:1rem;"></div>
           <div id="attachment-list" class="task-list"></div>
         </section>
 
@@ -150,10 +151,8 @@
       <h2>Final report history</h2>
       <div class="meta-stack">
         <div class="meta-card"><strong>Current status</strong><span id="meta-status"></span></div>
-        <div class="meta-card"><strong>Mentor review</strong><span id="meta-mentor"></span></div>
-        <div class="meta-card"><strong>CPA review</strong><span id="meta-cpa"></span></div>
         <div class="meta-card"><strong>Submitted date and time</strong><span id="meta-submitted"></span></div>
-        <div class="meta-card"><strong>Learner notifications</strong><span id="meta-notifications"></span></div>
+        <div class="meta-card"><strong>Assigned mentor</strong><span id="meta-assigned-mentor"></span></div>
       </div>
     </aside>
   </section>
@@ -161,7 +160,9 @@
 
 <script>
 const finalReportKey = 'finalExperienceReport:learner-101';
+const workPlanKey = 'workPlanRecord:learner-101';
 const report = JSON.parse(localStorage.getItem(finalReportKey) || 'null');
+const workPlan = JSON.parse(localStorage.getItem(workPlanKey) || 'null') || {};
 const coreOrder = ['fr1','fr2','fr3','fr4','at1a','at1b','at1c'];
 const coreTitles = {
   fr1:'FR1 - Assess decision makers\' needs and actively design the development/ modification of reporting requirements or financial-reporting systems required to meet external user needs, such as an MD&A or financing needs (a large, complex example, or several smaller ones).',
@@ -181,6 +182,7 @@ const dcTitles = {
 
 function escapeHtml(value){return String(value || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
 function formatDate(dateValue){if(!dateValue)return'Not submitted';const d=new Date(dateValue);if(Number.isNaN(d.getTime()))return'Not submitted';return d.toLocaleString('en-CA',{year:'numeric',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})}
+function formatShortDate(dateValue){if(!dateValue)return'Not available';const d=new Date(`${dateValue}T00:00:00`);if(Number.isNaN(d.getTime()))return'Not available';return d.toLocaleDateString('en-CA',{year:'numeric',month:'short',day:'numeric'})}
 function renderCards(id, values){document.getElementById(id).innerHTML = values.map((item)=>`<div class="value-card"><span>${escapeHtml(item.label)}</span><strong>${escapeHtml(item.value)}</strong></div>`).join('')}
 function statusBadge(status){
   if(status === 'Pending Mentor Approval') return `<span class="status-badge badge-pending">${escapeHtml(status)}</span>`;
@@ -201,10 +203,18 @@ if(!report){
   ]);
   document.getElementById('final-summary').textContent = report.finalSummary || 'Not provided.';
   document.getElementById('completion-rationale').textContent = report.completionRationale || 'Not provided.';
+  const employerDetails = workPlan.employerDetails || {};
   renderCards('duration-grid', [
+    { label:'Experience start date', value: formatShortDate(employerDetails.professionalStartDate || employerDetails.positionStartDate) },
+    { label:'Expected completion date', value: formatShortDate(employerDetails.expectedCompletionDate) },
+    { label:'Leave days', value: report.leaveDaysShown || String(employerDetails.expectedLeaveDays ?? '0') },
+    { label:'Average hours per week', value: String(employerDetails.averageHoursPerWeek ?? '0') },
     { label:'Confirmed eligible duration (months)', value: report.confirmedMonths === '' ? 'Not confirmed' : Number(report.confirmedMonths).toFixed(2) },
-    { label:'Confirmed total hours', value: report.confirmedHours || 'Not confirmed' },
-    { label:'Leave days shown', value: report.leaveDaysShown || 'From work plan' }
+    { label:'Confirmed total hours', value: report.confirmedHours || 'Not confirmed' }
+  ]);
+  renderCards('chargeable-status-grid', [
+    { label:'Chargeable hour form required', value: report.chargeableHoursRequired || 'No' },
+    { label:'Attachment note', value: report.chargeableHoursNote || 'Not provided' }
   ]);
   const attachments = report.attachments || [];
   document.getElementById('attachment-list').innerHTML = attachments.length
@@ -219,10 +229,8 @@ if(!report){
     return `<div class="task-card"><strong>${escapeHtml(dcTitles[id])}</strong><span>Final level: ${escapeHtml(item.level || 'Not selected')}</span><span>${escapeHtml(item.evidence || 'No evidence summary recorded.')}</span></div>`;
   }).join('');
   document.getElementById('meta-status').innerHTML = statusBadge(report.status || 'Draft');
-  document.getElementById('meta-mentor').textContent = report.mentorDecision || 'Pending mentor review.';
-  document.getElementById('meta-cpa').textContent = report.cpaDecision || 'Pending CPA review.';
   document.getElementById('meta-submitted').textContent = formatDate(report.submittedAt);
-  document.getElementById('meta-notifications').textContent = (report.notifications || []).length ? `${report.notifications.length} notification(s) recorded` : 'No learner notifications recorded yet.';
+  document.getElementById('meta-assigned-mentor').textContent = report.mentor || 'Not recorded';
 }
 </script>
 </body>

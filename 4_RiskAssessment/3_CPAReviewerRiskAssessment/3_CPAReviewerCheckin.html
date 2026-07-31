@@ -121,7 +121,7 @@
   <section class="hero" aria-labelledby="checkin-title">
     <div>
       <h1 id="checkin-title">Review learner check-in report</h1>
-      <p>Review the learner check-in report, update the next check-in date or risk rating as needed, and approve, decline, or request more information.</p>
+      <p>Review the learner check-in report alongside the approved work plan context and the mentor's comment, then approve, decline, or mark it more information needed.</p>
     </div>
   </section>
 
@@ -150,43 +150,31 @@
             <div class="readonly-block"><strong>Hours completed in this period</strong><span id="hours-completed-value">Not provided</span></div>
             <div class="readonly-block"><strong>Competency progress update</strong><span id="competencies-progress-value">Not provided</span></div>
           </div>
-          <div class="readonly-block" style="margin-top:1rem;"><strong>Progress summary</strong><span id="progress-summary-value">Not provided</span></div>
-          <div class="readonly-block" style="margin-top:1rem;"><strong>Key accomplishments and updates</strong><span id="key-accomplishments-value">Not provided</span></div>
-          <div class="readonly-block" style="margin-top:1rem;"><strong>Support or guidance needed</strong><span id="support-needed-value">Not provided</span></div>
         </section>
 
         <section class="info-section">
-          <h3>Reviewer controls</h3>
-          <div class="grid-2">
-            <div class="form-field">
-              <label for="next-checkin-date">Reconfigured next check-in date</label>
-              <input id="next-checkin-date" type="date">
-            </div>
-            <div class="form-field">
-              <label for="risk-rating">Risk rating</label>
-              <select id="risk-rating">
-                <option value="">Select risk rating</option>
-                <option value="Low">Low</option>
-                <option value="Medium">Medium</option>
-                <option value="High">High</option>
-              </select>
-            </div>
-          </div>
-          <div class="form-field" style="margin-top:1rem;">
+          <h3>Mentor's comments</h3>
+          <div class="comment-list" id="comment-list"></div>
+        </section>
+
+        <section class="info-section">
+          <h3>CPA Reviewer review</h3>
+          <div class="form-field">
             <label for="reviewer-comment">CPA reviewer comment</label>
             <textarea id="reviewer-comment" placeholder="Add reviewer feedback, decision notes, or more-information details."></textarea>
           </div>
-          <div class="button-row" style="margin-top:1rem;">
-            <button class="action-btn primary" id="save-review-updates-btn" type="button">Save review updates</button>
-            <button class="action-btn success" id="approve-btn" type="button">Approve check-in report</button>
-            <button class="action-btn danger" id="decline-btn" type="button">Decline check-in report</button>
-            <button class="action-btn danger" id="more-info-btn" type="button">More info needed</button>
+          <div class="form-field" style="margin-top:1rem;max-width:320px;">
+            <label for="decision-select">Decision</label>
+            <select id="decision-select">
+              <option value="" selected>Select decision</option>
+              <option value="approve">Approve</option>
+              <option value="decline">Decline</option>
+              <option value="moreinfo">More info needed</option>
+            </select>
           </div>
-        </section>
-
-        <section class="info-section">
-          <h3>Review comments</h3>
-          <div class="comment-list" id="comment-list"></div>
+          <div class="button-row" style="margin-top:1rem;">
+            <button class="action-btn primary" id="save-decision-btn" type="button">Save</button>
+          </div>
         </section>
       </div>
     </section>
@@ -195,31 +183,9 @@
       <div class="section-label">Status and history</div>
       <h2>Report history</h2>
       <div class="meta-stack">
-        <div class="meta-card">
-          <strong>Assigned reviewer</strong>
-          <span>Assign the CPA reviewer responsible for this check-in report.</span>
-          <div class="form-field" style="margin-top:.75rem;">
-            <select id="assigned-reviewer-select">
-              <option value="Avery Patel, CPA">Avery Patel, CPA</option>
-              <option value="Noah Ramirez, CPA">Noah Ramirez, CPA</option>
-              <option value="Harper Singh, CPA">Harper Singh, CPA</option>
-              <option value="Lena Ortiz, CPA">Lena Ortiz, CPA</option>
-            </select>
-          </div>
-          <div class="button-row" style="margin-top:.75rem;">
-            <button class="action-btn primary" id="assign-reviewer-btn" type="button">Save assignment</button>
-          </div>
-          <span id="assigned-reviewer-status" style="margin-top:.75rem;">No reviewer assigned.</span>
-        </div>
         <div class="meta-card"><strong>Current status</strong><span id="meta-status">Not started</span></div>
-        <div class="meta-card"><strong>Review route</strong><span id="meta-route">No review route recorded.</span></div>
-        <div class="meta-card"><strong>Next check-in due</strong><span id="meta-due-date">No next check-in date recorded.</span></div>
         <div class="meta-card"><strong>Submitted date and time</strong><span id="meta-submitted">Not submitted</span></div>
-        <div class="meta-card"><strong>Current risk rating</strong><span id="meta-risk">Not set</span></div>
-        <div class="meta-card">
-          <strong>Audit trail</strong>
-          <div class="trail-list" id="trail-list" style="margin-top:.75rem;"></div>
-        </div>
+        <div class="meta-card"><strong>Assigned mentor</strong><span id="meta-mentor">Not recorded</span></div>
       </div>
     </aside>
   </section>
@@ -230,22 +196,18 @@ const workPlanKey = 'workPlanRecord:learner-101';
 const versionsKey = 'workPlanVersions:learner-101';
 const activeApprovedKey = 'activeApprovedWorkPlan:learner-101';
 const checkInKey = 'workPlanCheckInReport:learner-101';
-const availableReviewers = ['Avery Patel, CPA', 'Noah Ramirez, CPA', 'Harper Singh, CPA', 'Lena Ortiz, CPA'];
 
 const detailCopy = document.getElementById('detail-copy');
 const approvedPlanGrid = document.getElementById('approved-plan-grid');
 const messageBar = document.getElementById('message-bar');
 const messageText = document.getElementById('message-text');
 const reviewerComment = document.getElementById('reviewer-comment');
-const nextCheckinDate = document.getElementById('next-checkin-date');
-const riskRating = document.getElementById('risk-rating');
+const decisionSelect = document.getElementById('decision-select');
+const saveDecisionBtn = document.getElementById('save-decision-btn');
 const commentList = document.getElementById('comment-list');
 const metaStatus = document.getElementById('meta-status');
-const metaRoute = document.getElementById('meta-route');
-const metaDueDate = document.getElementById('meta-due-date');
 const metaSubmitted = document.getElementById('meta-submitted');
-const metaRisk = document.getElementById('meta-risk');
-const trailList = document.getElementById('trail-list');
+const metaMentor = document.getElementById('meta-mentor');
 
 let approvedPlan = null;
 let checkInReport = null;
@@ -360,9 +322,6 @@ function renderFieldValues() {
   document.getElementById('reporting-end-value').textContent = formatShortDate(checkInReport.reportingPeriodEnd);
   document.getElementById('hours-completed-value').textContent = checkInReport.hoursCompleted || 'Not provided';
   document.getElementById('competencies-progress-value').textContent = checkInReport.competenciesProgress || 'Not provided';
-  document.getElementById('progress-summary-value').textContent = checkInReport.progressSummary || 'Not provided';
-  document.getElementById('key-accomplishments-value').textContent = checkInReport.keyAccomplishments || 'Not provided';
-  document.getElementById('support-needed-value').textContent = checkInReport.supportNeeded || 'Not provided';
 }
 
 function statusBadge(status) {
@@ -373,53 +332,20 @@ function statusBadge(status) {
 }
 
 function renderComments() {
-  const items = checkInReport.comments || [];
+  const items = (checkInReport.comments || []).filter((item) => item.role === 'Mentor');
   commentList.innerHTML = items.length ? items.slice().reverse().map((item) => `
     <div class="comment-item">
       <strong>${escapeHtml(item.author)} | ${escapeHtml(item.visibility)}</strong>
       <span>${escapeHtml(formatDate(item.at))}</span>
       <span>${escapeHtml(item.text)}</span>
     </div>
-  `).join('') : '<div class="empty-state">No CPA reviewer comments recorded yet.</div>';
-}
-
-function renderTrail() {
-  const items = checkInReport.auditTrail || [];
-  trailList.innerHTML = items.length ? items.slice().reverse().map((entry) => `
-    <div class="trail-item">
-      <strong>${escapeHtml(entry.actor)} | ${escapeHtml(entry.role)}</strong>
-      <span>${escapeHtml(formatDate(entry.at))}</span>
-      <span>${escapeHtml(entry.previousStatus)} -> ${escapeHtml(entry.newStatus)}</span>
-      <span>${escapeHtml(entry.comments)}</span>
-    </div>
-  `).join('') : '<div class="empty-state">No check-in report activity recorded yet.</div>';
+  `).join('') : '<div class="empty-state">No mentor comments recorded yet.</div>';
 }
 
 function renderMeta() {
   metaStatus.innerHTML = statusBadge(checkInReport.status || 'Draft');
-  metaRoute.textContent = checkInReport.route || 'No review route recorded.';
-  metaDueDate.textContent = checkInReport.nextCheckInDate ? formatShortDate(checkInReport.nextCheckInDate) : 'No next check-in date recorded.';
   metaSubmitted.textContent = checkInReport.submittedAt ? formatDate(checkInReport.submittedAt) : 'Not submitted';
-  metaRisk.textContent = checkInReport.riskRating || 'Not set';
-  const assignedReviewer = checkInReport.assignedReviewer || '';
-  document.getElementById('assigned-reviewer-select').value = availableReviewers.includes(assignedReviewer) ? assignedReviewer : availableReviewers[0];
-  document.getElementById('assigned-reviewer-status').textContent = assignedReviewer ? `Currently assigned to ${assignedReviewer}.` : 'No reviewer assigned.';
-  renderTrail();
-}
-
-function assignReviewer() {
-  const reviewer = document.getElementById('assigned-reviewer-select').value;
-  const previousReviewer = checkInReport.assignedReviewer || '';
-  checkInReport.assignedReviewer = reviewer;
-  addAudit(
-    checkInReport.status || 'Pending CPA Review',
-    checkInReport.status || 'Pending CPA Review',
-    previousReviewer && previousReviewer !== reviewer
-      ? `Assigned reviewer changed from ${previousReviewer} to ${reviewer}.`
-      : `Assigned reviewer set to ${reviewer}.`
-  );
-  renderAll();
-  setMessage(`Check-in report assigned to ${reviewer}.`);
+  metaMentor.textContent = checkInReport.mentorName || 'Not recorded';
 }
 
 function addAudit(previousStatus, newStatus, comments, actor = 'Avery Patel, CPA', role = 'CPA Reviewer') {
@@ -438,24 +364,9 @@ function addComment(text) {
   });
 }
 
-function saveReviewUpdates() {
-  const previousStatus = checkInReport.status || 'Pending CPA Review';
-  const oldDate = checkInReport.nextCheckInDate || '';
-  const oldRisk = checkInReport.riskRating || '';
-  const newDate = nextCheckinDate.value || oldDate;
-  const newRisk = riskRating.value || oldRisk;
-  checkInReport.nextCheckInDate = newDate;
-  checkInReport.riskRating = newRisk;
-  addAudit(previousStatus, previousStatus, `CPA Reviewer updated review controls.${oldDate !== newDate ? ` Next check-in date set to ${newDate}.` : ''}${oldRisk !== newRisk ? ` Risk rating set to ${newRisk}.` : ''}`);
-  renderAll();
-  window.location.href = '../../1_Dashboard/CPAReviewer.html';
-}
-
 function setDecision(status, routeText, auditText) {
   const previousStatus = checkInReport.status || 'Pending CPA Review';
   const comment = reviewerComment.value.trim();
-  if (nextCheckinDate.value) checkInReport.nextCheckInDate = nextCheckinDate.value;
-  if (riskRating.value) checkInReport.riskRating = riskRating.value;
   addComment(comment);
   checkInReport.status = status;
   checkInReport.route = routeText;
@@ -472,28 +383,29 @@ function renderAll() {
     { label:'Employer', value: approvedPlan.employerDetails.organizationName || 'Not recorded' },
     { label:'Position title', value: approvedPlan.employerDetails.positionTitle || 'Not recorded' },
     { label:'Mentor', value: approvedPlan.approvals.mentorName || 'Not recorded' },
-    { label:'Current next check-in date', value: checkInReport.nextCheckInDate ? formatShortDate(checkInReport.nextCheckInDate) : 'Not set' }
+    { label:'Next check-in due', value: checkInReport.nextCheckInDate ? formatShortDate(checkInReport.nextCheckInDate) : 'Not set' }
   ]);
-  detailCopy.textContent = 'CPA Reviewer can review the learner check-in report, approve it, decline it, mark it more information needed, and update next check-in and risk settings.';
+  detailCopy.textContent = 'CPA Reviewer can review the learner check-in report and either approve it, decline it, or mark it more information needed.';
   renderFieldValues();
-  nextCheckinDate.value = checkInReport.nextCheckInDate || '';
-  riskRating.value = checkInReport.riskRating || '';
   renderComments();
   renderMeta();
   persistCheckInReport();
 }
 
-document.getElementById('save-review-updates-btn').addEventListener('click', saveReviewUpdates);
-document.getElementById('approve-btn').addEventListener('click', () => {
-  setDecision('Approved', 'Approved by CPA Reviewer.', 'CPA Reviewer approved the learner check-in report.');
+saveDecisionBtn.addEventListener('click', () => {
+  const decision = decisionSelect.value;
+  if (!decision) {
+    setMessage('Select Approve, Decline, or More info needed before saving your decision.');
+    return;
+  }
+  if (decision === 'approve') {
+    setDecision('Approved', 'Approved by CPA Reviewer.', 'CPA Reviewer approved the learner check-in report.');
+  } else if (decision === 'decline') {
+    setDecision('Declined', 'Declined by CPA Reviewer and returned to learner.', 'CPA Reviewer declined the learner check-in report.');
+  } else if (decision === 'moreinfo') {
+    setDecision('More information needed', 'More information requested by CPA Reviewer.', 'CPA Reviewer requested more information on the learner check-in report.');
+  }
 });
-document.getElementById('decline-btn').addEventListener('click', () => {
-  setDecision('Declined', 'Declined by CPA Reviewer and returned to learner.', 'CPA Reviewer declined the learner check-in report.');
-});
-document.getElementById('more-info-btn').addEventListener('click', () => {
-  setDecision('More information needed', 'More information requested by CPA Reviewer.', 'CPA Reviewer requested more information on the learner check-in report.');
-});
-document.getElementById('assign-reviewer-btn').addEventListener('click', assignReviewer);
 
 loadApprovedPlan();
 loadCheckInReport();

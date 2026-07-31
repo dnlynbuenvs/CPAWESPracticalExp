@@ -81,6 +81,8 @@
   .button-row{display:flex;flex-wrap:wrap;gap:8px}
   .action-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:var(--radius-sm);border:1px solid var(--imis-blue);padding:9px 16px;background:var(--white);color:var(--imis-blue);font-size:12px;font-weight:700;cursor:pointer;transition:all .15s ease}
   .action-btn:hover{background:#EBF3FF}
+  .action-btn.primary{background:var(--imis-blue);border-color:var(--imis-blue);color:var(--white)}
+  .action-btn.primary:hover{background:#164e8f}
   .action-btn.success{background:var(--white);border-color:var(--badge-green-text);color:var(--badge-green-text)}
   .action-btn.success:hover{background:var(--badge-green-bg)}
   .action-btn.danger{background:var(--white);border-color:var(--red);color:var(--red)}
@@ -151,9 +153,11 @@
             <div class="readonly-block"><strong>Hours completed in this period</strong><span id="hours-completed-value">Not provided</span></div>
             <div class="readonly-block"><strong>Competency progress update</strong><span id="competencies-progress-value">Not provided</span></div>
           </div>
-          <div class="readonly-block" style="margin-top:1rem;"><strong>Progress summary</strong><span id="progress-summary-value">Not provided</span></div>
-          <div class="readonly-block" style="margin-top:1rem;"><strong>Key accomplishments and updates</strong><span id="key-accomplishments-value">Not provided</span></div>
-          <div class="readonly-block" style="margin-top:1rem;"><strong>Support or guidance needed</strong><span id="support-needed-value">Not provided</span></div>
+        </section>
+
+        <section class="info-section">
+          <h3>CPA review comment</h3>
+          <div class="comment-list" id="cpa-comment-list"></div>
         </section>
 
         <section class="info-section">
@@ -162,15 +166,17 @@
             <label for="mentor-comment">Mentor comment</label>
             <textarea id="mentor-comment" placeholder="Add learner-facing feedback for this check-in report."></textarea>
           </div>
-          <div class="button-row" style="margin-top:1rem;">
-            <button class="action-btn success" id="approve-btn" type="button">Approve check-in report</button>
-            <button class="action-btn danger" id="decline-btn" type="button">Decline check-in report</button>
+          <div class="form-field" style="margin-top:1rem;max-width:320px;">
+            <label for="decision-select">Decision</label>
+            <select id="decision-select">
+              <option value="" selected>Select decision</option>
+              <option value="approve">Approve</option>
+              <option value="decline">Decline</option>
+            </select>
           </div>
-        </section>
-
-        <section class="info-section">
-          <h3>Review comments</h3>
-          <div class="comment-list" id="comment-list"></div>
+          <div class="button-row" style="margin-top:1rem;">
+            <button class="action-btn primary" id="save-decision-btn" type="button">Save</button>
+          </div>
         </section>
       </div>
     </section>
@@ -180,13 +186,7 @@
       <h2>Report history</h2>
       <div class="meta-stack">
         <div class="meta-card"><strong>Current status</strong><span id="meta-status">Not started</span></div>
-        <div class="meta-card"><strong>Mentor route</strong><span id="meta-route">No submission route recorded.</span></div>
-        <div class="meta-card"><strong>Next check-in due</strong><span id="meta-due-date">No next check-in date recorded.</span></div>
         <div class="meta-card"><strong>Submitted date and time</strong><span id="meta-submitted">Not submitted</span></div>
-        <div class="meta-card">
-          <strong>Audit trail</strong>
-          <div class="trail-list" id="trail-list" style="margin-top:.75rem;"></div>
-        </div>
       </div>
     </aside>
   </section>
@@ -200,15 +200,14 @@ const checkInKey = 'workPlanCheckInReport:learner-101';
 
 const detailCopy = document.getElementById('detail-copy');
 const approvedPlanGrid = document.getElementById('approved-plan-grid');
+const cpaCommentList = document.getElementById('cpa-comment-list');
 const messageBar = document.getElementById('message-bar');
 const messageText = document.getElementById('message-text');
 const mentorComment = document.getElementById('mentor-comment');
-const commentList = document.getElementById('comment-list');
+const decisionSelect = document.getElementById('decision-select');
+const saveDecisionBtn = document.getElementById('save-decision-btn');
 const metaStatus = document.getElementById('meta-status');
-const metaRoute = document.getElementById('meta-route');
-const metaDueDate = document.getElementById('meta-due-date');
 const metaSubmitted = document.getElementById('meta-submitted');
-const trailList = document.getElementById('trail-list');
 
 let approvedPlan = null;
 let checkInReport = null;
@@ -321,9 +320,17 @@ function renderFieldValues() {
   document.getElementById('reporting-end-value').textContent = formatShortDate(checkInReport.reportingPeriodEnd);
   document.getElementById('hours-completed-value').textContent = checkInReport.hoursCompleted || 'Not provided';
   document.getElementById('competencies-progress-value').textContent = checkInReport.competenciesProgress || 'Not provided';
-  document.getElementById('progress-summary-value').textContent = checkInReport.progressSummary || 'Not provided';
-  document.getElementById('key-accomplishments-value').textContent = checkInReport.keyAccomplishments || 'Not provided';
-  document.getElementById('support-needed-value').textContent = checkInReport.supportNeeded || 'Not provided';
+}
+
+function renderCpaComments() {
+  const items = (checkInReport.comments || []).filter((item) => item.role === 'CPA Reviewer');
+  cpaCommentList.innerHTML = items.length ? items.slice().reverse().map((item) => `
+    <div class="comment-item">
+      <strong>${escapeHtml(item.author)} | ${escapeHtml(item.visibility)}</strong>
+      <span>${escapeHtml(formatDate(item.at))}</span>
+      <span>${escapeHtml(item.text)}</span>
+    </div>
+  `).join('') : '<div class="empty-state">No CPA reviewer comments recorded yet.</div>';
 }
 
 function statusBadge(status) {
@@ -333,35 +340,9 @@ function statusBadge(status) {
   return `<span class="status-badge badge-draft">${escapeHtml(status || 'Draft')}</span>`;
 }
 
-function renderComments() {
-  const items = checkInReport.comments || [];
-  commentList.innerHTML = items.length ? items.slice().reverse().map((item) => `
-    <div class="comment-item">
-      <strong>${escapeHtml(item.author)} | ${escapeHtml(item.visibility)}</strong>
-      <span>${escapeHtml(formatDate(item.at))}</span>
-      <span>${escapeHtml(item.text)}</span>
-    </div>
-  `).join('') : '<div class="empty-state">No mentor review comments recorded yet.</div>';
-}
-
-function renderTrail() {
-  const items = checkInReport.auditTrail || [];
-  trailList.innerHTML = items.length ? items.slice().reverse().map((entry) => `
-    <div class="trail-item">
-      <strong>${escapeHtml(entry.actor)} | ${escapeHtml(entry.role)}</strong>
-      <span>${escapeHtml(formatDate(entry.at))}</span>
-      <span>${escapeHtml(entry.previousStatus)} -> ${escapeHtml(entry.newStatus)}</span>
-      <span>${escapeHtml(entry.comments)}</span>
-    </div>
-  `).join('') : '<div class="empty-state">No check-in report activity recorded yet.</div>';
-}
-
 function renderMeta() {
   metaStatus.innerHTML = statusBadge(checkInReport.status || 'Draft');
-  metaRoute.textContent = checkInReport.route || 'No submission route recorded.';
-  metaDueDate.textContent = checkInReport.nextCheckInDate ? formatShortDate(checkInReport.nextCheckInDate) : 'No next check-in date recorded.';
   metaSubmitted.textContent = checkInReport.submittedAt ? formatDate(checkInReport.submittedAt) : 'Not submitted';
-  renderTrail();
 }
 
 function addAudit(previousStatus, newStatus, comments, actor = 'Marcus Chen, CPA', role = 'Mentor') {
@@ -415,13 +396,20 @@ function renderAll() {
   ]);
   detailCopy.textContent = 'Mentor can review the learner check-in report and either approve or decline the submission.';
   renderFieldValues();
-  renderComments();
+  renderCpaComments();
   renderMeta();
   persistCheckInReport();
 }
 
-document.getElementById('approve-btn').addEventListener('click', approveCheckIn);
-document.getElementById('decline-btn').addEventListener('click', declineCheckIn);
+saveDecisionBtn.addEventListener('click', () => {
+  const decision = decisionSelect.value;
+  if (!decision) {
+    setMessage('Select Approve or Decline before saving your decision.');
+    return;
+  }
+  if (decision === 'approve') { approveCheckIn(); }
+  else if (decision === 'decline') { declineCheckIn(); }
+});
 
 loadApprovedPlan();
 loadCheckInReport();

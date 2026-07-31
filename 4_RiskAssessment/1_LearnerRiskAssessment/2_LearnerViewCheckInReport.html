@@ -130,18 +130,6 @@
         <section class="info-section">
           <h3>Check-in report</h3>
           <div class="grid-2" id="report-grid"></div>
-          <div class="readonly-block" style="margin-top:1rem;">
-            <strong>Progress summary</strong>
-            <span id="progress-summary">Not provided.</span>
-          </div>
-          <div class="readonly-block" style="margin-top:1rem;">
-            <strong>Key accomplishments and updates</strong>
-            <span id="key-accomplishments">Not provided.</span>
-          </div>
-          <div class="readonly-block" style="margin-top:1rem;">
-            <strong>Support or guidance needed</strong>
-            <span id="support-needed">Not provided.</span>
-          </div>
         </section>
 
         <section class="info-section">
@@ -160,30 +148,8 @@
           <span id="meta-status">Not started</span>
         </div>
         <div class="meta-card">
-          <strong>Mentor route</strong>
-          <span id="meta-route">No submission route recorded.</span>
-        </div>
-        <div class="meta-card">
-          <strong>Next check-in due</strong>
-          <span id="meta-due-date">No next check-in date recorded.</span>
-        </div>
-        <div class="meta-card">
           <strong>Submitted date and time</strong>
           <span id="meta-submitted">Not submitted</span>
-        </div>
-        <div class="meta-card">
-          <strong>Progress to date</strong>
-          <div class="progress-shell" style="margin-top:.75rem;">
-            <div class="progress-head">
-              <span id="progress-label">Not started</span>
-              <span class="progress-value" id="progress-value">0%</span>
-            </div>
-            <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
-          </div>
-        </div>
-        <div class="meta-card">
-          <strong>Audit trail</strong>
-          <div class="trail-list" id="trail-list" style="margin-top:.75rem;"></div>
         </div>
       </div>
     </aside>
@@ -200,17 +166,8 @@ const detailCopy = document.getElementById('detail-copy');
 const approvedPlanGrid = document.getElementById('approved-plan-grid');
 const reportGrid = document.getElementById('report-grid');
 const notificationGrid = document.getElementById('notification-grid');
-const progressSummary = document.getElementById('progress-summary');
-const keyAccomplishments = document.getElementById('key-accomplishments');
-const supportNeeded = document.getElementById('support-needed');
 const metaStatus = document.getElementById('meta-status');
-const metaRoute = document.getElementById('meta-route');
-const metaDueDate = document.getElementById('meta-due-date');
 const metaSubmitted = document.getElementById('meta-submitted');
-const progressLabel = document.getElementById('progress-label');
-const progressValue = document.getElementById('progress-value');
-const progressFill = document.getElementById('progress-fill');
-const trailList = document.getElementById('trail-list');
 
 let approvedPlan = null;
 let checkInReport = null;
@@ -343,30 +300,6 @@ function loadCheckInReport() {
   }
 }
 
-function renderTrail() {
-  const items = checkInReport.auditTrail || [];
-  if (!items.length) {
-    trailList.innerHTML = '<div class="empty-state">No check-in report activity recorded yet.</div>';
-    return;
-  }
-  trailList.innerHTML = items.slice().reverse().map((entry) => `
-    <div class="trail-item">
-      <strong>${escapeHtml(entry.actor)} | ${escapeHtml(entry.role)}</strong>
-      <span>${escapeHtml(formatDate(entry.at))}</span>
-      <span>${escapeHtml(entry.previousStatus)} -> ${escapeHtml(entry.newStatus)}</span>
-      <span>${escapeHtml(entry.comments)}</span>
-    </div>
-  `).join('');
-}
-
-function getProgressState(status) {
-  if (status === 'Approved') return { label:'Approved', value:100 };
-  if (status === 'Pending Mentor Approval') return { label:'Pending mentor approval', value:70 };
-  if (status === 'Draft') return { label:'Draft', value:35 };
-  if (status === 'Declined') return { label:'Returned for revision', value:40 };
-  return { label:'Not started', value:0 };
-}
-
 function renderAll() {
   renderValueCards(approvedPlanGrid, [
     { label:'Learner', value: approvedPlan.learnerInfo.legalName || 'Not recorded' },
@@ -391,25 +324,12 @@ function renderAll() {
     { label:'Submission route', value: checkInReport.route || 'Once submitted, the report routes to the mentor for approval.' }
   ]);
 
-  progressSummary.textContent = checkInReport.progressSummary || 'Not provided.';
-  keyAccomplishments.textContent = checkInReport.keyAccomplishments || 'Not provided.';
-  supportNeeded.textContent = checkInReport.supportNeeded || 'Not provided.';
-
   metaStatus.innerHTML = statusBadge(checkInReport.status || 'Not started');
-  metaRoute.textContent = checkInReport.route || 'Once submitted, the report routes to the mentor for approval.';
-  metaDueDate.textContent = checkInReport.nextCheckInDate ? formatShortDate(checkInReport.nextCheckInDate) : 'No next check-in date recorded.';
   metaSubmitted.textContent = checkInReport.submittedAt ? formatDate(checkInReport.submittedAt) : 'Not submitted';
-
-  const progress = getProgressState(checkInReport.status || 'Not started');
-  progressLabel.textContent = progress.label;
-  progressValue.textContent = `${progress.value}%`;
-  progressFill.style.width = `${progress.value}%`;
 
   detailCopy.textContent = checkInReport.status === 'Pending Mentor Approval'
     ? 'This learner check-in report has been submitted and is shown in read-only mode while mentor review is pending.'
     : 'This learner check-in report is shown in read-only mode so the saved draft or submitted details can be reviewed.';
-
-  renderTrail();
 }
 
 loadApprovedPlan();

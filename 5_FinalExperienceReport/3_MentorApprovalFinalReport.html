@@ -43,33 +43,39 @@
       <div class="stack" style="margin-top:1rem;">
         <section class="info-section"><h3>Final report summary</h3><div class="grid-2" id="summary-grid"></div><div class="readonly-block" style="margin-top:1rem;"><strong>Final experience summary</strong><span id="final-summary"></span></div><div class="readonly-block" style="margin-top:1rem;"><strong>Completion rationale</strong><span id="completion-rationale"></span></div></section>
         <section class="info-section"><h3>Duration confirmation and leave</h3><div class="grid-3" id="duration-grid"></div></section>
-        <section class="info-section"><h3>Chargeable hours attachment</h3><div id="attachment-list" class="task-list"></div></section>
+        <section class="info-section"><h3>Chargeable hours attachment</h3><div class="grid-2" id="chargeable-status-grid" style="margin-bottom:1rem;"></div><div id="attachment-list" class="task-list"></div></section>
         <section class="info-section"><h3>Final competency assessment</h3><div id="core-list" class="task-list"></div></section>
         <section class="info-section"><h3>DC statements</h3><div id="dc-list" class="task-list"></div></section>
-        <section class="info-section"><h3>Mentor decision</h3><div class="field"><label for="mentor-comment">Mentor comments</label><textarea id="mentor-comment" placeholder="Add approval notes or explain why the report is being rejected."></textarea></div><div class="button-row" style="margin-top:1rem;"><button class="action-btn success" id="approve-btn" type="button">Approve final report</button><button class="action-btn danger" id="reject-btn" type="button">Reject final report</button></div></section>
+        <section class="info-section"><h3>CPA Reviewer comment</h3><div class="task-list" id="cpa-comment-list"></div></section>
+        <section class="info-section"><h3>Mentor decision</h3><div class="field"><label for="mentor-comment">Mentor comments</label><textarea id="mentor-comment" placeholder="Add approval notes or explain what additional information is needed."></textarea></div><div class="field" style="margin-top:1rem;max-width:320px;"><label for="decision-select">Decision</label><select id="decision-select"><option value="" selected>Select decision</option><option value="approve">Approve</option><option value="moreinfo">Return for more info</option></select></div><div class="button-row" style="margin-top:1rem;"><button class="action-btn primary" id="save-decision-btn" type="button">Save</button></div></section>
       </div>
     </section>
-    <aside class="panel side-panel"><div class="section-label">Status and routing</div><h2>Review history</h2><div class="meta-stack"><div class="meta-card"><strong>Current status</strong><span id="meta-status"></span></div><div class="meta-card"><strong>Learner notification</strong><span id="meta-notification"></span></div><div class="meta-card"><strong>Next route</strong><span>If approved, redirect to CPA Reviewer.</span></div><div class="meta-card"><strong>Submitted date and time</strong><span id="meta-submitted"></span></div></div></aside>
+    <aside class="panel side-panel"><div class="section-label">Status and routing</div><h2>Review history</h2><div class="meta-stack"><div class="meta-card"><strong>Current status</strong><span id="meta-status"></span></div><div class="meta-card"><strong>Learner notification</strong><span id="meta-notification"></span></div><div class="meta-card"><strong>Submitted date and time</strong><span id="meta-submitted"></span></div></div></aside>
   </section>
 </main>
 
 <script>
 const finalReportKey='finalExperienceReport:learner-101';
+const workPlanKey='workPlanRecord:learner-101';
 const report=JSON.parse(localStorage.getItem(finalReportKey)||'null');
+const workPlan=JSON.parse(localStorage.getItem(workPlanKey)||'null')||{};
 const coreOrder=['fr1','fr2','fr3','fr4','at1a','at1b','at1c'];
 const coreTitles={fr1:'FR1 - Assess decision makers\' needs and actively design the development/ modification of reporting requirements or financial-reporting systems required to meet external user needs, such as an MD&A or financing needs (a large, complex example, or several smaller ones).',fr2:'FR2 - Critically evaluate and reach a preliminary conclusion on three distinct GAAP (or equivalent) transactions based on management requests, using the CPA Canada Handbook (or equivalent) as guidance.',fr3:'FR3 - Prepare and critically evaluate financial statements and notes in accordance with GAAP or equivalent over two business periods (at least one of which is year-end).',fr4:'FR4 - Assess variances on historical, year-over-year financial statements and interpret the root causes, including insights into interconnectivity of multiple line items (over two business periods, at least one of which needs to be year-end).',at1a:'AT1a - Formulate the planning and risk assessment of the assurance engagement (including calculating materiality and assessing the control environment).',at1b:'AT1b - Design appropriate planned procedures that meet the objective of the engagement.',at1c:'AT1c - Critically evaluate supporting information and results of analysis to draw conclusions and communicate results.'};
 const dcOrder=['dc1','dc2','dc3']; const dcTitles={dc1:'DC1 (Professional Skepticism)',dc2:'DC2 (Ethical Decision Making)',dc3:'DC3 (Communication)'};
 function escapeHtml(value){return String(value||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
 function formatDate(dateValue){if(!dateValue)return'Not submitted';const d=new Date(dateValue);if(Number.isNaN(d.getTime()))return'Not submitted';return d.toLocaleString('en-CA',{year:'numeric',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})}
+function formatShortDate(dateValue){if(!dateValue)return'Not available';const d=new Date(`${dateValue}T00:00:00`);if(Number.isNaN(d.getTime()))return'Not available';return d.toLocaleDateString('en-CA',{year:'numeric',month:'short',day:'numeric'})}
 function renderCards(id, values){document.getElementById(id).innerHTML=values.map((item)=>`<div class="value-card"><span>${escapeHtml(item.label)}</span><strong>${escapeHtml(item.value)}</strong></div>`).join('')}
-function badge(status){if(status==='Approved'||status==='Pending CPA Review')return `<span class="status-badge badge-approved">${escapeHtml(status)}</span>`;if(/reject/i.test(status||''))return `<span class="status-badge badge-declined">${escapeHtml(status)}</span>`;return `<span class="status-badge badge-pending">${escapeHtml(status||'Pending Mentor Approval')}</span>`}
+function badge(status){if(status==='Approved'||status==='Pending CPA Review')return `<span class="status-badge badge-approved">${escapeHtml(status)}</span>`;if(/reject|more information needed/i.test(status||''))return `<span class="status-badge badge-declined">${escapeHtml(status)}</span>`;return `<span class="status-badge badge-pending">${escapeHtml(status||'Pending Mentor Approval')}</span>`}
 function save(){localStorage.setItem(finalReportKey, JSON.stringify(report))}
 function notify(message){const bar=document.getElementById('message-bar');document.getElementById('message-text').textContent=message;bar.classList.add('visible')}
 if(!report){document.querySelector('.workspace').innerHTML='<div class="panel main-panel"><div class="empty-state">No final experience report has been submitted yet.</div></div>'} else {
   renderCards('summary-grid',[{label:'Learner name',value:report.learnerName||'Not recorded'},{label:'Learner ID',value:report.learnerId||'Not recorded'},{label:'Current employer',value:report.employer||'Not recorded'},{label:'Current mentor',value:report.mentor||'Not recorded'}]);
   document.getElementById('final-summary').textContent=report.finalSummary||'Not provided.';
   document.getElementById('completion-rationale').textContent=report.completionRationale||'Not provided.';
-  renderCards('duration-grid',[{label:'Confirmed eligible duration (months)',value:report.confirmedMonths===''?'Not confirmed':Number(report.confirmedMonths).toFixed(2)},{label:'Confirmed total hours',value:report.confirmedHours||'Not confirmed'},{label:'Leave days shown',value:report.leaveDaysShown||'From work plan'}]);
+  const employerDetails=workPlan.employerDetails||{};
+  renderCards('duration-grid',[{label:'Experience start date',value:formatShortDate(employerDetails.professionalStartDate||employerDetails.positionStartDate)},{label:'Expected completion date',value:formatShortDate(employerDetails.expectedCompletionDate)},{label:'Leave days',value:report.leaveDaysShown||String(employerDetails.expectedLeaveDays??'0')},{label:'Average hours per week',value:String(employerDetails.averageHoursPerWeek??'0')},{label:'Confirmed eligible duration (months)',value:report.confirmedMonths===''?'Not confirmed':Number(report.confirmedMonths).toFixed(2)},{label:'Confirmed total hours',value:report.confirmedHours||'Not confirmed'}]);
+  renderCards('chargeable-status-grid',[{label:'Chargeable hour form required',value:report.chargeableHoursRequired||'No'},{label:'Attachment note',value:report.chargeableHoursNote||'Not provided'}]);
   const attachments=report.attachments||[];
   document.getElementById('attachment-list').innerHTML=attachments.length?attachments.map((item)=>`<div class="task-card"><strong>${escapeHtml(item.name)}</strong><span>${escapeHtml(item.note || 'Chargeable hour form')} | ${escapeHtml(item.uploadedAt || 'Saved')}</span></div>`).join(''):'<div class="empty-state">No chargeable hour form attached.</div>';
   document.getElementById('core-list').innerHTML=coreOrder.map((id)=>{const item=(report.competencies||{})[id]||{};return `<div class="task-card"><strong>${escapeHtml(coreTitles[id])}</strong><span>Final level: ${escapeHtml(item.level || 'Not selected')}</span><span>${escapeHtml(item.evidence || 'No evidence summary recorded.')}</span></div>`}).join('');
@@ -77,23 +83,30 @@ if(!report){document.querySelector('.workspace').innerHTML='<div class="panel ma
   document.getElementById('meta-status').innerHTML=badge(report.status || 'Pending Mentor Approval');
   document.getElementById('meta-notification').textContent=(report.notifications||[]).length ? `${report.notifications.length} learner notification(s) recorded` : 'No learner notification recorded yet.';
   document.getElementById('meta-submitted').textContent=formatDate(report.submittedAt);
-  document.getElementById('approve-btn').addEventListener('click', ()=> {
-    report.status='Pending CPA Review';
-    report.mentorDecision='Approved by mentor';
-    report.notifications = report.notifications || [];
-    report.notifications.push({type:'Mentor approval notice', sentAt:new Date().toISOString(), recipient:report.learnerName || 'Learner', comments:document.getElementById('mentor-comment').value.trim() || 'Final report approved by mentor.'});
-    save();
-    notify('Final report approved by mentor. Learner notification recorded, and the workflow is being redirected to CPA Reviewer.');
-    window.location.href='../1_Dashboard/CPAReviewer.html';
-  });
-  document.getElementById('reject-btn').addEventListener('click', ()=> {
-    report.status='Rejected by Mentor';
-    report.mentorDecision='Rejected by mentor';
-    report.notifications = report.notifications || [];
-    report.notifications.push({type:'Mentor rejection notice', sentAt:new Date().toISOString(), recipient:report.learnerName || 'Learner', comments:document.getElementById('mentor-comment').value.trim() || 'Final report rejected by mentor.'});
-    save();
-    notify('Final report rejected by mentor. Learner notification recorded.');
-    window.location.href='../1_Dashboard/MentorDashboard.html';
+  const cpaNotifications=(report.notifications||[]).filter((item)=>/cpa/i.test(item.type||''));
+  document.getElementById('cpa-comment-list').innerHTML = cpaNotifications.length
+    ? cpaNotifications.slice().reverse().map((item)=>`<div class="task-card"><strong>${escapeHtml(item.type)}</strong><span>${escapeHtml(formatDate(item.sentAt))}</span><span>${escapeHtml(item.comments || 'No comment provided.')}</span></div>`).join('')
+    : '<div class="empty-state">No CPA reviewer comments recorded yet.</div>';
+  document.getElementById('save-decision-btn').addEventListener('click', ()=> {
+    const decision = document.getElementById('decision-select').value;
+    if(!decision){ notify('Select Approve or Return for more info before saving your decision.'); return; }
+    if(decision === 'approve'){
+      report.status='Pending CPA Review';
+      report.mentorDecision='Approved by mentor';
+      report.notifications = report.notifications || [];
+      report.notifications.push({type:'Mentor approval notice', sentAt:new Date().toISOString(), recipient:report.learnerName || 'Learner', comments:document.getElementById('mentor-comment').value.trim() || 'Final report approved by mentor.'});
+      save();
+      notify('Final report approved by mentor. Learner notification recorded, and the workflow is being redirected to CPA Reviewer.');
+      window.location.href='../1_Dashboard/CPAReviewer.html';
+    } else if(decision === 'moreinfo'){
+      report.status='More information needed';
+      report.mentorDecision='More information needed';
+      report.notifications = report.notifications || [];
+      report.notifications.push({type:'Mentor more information request', sentAt:new Date().toISOString(), recipient:report.learnerName || 'Learner', comments:document.getElementById('mentor-comment').value.trim() || 'Mentor requested more information on the final report.'});
+      save();
+      notify('Learner notified that more information is needed on the final report.');
+      window.location.href='../1_Dashboard/MentorDashboard.html';
+    }
   });
 }
 </script>
