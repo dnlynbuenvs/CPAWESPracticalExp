@@ -170,6 +170,14 @@
   [data-checkin-required="false"] .checkin-row{display:none}
   [data-checkin-required="false"] .checkin-required-type{display:none}
   [data-checkin-required="true"] .checkin-not-required-type{display:none}
+  .imis-tabs{display:flex;gap:4px;border-bottom:2px solid var(--gray-200);margin:.5rem 0 1.25rem;overflow-x:auto}
+  .imis-tab{appearance:none;border:none;background:none;font-family:inherit;padding:10px 18px;font-size:13px;font-weight:700;color:var(--gray-600);cursor:pointer;white-space:nowrap;border-bottom:3px solid transparent;margin-bottom:-2px}
+  .imis-tab:hover{color:var(--imis-blue)}
+  .imis-tab.active{color:var(--imis-blue);border-bottom-color:var(--imis-blue)}
+  .imis-tab-panel[hidden]{display:none}
+  .learner-details-actions{display:flex;justify-content:flex-end;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--gray-200)}
+  .text-action{font-size:12px;font-weight:700;color:var(--gray-600);text-decoration:underline;text-underline-offset:2px}
+  .text-action:hover{color:var(--imis-blue)}
   @media(max-width:1040px){
     .dashboard-grid,.content-grid{grid-template-columns:1fr}
     .option-grid{grid-template-columns:repeat(2,1fr)}
@@ -258,6 +266,9 @@
       <div class="imis-detail-item"><span>Current mentor</span><strong>Marcus Chen, CPA</strong></div>
       <div class="imis-detail-item"><span>Current supervisor</span><strong>Priya Nair, CPA</strong></div>
       <div class="imis-detail-item"><span>Program expiry date</span><strong>Dec 31, 2027</strong></div>
+    </div>
+    <div class="learner-details-actions">
+      <a class="text-action" href="7_ReportJobChange/2_MentorJobChange/1_LearnerEndRelationshipWithMentor.html">End relationship with mentor</a>
     </div>
   </section>
 
@@ -388,137 +399,184 @@
 
   <div class="section-label">Experience progress</div>
 
-  <section class="panel imis-table-panel has-footer-action" id="foundational-card" aria-labelledby="foundational-title">
-    <div class="imis-table-header">
-      <h2 id="foundational-title">Foundational Experience</h2>
-    </div>
-    <div class="imis-table-wrap">
-      <table class="imis-table">
-        <thead>
-          <tr>
-            <th>Submission</th>
-            <th>Status</th>
-            <th>Submitted</th>
-            <th>Decision Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr data-href="2_ClaimFoundationalExp/1_LearnerFE/3_LearnerViewFE.html">
-            <td><a href="2_ClaimFoundationalExp/1_LearnerFE/3_LearnerViewFE.html">Foundational experience submission</a></td>
-            <td><span class="imis-badge imis-badge-green">Approved</span></td>
-            <td>Apr 19, 2026</td>
-            <td>May 03, 2026</td>
-          </tr>
-          <tr data-href="2_ClaimFoundationalExp/1_LearnerFE/2_FE_RecordExpDuration.html">
-            <td><a href="2_ClaimFoundationalExp/1_LearnerFE/2_FE_RecordExpDuration.html">Revise foundational experience</a></td>
-            <td><span class="imis-badge imis-badge-blue">Draft</span></td>
-            <td>Not submitted</td>
-            <td>&mdash;</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-  <div class="imis-table-footer">
-    <a class="imis-table-action" href="2_ClaimFoundationalExp/1_LearnerFE/1_FE_YesorNo.html">Submit foundational experience</a>
+  <div class="imis-tabs" role="tablist" aria-label="Experience progress">
+    <button type="button" class="imis-tab active" role="tab" aria-selected="true" aria-controls="foundational-panel" data-tab="foundational">Foundational Experience</button>
+    <button type="button" class="imis-tab" role="tab" aria-selected="false" aria-controls="workplan-panel" data-tab="workplan">Experience Plan</button>
+    <button type="button" class="imis-tab checkin-row" role="tab" aria-selected="false" aria-controls="checkin-panel" data-tab="checkin">Check-In Progress</button>
+    <button type="button" class="imis-tab" role="tab" aria-selected="false" aria-controls="completion-panel" data-tab="completion">Completion Report</button>
+    <button type="button" class="imis-tab" role="tab" aria-selected="false" aria-controls="jobchange-panel" data-tab="jobchange">Job Change</button>
   </div>
 
-  <section class="panel imis-table-panel has-footer-action" id="workplan-card" aria-labelledby="workplan-title">
-    <div class="imis-table-header">
-      <h2 id="workplan-title">Experience Plan</h2>
+  <div class="imis-tab-panel" id="foundational-panel" data-tab-panel="foundational" role="tabpanel">
+    <section class="panel imis-table-panel has-footer-action" id="foundational-card" aria-labelledby="foundational-title">
+      <div class="imis-table-header">
+        <h2 id="foundational-title">Foundational Experience</h2>
+      </div>
+      <div class="imis-table-wrap">
+        <table class="imis-table">
+          <thead>
+            <tr>
+              <th>Submission</th>
+              <th>Status</th>
+              <th>Submitted</th>
+              <th>Decision Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-href="2_ClaimFoundationalExp/1_LearnerFE/3_LearnerViewFE.html">
+              <td><a href="2_ClaimFoundationalExp/1_LearnerFE/3_LearnerViewFE.html">Foundational experience submission</a></td>
+              <td><span class="imis-badge imis-badge-green">Approved</span></td>
+              <td>Apr 19, 2026</td>
+              <td>May 03, 2026</td>
+            </tr>
+            <tr data-href="2_ClaimFoundationalExp/1_LearnerFE/2_FE_RecordExpDuration.html">
+              <td><a href="2_ClaimFoundationalExp/1_LearnerFE/2_FE_RecordExpDuration.html">Revise foundational experience</a></td>
+              <td><span class="imis-badge imis-badge-blue">Draft</span></td>
+              <td>Not submitted</td>
+              <td>&mdash;</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+    <div class="imis-table-footer">
+      <a class="imis-table-action" href="2_ClaimFoundationalExp/1_LearnerFE/1_FE_YesorNo.html">Create foundational experience</a>
     </div>
-    <div class="imis-table-wrap">
-      <table class="imis-table">
-        <thead>
-          <tr>
-            <th>Submission</th>
-            <th>Status</th>
-            <th>Submitted</th>
-            <th>Decision Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr data-href="3_WorkPlan/1_LearnerWP/3_LearnerWPRevision.html">
-            <td><a href="3_WorkPlan/1_LearnerWP/3_LearnerWPRevision.html">Experience plan submission</a></td>
-            <td><span class="imis-badge imis-badge-yellow">Pending mentor approval</span></td>
-            <td>Jul 08, 2026</td>
-            <td>Pending</td>
-          </tr>
-          <tr data-href="3_WorkPlan/1_LearnerWP/3_LearnerWPRevision.html">
-            <td><a href="3_WorkPlan/1_LearnerWP/3_LearnerWPRevision.html">Revise experience plan</a></td>
-            <td><span class="imis-badge imis-badge-blue">Draft</span></td>
-            <td>Not submitted</td>
-            <td>&mdash;</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-  <div class="imis-table-footer">
-    <a class="imis-table-action" href="3_WorkPlan/1_LearnerWP/1_LearnerWorkPlanInfo.html">Submit experience plan</a>
   </div>
 
-  <section class="panel imis-table-panel has-footer-action checkin-row" id="checkin-card" aria-labelledby="checkin-title">
-    <div class="imis-table-header">
-      <h2 id="checkin-title">Check-in Progress</h2>
+  <div class="imis-tab-panel" id="workplan-panel" data-tab-panel="workplan" role="tabpanel" hidden>
+    <section class="panel imis-table-panel has-footer-action" id="workplan-card" aria-labelledby="workplan-title">
+      <div class="imis-table-header">
+        <h2 id="workplan-title">Experience Plan</h2>
+      </div>
+      <div class="imis-table-wrap">
+        <table class="imis-table">
+          <thead>
+            <tr>
+              <th>Submission</th>
+              <th>Status</th>
+              <th>Submitted</th>
+              <th>Decision Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-href="3_WorkPlan/1_LearnerWP/3_LearnerWPRevision.html">
+              <td><a href="3_WorkPlan/1_LearnerWP/3_LearnerWPRevision.html">Experience plan submission</a></td>
+              <td><span class="imis-badge imis-badge-yellow">Pending mentor approval</span></td>
+              <td>Jul 08, 2026</td>
+              <td>Pending</td>
+            </tr>
+            <tr data-href="3_WorkPlan/1_LearnerWP/3_LearnerWPRevision.html">
+              <td><a href="3_WorkPlan/1_LearnerWP/3_LearnerWPRevision.html">Revise experience plan</a></td>
+              <td><span class="imis-badge imis-badge-blue">Draft</span></td>
+              <td>Not submitted</td>
+              <td>&mdash;</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+    <div class="imis-table-footer">
+      <a class="imis-table-action" href="3_WorkPlan/1_LearnerWP/1_LearnerWorkPlanInfo.html">Create experience plan</a>
     </div>
-    <div class="imis-table-wrap">
-      <table class="imis-table">
-        <thead>
-          <tr>
-            <th>Submission</th>
-            <th>Status</th>
-            <th>Submitted</th>
-            <th>Decision Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr data-href="4_RiskAssessment/1_LearnerRiskAssessment/2_LearnerViewCheckInReport.html">
-            <td><a href="4_RiskAssessment/1_LearnerRiskAssessment/2_LearnerViewCheckInReport.html">Check in report submission</a></td>
-            <td><span class="imis-badge imis-badge-blue">Draft</span></td>
-            <td>Not submitted</td>
-            <td>&mdash;</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-  <div class="imis-table-footer">
-    <a class="imis-table-action" href="4_RiskAssessment/1_LearnerRiskAssessment/1_LearnerSubmitCheckin.html">Submit check-in report</a>
   </div>
 
-  <section class="panel imis-table-panel has-footer-action" id="completion-card" aria-labelledby="completion-title">
-    <div class="imis-table-header">
-      <h2 id="completion-title">Completion Report</h2>
+  <div class="imis-tab-panel checkin-row" id="checkin-panel" data-tab-panel="checkin" role="tabpanel" hidden>
+    <section class="panel imis-table-panel has-footer-action" id="checkin-card" aria-labelledby="checkin-title">
+      <div class="imis-table-header">
+        <h2 id="checkin-title">Check-in Progress</h2>
+      </div>
+      <div class="imis-table-wrap">
+        <table class="imis-table">
+          <thead>
+            <tr>
+              <th>Submission</th>
+              <th>Status</th>
+              <th>Submitted</th>
+              <th>Decision Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-href="4_RiskAssessment/1_LearnerRiskAssessment/2_LearnerViewCheckInReport.html">
+              <td><a href="4_RiskAssessment/1_LearnerRiskAssessment/2_LearnerViewCheckInReport.html">Check in report submission</a></td>
+              <td><span class="imis-badge imis-badge-blue">Draft</span></td>
+              <td>Not submitted</td>
+              <td>&mdash;</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+    <div class="imis-table-footer">
+      <a class="imis-table-action" href="4_RiskAssessment/1_LearnerRiskAssessment/1_LearnerSubmitCheckin.html">Create check-in report</a>
     </div>
-    <div class="imis-table-wrap">
-      <table class="imis-table">
-        <thead>
-          <tr>
-            <th>Submission</th>
-            <th>Type</th>
-            <th>Status</th>
-            <th>Submitted</th>
-            <th>Decision Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr data-href="5_FinalExperienceReport/2_ViewFinalExperienceReport.html">
-            <td><a href="5_FinalExperienceReport/2_ViewFinalExperienceReport.html">Not started</a></td>
-            <td>
-              <span class="checkin-required-type">Partial Completion Report</span>
-              <span class="checkin-not-required-type">Completion Report</span>
-            </td>
-            <td><span class="imis-badge imis-badge-gray">Not started</span></td>
-            <td>Not submitted</td>
-            <td>Pending</td>
-          </tr>
-        </tbody>
-      </table>
+  </div>
+
+  <div class="imis-tab-panel" id="completion-panel" data-tab-panel="completion" role="tabpanel" hidden>
+    <section class="panel imis-table-panel has-footer-action" id="completion-card" aria-labelledby="completion-title">
+      <div class="imis-table-header">
+        <h2 id="completion-title">Completion Report</h2>
+      </div>
+      <div class="imis-table-wrap">
+        <table class="imis-table">
+          <thead>
+            <tr>
+              <th>Submission</th>
+              <th>Type</th>
+              <th>Status</th>
+              <th>Submitted</th>
+              <th>Decision Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr data-href="5_FinalExperienceReport/2_ViewFinalExperienceReport.html">
+              <td><a href="5_FinalExperienceReport/2_ViewFinalExperienceReport.html">Not started</a></td>
+              <td>
+                <span class="checkin-required-type">Partial Completion Report</span>
+                <span class="checkin-not-required-type">Completion Report</span>
+              </td>
+              <td><span class="imis-badge imis-badge-gray">Not started</span></td>
+              <td>Not submitted</td>
+              <td>Pending</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+    <div class="imis-table-footer">
+      <a class="imis-table-action" href="5_FinalExperienceReport/1_SubmitFinalExperienceReport.html">Create completion report</a>
     </div>
-  </section>
-  <div class="imis-table-footer">
-    <a class="imis-table-action" href="5_FinalExperienceReport/1_SubmitFinalExperienceReport.html">Submit completion report</a>
+  </div>
+
+  <div class="imis-tab-panel" id="jobchange-panel" data-tab-panel="jobchange" role="tabpanel" hidden>
+    <section class="panel imis-table-panel has-footer-action" id="jobchange-card" aria-labelledby="jobchange-title">
+      <div class="imis-table-header">
+        <h2 id="jobchange-title">Job Change</h2>
+      </div>
+      <div class="imis-table-wrap">
+        <table class="imis-table">
+          <thead>
+            <tr>
+              <th>Submission</th>
+              <th>Status</th>
+              <th>Submitted</th>
+              <th>Decision Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Job change report</td>
+              <td><span class="imis-badge imis-badge-gray">Not started</span></td>
+              <td>Not submitted</td>
+              <td>&mdash;</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+    <div class="imis-table-footer">
+      <a class="imis-table-action" href="7_ReportJobChange/1_LearnerJobChange/1_LearnerReportJobChange.html">Report a job change</a>
+    </div>
   </div>
 </main>
 
@@ -527,6 +585,21 @@ const savedCheckInRequirement = localStorage.getItem('learnerDashboard:checkInRe
 if (savedCheckInRequirement === 'false') {
   document.body.dataset.checkinRequired = 'false';
 }
+
+document.querySelectorAll('.imis-tab').forEach(function (tab) {
+  tab.addEventListener('click', function () {
+    document.querySelectorAll('.imis-tab').forEach(function (t) {
+      t.classList.remove('active');
+      t.setAttribute('aria-selected', 'false');
+    });
+    document.querySelectorAll('.imis-tab-panel').forEach(function (panel) {
+      panel.hidden = true;
+    });
+    tab.classList.add('active');
+    tab.setAttribute('aria-selected', 'true');
+    document.querySelector('.imis-tab-panel[data-tab-panel="' + tab.dataset.tab + '"]').hidden = false;
+  });
+});
 
 document.querySelectorAll('.imis-table tbody tr[data-href]').forEach(function (row) {
   row.tabIndex = 0;
